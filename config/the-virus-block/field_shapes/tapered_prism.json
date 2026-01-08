@@ -1,0 +1,10 @@
+{
+  "name": "Tapered",
+  "description": "Prism tapering to smaller top",
+  "type": "prism",
+  "sides": 6,
+  "radius": 3.0,
+  "height": 3.0,
+  "topRadius": 1.5
+}
+

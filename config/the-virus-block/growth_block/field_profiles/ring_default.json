@@ -1,0 +1,10 @@
+{
+  "id": "the-virus-block:ring_default",
+  "mesh": "ring",
+  "texture": "the-virus-block:textures/misc/singularity_sphere_1.png",
+  "alpha": 0.65,
+  "spin_speed": 1.2,
+  "scale_multiplier": 1.0,
+  "color": "#FFFFFFFF"
+}
+

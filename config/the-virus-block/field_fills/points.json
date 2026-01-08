@@ -1,0 +1,15 @@
+{
+  "name": "Points Small",
+  "description": "Vertex points only",
+  "mode": "POINTS",
+  "wireThickness": 0.5,
+  "doubleSided": false,
+  "depthTest": true,
+  "depthWrite": true,
+  "cage": {
+    "latitudeCount": 8,
+    "longitudeCount": 16
+  },
+  "pointSize": 1.0
+}
+

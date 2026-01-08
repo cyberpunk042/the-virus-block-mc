@@ -1,0 +1,7 @@
+{
+  "name": "Latitude Only",
+  "description": "Horizontal lines only",
+  "cellType": "EDGE",
+  "pattern": "latitude",
+  "showLongitude": false
+}

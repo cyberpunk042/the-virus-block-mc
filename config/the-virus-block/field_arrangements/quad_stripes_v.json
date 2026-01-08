@@ -1,0 +1,8 @@
+{
+  "name": "Vertical Stripes",
+  "description": "Vertical stripe bands",
+  "cellType": "QUAD",
+  "pattern": "stripes",
+  "direction": "vertical",
+  "count": 16
+}

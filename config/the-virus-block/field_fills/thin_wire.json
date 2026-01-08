@@ -1,0 +1,15 @@
+{
+  "name": "Thin Wire",
+  "description": "Thin wireframe lines",
+  "mode": "WIREFRAME",
+  "wireThickness": 0.3,
+  "doubleSided": false,
+  "depthTest": true,
+  "depthWrite": true,
+  "cage": {
+    "latitudeCount": 8,
+    "longitudeCount": 16
+  },
+  "pointSize": 1.5
+}
+

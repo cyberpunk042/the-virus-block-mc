@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "CNC",
+    "CCC"
+  ],
+  "key": {
+    "C": { "item": "minecraft:crying_obsidian" },
+    "N": { "item": "minecraft:netherite_leggings" }
+  },
+  "result": {
+    "item": "the-virus-block:heavy_pants"
+  }
+}
+

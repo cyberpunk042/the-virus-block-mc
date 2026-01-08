@@ -1,0 +1,17 @@
+{
+  "name": "Cage Dense",
+  "description": "Dense grid cage",
+  "mode": "CAGE",
+  "wireThickness": 0.8,
+  "doubleSided": false,
+  "depthTest": true,
+  "depthWrite": true,
+  "cage": {
+    "latitudeCount": 16,
+    "longitudeCount": 32,
+    "showEquator": true,
+    "showPoles": true
+  },
+  "pointSize": 2.0
+}
+

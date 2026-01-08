@@ -1,0 +1,9 @@
+{
+  "name": "Spin Medium",
+  "description": "Medium Y-axis rotation",
+  "spin": {
+    "axis": "Y",
+    "speed": 45.0,
+    "oscillate": false
+  }
+}

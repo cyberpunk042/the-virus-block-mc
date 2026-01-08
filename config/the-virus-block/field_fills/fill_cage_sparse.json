@@ -1,0 +1,13 @@
+{
+  "name": "Cage Sparse",
+  "description": "Minimal grid lines",
+  "mode": "CAGE",
+  "wireThickness": 1.0,
+  "doubleSided": true,
+  "cage": {
+    "latitudeCount": 4,
+    "longitudeCount": 8,
+    "showEquator": true,
+    "showPoles": false
+  }
+}

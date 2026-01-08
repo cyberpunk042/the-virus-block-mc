@@ -1,0 +1,7 @@
+{
+  "name": "Dense",
+  "description": "75% of quads visible - nearly complete",
+  "cellType": "QUAD",
+  "pattern": "dense",
+  "visibility": 0.75
+}

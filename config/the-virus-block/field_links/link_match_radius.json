@@ -1,0 +1,11 @@
+{
+  "name": "Link Match Radius",
+  "description": "Match parent primitive radius",
+  "primitiveId": "parent",
+  "radiusMatch": true,
+  "radiusOffset": 0.0,
+  "follow": false,
+  "mirror": false,
+  "phaseOffset": 0.0,
+  "scaleWith": false
+}

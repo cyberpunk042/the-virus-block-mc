@@ -1,0 +1,8 @@
+{
+  "name": "Prism Tall",
+  "description": "Tall prism column",
+  "type": "prism",
+  "sides": 6,
+  "radius": 0.5,
+  "height": 4.0
+}

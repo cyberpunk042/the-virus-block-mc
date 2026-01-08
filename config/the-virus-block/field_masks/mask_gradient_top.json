@@ -1,0 +1,9 @@
+{
+  "name": "Fade Top",
+  "description": "Fade in from top",
+  "mask": "GRADIENT",
+  "direction": "VERTICAL",
+  "gradientStart": 0.0,
+  "gradientEnd": 1.0,
+  "falloff": 1.0
+}

@@ -1,0 +1,29 @@
+{
+  "id": "the-virus-block:magma",
+  "primary_texture": "the-virus-block:textures/block/glow_magma_primary.png",
+  "secondary_texture": "the-virus-block:textures/block/glow_magma_secondary.png",
+  "primary_color": "#FF6E00",
+  "secondary_color": "#FFB347",
+  "light_level": 15,
+  "primary_mesh_animation": {
+    "frame_time": 8,
+    "interpolate": true,
+    "frames": [
+      0,
+      1,
+      2
+    ]
+  },
+  "secondary_mesh_animation": {
+    "frame_time": 8,
+    "interpolate": true,
+    "frames": [
+      0,
+      1,
+      2
+    ]
+  },
+  "primary_use_mesh": false,
+  "secondary_use_mesh": false
+}
+

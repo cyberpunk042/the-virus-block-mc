@@ -1,0 +1,67 @@
+{
+  "id": "the-virus-block:overworld",
+  "core_charge": {
+    "particle": "minecraft:enchant",
+    "sound": {
+      "id": "minecraft:block.beacon.ambient",
+      "category": "hostile",
+      "volume": 1.5,
+      "pitch": 0.6,
+      "interval_ticks": 10
+    }
+  },
+  "core_detonation": {
+    "particle": "minecraft:explosion_emitter",
+    "sound": {
+      "id": "minecraft:entity.wither.spawn",
+      "category": "hostile",
+      "volume": 4.0,
+      "pitch": 0.5,
+      "interval_ticks": 0
+    }
+  },
+  "ring_charge": {
+    "particle": "minecraft:small_flame"
+  },
+  "ring_pulse": {
+    "primary_particle": "minecraft:portal",
+    "secondary_particle": "minecraft:reverse_portal",
+    "debris_block": "minecraft:deepslate",
+    "ambient_sound": {
+      "id": "minecraft:ambient.nether_wastes.mood",
+      "category": "ambient",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "interval_ticks": 20
+    },
+    "pulse_sound": {
+      "id": "minecraft:block.end_portal.spawn",
+      "category": "hostile",
+      "volume": 1.1,
+      "pitch": 0.5,
+      "interval_ticks": 10
+    }
+  },
+  "dissipation": {
+    "primary_particle": "minecraft:reverse_portal",
+    "sound": {
+      "id": "minecraft:block.respawn_anchor.deplete",
+      "category": "hostile",
+      "volume": 1.0,
+      "pitch": 1.0,
+      "interval_ticks": 5
+    }
+  },
+  "collapse_veil": {
+    "primary_particle": "minecraft:sculk_soul",
+    "secondary_particle": "minecraft:reverse_portal",
+    "sound": {
+      "id": "minecraft:entity.warden.sonic_boom",
+      "category": "hostile",
+      "volume": 1.2,
+      "pitch": 0.6,
+      "interval_ticks": 0
+    }
+  }
+}
+

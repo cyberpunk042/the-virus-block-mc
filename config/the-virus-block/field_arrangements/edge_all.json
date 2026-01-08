@@ -1,0 +1,6 @@
+{
+  "name": "All Edges",
+  "description": "All edges visible - full wireframe",
+  "cellType": "EDGE",
+  "pattern": "full"
+}

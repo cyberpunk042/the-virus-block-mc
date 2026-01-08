@@ -1,0 +1,8 @@
+{
+  "name": "Horizontal Stripes",
+  "description": "Horizontal stripe bands",
+  "cellType": "QUAD",
+  "pattern": "stripes",
+  "direction": "horizontal",
+  "count": 8
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Orbit Default",
+  "description": "Standard circular orbit",
+  "enabled": true,
+  "radius": 1.5,
+  "speed": 1.0,
+  "axis": "Y",
+  "phase": 0.0
+}

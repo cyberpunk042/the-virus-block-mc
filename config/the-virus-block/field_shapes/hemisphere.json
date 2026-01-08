@@ -1,0 +1,12 @@
+{
+  "name": "Hemisphere",
+  "description": "Half sphere (top half)",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 32,
+  "lonSteps": 64,
+  "latStart": 0.0,
+  "latEnd": 0.5,
+  "algorithm": "LAT_LON"
+}
+

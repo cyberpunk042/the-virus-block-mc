@@ -1,0 +1,9 @@
+{
+  "name": "Ring Thin",
+  "description": "Hairline thin ring",
+  "type": "ring",
+  "innerRadius": 0.95,
+  "outerRadius": 1.0,
+  "segments": 64,
+  "y": 0.0
+}

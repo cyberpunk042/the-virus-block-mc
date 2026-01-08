@@ -1,0 +1,8 @@
+{
+  "name": "Inverted Bands",
+  "description": "Inverted band pattern",
+  "mask": "BANDS",
+  "count": 4,
+  "thickness": 0.5,
+  "invert": true
+}

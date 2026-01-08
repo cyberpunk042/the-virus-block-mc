@@ -1,0 +1,9 @@
+{
+  "name": "Sphere Highpoly",
+  "description": "High detail sphere",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 64,
+  "lonSteps": 128,
+  "algorithm": "LAT_LON"
+}

@@ -1,0 +1,20 @@
+Compiled from "PostEffectPass.java"
+public class net.minecraft.client.gl.PostEffectPass implements java.lang.AutoCloseable {
+  private static final int SIZE;
+  private final java.lang.String id;
+  private final com.mojang.blaze3d.pipeline.RenderPipeline pipeline;
+  private final net.minecraft.util.Identifier outputTargetId;
+  private final java.util.Map<java.lang.String, com.mojang.blaze3d.buffers.GpuBuffer> uniformBuffers;
+  private final net.minecraft.client.gl.MappableRingBuffer samplerInfoBuffer;
+  private final java.util.List<net.minecraft.client.gl.PostEffectPass$Sampler> samplers;
+  public net.minecraft.client.gl.PostEffectPass(com.mojang.blaze3d.pipeline.RenderPipeline, net.minecraft.util.Identifier, java.util.Map<java.lang.String, java.util.List<net.minecraft.client.gl.UniformValue>>, java.util.List<net.minecraft.client.gl.PostEffectPass$Sampler>);
+  public void render(net.minecraft.client.render.FrameGraphBuilder, java.util.Map<net.minecraft.util.Identifier, net.minecraft.client.util.Handle<net.minecraft.client.gl.Framebuffer>>, com.mojang.blaze3d.buffers.GpuBufferSlice);
+  public void close();
+  private void method_67884(net.minecraft.client.util.Handle, com.mojang.blaze3d.buffers.GpuBufferSlice, java.util.Map);
+  private java.lang.String method_71313();
+  private static com.mojang.datafixers.util.Pair method_71127(java.util.Map, net.minecraft.client.gl.PostEffectPass$Sampler);
+  private static net.minecraft.client.util.Handle method_62256(net.minecraft.client.render.FramePass, net.minecraft.util.Identifier, net.minecraft.client.util.Handle);
+  private java.lang.String method_71314();
+  private java.lang.String method_71126(java.util.Map$Entry);
+  static {};
+}

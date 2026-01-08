@@ -1,0 +1,8 @@
+{
+  "name": "Single Slice",
+  "description": "One pie slice",
+  "cellType": "SECTOR",
+  "pattern": "arc",
+  "arcStart": 0.0,
+  "arcEnd": 0.125
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "the-virus-block:block/corrupted_layered_cube",
+  "textures": {
+    "base": "minecraft:block/tinted_glass",
+    "overlay": "minecraft:block/resin_clump",
+    "glow": "minecraft:block/magma"
+  }
+}
+

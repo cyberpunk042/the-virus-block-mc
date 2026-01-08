@@ -1,0 +1,105 @@
+{
+    "name": "Custom White Sun",
+    "description": "Custom V7 Panteleymonov sun with white tones and blue tertiary",
+    "fieldVisual": {
+        "enabled": true,
+        "effectType": "ENERGY_ORB",
+        "version": 7,
+        "general": {
+            "intensity": 1.2,
+            "animationSpeed": 1.0,
+            "previewRadius": 0.2272826
+        },
+        "colors": {
+            "primary": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "secondary": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "tertiary": [
+                0.101960786,
+                0.4,
+                0.8
+            ],
+            "highlight": [
+                1.0,
+                1.0,
+                1.0
+            ],
+            "ray": [
+                1.0,
+                0.6,
+                0.2
+            ]
+        },
+        "params": {
+            "coreSize": 10.0,
+            "edgeSharpness": 4.0,
+            "coreFalloff": 29.800001,
+            "fadePower": 0.0,
+            "fadeScale": 2.0,
+            "insideFalloffPower": 1.0,
+            "noiseResLow": 5.0,
+            "noiseResHigh": 5.0,
+            "noiseAmplitude": 2.0,
+            "noiseSeed": 0.0,
+            "noiseBaseScale": 0.03125,
+            "noiseScaleMultiplier": 4.0,
+            "noiseOctaves": 7.0,
+            "glowLineCount": 16.0,
+            "glowLineIntensity": 1.0,
+            "rayPower": 3.8648648,
+            "raySharpness": 0.68533784,
+            "coronaWidth": 0.5,
+            "coronaPower": 19.327702,
+            "coronaMultiplier": 50.0,
+            "ringPower": 1.0,
+            "speedLow": 2.0,
+            "speedHigh": 2.0,
+            "speedRay": 5.0,
+            "speedRing": 2.0,
+            "radialSpeed1": 0.35,
+            "radialSpeed2": 0.15,
+            "axialSpeed": 0.015,
+            "lightAmbient": 0.8,
+            "lightDiffuse": 1.2,
+            "transScale": 1.0,
+            "showExternalRays": false,
+            "showCorona": true,
+            "flamesEdge": 1.1,
+            "flamesPower": 2.0,
+            "flamesMult": 50.0,
+            "flamesTimeScale": 1.2,
+            "flamesInsideFalloff": 24.0,
+            "surfaceNoiseScale": 5.0,
+            "v2CoronaStart": 0.15,
+            "v2CoronaBrightness": 1.0,
+            "v2CoreMaskRadius": 0.35,
+            "v2CoreSpread": 1.0,
+            "v2CoreGlow": 1.0,
+            "v2CoreMaskSoft": 0.05,
+            "v2EdgeRadius": 0.3,
+            "v2EdgeSpread": 1.0,
+            "v2EdgeGlow": 1.0,
+            "v2SharpScale": 4.0,
+            "v2LinesUVScale": 3.0,
+            "v2LinesDensityMult": 1.6,
+            "v2LinesContrast1": 2.5,
+            "v2LinesContrast2": 3.0,
+            "v2LinesMaskRadius": 0.3,
+            "v2LinesMaskSoft": 0.02,
+            "v2RayRotSpeed": 0.3,
+            "v2RayStartRadius": 0.32,
+            "v2AlphaScale": 1.0,
+            "distortionStrength": 0.0,
+            "blackout": 1.0,
+            "distortionRadius": 225.0,
+            "distortionFrequency": 0.1
+        }
+    }
+}

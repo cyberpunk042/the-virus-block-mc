@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "the-virus-block:block/infected_grass_top",
+    "side": "the-virus-block:block/infected_grass_side",
+    "bottom": "minecraft:block/dirt"
+  }
+}
+

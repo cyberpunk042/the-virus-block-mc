@@ -1,0 +1,12 @@
+{
+  "id": "the-virus-block:slow_growth",
+  "growth_enabled": true,
+  "rate": 10,
+  "rate_scale": 0.8,
+  "start": 0.3,
+  "target": 1.0,
+  "min": 0.2,
+  "max": 1.2
+}
+
+

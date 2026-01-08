@@ -1,0 +1,8 @@
+{
+  "name": "Prism Flat",
+  "description": "Flat/short prism",
+  "type": "prism",
+  "sides": 6,
+  "radius": 1.5,
+  "height": 0.3
+}

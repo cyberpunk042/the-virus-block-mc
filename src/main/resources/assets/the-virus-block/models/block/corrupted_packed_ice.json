@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_mirrored_all",
+  "textures": {
+    "all": "the-virus-block:block/corrupted_packed_ice"
+  }
+}
+

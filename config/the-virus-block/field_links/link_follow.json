@@ -1,0 +1,11 @@
+{
+  "name": "Link Follow",
+  "description": "Follow parent transform",
+  "primitiveId": "parent",
+  "radiusMatch": false,
+  "radiusOffset": 0.0,
+  "follow": true,
+  "mirror": false,
+  "phaseOffset": 0.0,
+  "scaleWith": false
+}

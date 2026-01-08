@@ -1,0 +1,26 @@
+{
+  "id": "the-virus-block:default_push",
+  "interval_ticks": 20,
+  "radius": 12.0,
+  "strength": 1.0,
+  "vertical_boost": 0.35,
+  "falloff": 0.65,
+  "start_progress": 0.0,
+  "end_progress": 0.5,
+  "guardian_beams": true,
+  "edge_falloff": 0.2,
+  "beam_color": "#ffcc66",
+  "particle": "minecraft:poof",
+  "particle_count": 8,
+  "particle_speed": 0.02,
+  "sound": "minecraft:block.respawn_anchor.deplete",
+  "impact_damage": 0.0,
+  "impact_cooldown_ticks": 10,
+  "ring_behavior": "none",
+  "ring_count": 0,
+  "ring_spacing": 0.0,
+  "ring_width": 0.0,
+  "ring_strength": 1.0,
+  "ring_field_profiles": []
+}
+

@@ -1,0 +1,8 @@
+{
+  "name": "Prism Hexagon",
+  "description": "6-sided prism (default)",
+  "type": "prism",
+  "sides": 6,
+  "radius": 1.0,
+  "height": 2.0
+}

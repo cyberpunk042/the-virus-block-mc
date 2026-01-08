@@ -1,0 +1,28 @@
+{
+  "id": "the-virus-block:none_push",
+  "enabled": false,
+  "interval_ticks": 20,
+  "radius": 0.5,
+  "strength": 0.0,
+  "vertical_boost": 0.0,
+  "falloff": 1.0,
+  "start_progress": 0.0,
+  "end_progress": 1.0,
+  "guardian_beams": false,
+  "edge_falloff": 0.0,
+  "beam_color": "#000000",
+  "particle": null,
+  "particle_count": 0,
+  "particle_speed": 0.0,
+  "sound": null,
+  "impact_damage": 0.0,
+  "impact_cooldown_ticks": 20,
+  "ring_behavior": "none",
+  "ring_count": 0,
+  "ring_spacing": 0.0,
+  "ring_width": 0.0,
+  "ring_strength": 0.0,
+  "ring_field_profiles": []
+}
+
+

@@ -1,0 +1,18 @@
+{
+  "id": "the-virus-block:half_spin",
+  "primary": {
+    "speed": 0.5,
+    "direction_multiplier": 1.0,
+    "axis_x": 0.0,
+    "axis_y": 1.0,
+    "axis_z": 0.0
+  },
+  "secondary": {
+    "speed": 0.25,
+    "direction_multiplier": -1.0,
+    "axis_x": 0.0,
+    "axis_y": 1.0,
+    "axis_z": 0.0
+  }
+}
+

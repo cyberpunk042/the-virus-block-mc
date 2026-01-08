@@ -1,0 +1,8 @@
+{
+  "name": "Prism Octagon",
+  "description": "8-sided prism",
+  "type": "prism",
+  "sides": 8,
+  "radius": 1.0,
+  "height": 2.0
+}

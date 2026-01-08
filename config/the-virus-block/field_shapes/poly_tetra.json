@@ -1,0 +1,7 @@
+{
+  "name": "Tetrahedron",
+  "description": "4-faced pyramid",
+  "type": "polyhedron",
+  "polyType": "TETRAHEDRON",
+  "radius": 1.0
+}

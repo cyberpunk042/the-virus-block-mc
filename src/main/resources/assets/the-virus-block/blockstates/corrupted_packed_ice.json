@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "": {
+      "model": "the-virus-block:block/corrupted_packed_ice",
+      "render_type": "translucent"
+    }
+  }
+}
+

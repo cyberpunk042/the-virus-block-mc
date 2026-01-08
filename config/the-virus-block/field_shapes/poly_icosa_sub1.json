@@ -1,0 +1,8 @@
+{
+  "name": "Icosahedron Subdivided",
+  "description": "Icosahedron with 1 subdivision",
+  "type": "polyhedron",
+  "polyType": "ICOSAHEDRON",
+  "radius": 1.0,
+  "subdivisions": 1
+}

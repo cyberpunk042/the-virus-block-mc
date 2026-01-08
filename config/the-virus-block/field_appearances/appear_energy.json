@@ -1,0 +1,10 @@
+{
+  "name": "Energy",
+  "description": "Energized, powerful look",
+  "color": "@primary",
+  "alpha": 0.9,
+  "glow": 0.9,
+  "emissive": 0.6,
+  "saturation": 1.2,
+  "brightness": 1.1
+}

@@ -1,0 +1,10 @@
+{
+  "id": "the-virus-block:none_field",
+  "mesh": "none",
+  "texture": null,
+  "alpha": 0.0,
+  "spin_speed": 0.0,
+  "scale_multiplier": 1.0,
+  "color": "#00000000"
+}
+

@@ -1,0 +1,29 @@
+{
+    "name": "Neon Core",
+    "description": "Bright neon core with sharp edges",
+    "enabled": true,
+    "effectType": "ENERGY_ORB",
+    "intensity": 1.8,
+    "animationSpeed": 1.2,
+    "primaryColor": [
+        1.0,
+        0.2,
+        0.8
+    ],
+    "secondaryColor": [
+        0.0,
+        1.0,
+        1.0
+    ],
+    "tertiaryColor": [
+        0.6,
+        0.0,
+        1.0
+    ],
+    "coreSize": 0.2,
+    "edgeSharpness": 6.0,
+    "spiralDensity": 4.0,
+    "spiralTwist": 3.0,
+    "glowLineCount": 20.0,
+    "glowLineIntensity": 1.0
+}

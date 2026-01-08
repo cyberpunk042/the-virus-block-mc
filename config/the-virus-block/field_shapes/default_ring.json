@@ -1,0 +1,11 @@
+{
+  "name": "Default",
+  "description": "Standard ring",
+  "type": "ring",
+  "innerRadius": 0.5,
+  "outerRadius": 1.5,
+  "segments": 96,
+  "height": 0.0,
+  "y": 0.0
+}
+

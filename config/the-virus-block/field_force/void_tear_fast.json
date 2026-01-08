@@ -1,0 +1,15 @@
+{
+    "id": "void_tear_fast",
+    "name": "Void Tear (Fast)",
+    "description": "Fast chaotic pull with 3D rotation - high velocity orbit",
+    "strength": 4.0,
+    "radius": 20.0,
+    "maxVelocity": 7.0,
+    "damping": 0.006,
+    "groundLift": 0.25,
+    "falloff": "inverse",
+    "tiltMode": "fullcycle",
+    "tiltRate": 0.06,
+    "orientationMode": "fullcycle",
+    "orientationRate": 0.08
+}

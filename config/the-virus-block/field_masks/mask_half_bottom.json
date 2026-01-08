@@ -1,0 +1,8 @@
+{
+  "name": "Bottom Half",
+  "description": "Only bottom half visible",
+  "mask": "GRADIENT",
+  "direction": "VERTICAL",
+  "gradientStart": 0.5,
+  "gradientEnd": 1.0
+}

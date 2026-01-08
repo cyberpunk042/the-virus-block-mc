@@ -1,0 +1,9 @@
+{
+  "name": "Orbit Phase 90\u00b0",
+  "description": "Quarter phase offset (for multi-layer)",
+  "enabled": true,
+  "radius": 1.5,
+  "speed": 1.0,
+  "axis": "Y",
+  "phase": 90.0
+}

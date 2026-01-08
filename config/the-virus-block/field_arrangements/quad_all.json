@@ -1,0 +1,6 @@
+{
+  "name": "All Quads",
+  "description": "All quads visible - complete surface",
+  "cellType": "QUAD",
+  "pattern": "full"
+}

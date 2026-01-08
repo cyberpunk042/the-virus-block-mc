@@ -1,0 +1,6 @@
+{
+  "name": "Checkerboard",
+  "description": "Alternating checkerboard pattern",
+  "cellType": "QUAD",
+  "pattern": "checkerboard"
+}

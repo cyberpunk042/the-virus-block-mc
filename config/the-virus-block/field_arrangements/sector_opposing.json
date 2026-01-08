@@ -1,0 +1,8 @@
+{
+  "name": "Opposing",
+  "description": "Two opposite pie slices",
+  "cellType": "SECTOR",
+  "pattern": "uniform",
+  "count": 2,
+  "gapRatio": 0.6
+}

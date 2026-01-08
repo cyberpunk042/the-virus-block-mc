@@ -1,0 +1,9 @@
+{
+  "name": "Orbit X Axis",
+  "description": "Orbit around X axis (vertical loop)",
+  "enabled": true,
+  "radius": 1.5,
+  "speed": 1.0,
+  "axis": "X",
+  "phase": 0.0
+}

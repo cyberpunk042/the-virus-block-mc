@@ -1,0 +1,15 @@
+{
+    "id": "void_tear_maelstrom_3d_fast",
+    "name": "Void Tear Maelstrom 3D Fast",
+    "description": "Fast 3D maelstrom void tear - chaotic strong forces with rapid rotation",
+    "strength": 5.0,
+    "radius": 30.0,
+    "maxVelocity": 8.0,
+    "damping": 0.005,
+    "groundLift": 0.3,
+    "falloff": "inverse",
+    "tiltMode": "fullcycle",
+    "tiltRate": 0.08,
+    "orientationMode": "fullcycle",
+    "orientationRate": 0.1
+}

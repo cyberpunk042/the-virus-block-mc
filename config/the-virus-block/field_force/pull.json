@@ -1,0 +1,11 @@
+{
+    "id": "pull",
+    "name": "Pull",
+    "description": "Moderate gravitational pull",
+    "strength": 0.22,
+    "radius": 15.0,
+    "maxVelocity": 1.6,
+    "damping": 0.02,
+    "groundLift": 0.06,
+    "falloff": "inverse"
+}

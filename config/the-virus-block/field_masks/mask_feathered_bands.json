@@ -1,0 +1,8 @@
+{
+  "name": "Soft Bands",
+  "description": "Bands with soft edges",
+  "mask": "BANDS",
+  "count": 4,
+  "thickness": 0.6,
+  "feather": 0.3
+}

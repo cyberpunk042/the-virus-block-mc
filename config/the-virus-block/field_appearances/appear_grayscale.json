@@ -1,0 +1,7 @@
+{
+  "name": "Grayscale",
+  "description": "No color saturation",
+  "color": "@primary",
+  "alpha": 1.0,
+  "saturation": 0.0
+}

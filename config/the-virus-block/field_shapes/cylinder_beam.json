@@ -1,0 +1,10 @@
+{
+  "name": "Cylinder Beam",
+  "description": "Tall thin beam",
+  "type": "cylinder",
+  "radius": 0.1,
+  "height": 10.0,
+  "segments": 16,
+  "capTop": true,
+  "capBottom": false
+}

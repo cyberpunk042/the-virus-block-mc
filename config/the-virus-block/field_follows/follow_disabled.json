@@ -1,0 +1,7 @@
+{
+  "name": "Follow Disabled",
+  "description": "Static position",
+  "enabled": false,
+  "mode": "LOCKED",
+  "playerOverride": false
+}

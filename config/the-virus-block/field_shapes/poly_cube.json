@@ -1,0 +1,7 @@
+{
+  "name": "Cube",
+  "description": "6-faced cube",
+  "type": "polyhedron",
+  "polyType": "CUBE",
+  "radius": 1.0
+}

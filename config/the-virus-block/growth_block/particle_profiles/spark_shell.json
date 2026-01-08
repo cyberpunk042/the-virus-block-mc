@@ -1,0 +1,20 @@
+{
+  "id": "the-virus-block:spark_shell",
+  "particle": "minecraft:enchanted_hit",
+  "count": 28,
+  "speed": 0.0,
+  "sound": "minecraft:block.beacon.ambient",
+  "sound_interval": 25,
+  "interval_ticks": 10,
+  "shape": "shell",
+  "radius": 1.8,
+  "height": 1.2,
+  "offset_x": 0.0,
+  "offset_y": 0.4,
+  "offset_z": 0.0,
+  "jitter_x": 0.05,
+  "jitter_y": 0.05,
+  "jitter_z": 0.05,
+  "follow_scale": true
+}
+

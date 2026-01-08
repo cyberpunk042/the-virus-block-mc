@@ -1,0 +1,12 @@
+{
+  "id": "the-virus-block:standard_wobble",
+  "enabled": true,
+  "amplitude_x": 0.08,
+  "amplitude_y": 0.04,
+  "amplitude_z": 0.08,
+  "speed_x": 0.23,
+  "speed_y": 0.17,
+  "speed_z": 0.19
+}
+
+

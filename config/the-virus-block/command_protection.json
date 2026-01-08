@@ -1,0 +1,33 @@
+{
+  "untouchable": [
+    "difficulty.level"
+  ],
+  
+  "blacklisted": [
+    {
+      "path": "growth.defaults.set",
+      "reason": "Permanently affects all future growth blocks"
+    },
+    {
+      "path": "infection.scenario.unbind",
+      "reason": "May break progression if done mid-infection"
+    },
+    {
+      "path": "teleport.enabled",
+      "reason": "Core gameplay mechanic - disable with caution"
+    },
+    {
+      "path": "erosion.fill_mode",
+      "reason": "Changing mid-collapse can cause visual inconsistencies"
+    },
+    {
+      "path": "singularity.view_distance",
+      "reason": "Setting to 0 hides the collapse entirely"
+    },
+    {
+      "path": "debug.spawn_void_tear",
+      "reason": "Spawns a dangerous entity near you"
+    }
+  ]
+}
+

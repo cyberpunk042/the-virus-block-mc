@@ -1,0 +1,148 @@
+{
+    "version": 1,
+    "id": "triangular_orbit",
+    "name": "Triangular Orbit",
+    "description": "Three planets orbiting in perfect 120° triangular formation",
+    "type": "SHIELD",
+    "category": "orbital",
+    "tags": [
+        "orbit",
+        "planets",
+        "linking",
+        "demo"
+    ],
+    "definition": {
+        "id": "triangular_orbit",
+        "type": "SHIELD",
+        "baseRadius": 0.1,
+        "layers": [
+            {
+                "id": "orbital_layer",
+                "primitives": [
+                    {
+                        "id": "planet_1",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.15,
+                            "latSteps": 16,
+                            "lonSteps": 32
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 2.0,
+                                    "frequency": 1.0
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#FF4444",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.3
+                        },
+                        "animation": {}
+                    },
+                    {
+                        "id": "planet_2",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.15,
+                            "latSteps": 16,
+                            "lonSteps": 32
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 2.0,
+                                    "frequency": 1.0
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#44FF44",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.3
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "planet_1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.333,
+                            "orbitSpeedMult": 1.0
+                        }
+                    },
+                    {
+                        "id": "planet_3",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.15,
+                            "latSteps": 16,
+                            "lonSteps": 32
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 2.0,
+                                    "frequency": 1.0
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#4488FF",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.3
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "planet_1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.667,
+                            "orbitSpeedMult": 1.0
+                        }
+                    }
+                ],
+                "alpha": 1.0,
+                "visible": true,
+                "blendMode": "NORMAL"
+            }
+        ],
+        "follow": {
+            "enabled": true,
+            "leadOffset": 0.0,
+            "responsiveness": 1.0
+        }
+    }
+}

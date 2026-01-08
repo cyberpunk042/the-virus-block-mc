@@ -1,0 +1,11 @@
+{
+  "name": "Sphere Band",
+  "description": "Equatorial band only",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 16,
+  "lonSteps": 64,
+  "latStart": 0.3,
+  "latEnd": 0.7,
+  "algorithm": "LAT_LON"
+}

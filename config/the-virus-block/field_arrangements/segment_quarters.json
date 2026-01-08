@@ -1,0 +1,8 @@
+{
+  "name": "Quarters",
+  "description": "Four equal segments - compass points",
+  "cellType": "SEGMENT",
+  "pattern": "uniform",
+  "count": 4,
+  "gapRatio": 0.5
+}

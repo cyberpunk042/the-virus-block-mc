@@ -1,0 +1,27 @@
+{
+  "id": "the-virus-block:shock_push",
+  "interval_ticks": 12,
+  "radius": 11.0,
+  "strength": 1.25,
+  "vertical_boost": 0.6,
+  "falloff": 0.7,
+  "start_progress": 0.0,
+  "end_progress": 0.45,
+  "guardian_beams": true,
+  "edge_falloff": 0.1,
+  "beam_color": "#ffaa00",
+  "particle": "minecraft:sonic_boom",
+  "particle_count": 14,
+  "particle_speed": 0.05,
+  "sound": "minecraft:entity.guardian.attack",
+  "impact_damage": 4.0,
+  "impact_cooldown_ticks": 20,
+  "ring_behavior": "none",
+  "ring_count": 0,
+  "ring_spacing": 0.0,
+  "ring_width": 0.0,
+  "ring_strength": 1.0,
+  "ring_field_profiles": [],
+  "particle_profile": "the-virus-block:spark_shell"
+}
+

@@ -1,0 +1,14 @@
+{
+  "id": "the-virus-block:beam_secondary_mesh",
+  "primary_texture": "the-virus-block:textures/block/glow_beam_secondary.png",
+  "secondary_texture": "the-virus-block:textures/block/glow_beam_secondary.png",
+  "primary_color": "#A5F1FF",
+  "secondary_color": "#A5F1FF",
+  "light_level": 10,
+  "primary_use_mesh": false,
+  "secondary_use_mesh": true,
+  "secondary_mesh_animation": {
+    "scroll_speed": 0.02
+  }
+}
+

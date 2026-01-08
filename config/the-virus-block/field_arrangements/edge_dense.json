@@ -1,0 +1,7 @@
+{
+  "name": "Dense",
+  "description": "High edge density",
+  "cellType": "EDGE",
+  "pattern": "dense",
+  "visibility": 0.8
+}

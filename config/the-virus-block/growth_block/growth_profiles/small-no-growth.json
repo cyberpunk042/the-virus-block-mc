@@ -1,0 +1,12 @@
+{
+  "id": "the-virus-block:small_no_growth",
+  "growth_enabled": true,
+  "rate_ticks": 5,
+  "rate_scale": 1.0,
+  "start_scale": 0.1,
+  "target_scale": 0.1,
+  "min_scale": 0.05,
+  "max_scale": 0.2
+}
+
+

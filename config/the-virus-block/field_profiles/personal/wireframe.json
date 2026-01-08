@@ -1,0 +1,68 @@
+{
+    "id": "wireframe",
+    "name": "Wireframe",
+    "type": "SHIELD",
+    "baseRadius": 1.0,
+    "layers": [
+        {
+            "id": "Layer 1",
+            "primitives": [
+                {
+                    "id": "wireframe_sphere",
+                    "type": "sphere",
+                    "shape": {
+                        "radius": 1.0,
+                        "latSteps": 32,
+                        "lonSteps": 64
+                    },
+                    "fill": {
+                        "mode": "WIREFRAME",
+                        "wireThickness": 0.1,
+                        "depthWrite": true,
+                        "cage": {
+                            "lineWidth": 1.0,
+                            "showEdges": true,
+                            "latitudeCount": 6,
+                            "longitudeCount": 12,
+                            "showEquator": true,
+                            "showPoles": true
+                        }
+                    },
+                    "appearance": {
+                        "color": "#00FFFF",
+                        "alpha": {
+                            "min": 0.6,
+                            "max": 0.6
+                        },
+                        "glow": 0.5,
+                        "emissive": 0.0,
+                        "saturation": 1.0,
+                        "brightness": 1.0,
+                        "hueShift": 0.0,
+                        "secondaryColor": "#FFFFFF",
+                        "colorBlend": 0.0
+                    },
+                    "animation": {}
+                }
+            ],
+            "alpha": 1.0,
+            "visible": true,
+            "blendMode": "NORMAL"
+        }
+    ],
+    "modifiers": {},
+    "follow": {
+        "enabled": true,
+        "leadOffset": 0.0,
+        "responsiveness": 1.0,
+        "lookAhead": 0.0
+    },
+    "beam": {
+        "enabled": false,
+        "innerRadius": 0.05,
+        "outerRadius": 0.1,
+        "color": "@beam",
+        "height": 10.0,
+        "glow": 0.0
+    }
+}

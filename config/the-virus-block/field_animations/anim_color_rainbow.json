@@ -1,0 +1,17 @@
+{
+  "name": "Rainbow",
+  "description": "Full rainbow cycle",
+  "colorCycle": {
+    "colors": [
+      "#FF0000",
+      "#FF7F00",
+      "#FFFF00",
+      "#00FF00",
+      "#0000FF",
+      "#4B0082",
+      "#9400D3"
+    ],
+    "speed": 0.5,
+    "blend": true
+  }
+}

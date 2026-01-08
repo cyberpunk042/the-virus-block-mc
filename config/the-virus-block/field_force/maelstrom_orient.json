@@ -1,0 +1,15 @@
+{
+    "id": "maelstrom_orient",
+    "name": "Maelstrom Orientation Only",
+    "description": "Maelstrom with only ORIENTATION rotation - orbit tips left/right",
+    "strength": 3.0,
+    "radius": 35.0,
+    "maxVelocity": 5.0,
+    "damping": 0.005,
+    "groundLift": 0.2,
+    "falloff": "inverse",
+    "tiltMode": "fixed",
+    "tiltRate": 0.0,
+    "orientationMode": "fullcycle",
+    "orientationRate": 0.03
+}

@@ -1,0 +1,14 @@
+{
+  "id": "the-virus-block:prototype",
+  "primary_texture": "the-virus-block:textures/misc/singularity_sphere_1.png",
+  "secondary_texture": "the-virus-block:textures/misc/singularity_sphere_2.png",
+  "particle": "minecraft:small_flame",
+  "particle_speed": 0.02,
+  "particle_count": 2,
+  "primary_color": "#FFFFFF",
+  "secondary_color": "#FFFFFF",
+  "light_level": 10,
+  "primary_use_mesh": false,
+  "secondary_use_mesh": false
+}
+

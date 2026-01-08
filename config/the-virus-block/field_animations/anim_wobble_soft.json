@@ -1,0 +1,13 @@
+{
+  "name": "Wobble Soft",
+  "description": "Gentle random wobble",
+  "wobble": {
+    "amplitude": [
+      0.05,
+      0.03,
+      0.05
+    ],
+    "speed": 1.0,
+    "randomize": true
+  }
+}

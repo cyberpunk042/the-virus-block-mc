@@ -1,0 +1,11 @@
+{
+  "name": "Link Opposite Phase",
+  "description": "180\u00b0 phase offset",
+  "primitiveId": "parent",
+  "radiusMatch": false,
+  "radiusOffset": 0.0,
+  "follow": false,
+  "mirror": false,
+  "phaseOffset": 180.0,
+  "scaleWith": false
+}

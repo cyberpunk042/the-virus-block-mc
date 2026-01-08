@@ -1,0 +1,9 @@
+{
+  "name": "Rotating Stripes",
+  "description": "Animated rotating vertical stripes",
+  "mask": "STRIPES",
+  "count": 8,
+  "thickness": 0.5,
+  "animate": true,
+  "animSpeed": 0.5
+}

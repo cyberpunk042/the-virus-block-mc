@@ -1,0 +1,11 @@
+{
+  "name": "Sphere Partial",
+  "description": "270\u00b0 longitude arc",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 32,
+  "lonSteps": 48,
+  "lonStart": 0.0,
+  "lonEnd": 0.75,
+  "algorithm": "LAT_LON"
+}

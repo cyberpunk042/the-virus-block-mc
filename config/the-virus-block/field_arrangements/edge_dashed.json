@@ -1,0 +1,8 @@
+{
+  "name": "Dashed",
+  "description": "Dashed line edges",
+  "cellType": "EDGE",
+  "pattern": "dashed",
+  "dashLength": 0.1,
+  "gapLength": 0.05
+}

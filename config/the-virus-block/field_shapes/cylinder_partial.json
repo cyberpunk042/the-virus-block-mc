@@ -1,0 +1,9 @@
+{
+  "name": "Cylinder Partial",
+  "description": "270\u00b0 arc cylinder",
+  "type": "cylinder",
+  "radius": 0.5,
+  "height": 2.0,
+  "segments": 24,
+  "arc": 270
+}

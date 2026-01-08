@@ -1,0 +1,10 @@
+{
+  "name": "Oscillate",
+  "description": "Back-and-forth rotation",
+  "spin": {
+    "axis": "Y",
+    "speed": 45.0,
+    "oscillate": true,
+    "range": 90.0
+  }
+}

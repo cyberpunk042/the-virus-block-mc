@@ -1,0 +1,11 @@
+{
+  "name": "Beam Default",
+  "description": "Standard beam configuration",
+  "enabled": true,
+  "innerRadius": 0.0,
+  "outerRadius": 0.5,
+  "height": 3.0,
+  "glow": 0.5,
+  "color": "#00FF00",
+  "pulseEnabled": false
+}

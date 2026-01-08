@@ -1,0 +1,10 @@
+{
+  "name": "Ring Half Arc",
+  "description": "180\u00b0 arc",
+  "type": "ring",
+  "innerRadius": 0.8,
+  "outerRadius": 1.0,
+  "segments": 32,
+  "arcStart": 0,
+  "arcEnd": 180
+}

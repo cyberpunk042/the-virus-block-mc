@@ -1,0 +1,9 @@
+{
+  "name": "Sphere Ultra",
+  "description": "Maximum detail for close-up",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 128,
+  "lonSteps": 256,
+  "algorithm": "LAT_LON"
+}

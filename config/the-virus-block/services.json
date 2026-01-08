@@ -1,0 +1,97 @@
+{
+  "watchdog": {
+    "collapse": {
+      "stallTicks": 200
+    },
+    "singularity": {
+      "fuse": {
+        "enabled": false,
+        "maxExtraTicks": 200,
+        "autoSkip": false
+      },
+      "collapse": {
+        "enabled": false,
+        "warnTicks": 200,
+        "abortTicks": 400,
+        "autoSkip": false
+      }
+    },
+    "scheduler": {
+      "enabled": false,
+      "warnTasks": 32,
+      "abortTasks": 64
+    }
+  },
+  "effects": {
+    "core": true,
+    "ring": true,
+    "collapseVeil": true,
+    "dissipation": true
+  },
+  "guardian": {
+    "beams": true,
+    "pushRadius": 12.0,
+    "pushStrength": 2.0,
+    "knockbackEnabled": true,
+    "beamDurationTicks": 60
+  },
+  "audio": {
+    "core": true,
+    "ring": true,
+    "collapseVeil": true,
+    "dissipation": true
+  },
+  "singularity": {
+    "collapseBarDelayTicks": 60,
+    "collapseCompleteHoldTicks": 40,
+    "coreChargeTicks": 80,
+    "resetDelayTicks": 160,
+    "postReset": {
+      "enabled": true,
+      "delayTicks": 25,
+      "tickDelay": 1,
+      "chunksPerTick": 2,
+      "batchRadius": 1
+    },
+    "execution": {
+      "collapseEnabled": true,
+      "allowChunkGeneration": true,
+      "allowOutsideBorderLoad": true
+    },
+    "visuals": {
+      "horizonDarkening": {
+        "enabled": true,
+        "color": "#100107",
+        "maxIntensity": 0.85,
+        "fadeInTicks": 60,
+        "fadeOutTicks": 80,
+        "startDelayTicks": 20,
+        "includeDissipation": true,
+        "triggerPhases": [
+          "FUSING",
+          "COLLAPSE",
+          "CORE",
+          "RING"
+        ]
+      }
+    }
+  },
+  "fuse": {
+    "explosionDelayTicks": 400,
+    "shellCollapseTicks": 20,
+    "pulseIntervalTicks": 8
+  },
+  "diagnostics": {
+    "enabled": true,
+    "logChunkSamples": true,
+    "logBypasses": true,
+    "logSampleIntervalTicks": 20,
+    "logSpam": {
+      "enableSpamDetection": true,
+      "perSecondThreshold": 10,
+      "perMinuteThreshold": 200,
+      "suppressWhenTriggered": true
+    }
+  }
+}
+

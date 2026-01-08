@@ -1,0 +1,14 @@
+{
+  "id": "the-virus-block:default_opacity",
+  "primary": {
+    "base_alpha": 1.0,
+    "pulse_speed": 0.0,
+    "pulse_amplitude": 0.0
+  },
+  "secondary": {
+    "base_alpha": 1.0,
+    "pulse_speed": 0.0,
+    "pulse_amplitude": 0.0
+  }
+}
+

@@ -1,0 +1,232 @@
+{
+    "targets": {
+        "swap": {}
+    },
+    "passes": [
+        {
+            "vertex_shader": "minecraft:post/sobel",
+            "fragment_shader": "the-virus-block:post/shockwave_ring",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                }
+            ],
+            "uniforms": {
+                "ShockwaveConfig": [
+                    {
+                        "name": "RingRadius",
+                        "type": "float",
+                        "value": 20.0
+                    },
+                    {
+                        "name": "RingThickness",
+                        "type": "float",
+                        "value": 4.0
+                    },
+                    {
+                        "name": "Intensity",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "Time",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "RingCount",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "RingSpacing",
+                        "type": "float",
+                        "value": 8.0
+                    },
+                    {
+                        "name": "ContractMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GlowWidth",
+                        "type": "float",
+                        "value": 8.0
+                    },
+                    {
+                        "name": "TargetX",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "TargetY",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "TargetZ",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "UseWorldOrigin",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "CameraX",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "CameraY",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "CameraZ",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "AspectRatio",
+                        "type": "float",
+                        "value": 1.777
+                    },
+                    {
+                        "name": "ForwardX",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "ForwardY",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "ForwardZ",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "Fov",
+                        "type": "float",
+                        "value": 1.22
+                    },
+                    {
+                        "name": "UpX",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "UpY",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "UpZ",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "Reserved2",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "BlackoutAmount",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VignetteAmount",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VignetteRadius",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "Reserved3",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "TintR",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "TintG",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "TintB",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "TintAmount",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "RingR",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "RingG",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "RingB",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "RingOpacity",
+                        "type": "float",
+                        "value": 1.0
+                    }
+                ]
+            },
+            "output": "swap"
+        },
+        {
+            "vertex_shader": "minecraft:post/blit",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1,
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                ]
+            },
+            "output": "minecraft:main"
+        }
+    ]
+}

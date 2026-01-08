@@ -1,0 +1,13 @@
+{
+  "name": "Cage Default",
+  "description": "Globe-like latitude/longitude grid",
+  "mode": "CAGE",
+  "wireThickness": 1.0,
+  "doubleSided": true,
+  "cage": {
+    "latitudeCount": 8,
+    "longitudeCount": 16,
+    "showEquator": true,
+    "showPoles": true
+  }
+}

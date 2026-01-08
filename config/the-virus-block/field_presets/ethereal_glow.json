@@ -1,0 +1,23 @@
+{
+  "name": "Ethereal Glow",
+  "description": "Ghostly glowing effect with breathing alpha",
+  "merge": {
+    "appearance": {
+      "glow": 0.8,
+      "emissive": true,
+      "saturation": 0.3
+    },
+    "animation": {
+      "alphaPulse": {
+        "enabled": true,
+        "min": 0.5,
+        "max": 1.0
+      }
+    },
+    "fill": {
+      "doubleSided": true,
+      "depthWrite": false
+    }
+  }
+}
+

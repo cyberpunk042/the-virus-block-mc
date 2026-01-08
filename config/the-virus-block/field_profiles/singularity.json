@@ -1,0 +1,79 @@
+{
+    "id": "singularity",
+    "name": "Singularity Field",
+    "description": "Dark crimson singularity with core sphere and banded outer layer",
+    "type": "shield",
+    "baseRadius": 24.0,
+    "theme": "singularity_crimson",
+    "layers": [
+        {
+            "id": "core",
+            "primitives": [
+                {
+                    "id": "inner_sphere",
+                    "type": "sphere",
+                    "shape": {
+                        "radius": 1.15,
+                        "latSteps": 48,
+                        "lonSteps": 96
+                    },
+                    "appearance": {
+                        "color": "#FF1B1F3C",
+                        "alpha": {
+                            "min": 0.45,
+                            "max": 0.95
+                        },
+                        "fill": true,
+                        "glow": 0.4
+                    },
+                    "animation": {
+                        "spin": 0.05,
+                        "phase": 0.2
+                    }
+                }
+            ]
+        },
+        {
+            "id": "bands",
+            "primitives": [
+                {
+                    "id": "banded_sphere",
+                    "type": "sphere",
+                    "shape": {
+                        "radius": 1.28,
+                        "latSteps": 48,
+                        "lonSteps": 96
+                    },
+                    "appearance": {
+                        "color": "#FF0D0C13",
+                        "alpha": {
+                            "min": 0.35,
+                            "max": 0.8
+                        },
+                        "fill": true,
+                        "pattern": {
+                            "type": "bands",
+                            "count": 8,
+                            "thickness": 0.4
+                        },
+                        "glow": 0.3
+                    },
+                    "animation": {
+                        "spin": 0.03
+                    }
+                }
+            ]
+        }
+    ],
+    "modifiers": {
+        "visualScale": 0.36,
+        "tilt": 0.25,
+        "swirl": 0.75
+    },
+    "beam": {
+        "enabled": true,
+        "innerRadius": 0.05,
+        "outerRadius": 0.12,
+        "color": "#FFEC4558"
+    }
+}

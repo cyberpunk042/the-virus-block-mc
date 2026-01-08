@@ -1,0 +1,24 @@
+{
+  "defaultScenario": "the-virus-block:overworld",
+  "scenarios": [
+    {
+      "id": "the-virus-block:overworld",
+      "factory": "overworld"
+    },
+    {
+      "id": "the-virus-block:nether",
+      "factory": "nether"
+    }
+  ],
+  "bindings": [
+    {
+      "dimension": "minecraft:overworld",
+      "scenario": "the-virus-block:overworld"
+    },
+    {
+      "dimension": "minecraft:the_nether",
+      "scenario": "the-virus-block:nether"
+    }
+  ]
+}
+

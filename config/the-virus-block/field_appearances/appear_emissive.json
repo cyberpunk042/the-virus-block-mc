@@ -1,0 +1,8 @@
+{
+  "name": "Emissive",
+  "description": "Strong self-illumination",
+  "color": "@primary",
+  "alpha": 1.0,
+  "glow": 0.5,
+  "emissive": 0.8
+}

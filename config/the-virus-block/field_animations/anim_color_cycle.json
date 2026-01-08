@@ -1,0 +1,13 @@
+{
+  "name": "Color Cycle",
+  "description": "Smooth color cycling",
+  "colorCycle": {
+    "colors": [
+      "#FF0000",
+      "#00FF00",
+      "#0000FF"
+    ],
+    "speed": 1.0,
+    "blend": true
+  }
+}

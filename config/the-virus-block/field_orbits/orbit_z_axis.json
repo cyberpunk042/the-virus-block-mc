@@ -1,0 +1,9 @@
+{
+  "name": "Orbit Z Axis",
+  "description": "Orbit around Z axis",
+  "enabled": true,
+  "radius": 1.5,
+  "speed": 1.0,
+  "axis": "Z",
+  "phase": 0.0
+}

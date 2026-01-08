@@ -1,0 +1,7 @@
+{
+  "name": "Cross",
+  "description": "Cross/plus pattern on surface",
+  "cellType": "QUAD",
+  "pattern": "cross",
+  "thickness": 0.2
+}

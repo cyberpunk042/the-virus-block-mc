@@ -1,0 +1,9 @@
+{
+  "name": "8 Radial",
+  "description": "8 radial segments",
+  "mask": "RADIAL",
+  "count": 8,
+  "thickness": 0.5,
+  "centerX": 0.5,
+  "centerY": 0.5
+}

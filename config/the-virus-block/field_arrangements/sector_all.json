@@ -1,0 +1,6 @@
+{
+  "name": "Full Disc",
+  "description": "Complete disc - all sectors",
+  "cellType": "SECTOR",
+  "pattern": "full"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Beam Hollow",
+  "description": "Ring beam (hollow center)",
+  "enabled": true,
+  "innerRadius": 0.4,
+  "outerRadius": 0.6,
+  "height": 3.0,
+  "glow": 0.5,
+  "color": "#FFFF00",
+  "pulseEnabled": false
+}

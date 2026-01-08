@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S S",
+    "S S",
+    "TTT"
+  ],
+  "key": {
+    "S": { "item": "minecraft:slime_ball" },
+    "T": { "item": "minecraft:string" }
+  },
+  "result": {
+    "item": "the-virus-block:rubber_boots"
+  }
+}
+

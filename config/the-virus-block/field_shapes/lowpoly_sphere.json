@@ -1,0 +1,12 @@
+{
+  "name": "Low-poly",
+  "description": "Minimal detail sphere for performance",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 12,
+  "lonSteps": 24,
+  "latStart": 0.0,
+  "latEnd": 1.0,
+  "algorithm": "LAT_LON"
+}
+

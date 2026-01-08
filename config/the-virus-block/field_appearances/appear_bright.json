@@ -1,0 +1,7 @@
+{
+  "name": "Bright",
+  "description": "High brightness",
+  "color": "@primary",
+  "alpha": 1.0,
+  "brightness": 1.5
+}

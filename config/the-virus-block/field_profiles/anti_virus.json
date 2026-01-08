@@ -1,0 +1,58 @@
+{
+    "id": "anti_virus",
+    "name": "Anti Virus Field",
+    "description": "High-detail protective sphere with pink/white coloring and central beam",
+    "type": "shield",
+    "baseRadius": 18.0,
+    "theme": "antivirus_pink",
+    "layers": [
+        {
+            "id": "shell",
+            "primitives": [
+                {
+                    "id": "primitive_1765899260593",
+                    "type": "sphere",
+                    "shape": {
+                        "radius": 4.5082192,
+                        "latSteps": 256,
+                        "lonSteps": 23
+                    },
+                    "arrangement": {
+                        "defaultPattern": "stripe_1"
+                    },
+                    "appearance": {
+                        "color": "#00FFFF",
+                        "alpha": {
+                            "min": 0.75,
+                            "max": 0.75
+                        },
+                        "glow": 0.5,
+                        "emissive": 0.0,
+                        "saturation": 1.0,
+                        "brightness": 1.0,
+                        "hueShift": 0.0,
+                        "secondaryColor": "#FFFFFF",
+                        "colorBlend": 0.0
+                    },
+                    "animation": {
+                        "spin": {
+                            "axis": "Y",
+                            "speed": 45.0
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "modifiers": {
+        "visualScale": 0.3,
+        "swirl": 0.6
+    },
+    "beam": {
+        "enabled": true,
+        "innerRadius": 0.045,
+        "outerRadius": 0.06,
+        "height": 0,
+        "color": "#FFEAFAFF"
+    }
+}

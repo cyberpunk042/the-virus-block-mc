@@ -1,0 +1,9 @@
+{
+  "name": "Sphere Longitude Dense",
+  "description": "Extreme vertical meridians",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 16,
+  "lonSteps": 128,
+  "algorithm": "LAT_LON"
+}

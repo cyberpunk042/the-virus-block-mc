@@ -1,0 +1,11 @@
+{
+  "name": "Pulse Square",
+  "description": "Sharp on/off pulse",
+  "pulse": {
+    "scale": 1.0,
+    "speed": 2.0,
+    "waveform": "SQUARE",
+    "min": 0.9,
+    "max": 1.1
+  }
+}

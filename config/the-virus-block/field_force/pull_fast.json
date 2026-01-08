@@ -1,0 +1,11 @@
+{
+    "id": "pull_fast",
+    "name": "Pull (Fast)",
+    "description": "Faster pull - more force, larger range",
+    "strength": 0.35,
+    "radius": 25.0,
+    "maxVelocity": 2.2,
+    "damping": 0.015,
+    "groundLift": 0.1,
+    "falloff": "inverse"
+}

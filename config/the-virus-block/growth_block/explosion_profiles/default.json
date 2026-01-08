@@ -1,0 +1,12 @@
+{
+  "id": "the-virus-block:default_explosion",
+  "radius": 3.5,
+  "charges": 1,
+  "amount": 1,
+  "amount_delay_ticks": 0,
+  "max_damage": 20.0,
+  "damage_scaling": 1.0,
+  "causes_fire": false,
+  "breaks_blocks": true
+}
+

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "the-virus-block:block/infectious_cube"
+  }
+}
+

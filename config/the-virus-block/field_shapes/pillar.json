@@ -1,0 +1,10 @@
+{
+  "name": "Pillar",
+  "description": "Thick tall pillar",
+  "type": "cylinder",
+  "radius": 1.2,
+  "height": 12.0,
+  "segments": 48,
+  "topRadius": 1.2
+}
+

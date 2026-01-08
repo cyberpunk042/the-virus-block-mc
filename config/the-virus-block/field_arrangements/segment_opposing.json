@@ -1,0 +1,8 @@
+{
+  "name": "Opposing",
+  "description": "Two segments 180\u00b0 apart",
+  "cellType": "SEGMENT",
+  "pattern": "uniform",
+  "count": 2,
+  "gapRatio": 0.6
+}

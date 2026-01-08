@@ -1,0 +1,26 @@
+{
+  "name": "Rainbow",
+  "description": "Smooth RGB color cycling",
+  "spin": {
+    "enabled": false,
+    "axis": "Y",
+    "speed": 0.0
+  },
+  "pulse": {
+    "enabled": false,
+    "mode": "SCALE",
+    "frequency": 1.0,
+    "amplitude": 0.0
+  },
+  "alphaPulse": {
+    "enabled": false,
+    "min": 1.0,
+    "max": 1.0
+  },
+  "colorCycle": {
+    "colors": ["#FF0000", "#FF7F00", "#FFFF00", "#00FF00", "#0000FF", "#4B0082", "#9400D3"],
+    "speed": 0.5,
+    "blend": true
+  }
+}
+

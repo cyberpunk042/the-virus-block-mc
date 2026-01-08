@@ -1,0 +1,16 @@
+{
+  "name": "Beam Scanner",
+  "description": "Scanner-style pulsing",
+  "enabled": true,
+  "innerRadius": 0.0,
+  "outerRadius": 0.3,
+  "height": 2.0,
+  "glow": 0.6,
+  "color": "#00FFFF",
+  "pulseEnabled": true,
+  "pulseScale": 0.5,
+  "pulseSpeed": 4.0,
+  "pulseWaveform": "TRIANGLE",
+  "pulseMin": 0.1,
+  "pulseMax": 1.0
+}

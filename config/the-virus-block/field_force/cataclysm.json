@@ -1,0 +1,11 @@
+{
+    "id": "cataclysm",
+    "name": "Cataclysm",
+    "description": "Extreme force - testing limits of escape prevention",
+    "strength": 5.0,
+    "radius": 50.0,
+    "maxVelocity": 6.0,
+    "damping": 0.002,
+    "groundLift": 0.25,
+    "falloff": "inverse"
+}

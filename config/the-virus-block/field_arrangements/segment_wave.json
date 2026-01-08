@@ -1,0 +1,8 @@
+{
+  "name": "Wave",
+  "description": "Wavy segment distribution",
+  "cellType": "SEGMENT",
+  "pattern": "wave",
+  "frequency": 4,
+  "amplitude": 0.3
+}

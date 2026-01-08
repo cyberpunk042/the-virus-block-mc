@@ -1,0 +1,808 @@
+{
+    "version": 1,
+    "id": "atom_complex",
+    "name": "Complex Atom",
+    "description": "Sophisticated atom with nucleus, multiple electron shells on different orbital planes",
+    "type": "SHIELD",
+    "category": "orbital",
+    "tags": [
+        "atom",
+        "electrons",
+        "nucleus",
+        "orbitals",
+        "chemistry",
+        "linking"
+    ],
+    "definition": {
+        "id": "atom_complex",
+        "type": "SHIELD",
+        "baseRadius": 0.1,
+        "layers": [
+            {
+                "id": "nucleus_layer",
+                "primitives": [
+                    {
+                        "id": "nucleus_core",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.15,
+                            "latSteps": 16,
+                            "lonSteps": 32
+                        },
+                        "transform": {},
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#FF6644",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.6
+                        },
+                        "animation": {
+                            "pulse": {
+                                "speed": 0.5,
+                                "scale": 0.05,
+                                "mode": "SMOOTH"
+                            }
+                        }
+                    },
+                    {
+                        "id": "proton_1",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.06,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.08,
+                                    "frequency": 3.0
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.5,
+                                    "frequency": 2.0
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.3,
+                                    "frequency": 1.5
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#FF4444",
+                            "alpha": {
+                                "min": 0.8,
+                                "max": 0.8
+                            },
+                            "glow": 0.4
+                        },
+                        "animation": {}
+                    },
+                    {
+                        "id": "proton_2",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.06,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.08,
+                                    "frequency": 3.0
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.5,
+                                    "frequency": 2.0
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.3,
+                                    "frequency": 1.5
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#FF4444",
+                            "alpha": {
+                                "min": 0.8,
+                                "max": 0.8
+                            },
+                            "glow": 0.4
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "proton_1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.5,
+                            "orbitSpeedMult": 1.0
+                        }
+                    },
+                    {
+                        "id": "neutron_1",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.06,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.09,
+                                    "frequency": 2.5
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.6,
+                                    "frequency": 1.8
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.4,
+                                    "frequency": 2.2
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#888888",
+                            "alpha": {
+                                "min": 0.8,
+                                "max": 0.8
+                            },
+                            "glow": 0.3
+                        },
+                        "animation": {}
+                    },
+                    {
+                        "id": "neutron_2",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.06,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.09,
+                                    "frequency": 2.5
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.6,
+                                    "frequency": 1.8
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.4,
+                                    "frequency": 2.2
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#888888",
+                            "alpha": {
+                                "min": 0.8,
+                                "max": 0.8
+                            },
+                            "glow": 0.3
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "neutron_1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.5,
+                            "orbitSpeedMult": 1.0
+                        }
+                    }
+                ],
+                "alpha": 1.0,
+                "visible": true,
+                "blendMode": "NORMAL"
+            },
+            {
+                "id": "shell_1_s",
+                "primitives": [
+                    {
+                        "id": "e1_s1",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.04,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.6,
+                                    "frequency": 2.5
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.2,
+                                    "frequency": 1.8
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.8,
+                                    "frequency": 2.2
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#00FFFF",
+                            "alpha": {
+                                "min": 0.9,
+                                "max": 0.9
+                            },
+                            "glow": 0.8
+                        },
+                        "animation": {}
+                    },
+                    {
+                        "id": "e1_s2",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.04,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.6,
+                                    "frequency": 2.5
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.2,
+                                    "frequency": 1.8
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.8,
+                                    "frequency": 2.2
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#00FFFF",
+                            "alpha": {
+                                "min": 0.9,
+                                "max": 0.9
+                            },
+                            "glow": 0.8
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "e1_s1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.5,
+                            "orbitSpeedMult": 1.0
+                        }
+                    }
+                ],
+                "alpha": 1.0,
+                "visible": true,
+                "blendMode": "NORMAL"
+            },
+            {
+                "id": "shell_2_p",
+                "primitives": [
+                    {
+                        "id": "e2_px1",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.035,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.2,
+                                    "frequency": 1.5
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#FF00FF",
+                            "alpha": {
+                                "min": 0.85,
+                                "max": 0.85
+                            },
+                            "glow": 0.7
+                        },
+                        "animation": {}
+                    },
+                    {
+                        "id": "e2_px2",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.035,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.2,
+                                    "frequency": 1.5
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#FF00FF",
+                            "alpha": {
+                                "min": 0.85,
+                                "max": 0.85
+                            },
+                            "glow": 0.7
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "e2_px1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.5,
+                            "orbitSpeedMult": 1.0
+                        }
+                    },
+                    {
+                        "id": "e2_py1",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.035,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.2,
+                                    "frequency": 1.5
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 2.0,
+                                    "frequency": 0.0
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#FFFF00",
+                            "alpha": {
+                                "min": 0.85,
+                                "max": 0.85
+                            },
+                            "glow": 0.7
+                        },
+                        "animation": {}
+                    },
+                    {
+                        "id": "e2_py2",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.035,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.2,
+                                    "frequency": 1.5
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 2.0,
+                                    "frequency": 0.0
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#FFFF00",
+                            "alpha": {
+                                "min": 0.85,
+                                "max": 0.85
+                            },
+                            "glow": 0.7
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "e2_py1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.5,
+                            "orbitSpeedMult": 1.0
+                        }
+                    },
+                    {
+                        "id": "e2_pz1",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.035,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.2,
+                                    "frequency": 1.5
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.5,
+                                    "frequency": 0.0
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#00FF00",
+                            "alpha": {
+                                "min": 0.85,
+                                "max": 0.85
+                            },
+                            "glow": 0.7
+                        },
+                        "animation": {}
+                    },
+                    {
+                        "id": "e2_pz2",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.035,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.2,
+                                    "frequency": 1.5
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.5,
+                                    "frequency": 0.0
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#00FF00",
+                            "alpha": {
+                                "min": 0.85,
+                                "max": 0.85
+                            },
+                            "glow": 0.7
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "e2_pz1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.5,
+                            "orbitSpeedMult": 1.0
+                        }
+                    }
+                ],
+                "alpha": 1.0,
+                "visible": true,
+                "blendMode": "NORMAL"
+            },
+            {
+                "id": "shell_3_outer",
+                "primitives": [
+                    {
+                        "id": "e3_1",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.03,
+                            "latSteps": 10,
+                            "lonSteps": 20
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 2.0,
+                                    "frequency": 0.8
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.8,
+                                    "frequency": 0.5
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.6,
+                                    "frequency": 0.7
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#88FFFF",
+                            "alpha": {
+                                "min": 0.7,
+                                "max": 0.7
+                            },
+                            "glow": 0.5
+                        },
+                        "animation": {}
+                    },
+                    {
+                        "id": "e3_2",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.03,
+                            "latSteps": 10,
+                            "lonSteps": 20
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 2.0,
+                                    "frequency": 0.8
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.8,
+                                    "frequency": 0.5
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.6,
+                                    "frequency": 0.7
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#88FFFF",
+                            "alpha": {
+                                "min": 0.7,
+                                "max": 0.7
+                            },
+                            "glow": 0.5
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "e3_1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.25,
+                            "orbitSpeedMult": 1.0
+                        }
+                    },
+                    {
+                        "id": "e3_3",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.03,
+                            "latSteps": 10,
+                            "lonSteps": 20
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 2.0,
+                                    "frequency": 0.8
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.8,
+                                    "frequency": 0.5
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.6,
+                                    "frequency": 0.7
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#88FFFF",
+                            "alpha": {
+                                "min": 0.7,
+                                "max": 0.7
+                            },
+                            "glow": 0.5
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "e3_1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.5,
+                            "orbitSpeedMult": 1.0
+                        }
+                    },
+                    {
+                        "id": "e3_4",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.03,
+                            "latSteps": 10,
+                            "lonSteps": 20
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 2.0,
+                                    "frequency": 0.8
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.8,
+                                    "frequency": 0.5
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.6,
+                                    "frequency": 0.7
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#88FFFF",
+                            "alpha": {
+                                "min": 0.7,
+                                "max": 0.7
+                            },
+                            "glow": 0.5
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "e3_1",
+                            "orbitSync": true,
+                            "orbitPhaseOffset": 0.75,
+                            "orbitSpeedMult": 1.0
+                        }
+                    }
+                ],
+                "alpha": 1.0,
+                "visible": true,
+                "blendMode": "NORMAL"
+            }
+        ],
+        "follow": {
+            "enabled": true,
+            "leadOffset": 0.0,
+            "responsiveness": 1.0
+        }
+    }
+}

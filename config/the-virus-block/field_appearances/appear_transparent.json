@@ -1,0 +1,7 @@
+{
+  "name": "Transparent",
+  "description": "Highly see-through",
+  "color": "@primary",
+  "alpha": 0.2,
+  "glow": 0.0
+}

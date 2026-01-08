@@ -1,0 +1,7 @@
+{
+  "name": "Fine Checker",
+  "description": "Small checkerboard squares",
+  "mask": "CHECKER",
+  "count": 16,
+  "thickness": 0.5
+}

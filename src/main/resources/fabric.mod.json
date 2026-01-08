@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "the-virus-block",
+	"version": "${version}",
+	"name": "The Virus Block - Beginning of the End",
+	"description": "Place a single block and watch your world descend through five escalating tiers of corruption, mutations, and endgame anomalies.",
+	"authors": [
+		"Jean"
+	],
+	"contact": {
+		"sources": "https://github.com/Jean/the-virus-block"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/the-virus-block/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.cyberpunk042.TheVirusBlock"
+		],
+		"client": [
+			"net.cyberpunk042.TheVirusBlockClient"
+		]
+	},
+	"mixins": [
+		"the-virus-block.mixins.json",
+		{
+			"config": "the-virus-block.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.18.1",
+		"minecraft": "~1.21.6",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

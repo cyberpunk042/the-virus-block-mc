@@ -1,0 +1,8 @@
+{
+  "name": "Minimal",
+  "description": "Bare minimum structure",
+  "cellType": "EDGE",
+  "pattern": "minimal",
+  "latitudeCount": 3,
+  "longitudeCount": 6
+}

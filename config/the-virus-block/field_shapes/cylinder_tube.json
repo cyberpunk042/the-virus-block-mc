@@ -1,0 +1,10 @@
+{
+  "name": "Cylinder Tube",
+  "description": "Hollow tube (no caps)",
+  "type": "cylinder",
+  "radius": 0.5,
+  "height": 2.0,
+  "segments": 32,
+  "capTop": false,
+  "capBottom": false
+}

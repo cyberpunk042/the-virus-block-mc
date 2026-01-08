@@ -1,0 +1,11 @@
+{
+  "name": "Link Outer Offset",
+  "description": "Outside parent radius",
+  "primitiveId": "parent",
+  "radiusMatch": true,
+  "radiusOffset": 0.3,
+  "follow": false,
+  "mirror": false,
+  "phaseOffset": 0.0,
+  "scaleWith": false
+}

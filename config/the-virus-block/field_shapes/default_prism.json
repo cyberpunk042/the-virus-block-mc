@@ -1,0 +1,10 @@
+{
+  "name": "Default",
+  "description": "Standard hexagonal prism",
+  "type": "prism",
+  "sides": 6,
+  "radius": 3.0,
+  "height": 2.0,
+  "topRadius": 3.0
+}
+

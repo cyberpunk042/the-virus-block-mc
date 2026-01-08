@@ -1,0 +1,50 @@
+{
+  "parent": "the-virus-block:block/corrupted_layered_cube",
+  "textures": {
+    "base": "minecraft:block/basalt_top",
+    "overlay": "minecraft:block/sculk",
+    "glow": "minecraft:block/end_portal_frame_top"
+  }
+}
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "the-virus-block:block/corrupted_stone_noise",
+    "base": "the-virus-block:block/corrupted_stone_noise",
+    "veins": "the-virus-block:block/corrupted_stone_veins",
+    "glow": "the-virus-block:block/corrupted_glow"
+  },
+  "elements": [
+    { "from": [0,0,0], "to": [16,16,16],
+      "faces": {
+        "down": { "texture": "#base" },
+        "up": { "texture": "#base" },
+        "north": { "texture": "#base" },
+        "south": { "texture": "#base" },
+        "west": { "texture": "#base" },
+        "east": { "texture": "#base" }
+      }
+    },
+    { "from": [0,0,0], "to": [16,16,16],
+      "faces": {
+        "down": { "texture": "#veins", "tintindex": 0 },
+        "up": { "texture": "#veins", "tintindex": 0 },
+        "north": { "texture": "#veins", "tintindex": 0 },
+        "south": { "texture": "#veins", "tintindex": 0 },
+        "west": { "texture": "#veins", "tintindex": 0 },
+        "east": { "texture": "#veins", "tintindex": 0 }
+      }
+    },
+    { "from": [0,0,0], "to": [16,16,16],
+      "faces": {
+        "down": { "texture": "#glow", "emissive": true },
+        "up": { "texture": "#glow", "emissive": true },
+        "north": { "texture": "#glow", "emissive": true },
+        "south": { "texture": "#glow", "emissive": true },
+        "west": { "texture": "#glow", "emissive": true },
+        "east": { "texture": "#glow", "emissive": true }
+      }
+    }
+  ]
+}
+

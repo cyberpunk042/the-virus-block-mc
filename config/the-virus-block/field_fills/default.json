@@ -1,0 +1,15 @@
+{
+  "name": "Default",
+  "description": "Standard solid fill",
+  "mode": "SOLID",
+  "wireThickness": 1.0,
+  "doubleSided": false,
+  "depthTest": true,
+  "depthWrite": true,
+  "cage": {
+    "latitudeCount": 8,
+    "longitudeCount": 16
+  },
+  "pointSize": 2.0
+}
+

@@ -1,0 +1,8 @@
+{
+  "name": "Pac-Man",
+  "description": "Disc with mouth cutout",
+  "cellType": "SECTOR",
+  "pattern": "arc",
+  "arcStart": 0.1,
+  "arcEnd": 0.9
+}

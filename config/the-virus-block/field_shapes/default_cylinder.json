@@ -1,0 +1,10 @@
+{
+  "name": "Default",
+  "description": "Standard cylinder",
+  "type": "cylinder",
+  "radius": 1.0,
+  "height": 4.0,
+  "segments": 64,
+  "topRadius": 1.0
+}
+

@@ -1,0 +1,8 @@
+{
+  "name": "Soft Glow",
+  "description": "Gentle glow effect",
+  "color": "@primary",
+  "alpha": 0.85,
+  "glow": 0.4,
+  "emissive": 0.1
+}

@@ -1,0 +1,15 @@
+{
+    "id": "maelstrom_slow_3d",
+    "name": "Maelstrom Slow 3D",
+    "description": "Slow, graceful 3D orbit evolution",
+    "strength": 3.0,
+    "radius": 35.0,
+    "maxVelocity": 5.0,
+    "damping": 0.005,
+    "groundLift": 0.2,
+    "falloff": "inverse",
+    "tiltMode": "fullcycle",
+    "tiltRate": 0.03,
+    "orientationMode": "fullcycle",
+    "orientationRate": 0.04
+}

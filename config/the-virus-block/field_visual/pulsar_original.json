@@ -1,0 +1,57 @@
+{
+    "name": "Pulsar Original",
+    "description": "EXACT reproduction of Shadertoy lsf3RH by trisomie21 - all original hardcoded values",
+    "enabled": true,
+    "effectType": "ENERGY_ORB",
+    "version": 5,
+    "primaryColor": [
+        1.0,
+        1.0,
+        1.0
+    ],
+    "secondaryColor": [
+        0.2,
+        0.65,
+        0.5
+    ],
+    "tertiaryColor": [
+        0.1,
+        0.25,
+        0.81
+    ],
+    "highlightColor": [
+        0.0,
+        0.0,
+        0.0
+    ],
+    "params": {
+        "intensity": 0.1,
+        "animationSpeed": 0.1,
+        "coreSize": 0.24,
+        "fadePower": 0.5,
+        "fadeScale": 2.0,
+        "noiseResLow": 15.0,
+        "noiseResHigh": 45.0,
+        "noiseAmplitude": 0.5,
+        "noiseOctaves": 7,
+        "noiseBaseScale": 10.0,
+        "noiseScaleMultiplier": 25.0,
+        "speedLow": 0.2,
+        "radialSpeed1": 0.35,
+        "radialSpeed2": 0.15,
+        "axialSpeed": 0.015,
+        "flamesEdge": 1.1,
+        "flamesPower": 2.0,
+        "flamesMult": 50.0,
+        "flamesTimeScale": 1.2,
+        "flamesInsideFalloff": 24.0,
+        "surfaceNoiseScale": 5.0,
+        "coronaWidth": 0.0,
+        "coronaPower": 2.0,
+        "coronaMultiplier": 0.0,
+        "lightAmbient": 0.75,
+        "lightDiffuse": 0.3,
+        "transScale": 2.0,
+        "v2AlphaScale": 1.0
+    }
+}

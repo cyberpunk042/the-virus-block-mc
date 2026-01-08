@@ -1,0 +1,17 @@
+{
+  "id": "the-virus-block:default_fuse",
+  "trigger": "auto",
+  "auto_progress": 1.0,
+  "requires_item": false,
+  "consume_item": false,
+  "allowed_items": [],
+  "explosion_delay_ticks": 400,
+  "shell_collapse_ticks": 20,
+  "collapse_target_scale": 0.25,
+  "pulse_interval_ticks": 8,
+  "primary_color": "#FF6A00FF",
+  "secondary_color": "#111111FF",
+  "particle": "minecraft:small_flame",
+  "sound": "minecraft:block.respawn_anchor.charge"
+}
+

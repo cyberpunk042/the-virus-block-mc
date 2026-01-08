@@ -1,0 +1,11 @@
+{
+  "name": "Sphere Slice",
+  "description": "Quarter to three-quarter slice",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 32,
+  "lonSteps": 32,
+  "lonStart": 0.25,
+  "lonEnd": 0.75,
+  "algorithm": "LAT_LON"
+}

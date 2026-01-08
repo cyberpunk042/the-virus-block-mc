@@ -1,0 +1,9 @@
+{
+  "name": "Default",
+  "description": "Solid filled pattern",
+  "quad": "FILLED",
+  "segment": "FULL",
+  "sector": "FULL",
+  "multiPart": false
+}
+

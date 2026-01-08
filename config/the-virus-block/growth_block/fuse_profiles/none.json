@@ -1,0 +1,20 @@
+{
+  "id": "the-virus-block:none_fuse",
+  "trigger": "item_use",
+  "auto_progress": 1.0,
+  "requires_item": true,
+  "consume_item": false,
+  "allowed_items": [
+    "the-virus-block:none_item"
+  ],
+  "explosion_delay_ticks": 400,
+  "shell_collapse_ticks": 20,
+  "collapse_target_scale": 0.25,
+  "pulse_interval_ticks": 8,
+  "primary_color": "#00000000",
+  "secondary_color": "#00000000",
+  "particle": null,
+  "sound": null
+}
+
+

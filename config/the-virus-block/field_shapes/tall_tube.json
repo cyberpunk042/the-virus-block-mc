@@ -1,0 +1,11 @@
+{
+  "name": "Tall Tube",
+  "description": "3D ring with height",
+  "type": "ring",
+  "innerRadius": 0.5,
+  "outerRadius": 1.0,
+  "segments": 128,
+  "height": 2.0,
+  "y": 0.0
+}
+

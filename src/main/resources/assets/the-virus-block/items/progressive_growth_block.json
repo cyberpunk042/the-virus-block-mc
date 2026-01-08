@@ -1,0 +1,10 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "the-virus-block:item/progressive_growth_block",
+    "model": {
+      "type": "the-virus-block:progressive_growth"
+    }
+  }
+}
+

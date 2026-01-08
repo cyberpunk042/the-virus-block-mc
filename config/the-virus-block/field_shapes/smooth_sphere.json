@@ -1,0 +1,6 @@
+{
+  "radius": 1.5,
+  "latSteps": 24,
+  "lonSteps": 48,
+  "algorithm": "ICOSPHERE"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "the-virus-block:faint",
+  "primary": {
+    "base_alpha": 0.45,
+    "pulse_speed": 0.0,
+    "pulse_amplitude": 0.0
+  },
+  "secondary": {
+    "base_alpha": 0.35,
+    "pulse_speed": 0.0,
+    "pulse_amplitude": 0.0
+  }
+}
+
+

@@ -1,0 +1,9 @@
+{
+  "name": "Prediction Fast",
+  "description": "More aggressive prediction",
+  "enabled": true,
+  "leadTicks": 5,
+  "maxDistance": 8.0,
+  "lookAhead": true,
+  "verticalBoost": 1.2
+}

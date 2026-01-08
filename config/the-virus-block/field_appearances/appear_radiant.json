@@ -1,0 +1,9 @@
+{
+  "name": "Radiant",
+  "description": "Maximum emission and glow",
+  "color": "@primary",
+  "alpha": 1.0,
+  "glow": 1.0,
+  "emissive": 1.0,
+  "brightness": 1.3
+}

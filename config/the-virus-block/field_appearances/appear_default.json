@@ -1,0 +1,10 @@
+{
+  "name": "Default",
+  "description": "Standard appearance",
+  "color": "@primary",
+  "alpha": 1.0,
+  "glow": 0.0,
+  "emissive": 0.0,
+  "saturation": 1.0,
+  "brightness": 1.0
+}

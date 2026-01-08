@@ -1,0 +1,21 @@
+{
+  "name": "Spin Fast",
+  "description": "Fast rotation around Y axis",
+  "spin": {
+    "enabled": true,
+    "axis": "Y",
+    "speed": 180.0
+  },
+  "pulse": {
+    "enabled": false,
+    "mode": "SCALE",
+    "frequency": 1.0,
+    "amplitude": 0.1
+  },
+  "alphaPulse": {
+    "enabled": false,
+    "min": 1.0,
+    "max": 1.0
+  }
+}
+

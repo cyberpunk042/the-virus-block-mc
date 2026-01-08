@@ -1,0 +1,11 @@
+{
+  "name": "Beam Thin",
+  "description": "Thin laser beam",
+  "enabled": true,
+  "innerRadius": 0.0,
+  "outerRadius": 0.1,
+  "height": 5.0,
+  "glow": 0.8,
+  "color": "#FF0000",
+  "pulseEnabled": false
+}

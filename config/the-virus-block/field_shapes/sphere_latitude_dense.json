@@ -1,0 +1,9 @@
+{
+  "name": "Sphere Latitude Dense",
+  "description": "Extreme horizontal ribbing",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 128,
+  "lonSteps": 16,
+  "algorithm": "LAT_LON"
+}

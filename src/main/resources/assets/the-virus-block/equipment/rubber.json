@@ -1,0 +1,15 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "the-virus-block:rubber"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "the-virus-block:rubber"
+      }
+    ]
+  }
+}
+

@@ -1,0 +1,9 @@
+{
+  "name": "Orbit Slow",
+  "description": "Slow elegant orbit",
+  "enabled": true,
+  "radius": 2.0,
+  "speed": 0.3,
+  "axis": "Y",
+  "phase": 0.0
+}

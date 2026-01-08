@@ -1,0 +1,9 @@
+{
+  "name": "Sphere Ribbed Horizontal",
+  "description": "Dense latitude lines, sparse longitude",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 256,
+  "lonSteps": 32,
+  "algorithm": "LAT_LON"
+}

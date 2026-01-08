@@ -1,0 +1,9 @@
+{
+  "name": "Cylinder Cone",
+  "description": "Cone shape",
+  "type": "cylinder",
+  "radius": 1.0,
+  "height": 2.0,
+  "segments": 32,
+  "topRadius": 0.0
+}

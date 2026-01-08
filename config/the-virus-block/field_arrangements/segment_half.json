@@ -1,0 +1,8 @@
+{
+  "name": "Half Circle",
+  "description": "Semicircle - only half the ring",
+  "cellType": "SEGMENT",
+  "pattern": "arc",
+  "arcStart": 0.0,
+  "arcEnd": 0.5
+}

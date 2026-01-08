@@ -1,0 +1,57 @@
+{
+    "name": "Pulsar Star",
+    "description": "Classic star/sun effect from Shadertoy trisomie21",
+    "enabled": true,
+    "effectType": "ENERGY_ORB",
+    "version": 5,
+    "primaryColor": [
+        1.0,
+        0.9,
+        0.7
+    ],
+    "secondaryColor": [
+        1.0,
+        0.5,
+        0.2
+    ],
+    "tertiaryColor": [
+        1.0,
+        0.3,
+        0.1
+    ],
+    "highlightColor": [
+        1.0,
+        0.6,
+        0.3
+    ],
+    "params": {
+        "intensity": 1.0,
+        "animationSpeed": 0.1,
+        "coreSize": 0.24,
+        "fadePower": 0.5,
+        "fadeScale": 2.0,
+        "noiseResLow": 15.0,
+        "noiseResHigh": 45.0,
+        "noiseAmplitude": 0.5,
+        "noiseOctaves": 7,
+        "noiseBaseScale": 10.0,
+        "noiseScaleMultiplier": 25.0,
+        "speedLow": 0.2,
+        "radialSpeed1": 0.35,
+        "radialSpeed2": 0.15,
+        "axialSpeed": 0.015,
+        "flamesEdge": 1.1,
+        "flamesPower": 2.0,
+        "flamesMult": 50.0,
+        "flamesTimeScale": 1.2,
+        "flamesInsideFalloff": 24.0,
+        "surfaceNoiseScale": 5.0,
+        "coronaWidth": 0.3,
+        "coronaPower": 2.0,
+        "coronaMultiplier": 30.0,
+        "lightAmbient": 0.75,
+        "lightDiffuse": 0.3,
+        "transScale": 2.0,
+        "v2AlphaScale": 1.0
+    }
+}

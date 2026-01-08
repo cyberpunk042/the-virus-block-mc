@@ -1,0 +1,10 @@
+{
+  "id": "the-virus-block:spark_shell",
+  "mesh": "sphere",
+  "texture": "the-virus-block:textures/misc/singularity_sphere_2.png",
+  "alpha": 0.35,
+  "spin_speed": 1.6,
+  "scale_multiplier": 1.5,
+  "color": "#66AAFFFF"
+}
+

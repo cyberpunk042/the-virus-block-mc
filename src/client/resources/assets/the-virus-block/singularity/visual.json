@@ -1,0 +1,42 @@
+{
+  "general": {
+    "lat_steps": 80,
+    "lon_steps": 200,
+    "core_overlap_ticks": 15
+  },
+  "beam": {
+    "inner_radius": 0.24,
+    "outer_radius": 0.34,
+    "black_delay": 30,
+    "primary_alpha": 0.65,
+    "core_alpha": 1.0,
+    "black_growth": 0.12,
+    "red_growth": 0.2,
+    "alpha_step": 0.08
+  },
+  "primary": {
+    "min_scale": 0.05,
+    "max_scale": 4.0,
+    "grow_start_alpha": 0.55,
+    "grow_end_alpha": 1.0,
+    "shrink_start_alpha": 1.0,
+    "shrink_end_alpha": 0.35,
+    "grow_ticks": 40,
+    "shrink_ticks": 20,
+    "spin_multiplier": 1.0,
+    "texture": "the-virus-block:textures/misc/singularity_sphere_1.png"
+  },
+  "core": {
+    "min_scale": 0.2,
+    "max_scale": 1.5,
+    "grow_start_alpha": 0.75,
+    "grow_end_alpha": 1.0,
+    "shrink_start_alpha": 1.0,
+    "shrink_end_alpha": 0.6,
+    "grow_ticks": 28,
+    "shrink_ticks": 18,
+    "spin_multiplier": 2.5,
+    "texture": "the-virus-block:textures/misc/singularity_sphere_2.png"
+  }
+}
+

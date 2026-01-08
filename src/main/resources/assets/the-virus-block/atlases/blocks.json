@@ -1,0 +1,53 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/fire_0"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/fire_1"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/soul_fire_0"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/soul_fire_1"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/glow_magma_primary"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/glow_magma_secondary"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/glow_lava_primary"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/glow_lava_secondary"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/glow_glowstone_primary"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/glow_glowstone_secondary"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/glow_beam_primary"
+    },
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/glow_beam_secondary"
+    }
+  ]
+}
+

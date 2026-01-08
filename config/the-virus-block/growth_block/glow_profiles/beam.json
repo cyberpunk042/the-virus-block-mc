@@ -1,0 +1,11 @@
+{
+  "id": "the-virus-block:beam",
+  "primary_texture": "the-virus-block:textures/block/glow_beam_primary.png",
+  "secondary_texture": "the-virus-block:textures/block/glow_beam_secondary.png",
+  "primary_color": "#38D3FF",
+  "secondary_color": "#A5F1FF",
+  "light_level": 12,
+  "primary_use_mesh": false,
+  "secondary_use_mesh": false
+}
+

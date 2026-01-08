@@ -1,0 +1,8 @@
+{
+  "name": "Quarters",
+  "description": "Four pie pieces",
+  "cellType": "SECTOR",
+  "pattern": "uniform",
+  "count": 4,
+  "gapRatio": 0.5
+}

@@ -1,0 +1,7 @@
+{
+  "name": "8 Stripes",
+  "description": "8 vertical stripes",
+  "mask": "STRIPES",
+  "count": 8,
+  "thickness": 0.5
+}

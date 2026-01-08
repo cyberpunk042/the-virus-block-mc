@@ -1,0 +1,16 @@
+{
+  "name": "Beam Pulsing",
+  "description": "Pulsing glow beam",
+  "enabled": true,
+  "innerRadius": 0.0,
+  "outerRadius": 0.5,
+  "height": 3.0,
+  "glow": 0.7,
+  "color": "#FF00FF",
+  "pulseEnabled": true,
+  "pulseScale": 0.3,
+  "pulseSpeed": 2.0,
+  "pulseWaveform": "SINE",
+  "pulseMin": 0.3,
+  "pulseMax": 1.0
+}

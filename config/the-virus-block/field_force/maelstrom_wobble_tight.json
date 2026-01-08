@@ -1,0 +1,15 @@
+{
+    "id": "maelstrom_wobble_tight",
+    "name": "Maelstrom Wobble Tight",
+    "description": "Wobbling orbit with tighter coupling - stronger pull, smaller radius",
+    "strength": 5.0,
+    "radius": 20.0,
+    "maxVelocity": 4.0,
+    "damping": 0.01,
+    "groundLift": 0.2,
+    "falloff": "inverse",
+    "tiltMode": "wobble",
+    "tiltRate": 0.025,
+    "orientationMode": "wobble",
+    "orientationRate": 0.03
+}

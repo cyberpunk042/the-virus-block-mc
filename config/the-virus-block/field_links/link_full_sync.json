@@ -1,0 +1,11 @@
+{
+  "name": "Link Full Sync",
+  "description": "Full parent synchronization",
+  "primitiveId": "parent",
+  "radiusMatch": true,
+  "radiusOffset": 0.0,
+  "follow": true,
+  "mirror": false,
+  "phaseOffset": 0.0,
+  "scaleWith": true
+}

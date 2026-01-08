@@ -1,0 +1,39 @@
+{
+  "name": "Shield Ring",
+  "description": "Adds a rotating ring layer around existing field",
+  "merge": {
+    "layers": [
+      {
+        "name": "Shield Ring",
+        "visible": true,
+        "primitives": [
+          {
+            "name": "Outer Ring",
+            "shape": {
+              "type": "ring",
+              "innerRadius": 2.0,
+              "outerRadius": 2.5,
+              "segments": 96,
+              "height": 0.1
+            },
+            "fill": {
+              "mode": "SOLID"
+            },
+            "animation": {
+              "spin": {
+                "enabled": true,
+                "axis": "Y",
+                "speed": 45.0
+              }
+            },
+            "appearance": {
+              "primaryColor": "#4488FF",
+              "glow": 0.6
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
+

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GLG",
+    "RHR",
+    "SCS"
+  ],
+  "key": {
+    "G": { "item": "minecraft:gold_ingot" },
+    "L": { "item": "minecraft:leather" },
+    "R": { "item": "minecraft:redstone" },
+    "H": { "item": "minecraft:netherite_helmet" },
+    "S": { "item": "minecraft:stone" },
+    "C": { "item": "minecraft:compass" }
+  },
+  "result": {
+    "item": "the-virus-block:augmented_helmet"
+  }
+}
+

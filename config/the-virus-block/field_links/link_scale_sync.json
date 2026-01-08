@@ -1,0 +1,11 @@
+{
+  "name": "Link Scale Sync",
+  "description": "Scale with parent",
+  "primitiveId": "parent",
+  "radiusMatch": false,
+  "radiusOffset": 0.0,
+  "follow": false,
+  "mirror": false,
+  "phaseOffset": 0.0,
+  "scaleWith": true
+}

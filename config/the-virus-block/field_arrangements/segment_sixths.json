@@ -1,0 +1,8 @@
+{
+  "name": "Sixths",
+  "description": "Six equal segments - hexagonal feel",
+  "cellType": "SEGMENT",
+  "pattern": "uniform",
+  "count": 6,
+  "gapRatio": 0.4
+}

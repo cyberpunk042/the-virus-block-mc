@@ -1,0 +1,7 @@
+{
+  "name": "Sparse",
+  "description": "Reduced edge density",
+  "cellType": "EDGE",
+  "pattern": "sparse",
+  "visibility": 0.3
+}

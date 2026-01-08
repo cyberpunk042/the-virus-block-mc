@@ -1,0 +1,9 @@
+{
+  "name": "Sphere Type A",
+  "description": "TYPE_A tessellation algorithm",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 32,
+  "lonSteps": 64,
+  "algorithm": "TYPE_A"
+}

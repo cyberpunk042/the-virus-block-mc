@@ -1,0 +1,9 @@
+{
+  "name": "Prism Tapered",
+  "description": "Tapered prism",
+  "type": "prism",
+  "sides": 6,
+  "radius": 1.0,
+  "height": 2.0,
+  "topRadius": 0.5
+}

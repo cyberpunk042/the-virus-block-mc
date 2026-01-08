@@ -1,0 +1,7 @@
+{
+  "name": "Wireframe Thin",
+  "description": "Delicate thin wireframe",
+  "mode": "WIREFRAME",
+  "wireThickness": 0.5,
+  "doubleSided": true
+}

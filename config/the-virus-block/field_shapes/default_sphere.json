@@ -1,0 +1,12 @@
+{
+  "name": "Default",
+  "description": "Standard sphere with balanced detail",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 32,
+  "lonSteps": 64,
+  "latStart": 0.0,
+  "latEnd": 1.0,
+  "algorithm": "LAT_LON"
+}
+

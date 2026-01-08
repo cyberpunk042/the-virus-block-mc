@@ -1,0 +1,518 @@
+package net.cyberpunk042.infection.service;
+
+
+import net.cyberpunk042.log.Logging;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+import java.util.Objects;
+
+import net.cyberpunk042.infection.VirusWorldState;
+import net.cyberpunk042.infection.profile.CollapseFillMode;
+import net.cyberpunk042.infection.profile.CollapseFillShape;
+import net.cyberpunk042.infection.profile.DimensionProfile;
+import net.cyberpunk042.infection.profile.WaterDrainMode;
+import net.cyberpunk042.infection.singularity.BulkFillHelper;
+import net.cyberpunk042.infection.singularity.CollapseErosionSettings;
+import net.cyberpunk042.registry.ModBlocks;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockBox;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.cyberpunk042.log.LogScope;
+import net.cyberpunk042.log.LogLevel;
+
+/**
+ * Simple radius-based collapse processor.
+ * 
+ * Each tick, calculates the current radius (interpolated from start to end)
+ * and fills/clears a slice at that radius. No queues, no rings, no complex state.
+ */
+public final class CollapseProcessor {
+
+	/**
+	 * Persistent state for the collapse processor.
+	 */
+	public static final class State {
+		public BlockPos center;
+		public double startRadius;
+		public double endRadius;
+		public long durationTicks;
+		public long elapsedTicks;
+		public boolean active;
+		public boolean inward = true; // true = outside→in, false = in→outside
+		public double lastProcessedRadius = -1;
+		public int sliceThickness = 16; // blocks per slice
+		public int ticksSinceLastProcess = 0; // for radius_delays support
+		// Deferred drain state
+		public int deferredDrainDelayRemaining = 0;
+		public boolean deferredDrainActive = false;
+	}
+
+	/**
+	 * Record for a queued deferred drain job.
+	 */
+	private record DeferredDrainJob(int x, int z, int minY, int maxY) {}
+
+	// Transient deferred drain queue (not persisted - rebuilds on restart)
+	private final Deque<DeferredDrainJob> deferredDrainQueue = new ArrayDeque<>();
+
+	private final VirusWorldState host;
+	private final State state;
+
+	public CollapseProcessor(VirusWorldState host, State state) {
+		this.host = Objects.requireNonNull(host, "host");
+		this.state = Objects.requireNonNull(state, "state");
+	}
+
+	public State state() {
+		return state;
+	}
+
+	/**
+	 * Starts the collapse from the given center, using direction from config.
+	 */
+	public void start(BlockPos center, double startRadius, double endRadius, long durationTicks) {
+		start(center, startRadius, endRadius, durationTicks, host.collapseConfig().configuredCollapseInward());
+	}
+
+	/**
+	 * Starts the collapse from the given center with explicit direction.
+	 * @param inward true = outside→center, false = center→outside
+	 */
+	public void start(BlockPos center, double startRadius, double endRadius, long durationTicks, boolean inward) {
+		state.center = center.toImmutable();
+		state.startRadius = startRadius;
+		state.endRadius = endRadius;
+		state.durationTicks = Math.max(1, durationTicks);
+		state.elapsedTicks = 0;
+		state.inward = inward;
+		state.active = true;
+		state.lastProcessedRadius = inward ? startRadius : endRadius;
+		state.ticksSinceLastProcess = 0;
+		state.deferredDrainDelayRemaining = 0;
+		state.deferredDrainActive = false;
+		deferredDrainQueue.clear();
+		host.markDirty();
+		
+		Logging.SINGULARITY.at(center)
+				.kv("startRadius", startRadius)
+				.kv("endRadius", endRadius)
+				.kv("duration", durationTicks + " ticks (" + durationTicks / 20 + "s)")
+				.kv("inward", inward)
+				.info("[CollapseProcessor] Started collapse");
+	}
+
+	/**
+	 * Stops the collapse.
+	 */
+	public void stop() {
+		state.active = false;
+		state.elapsedTicks = 0;
+		host.markDirty();
+	}
+
+	/**
+	 * Returns true if collapse is active.
+	 */
+	public boolean isActive() {
+		return state.active && state.center != null;
+	}
+
+	/**
+	 * Returns current progress (0.0 to 1.0).
+	 */
+	public double progress() {
+		if (state.durationTicks <= 0) {
+			return 1.0;
+		}
+		// Progress is based on elapsed time vs duration
+		return MathHelper.clamp((double) state.elapsedTicks / (double) state.durationTicks, 0.0, 1.0);
+	}
+
+	/**
+	 * Returns current radius (rings remaining).
+	 */
+	public double currentRadius() {
+		double progress = progress();
+		if (state.inward) {
+			return Math.max(0, state.startRadius * (1.0 - progress));
+		} else {
+			return Math.min(state.startRadius, state.startRadius * progress);
+		}
+	}
+
+	/**
+	 * Tick the collapse processor. 
+	 * Each tick: interpolate current radius based on progress, process any new rings.
+	 * Uses durationTicks to pace the collapse over the desired time.
+	 * 
+	 * @return true if work was done, false if complete or inactive
+	 */
+	public boolean tick() {
+		ServerWorld world = host.world();
+		if (!isActive()) {
+			return false;
+		}
+
+		state.elapsedTicks++;
+		
+		// Check if duration complete
+		if (state.elapsedTicks >= state.durationTicks) {
+			state.active = false;
+			host.markDirty();
+			Logging.SINGULARITY.info("[CollapseProcessor] Complete! Processed {} rings over {} ticks ({} seconds)", 
+					(int) state.startRadius, state.elapsedTicks, state.elapsedTicks / 20);
+			return false;
+		}
+
+		// Calculate current radius based on progress through duration
+		// progress = elapsedTicks / durationTicks (0.0 to 1.0)
+		double progress = (double) state.elapsedTicks / (double) state.durationTicks;
+		int currentRing;
+		if (state.inward) {
+			// Shrinking: lerp from startRadius to 0
+			currentRing = (int) Math.round(state.startRadius * (1.0 - progress));
+		} else {
+			// Expanding: lerp from 0 to startRadius
+			currentRing = (int) Math.round(state.startRadius * progress);
+		}
+		
+		// Only process if we've moved to a new ring
+		int lastRing = (int) state.lastProcessedRadius;
+		if (currentRing == lastRing) {
+			// No new ring to process this tick
+			return true;
+		}
+		
+		CollapseErosionSettings erosion = host.collapseConfig().erosionSettings();
+		
+		// Process all rings between lastRing and currentRing
+		// (handles cases where multiple rings need processing in one tick)
+		int ringsProcessed = 0;
+		if (state.inward) {
+			// Process from lastRing down to currentRing (exclusive of last, inclusive of current)
+			try (LogScope scope = Logging.SINGULARITY.scope("iterate-rings", LogLevel.INFO)) {
+    			for (int ring = lastRing - 1; ring >= currentRing && ring >= 0; ring--) {
+    				// Drain water ahead
+    				int drainAheadRadius = ring - 2;
+    				if (drainAheadRadius > 0) {
+    					drainWaterAtRadius(world, drainAheadRadius, erosion);
+    				}
+    				// Fill/destroy the ring
+    				fillSliceAtRadius(world, ring, erosion);
+    				ringsProcessed++;
+
+    				// Log first few rings to verify processing
+    				if (ring >= state.startRadius - 3 || ring <= 3) {
+    					scope.branch("entry").kv("ring", ring).kv("lastRing", lastRing).kv("currentRing", currentRing);
+    				}
+    			}
+			}
+		} else {
+			// Process from lastRing up to currentRing
+			for (int ring = lastRing + 1; ring <= currentRing && ring <= (int) state.startRadius; ring++) {
+				// Drain water ahead
+				int drainAheadRadius = ring + 2;
+				drainWaterAtRadius(world, drainAheadRadius, erosion);
+				// Fill/destroy the ring
+				fillSliceAtRadius(world, ring, erosion);
+				ringsProcessed++;
+				
+				// Log first few rings to verify processing
+				if (ring <= 3 || ring >= state.startRadius - 3) {
+					Logging.SINGULARITY.info("[CollapseProcessor] Processing ring {} (lastRing={}, currentRing={})", 
+							ring, lastRing, currentRing);
+				}
+			}
+		}
+		
+		state.lastProcessedRadius = currentRing;
+		host.markDirty();
+		
+		// Log progress every 2 seconds
+		if (state.elapsedTicks % 40 == 0) {
+			int processedRings = state.inward 
+					? (int) state.startRadius - currentRing 
+					: currentRing;
+			Logging.SINGULARITY.info("[CollapseProcessor] Ring {} of {} ({}%) - {} rings this tick", 
+					processedRings, 
+					(int) state.startRadius,
+					Math.round(progress * 100),
+					ringsProcessed);
+		}
+		return true;
+	}
+
+	/**
+	 * Process deferred drain tick - handles delay countdown and batch processing.
+	 */
+	private void processDeferredDrainTick(ServerWorld world, CollapseErosionSettings erosion) {
+		CollapseErosionSettings.WaterDrainDeferredSettings deferred = erosion.waterDrainDeferred();
+		if (deferred == null || !deferred.enabled()) {
+			return;
+		}
+
+		// Handle initial delay
+		if (state.deferredDrainDelayRemaining > 0) {
+			state.deferredDrainDelayRemaining--;
+			return;
+		}
+
+		// Process queued drains
+		if (!deferredDrainQueue.isEmpty()) {
+			int columnsPerTick = Math.max(1, deferred.columnsPerTick());
+			processDeferredDrains(world, columnsPerTick);
+		}
+	}
+
+	/**
+	 * Process up to maxColumns from the deferred drain queue.
+	 */
+	private void processDeferredDrains(ServerWorld world, int maxColumns) {
+		BlockState air = Blocks.AIR.getDefaultState();
+		BlockPos.Mutable mutable = new BlockPos.Mutable();
+		int processed = 0;
+
+		while (!deferredDrainQueue.isEmpty() && processed < maxColumns) {
+			DeferredDrainJob job = deferredDrainQueue.poll();
+			if (job == null) break;
+
+			for (int y = job.minY; y <= job.maxY; y++) {
+				mutable.set(job.x, y, job.z);
+				try {
+					BlockState blockState = world.getBlockState(mutable);
+					if (!blockState.getFluidState().isEmpty()
+							&& !blockState.isOf(ModBlocks.VIRUS_BLOCK)
+							&& !blockState.isOf(ModBlocks.SINGULARITY_BLOCK)) {
+						world.setBlockState(mutable, air, Block.NOTIFY_LISTENERS);
+					}
+				} catch (IllegalStateException ex) {
+					// Chunk not loaded, skip
+				}
+			}
+			processed++;
+		}
+	}
+
+	/**
+	 * Look up the tick interval for a given radius from the radius_delays list.
+	 * Delays are sorted by side (radius in chunks) ascending.
+	 * We find the first entry where the current radius (in chunks) is <= the delay's side.
+	 * 
+	 * @param radius current radius in blocks
+	 * @param delays list of RadiusDelay entries (sorted by side ascending)
+	 * @return tick interval to use
+	 */
+	private int getTickIntervalForRadius(double radius, List<DimensionProfile.Collapse.RadiusDelay> delays) {
+		if (delays == null || delays.isEmpty()) {
+			return 1; // Default: process every tick
+		}
+		
+		// Convert radius from blocks to chunks
+		int radiusChunks = (int) Math.ceil(radius / 16.0);
+		
+		// Find the matching delay - delays are sorted ascending by side
+		// We want the first entry where radiusChunks <= side
+		for (DimensionProfile.Collapse.RadiusDelay delay : delays) {
+			if (radiusChunks <= delay.side()) {
+				return delay.ticks();
+			}
+		}
+		
+		// If radius is larger than all entries, use the last (largest) entry's ticks
+		// This gives the fastest rate for the outer areas
+		return delays.get(delays.size() - 1).ticks();
+	}
+
+	/**
+	 * Scale columns-per-tick based on fill shape.
+	 * Shapes that affect fewer blocks can process more slices per tick.
+	 * 
+	 * @param baseColumns base columnsPerTick from config
+	 * @param shape the fill shape
+	 * @return scaled columns per tick
+	 */
+	private int scaleColumnsForShape(int baseColumns, CollapseFillShape shape) {
+		// MATRIX affects all blocks - use base rate
+		// OUTLINE affects 6 faces - moderate scaling
+		// COLUMN/ROW/VECTOR affect a thin slice - higher scaling
+		int multiplier = switch (shape) {
+			case MATRIX -> 1;          // All blocks - no scaling
+			case OUTLINE, WALLS -> 2;  // Shell/walls only - 2x throughput
+			case COLUMN, ROW -> 4;     // Thin line - 4x throughput
+			case VECTOR -> 4;          // Thin line along longest axis - 4x throughput
+		};
+		return baseColumns * multiplier;
+	}
+
+	/**
+	 * Drain water/fluids ahead of the collapse front.
+	 * Supports both immediate and deferred drain modes.
+	 */
+	private void drainWaterAtRadius(ServerWorld world, double radius, CollapseErosionSettings erosion) {
+		WaterDrainMode drainMode = erosion.waterDrainMode();
+		if (drainMode == null || drainMode == WaterDrainMode.OFF) {
+			return;
+		}
+		
+		int drainOffset = erosion.waterDrainOffset();
+		if (drainOffset <= 0) {
+			return;
+		}
+
+		if (state.center == null) {
+			return;
+		}
+
+		// Check if deferred mode is enabled
+		CollapseErosionSettings.WaterDrainDeferredSettings deferred = erosion.waterDrainDeferred();
+		boolean useDeferred = deferred != null && deferred.enabled();
+
+		int centerX = state.center.getX();
+		int centerZ = state.center.getZ();
+		int minY = world.getBottomY();
+		int maxY = minY + world.getDimension().height() - 1;
+
+		// "Ahead" means what we'll process NEXT:
+		// - Inward collapse (outside→center): ahead = SMALLER radius (toward center)
+		// - Outward expansion (center→outside): ahead = LARGER radius (away from center)
+		double drainRadius = state.inward 
+			? Math.max(0, radius - drainOffset)  // inward: drain ahead at smaller radius
+			: radius + drainOffset;              // outward: drain ahead at larger radius
+		
+		int drainRadiusInt = (int) Math.ceil(drainRadius);
+		int innerDrainRadius = Math.max(0, drainRadiusInt - state.sliceThickness);
+
+		// Iterate ring at drain radius
+		for (int x = centerX - drainRadiusInt; x <= centerX + drainRadiusInt; x++) {
+			for (int z = centerZ - drainRadiusInt; z <= centerZ + drainRadiusInt; z++) {
+				double distSq = (x - centerX) * (x - centerX) + (z - centerZ) * (z - centerZ);
+				double innerSq = innerDrainRadius * innerDrainRadius;
+				double outerSq = drainRadiusInt * drainRadiusInt;
+				
+				// Only process ring between inner and outer
+				if (distSq < innerSq || distSq > outerSq) {
+					continue;
+				}
+
+				if (useDeferred) {
+					// Queue for deferred processing
+					queueDeferredDrain(x, z, minY, maxY, deferred);
+				} else {
+					// Immediate drain
+					drainColumnImmediate(world, x, z, minY, maxY);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Queue a column for deferred drain processing.
+	 */
+	private void queueDeferredDrain(int x, int z, int minY, int maxY, 
+			CollapseErosionSettings.WaterDrainDeferredSettings deferred) {
+		deferredDrainQueue.add(new DeferredDrainJob(x, z, minY, maxY));
+		
+		// Initialize deferred drain if not yet active
+		if (!state.deferredDrainActive) {
+			state.deferredDrainActive = true;
+			state.deferredDrainDelayRemaining = deferred.initialDelayTicks();
+		}
+	}
+
+	/**
+	 * Immediately drain fluids from a column.
+	 */
+	private void drainColumnImmediate(ServerWorld world, int x, int z, int minY, int maxY) {
+		BlockPos.Mutable mutable = new BlockPos.Mutable();
+		BlockState air = Blocks.AIR.getDefaultState();
+
+		for (int y = minY; y <= maxY; y++) {
+			mutable.set(x, y, z);
+			try {
+				BlockState blockState = world.getBlockState(mutable);
+				if (!blockState.getFluidState().isEmpty()
+						&& !blockState.isOf(ModBlocks.VIRUS_BLOCK)
+						&& !blockState.isOf(ModBlocks.SINGULARITY_BLOCK)) {
+					world.setBlockState(mutable, air, Block.NOTIFY_LISTENERS);
+				}
+			} catch (IllegalStateException ex) {
+				// Chunk not loaded, skip
+			}
+		}
+	}
+
+	/**
+	 * Fill/clear a ring-shaped slice at the given radius.
+	 * Uses BulkFillHelper.clearVolume() which uses native /fill command when possible.
+	 */
+	private void fillSliceAtRadius(ServerWorld world, double radius, CollapseErosionSettings erosion) {
+		if (state.center == null) {
+			return;
+		}
+
+		int centerX = state.center.getX();
+		int centerZ = state.center.getZ();
+		int minY = world.getBottomY();
+		int maxY = minY + world.getDimension().height() - 1;
+
+		// Calculate the ring bounds based on collapse direction
+		int outerRadius;
+		if (state.inward) {
+			outerRadius = (int) Math.ceil(radius);
+		} else {
+			outerRadius = (int) Math.floor(radius) + state.sliceThickness;
+		}
+
+		// Create bounding box for the fill area
+		BlockBox box = new BlockBox(
+			centerX - outerRadius, minY, centerZ - outerRadius,
+			centerX + outerRadius, maxY, centerZ + outerRadius
+		);
+
+		// Get fill settings from erosion config
+		CollapseFillMode fillMode = erosion.fillMode();
+		CollapseFillShape fillShape = erosion.fillShape();
+		boolean respectProtected = erosion.respectProtectedBlocks();
+		int thickness = erosion.outlineThickness();
+		boolean useNativeFill = erosion.useNativeFill();
+
+		// Use BulkFillHelper which uses native /fill command when possible
+		int cleared = BulkFillHelper.clearVolume(world, box, fillMode, fillShape, respectProtected, 
+			thickness, useNativeFill, Block.NOTIFY_LISTENERS);
+		
+		// Log first few fills to verify
+		if (radius >= state.startRadius - 3 || radius <= 3) {
+			Logging.SINGULARITY.info("[CollapseProcessor] fillSliceAtRadius: radius={} outerRadius={} fillShape={} cleared={} blocks", 
+					(int) radius, outerRadius, fillShape, cleared);
+		}
+	}
+	
+	private boolean isProtectedBlock(BlockState state) {
+		// Add any protected block checks here
+		return state.isOf(Blocks.BEDROCK);
+	}
+
+	/**
+	 * Reset all state.
+	 */
+	public void reset() {
+		state.center = null;
+		state.startRadius = 0;
+		state.endRadius = 0;
+		state.durationTicks = 0;
+		state.elapsedTicks = 0;
+		state.active = false;
+		state.lastProcessedRadius = -1;
+		state.ticksSinceLastProcess = 0;
+		state.deferredDrainDelayRemaining = 0;
+		state.deferredDrainActive = false;
+		deferredDrainQueue.clear();
+		host.markDirty();
+	}
+}
+

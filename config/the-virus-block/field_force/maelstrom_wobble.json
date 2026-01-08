@@ -1,0 +1,15 @@
+{
+    "id": "maelstrom_wobble",
+    "name": "Maelstrom Wobble",
+    "description": "Maelstrom with wobbling orbit plane - oscillates back and forth",
+    "strength": 3.0,
+    "radius": 35.0,
+    "maxVelocity": 5.0,
+    "damping": 0.005,
+    "groundLift": 0.2,
+    "falloff": "inverse",
+    "tiltMode": "wobble",
+    "tiltRate": 0.05,
+    "orientationMode": "wobble",
+    "orientationRate": 0.06
+}

@@ -1,0 +1,9 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "the-virus-block:block/singularity_block"
+    }
+  ]
+}
+

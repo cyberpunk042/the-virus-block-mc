@@ -1,0 +1,9 @@
+{
+  "name": "Ghostly",
+  "description": "Faint, ethereal look",
+  "color": "@primary",
+  "alpha": 0.3,
+  "glow": 0.2,
+  "emissive": 0.1,
+  "saturation": 0.5
+}

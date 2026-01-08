@@ -1,0 +1,10 @@
+{
+  "name": "Tall",
+  "description": "Tall hexagonal prism",
+  "type": "prism",
+  "sides": 6,
+  "radius": 2.0,
+  "height": 6.0,
+  "topRadius": 2.0
+}
+

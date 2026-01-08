@@ -1,0 +1,13 @@
+{
+  "name": "Gradient",
+  "description": "Vertical fade gradient",
+  "mask": "GRADIENT",
+  "count": 4,
+  "thickness": 0.5,
+  "offset": 0.0,
+  "invert": false,
+  "feather": 0.1,
+  "animate": false,
+  "animateSpeed": 0.5
+}
+

@@ -1,0 +1,11 @@
+{
+  "name": "Link Default",
+  "description": "No linking (independent)",
+  "primitiveId": "",
+  "radiusMatch": false,
+  "radiusOffset": 0.0,
+  "follow": false,
+  "mirror": false,
+  "phaseOffset": 0.0,
+  "scaleWith": false
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Sphere Lowpoly",
+  "description": "Low detail for performance",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 8,
+  "lonSteps": 16,
+  "algorithm": "LAT_LON"
+}

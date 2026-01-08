@@ -1,0 +1,60 @@
+{
+    "name": "Pulsar Sun V6",
+    "description": "Beautiful orange/yellow sun effect with flames - V6 raymarched",
+    "enabled": true,
+    "effectType": "ENERGY_ORB",
+    "version": 6,
+    "primaryColor": [
+        1.0,
+        0.8,
+        0.2
+    ],
+    "secondaryColor": [
+        1.0,
+        0.4,
+        0.0
+    ],
+    "tertiaryColor": [
+        0.8,
+        0.098,
+        0.0
+    ],
+    "highlightColor": [
+        1.0,
+        1.0,
+        1.0
+    ],
+    "rayColor": [
+        0.0,
+        0.992,
+        1.0
+    ],
+    "params": {
+        "intensity": 1.5,
+        "animationSpeed": 0.1,
+        "coreSize": 0.435,
+        "edgeSharpness": 3.0,
+        "coreFalloff": 4.0,
+        "noiseResLow": 6.0,
+        "noiseResHigh": 1.0,
+        "glowLineCount": 12.0,
+        "glowLineIntensity": 0.7,
+        "showExternalRays": false,
+        "showCorona": true,
+        "coronaWidth": 1.216,
+        "coronaPower": 2.0,
+        "coronaMultiplier": 50.0,
+        "flamesEdge": 2.32,
+        "flamesPower": 1.69,
+        "flamesMult": 50.0,
+        "flamesTimeScale": 1.2,
+        "flamesInsideFalloff": 24.0,
+        "surfaceNoiseScale": 5.0,
+        "lightAmbient": 0.75,
+        "lightDiffuse": 0.3,
+        "speedLow": 0.2,
+        "radialSpeed1": 0.35,
+        "radialSpeed2": 0.15,
+        "axialSpeed": 0.015
+    }
+}

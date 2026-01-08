@@ -1,0 +1,12 @@
+{
+  "id": "the-virus-block:fast_growth",
+  "growth_enabled": true,
+  "rate": 2,
+  "rate_scale": 1.2,
+  "start": 0.4,
+  "target": 1.2,
+  "min": 0.3,
+  "max": 1.5
+}
+
+

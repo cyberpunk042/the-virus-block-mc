@@ -1,0 +1,9 @@
+{
+  "name": "Bullseye",
+  "description": "Center dot with ring",
+  "cellType": "SECTOR",
+  "pattern": "bullseye",
+  "centerRadius": 0.2,
+  "ringStart": 0.5,
+  "ringEnd": 0.7
+}

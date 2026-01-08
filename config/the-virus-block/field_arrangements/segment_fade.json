@@ -1,0 +1,9 @@
+{
+  "name": "Fade Out",
+  "description": "Segments get smaller/thinner",
+  "cellType": "SEGMENT",
+  "pattern": "gradient",
+  "direction": "clockwise",
+  "startVisibility": 1.0,
+  "endVisibility": 0.0
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Ring 3D",
+  "description": "Extruded ring with height",
+  "type": "ring",
+  "innerRadius": 0.8,
+  "outerRadius": 1.0,
+  "segments": 64,
+  "height": 0.2
+}

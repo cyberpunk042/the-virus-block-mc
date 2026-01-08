@@ -1,0 +1,7 @@
+{
+  "name": "Gradient Horizontal",
+  "description": "Fade from left to right",
+  "cellType": "QUAD",
+  "pattern": "gradient",
+  "direction": "horizontal"
+}

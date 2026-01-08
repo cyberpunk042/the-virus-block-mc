@@ -1,0 +1,10 @@
+{
+  "name": "Alpha Flicker",
+  "description": "Quick alpha flicker",
+  "alphaPulse": {
+    "speed": 3.0,
+    "min": 0.6,
+    "max": 1.0,
+    "waveform": "SAWTOOTH"
+  }
+}

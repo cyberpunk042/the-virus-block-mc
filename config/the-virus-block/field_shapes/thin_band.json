@@ -1,0 +1,11 @@
+{
+  "name": "Thin Band",
+  "description": "Narrow ring band",
+  "type": "ring",
+  "innerRadius": 0.2,
+  "outerRadius": 0.6,
+  "segments": 128,
+  "height": 0.0,
+  "y": 0.0
+}
+

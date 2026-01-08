@@ -1,0 +1,20 @@
+{
+  "id": "the-virus-block:beam_block",
+  "growth_profile": "the-virus-block:default_growth",
+  "has_collision": true,
+  "does_destruction": false,
+  "has_fuse": false,
+  "glow_profile": "the-virus-block:beam",
+  "particle_profile": "the-virus-block:none_particle",
+  "field_profile": "the-virus-block:none_field",
+  "wobble_profile": "the-virus-block:none_wobble",
+  "pull_profile": "the-virus-block:none_pull",
+  "push_profile": "the-virus-block:none_push",
+  "touch_damage": 4.0,
+  "fuse_profile": "the-virus-block:none_fuse",
+  "explosion_profile": "the-virus-block:default_explosion",
+  "opacity_profile": "the-virus-block:default_opacity",
+  "spin_profile": "the-virus-block:default_spin"
+}
+
+

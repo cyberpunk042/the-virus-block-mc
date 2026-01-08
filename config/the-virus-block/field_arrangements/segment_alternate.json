@@ -1,0 +1,7 @@
+{
+  "name": "Alternating",
+  "description": "Every other segment visible - classic stripe effect",
+  "cellType": "SEGMENT",
+  "pattern": "alternating",
+  "skip": 1
+}

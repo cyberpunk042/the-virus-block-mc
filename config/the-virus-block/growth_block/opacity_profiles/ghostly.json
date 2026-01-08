@@ -1,0 +1,15 @@
+{
+  "id": "the-virus-block:ghostly",
+  "primary": {
+    "base_alpha": 0.25,
+    "pulse_speed": 0.3,
+    "pulse_amplitude": 0.1
+  },
+  "secondary": {
+    "base_alpha": 0.15,
+    "pulse_speed": 0.35,
+    "pulse_amplitude": 0.1
+  }
+}
+
+

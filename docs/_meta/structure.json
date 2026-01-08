@@ -1,0 +1,2128 @@
+{
+  "root": {
+    "name": "docs",
+    "path": "docs",
+    "type": "folder",
+    "source_packages": [],
+    "class_count": 0,
+    "estimated_lines": 0,
+    "source_root": "",
+    "children": [
+      {
+        "name": "README.md",
+        "path": "docs/README.md",
+        "type": "file",
+        "source_packages": [],
+        "class_count": 0,
+        "estimated_lines": 100,
+        "source_root": "",
+        "children": []
+      },
+      {
+        "name": "ARCHITECTURE.md",
+        "path": "docs/ARCHITECTURE.md",
+        "type": "file",
+        "source_packages": [],
+        "class_count": 0,
+        "estimated_lines": 200,
+        "source_root": "",
+        "children": []
+      },
+      {
+        "name": "main",
+        "path": "docs/main",
+        "type": "folder",
+        "source_packages": [],
+        "class_count": 0,
+        "estimated_lines": 0,
+        "source_root": "main",
+        "children": [
+          {
+            "name": "block",
+            "path": "docs/main/block",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.block.entity",
+              "net.cyberpunk042.block.singularity",
+              "net.cyberpunk042.block.corrupted",
+              "net.cyberpunk042.block.growth",
+              "net.cyberpunk042.block.virus",
+              "net.cyberpunk042.block.matrix",
+              "net.cyberpunk042.block.core"
+            ],
+            "class_count": 34,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/block/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/block/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.block.entity",
+                  "net.cyberpunk042.block.singularity",
+                  "net.cyberpunk042.block.corrupted",
+                  "net.cyberpunk042.block.growth",
+                  "net.cyberpunk042.block.virus",
+                  "net.cyberpunk042.block.matrix",
+                  "net.cyberpunk042.block.core"
+                ],
+                "class_count": 30,
+                "estimated_lines": 550,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "collision",
+            "path": "docs/main/collision",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.collision"
+            ],
+            "class_count": 2,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/collision/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/collision/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.collision"
+                ],
+                "class_count": 2,
+                "estimated_lines": 130,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "command",
+            "path": "docs/main/command",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.command",
+              "net.cyberpunk042.command.field",
+              "net.cyberpunk042.command.util"
+            ],
+            "class_count": 34,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/command/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/command/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.command",
+                  "net.cyberpunk042.command.field",
+                  "net.cyberpunk042.command.util"
+                ],
+                "class_count": 30,
+                "estimated_lines": 550,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "entity",
+            "path": "docs/main/entity",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.entity"
+            ],
+            "class_count": 4,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/entity/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/entity/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.entity"
+                ],
+                "class_count": 4,
+                "estimated_lines": 160,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "field",
+            "path": "docs/main/field",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.field.category",
+              "net.cyberpunk042.field",
+              "net.cyberpunk042.field.effect",
+              "net.cyberpunk042.field.registry",
+              "net.cyberpunk042.field.instance",
+              "net.cyberpunk042.field.influence",
+              "net.cyberpunk042.field.primitive",
+              "net.cyberpunk042.field.profile",
+              "net.cyberpunk042.field.loader"
+            ],
+            "class_count": 52,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/field/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/field/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.field.category",
+                  "net.cyberpunk042.field",
+                  "net.cyberpunk042.field.effect",
+                  "net.cyberpunk042.field.registry",
+                  "net.cyberpunk042.field.instance",
+                  "net.cyberpunk042.field.influence",
+                  "net.cyberpunk042.field.primitive",
+                  "net.cyberpunk042.field.profile",
+                  "net.cyberpunk042.field.loader"
+                ],
+                "class_count": 30,
+                "estimated_lines": 550,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "category",
+                "path": "docs/main/field/category",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.field.category"
+                ],
+                "class_count": 3,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/field/category/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.field.category"
+                    ],
+                    "class_count": 3,
+                    "estimated_lines": 95,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "effect",
+                "path": "docs/main/field/effect",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.field.effect"
+                ],
+                "class_count": 5,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/field/effect/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.field.effect"
+                    ],
+                    "class_count": 5,
+                    "estimated_lines": 125,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "influence",
+                "path": "docs/main/field/influence",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.field.influence"
+                ],
+                "class_count": 15,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/field/influence/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.field.influence"
+                    ],
+                    "class_count": 15,
+                    "estimated_lines": 275,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "instance",
+                "path": "docs/main/field/instance",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.field.instance"
+                ],
+                "class_count": 7,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/field/instance/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.field.instance"
+                    ],
+                    "class_count": 7,
+                    "estimated_lines": 155,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "loader",
+                "path": "docs/main/field/loader",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.field.loader"
+                ],
+                "class_count": 6,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/field/loader/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.field.loader"
+                    ],
+                    "class_count": 6,
+                    "estimated_lines": 140,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "primitive",
+                "path": "docs/main/field/primitive",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.field.primitive"
+                ],
+                "class_count": 4,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/field/primitive/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.field.primitive"
+                    ],
+                    "class_count": 4,
+                    "estimated_lines": 110,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "growth",
+            "path": "docs/main/growth",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.growth",
+              "net.cyberpunk042.growth.scheduler",
+              "net.cyberpunk042.growth.profile"
+            ],
+            "class_count": 20,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/growth/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/growth/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.growth",
+                  "net.cyberpunk042.growth.scheduler",
+                  "net.cyberpunk042.growth.profile"
+                ],
+                "class_count": 20,
+                "estimated_lines": 400,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "infection",
+            "path": "docs/main/infection",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.infection.scenario",
+              "net.cyberpunk042.infection.profile",
+              "net.cyberpunk042.infection.api",
+              "net.cyberpunk042.infection.events",
+              "net.cyberpunk042.infection.singularity",
+              "net.cyberpunk042.infection.state",
+              "net.cyberpunk042.infection.collapse",
+              "net.cyberpunk042.infection.mutation",
+              "net.cyberpunk042.infection.controller.phase",
+              "net.cyberpunk042.infection.service",
+              "net.cyberpunk042.infection.command",
+              "net.cyberpunk042.infection",
+              "net.cyberpunk042.infection.orchestrator"
+            ],
+            "class_count": 143,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/infection/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/infection/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.infection.scenario",
+                  "net.cyberpunk042.infection.profile",
+                  "net.cyberpunk042.infection.api",
+                  "net.cyberpunk042.infection.events",
+                  "net.cyberpunk042.infection.singularity",
+                  "net.cyberpunk042.infection.state",
+                  "net.cyberpunk042.infection.collapse",
+                  "net.cyberpunk042.infection.mutation",
+                  "net.cyberpunk042.infection.controller.phase",
+                  "net.cyberpunk042.infection.service",
+                  "net.cyberpunk042.infection.command",
+                  "net.cyberpunk042.infection",
+                  "net.cyberpunk042.infection.orchestrator"
+                ],
+                "class_count": 30,
+                "estimated_lines": 550,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "api",
+                "path": "docs/main/infection/api",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.infection.api"
+                ],
+                "class_count": 16,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/infection/api/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.infection.api"
+                    ],
+                    "class_count": 16,
+                    "estimated_lines": 290,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "controller",
+                "path": "docs/main/infection/controller",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.infection.controller.phase"
+                ],
+                "class_count": 7,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/infection/controller/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.infection.controller.phase"
+                    ],
+                    "class_count": 7,
+                    "estimated_lines": 155,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "events",
+                "path": "docs/main/infection/events",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.infection.events"
+                ],
+                "class_count": 12,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/infection/events/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.infection.events"
+                    ],
+                    "class_count": 12,
+                    "estimated_lines": 230,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "orchestrator",
+                "path": "docs/main/infection/orchestrator",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.infection.orchestrator"
+                ],
+                "class_count": 8,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/infection/orchestrator/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.infection.orchestrator"
+                    ],
+                    "class_count": 8,
+                    "estimated_lines": 170,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "profile",
+                "path": "docs/main/infection/profile",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.infection.profile"
+                ],
+                "class_count": 9,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/infection/profile/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.infection.profile"
+                    ],
+                    "class_count": 9,
+                    "estimated_lines": 185,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "scenario",
+                "path": "docs/main/infection/scenario",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.infection.scenario"
+                ],
+                "class_count": 10,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/infection/scenario/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.infection.scenario"
+                    ],
+                    "class_count": 10,
+                    "estimated_lines": 200,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "service",
+                "path": "docs/main/infection/service",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.infection.service"
+                ],
+                "class_count": 47,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/infection/service/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.infection.service"
+                    ],
+                    "class_count": 47,
+                    "estimated_lines": 755,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "singularity",
+                "path": "docs/main/infection/singularity",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.infection.singularity"
+                ],
+                "class_count": 6,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/infection/singularity/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.infection.singularity"
+                    ],
+                    "class_count": 6,
+                    "estimated_lines": 140,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "state",
+                "path": "docs/main/infection/state",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.infection.state"
+                ],
+                "class_count": 6,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/infection/state/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.infection.state"
+                    ],
+                    "class_count": 6,
+                    "estimated_lines": 140,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "item",
+            "path": "docs/main/item",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.item",
+              "net.cyberpunk042.item.armor"
+            ],
+            "class_count": 8,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/item/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/item/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.item",
+                  "net.cyberpunk042.item.armor"
+                ],
+                "class_count": 8,
+                "estimated_lines": 220,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "network",
+            "path": "docs/main/network",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.network",
+              "net.cyberpunk042.network.gui"
+            ],
+            "class_count": 33,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/network/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/network/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.network",
+                  "net.cyberpunk042.network.gui"
+                ],
+                "class_count": 30,
+                "estimated_lines": 550,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "server",
+            "path": "docs/main/server",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.server.raycast"
+            ],
+            "class_count": 1,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/server/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/server/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.server.raycast"
+                ],
+                "class_count": 1,
+                "estimated_lines": 115,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "visual",
+            "path": "docs/main/visual",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.visual.appearance",
+              "net.cyberpunk042.visual.pattern",
+              "net.cyberpunk042.visual.layer",
+              "net.cyberpunk042.visual.color",
+              "net.cyberpunk042.visual.shape",
+              "net.cyberpunk042.visual.fill",
+              "net.cyberpunk042.visual.animation",
+              "net.cyberpunk042.visual.util",
+              "net.cyberpunk042.visual.validation",
+              "net.cyberpunk042.visual.visibility",
+              "net.cyberpunk042.visual.transform"
+            ],
+            "class_count": 78,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/main/visual/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/main/visual/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.visual.appearance",
+                  "net.cyberpunk042.visual.pattern",
+                  "net.cyberpunk042.visual.layer",
+                  "net.cyberpunk042.visual.color",
+                  "net.cyberpunk042.visual.shape",
+                  "net.cyberpunk042.visual.fill",
+                  "net.cyberpunk042.visual.animation",
+                  "net.cyberpunk042.visual.util",
+                  "net.cyberpunk042.visual.validation",
+                  "net.cyberpunk042.visual.visibility",
+                  "net.cyberpunk042.visual.transform"
+                ],
+                "class_count": 30,
+                "estimated_lines": 550,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "animation",
+                "path": "docs/main/visual/animation",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.visual.animation"
+                ],
+                "class_count": 14,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/visual/animation/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.visual.animation"
+                    ],
+                    "class_count": 14,
+                    "estimated_lines": 260,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "appearance",
+                "path": "docs/main/visual/appearance",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.visual.appearance"
+                ],
+                "class_count": 5,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/visual/appearance/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.visual.appearance"
+                    ],
+                    "class_count": 5,
+                    "estimated_lines": 125,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "color",
+                "path": "docs/main/visual/color",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.visual.color"
+                ],
+                "class_count": 4,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/visual/color/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.visual.color"
+                    ],
+                    "class_count": 4,
+                    "estimated_lines": 110,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "fill",
+                "path": "docs/main/visual/fill",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.visual.fill"
+                ],
+                "class_count": 8,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/visual/fill/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.visual.fill"
+                    ],
+                    "class_count": 8,
+                    "estimated_lines": 170,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "pattern",
+                "path": "docs/main/visual/pattern",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.visual.pattern"
+                ],
+                "class_count": 15,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/visual/pattern/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.visual.pattern"
+                    ],
+                    "class_count": 15,
+                    "estimated_lines": 275,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "shape",
+                "path": "docs/main/visual/shape",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.visual.shape"
+                ],
+                "class_count": 14,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/visual/shape/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.visual.shape"
+                    ],
+                    "class_count": 14,
+                    "estimated_lines": 260,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "transform",
+                "path": "docs/main/visual/transform",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.visual.transform"
+                ],
+                "class_count": 10,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/visual/transform/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.visual.transform"
+                    ],
+                    "class_count": 10,
+                    "estimated_lines": 200,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "visibility",
+                "path": "docs/main/visual/visibility",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.visual.visibility"
+                ],
+                "class_count": 3,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/main/visual/visibility/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.visual.visibility"
+                    ],
+                    "class_count": 3,
+                    "estimated_lines": 95,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "client",
+        "path": "docs/client",
+        "type": "folder",
+        "source_packages": [],
+        "class_count": 0,
+        "estimated_lines": 0,
+        "source_root": "client",
+        "children": [
+          {
+            "name": "color",
+            "path": "docs/client/color",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.client.color"
+            ],
+            "class_count": 1,
+            "estimated_lines": 65,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/color/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.color"
+                ],
+                "class_count": 1,
+                "estimated_lines": 65,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "command",
+            "path": "docs/client/command",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.client.command",
+              "net.cyberpunk042.client.command",
+              "net.cyberpunk042.client.command",
+              "net.cyberpunk042.client.command",
+              "net.cyberpunk042.client.command",
+              "net.cyberpunk042.client.command.util",
+              "net.cyberpunk042.client.command.util",
+              "net.cyberpunk042.client.command.util",
+              "net.cyberpunk042.client.command.util"
+            ],
+            "class_count": 9,
+            "estimated_lines": 185,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/command/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.command",
+                  "net.cyberpunk042.client.command",
+                  "net.cyberpunk042.client.command",
+                  "net.cyberpunk042.client.command",
+                  "net.cyberpunk042.client.command",
+                  "net.cyberpunk042.client.command.util",
+                  "net.cyberpunk042.client.command.util",
+                  "net.cyberpunk042.client.command.util",
+                  "net.cyberpunk042.client.command.util"
+                ],
+                "class_count": 9,
+                "estimated_lines": 185,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "field",
+            "path": "docs/client/field",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.client.field",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render",
+              "net.cyberpunk042.client.field.render"
+            ],
+            "class_count": 17,
+            "estimated_lines": 305,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/field/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.field",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render",
+                  "net.cyberpunk042.client.field.render"
+                ],
+                "class_count": 17,
+                "estimated_lines": 305,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "gui",
+            "path": "docs/client/gui",
+            "type": "folder",
+            "source_packages": [],
+            "class_count": 119,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/gui/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.gui.state.manager",
+                  "net.cyberpunk042.client.gui.layout",
+                  "net.cyberpunk042.client.gui.widget",
+                  "net.cyberpunk042.client.gui.screen",
+                  "net.cyberpunk042.client.gui.render",
+                  "net.cyberpunk042.client.gui.preview",
+                  "net.cyberpunk042.client.gui.preview.tessellator",
+                  "net.cyberpunk042.client.gui.config",
+                  "net.cyberpunk042.client.gui.panel.sub",
+                  "net.cyberpunk042.client.gui.state",
+                  "net.cyberpunk042.client.gui.panel",
+                  "net.cyberpunk042.client.gui.component",
+                  "net.cyberpunk042.client.gui.util",
+                  "net.cyberpunk042.client.gui.state.adapter"
+                ],
+                "class_count": 30,
+                "estimated_lines": 500,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "component",
+                "path": "docs/client/gui/component",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.client.gui.component"
+                ],
+                "class_count": 7,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/client/gui/component/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.client.gui.component"
+                    ],
+                    "class_count": 7,
+                    "estimated_lines": 155,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "layout",
+                "path": "docs/client/gui/layout",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.client.gui.layout"
+                ],
+                "class_count": 9,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/client/gui/layout/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.client.gui.layout"
+                    ],
+                    "class_count": 9,
+                    "estimated_lines": 185,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "panel",
+                "path": "docs/client/gui/panel",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.client.gui.panel",
+                  "net.cyberpunk042.client.gui.panel.sub"
+                ],
+                "class_count": 25,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/client/gui/panel/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.client.gui.panel",
+                      "net.cyberpunk042.client.gui.panel.sub"
+                    ],
+                    "class_count": 25,
+                    "estimated_lines": 425,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "preview",
+                "path": "docs/client/gui/preview",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.client.gui.preview.tessellator",
+                  "net.cyberpunk042.client.gui.preview"
+                ],
+                "class_count": 10,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/client/gui/preview/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.client.gui.preview.tessellator",
+                      "net.cyberpunk042.client.gui.preview"
+                    ],
+                    "class_count": 10,
+                    "estimated_lines": 200,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "state",
+                "path": "docs/client/gui/state",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.client.gui.state",
+                  "net.cyberpunk042.client.gui.state.manager",
+                  "net.cyberpunk042.client.gui.state.adapter"
+                ],
+                "class_count": 35,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/client/gui/state/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.client.gui.state",
+                      "net.cyberpunk042.client.gui.state.manager",
+                      "net.cyberpunk042.client.gui.state.adapter"
+                    ],
+                    "class_count": 35,
+                    "estimated_lines": 575,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "util",
+                "path": "docs/client/gui/util",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.client.gui.util"
+                ],
+                "class_count": 11,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/client/gui/util/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.client.gui.util"
+                    ],
+                    "class_count": 11,
+                    "estimated_lines": 215,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              },
+              {
+                "name": "widget",
+                "path": "docs/client/gui/widget",
+                "type": "folder",
+                "source_packages": [
+                  "net.cyberpunk042.client.gui.widget"
+                ],
+                "class_count": 17,
+                "estimated_lines": 0,
+                "source_root": "",
+                "children": [
+                  {
+                    "name": "CLASS_DIAGRAM.md",
+                    "path": "docs/client/gui/widget/CLASS_DIAGRAM.md",
+                    "type": "file",
+                    "source_packages": [
+                      "net.cyberpunk042.client.gui.widget"
+                    ],
+                    "class_count": 17,
+                    "estimated_lines": 305,
+                    "source_root": "",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "network",
+            "path": "docs/client/network",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.client.network",
+              "net.cyberpunk042.client.network"
+            ],
+            "class_count": 2,
+            "estimated_lines": 80,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/network/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.network",
+                  "net.cyberpunk042.client.network"
+                ],
+                "class_count": 2,
+                "estimated_lines": 80,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "profile",
+            "path": "docs/client/profile",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.client.profile"
+            ],
+            "class_count": 1,
+            "estimated_lines": 65,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/profile/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.profile"
+                ],
+                "class_count": 1,
+                "estimated_lines": 65,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "raycast",
+            "path": "docs/client/raycast",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.client.raycast"
+            ],
+            "class_count": 1,
+            "estimated_lines": 65,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/raycast/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.raycast"
+                ],
+                "class_count": 1,
+                "estimated_lines": 65,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "render",
+            "path": "docs/client/render",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.client.render",
+              "net.cyberpunk042.client.render",
+              "net.cyberpunk042.client.render",
+              "net.cyberpunk042.client.render",
+              "net.cyberpunk042.client.render",
+              "net.cyberpunk042.client.render",
+              "net.cyberpunk042.client.render",
+              "net.cyberpunk042.client.render",
+              "net.cyberpunk042.client.render.beam",
+              "net.cyberpunk042.client.render.blockentity",
+              "net.cyberpunk042.client.render.blockentity",
+              "net.cyberpunk042.client.render.blockentity",
+              "net.cyberpunk042.client.render.blockentity",
+              "net.cyberpunk042.client.render.blockentity",
+              "net.cyberpunk042.client.render.blockentity",
+              "net.cyberpunk042.client.render.blockentity",
+              "net.cyberpunk042.client.render.entity",
+              "net.cyberpunk042.client.render.feature",
+              "net.cyberpunk042.client.render.field",
+              "net.cyberpunk042.client.render.item",
+              "net.cyberpunk042.client.render.util"
+            ],
+            "class_count": 21,
+            "estimated_lines": 365,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/render/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.render",
+                  "net.cyberpunk042.client.render",
+                  "net.cyberpunk042.client.render",
+                  "net.cyberpunk042.client.render",
+                  "net.cyberpunk042.client.render",
+                  "net.cyberpunk042.client.render",
+                  "net.cyberpunk042.client.render",
+                  "net.cyberpunk042.client.render",
+                  "net.cyberpunk042.client.render.beam",
+                  "net.cyberpunk042.client.render.blockentity",
+                  "net.cyberpunk042.client.render.blockentity",
+                  "net.cyberpunk042.client.render.blockentity",
+                  "net.cyberpunk042.client.render.blockentity",
+                  "net.cyberpunk042.client.render.blockentity",
+                  "net.cyberpunk042.client.render.blockentity",
+                  "net.cyberpunk042.client.render.blockentity",
+                  "net.cyberpunk042.client.render.entity",
+                  "net.cyberpunk042.client.render.feature",
+                  "net.cyberpunk042.client.render.field",
+                  "net.cyberpunk042.client.render.item",
+                  "net.cyberpunk042.client.render.util"
+                ],
+                "class_count": 21,
+                "estimated_lines": 365,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "screen",
+            "path": "docs/client/screen",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.client.screen",
+              "net.cyberpunk042.client.screen"
+            ],
+            "class_count": 2,
+            "estimated_lines": 80,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/screen/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.screen",
+                  "net.cyberpunk042.client.screen"
+                ],
+                "class_count": 2,
+                "estimated_lines": 80,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "state",
+            "path": "docs/client/state",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.client.state",
+              "net.cyberpunk042.client.state"
+            ],
+            "class_count": 2,
+            "estimated_lines": 80,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/state/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.state",
+                  "net.cyberpunk042.client.state"
+                ],
+                "class_count": 2,
+                "estimated_lines": 80,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "visual",
+            "path": "docs/client/visual",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.client.visual",
+              "net.cyberpunk042.client.visual",
+              "net.cyberpunk042.client.visual.animation",
+              "net.cyberpunk042.client.visual.animation",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.mesh",
+              "net.cyberpunk042.client.visual.render",
+              "net.cyberpunk042.client.visual.render",
+              "net.cyberpunk042.client.visual.render",
+              "net.cyberpunk042.client.visual.render",
+              "net.cyberpunk042.client.visual.render",
+              "net.cyberpunk042.client.visual.render",
+              "net.cyberpunk042.client.visual.transform",
+              "net.cyberpunk042.client.visual.transform",
+              "net.cyberpunk042.client.visual.transform"
+            ],
+            "class_count": 28,
+            "estimated_lines": 470,
+            "source_root": "",
+            "children": [
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/client/visual/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.client.visual",
+                  "net.cyberpunk042.client.visual",
+                  "net.cyberpunk042.client.visual.animation",
+                  "net.cyberpunk042.client.visual.animation",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.mesh",
+                  "net.cyberpunk042.client.visual.render",
+                  "net.cyberpunk042.client.visual.render",
+                  "net.cyberpunk042.client.visual.render",
+                  "net.cyberpunk042.client.visual.render",
+                  "net.cyberpunk042.client.visual.render",
+                  "net.cyberpunk042.client.visual.render",
+                  "net.cyberpunk042.client.visual.transform",
+                  "net.cyberpunk042.client.visual.transform",
+                  "net.cyberpunk042.client.visual.transform"
+                ],
+                "class_count": 28,
+                "estimated_lines": 470,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "shared",
+        "path": "docs/shared",
+        "type": "folder",
+        "source_packages": [],
+        "class_count": 0,
+        "estimated_lines": 0,
+        "source_root": "shared",
+        "children": [
+          {
+            "name": "config",
+            "path": "docs/shared/config",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.config"
+            ],
+            "class_count": 4,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/shared/config/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/shared/config/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.config"
+                ],
+                "class_count": 4,
+                "estimated_lines": 160,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "log",
+            "path": "docs/shared/log",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.log"
+            ],
+            "class_count": 24,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/shared/log/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/shared/log/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.log"
+                ],
+                "class_count": 24,
+                "estimated_lines": 460,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "mixin",
+            "path": "docs/shared/mixin",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.mixin.client.access",
+              "net.cyberpunk042.mixin.client",
+              "net.cyberpunk042.mixin"
+            ],
+            "class_count": 37,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/shared/mixin/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/shared/mixin/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.mixin.client.access",
+                  "net.cyberpunk042.mixin.client",
+                  "net.cyberpunk042.mixin"
+                ],
+                "class_count": 30,
+                "estimated_lines": 550,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "recipe",
+            "path": "docs/shared/other",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.recipe"
+            ],
+            "class_count": 1,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/shared/other/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/shared/other/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.recipe"
+                ],
+                "class_count": 1,
+                "estimated_lines": 115,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "registry",
+            "path": "docs/shared/registry",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.registry"
+            ],
+            "class_count": 6,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/shared/registry/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/shared/registry/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.registry"
+                ],
+                "class_count": 6,
+                "estimated_lines": 190,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "screen",
+            "path": "docs/shared/screen",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.screen",
+              "net.cyberpunk042.screen.handler"
+            ],
+            "class_count": 3,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/shared/screen/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/shared/screen/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.screen",
+                  "net.cyberpunk042.screen.handler"
+                ],
+                "class_count": 3,
+                "estimated_lines": 145,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "status",
+            "path": "docs/shared/other",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.status.effect"
+            ],
+            "class_count": 1,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/shared/other/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/shared/other/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.status.effect"
+                ],
+                "class_count": 1,
+                "estimated_lines": 115,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          },
+          {
+            "name": "util",
+            "path": "docs/shared/util",
+            "type": "folder",
+            "source_packages": [
+              "net.cyberpunk042.util.json",
+              "net.cyberpunk042.util"
+            ],
+            "class_count": 8,
+            "estimated_lines": 0,
+            "source_root": "",
+            "children": [
+              {
+                "name": "README.md",
+                "path": "docs/shared/util/README.md",
+                "type": "file",
+                "source_packages": [],
+                "class_count": 0,
+                "estimated_lines": 50,
+                "source_root": "",
+                "children": []
+              },
+              {
+                "name": "CLASS_DIAGRAM.md",
+                "path": "docs/shared/util/CLASS_DIAGRAM.md",
+                "type": "file",
+                "source_packages": [
+                  "net.cyberpunk042.util.json",
+                  "net.cyberpunk042.util"
+                ],
+                "class_count": 8,
+                "estimated_lines": 220,
+                "source_root": "",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "config",
+        "path": "docs/config",
+        "type": "folder",
+        "source_packages": [],
+        "class_count": 0,
+        "estimated_lines": 0,
+        "source_root": "",
+        "children": [
+          {
+            "name": "README.md",
+            "path": "docs/config/README.md",
+            "type": "file",
+            "source_packages": [],
+            "class_count": 0,
+            "estimated_lines": 100,
+            "source_root": "",
+            "children": []
+          }
+        ]
+      }
+    ]
+  },
+  "total_files": 82,
+  "total_classes": 696,
+  "source_mapping": {
+    "net.cyberpunk042.block.entity": "docs/main/block",
+    "net.cyberpunk042.block.singularity": "docs/main/block",
+    "net.cyberpunk042.block.corrupted": "docs/main/block",
+    "net.cyberpunk042.block.growth": "docs/main/block",
+    "net.cyberpunk042.block.virus": "docs/main/block",
+    "net.cyberpunk042.block.matrix": "docs/main/block",
+    "net.cyberpunk042.block.core": "docs/main/block",
+    "net.cyberpunk042.client.color": "docs/client/color",
+    "net.cyberpunk042.client.command": "docs/client/command",
+    "net.cyberpunk042.client.command.util": "docs/client/command",
+    "net.cyberpunk042.client.field": "docs/client/field",
+    "net.cyberpunk042.client.field.render": "docs/client/field",
+    "net.cyberpunk042.client.network": "docs/client/network",
+    "net.cyberpunk042.client.profile": "docs/client/profile",
+    "net.cyberpunk042.client.raycast": "docs/client/raycast",
+    "net.cyberpunk042.client.render": "docs/client/render",
+    "net.cyberpunk042.client.render.beam": "docs/client/render",
+    "net.cyberpunk042.client.render.blockentity": "docs/client/render",
+    "net.cyberpunk042.client.render.entity": "docs/client/render",
+    "net.cyberpunk042.client.render.feature": "docs/client/render",
+    "net.cyberpunk042.client.render.field": "docs/client/render",
+    "net.cyberpunk042.client.render.item": "docs/client/render",
+    "net.cyberpunk042.client.render.util": "docs/client/render",
+    "net.cyberpunk042.client.screen": "docs/client/screen",
+    "net.cyberpunk042.client.state": "docs/client/state",
+    "net.cyberpunk042.client.visual": "docs/client/visual",
+    "net.cyberpunk042.client.visual.animation": "docs/client/visual",
+    "net.cyberpunk042.client.visual.mesh": "docs/client/visual",
+    "net.cyberpunk042.client.visual.render": "docs/client/visual",
+    "net.cyberpunk042.client.visual.transform": "docs/client/visual",
+    "net.cyberpunk042.collision": "docs/main/collision",
+    "net.cyberpunk042.command": "docs/main/command",
+    "net.cyberpunk042.command.field": "docs/main/command",
+    "net.cyberpunk042.command.util": "docs/main/command",
+    "net.cyberpunk042.config": "docs/shared/config",
+    "net.cyberpunk042.entity": "docs/main/entity",
+    "net.cyberpunk042.field.category": "docs/main/field",
+    "net.cyberpunk042.field": "docs/main/field",
+    "net.cyberpunk042.field.effect": "docs/main/field",
+    "net.cyberpunk042.field.registry": "docs/main/field",
+    "net.cyberpunk042.field.instance": "docs/main/field",
+    "net.cyberpunk042.field.influence": "docs/main/field",
+    "net.cyberpunk042.field.primitive": "docs/main/field",
+    "net.cyberpunk042.field.profile": "docs/main/field",
+    "net.cyberpunk042.field.loader": "docs/main/field",
+    "net.cyberpunk042.growth": "docs/main/growth",
+    "net.cyberpunk042.growth.scheduler": "docs/main/growth",
+    "net.cyberpunk042.growth.profile": "docs/main/growth",
+    "net.cyberpunk042.infection.scenario": "docs/main/infection",
+    "net.cyberpunk042.infection.profile": "docs/main/infection",
+    "net.cyberpunk042.infection.api": "docs/main/infection",
+    "net.cyberpunk042.infection.events": "docs/main/infection",
+    "net.cyberpunk042.infection.singularity": "docs/main/infection",
+    "net.cyberpunk042.infection.state": "docs/main/infection",
+    "net.cyberpunk042.infection.collapse": "docs/main/infection",
+    "net.cyberpunk042.infection.mutation": "docs/main/infection",
+    "net.cyberpunk042.infection.controller.phase": "docs/main/infection",
+    "net.cyberpunk042.infection.service": "docs/main/infection",
+    "net.cyberpunk042.infection.command": "docs/main/infection",
+    "net.cyberpunk042.infection": "docs/main/infection",
+    "net.cyberpunk042.infection.orchestrator": "docs/main/infection",
+    "net.cyberpunk042.item": "docs/main/item",
+    "net.cyberpunk042.item.armor": "docs/main/item",
+    "net.cyberpunk042.log": "docs/shared/log",
+    "net.cyberpunk042.mixin.client.access": "docs/shared/mixin",
+    "net.cyberpunk042.mixin.client": "docs/shared/mixin",
+    "net.cyberpunk042.mixin": "docs/shared/mixin",
+    "net.cyberpunk042.network": "docs/main/network",
+    "net.cyberpunk042.network.gui": "docs/main/network",
+    "net.cyberpunk042.recipe": "docs/shared/other",
+    "net.cyberpunk042.registry": "docs/shared/registry",
+    "net.cyberpunk042.screen": "docs/shared/screen",
+    "net.cyberpunk042.screen.handler": "docs/shared/screen",
+    "net.cyberpunk042.server.raycast": "docs/main/server",
+    "net.cyberpunk042.status.effect": "docs/shared/other",
+    "net.cyberpunk042.util.json": "docs/shared/util",
+    "net.cyberpunk042.util": "docs/shared/util",
+    "net.cyberpunk042.visual.appearance": "docs/main/visual",
+    "net.cyberpunk042.visual.pattern": "docs/main/visual",
+    "net.cyberpunk042.visual.layer": "docs/main/visual",
+    "net.cyberpunk042.visual.color": "docs/main/visual",
+    "net.cyberpunk042.visual.shape": "docs/main/visual",
+    "net.cyberpunk042.visual.fill": "docs/main/visual",
+    "net.cyberpunk042.visual.animation": "docs/main/visual",
+    "net.cyberpunk042.visual.util": "docs/main/visual",
+    "net.cyberpunk042.visual.validation": "docs/main/visual",
+    "net.cyberpunk042.visual.visibility": "docs/main/visual",
+    "net.cyberpunk042.visual.transform": "docs/main/visual"
+  }
+}

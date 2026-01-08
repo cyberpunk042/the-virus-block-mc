@@ -1,0 +1,7 @@
+{
+  "name": "Dark",
+  "description": "Low brightness",
+  "color": "@primary",
+  "alpha": 1.0,
+  "brightness": 0.5
+}

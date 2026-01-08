@@ -1,0 +1,8 @@
+{
+  "name": "Dotted",
+  "description": "Small dots around the ring",
+  "cellType": "SEGMENT",
+  "pattern": "dotted",
+  "dotLength": 0.03,
+  "gapLength": 0.07
+}

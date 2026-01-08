@@ -1,0 +1,17 @@
+{
+  "name": "Cage Globe",
+  "description": "Latitude/longitude grid",
+  "mode": "CAGE",
+  "wireThickness": 0.8,
+  "doubleSided": false,
+  "depthTest": true,
+  "depthWrite": true,
+  "cage": {
+    "latitudeCount": 8,
+    "longitudeCount": 16,
+    "showEquator": true,
+    "showPoles": true
+  },
+  "pointSize": 2.0
+}
+

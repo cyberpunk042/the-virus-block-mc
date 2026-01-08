@@ -1,0 +1,11 @@
+{
+  "name": "Link Mirror",
+  "description": "Mirror parent animation",
+  "primitiveId": "parent",
+  "radiusMatch": false,
+  "radiusOffset": 0.0,
+  "follow": false,
+  "mirror": true,
+  "phaseOffset": 0.0,
+  "scaleWith": false
+}

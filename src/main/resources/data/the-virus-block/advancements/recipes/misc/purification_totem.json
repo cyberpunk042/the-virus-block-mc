@@ -1,0 +1,17 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "the-virus-block:purification_totem",
+      "the-virus-block:purification_totem_east",
+      "the-virus-block:purification_totem_south",
+      "the-virus-block:purification_totem_west"
+    ]
+  }
+}
+

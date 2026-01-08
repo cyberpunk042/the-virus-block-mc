@@ -1,0 +1,7 @@
+{
+  "name": "Concentric Rings",
+  "description": "Ring bands from center",
+  "cellType": "SECTOR",
+  "pattern": "rings",
+  "count": 4
+}

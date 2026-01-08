@@ -1,0 +1,12 @@
+{
+  "id": "the-virus-block:none_glow",
+  "primary_texture": "the-virus-block:textures/block/singularity_block.png",
+  "secondary_texture": "the-virus-block:textures/block/singularity_block.png",
+  "primary_color": "#FFFFFF",
+  "secondary_color": "#FFFFFF",
+  "light_level": 0,
+  "primary_use_mesh": false,
+  "secondary_use_mesh": false
+}
+
+

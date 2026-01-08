@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " D ",
+    "ITG",
+    " C "
+  ],
+  "key": {
+    "D": {
+      "item": "the-virus-block:corrupted_diamond"
+    },
+    "I": {
+      "item": "the-virus-block:corrupted_iron"
+    },
+    "G": {
+      "item": "the-virus-block:corrupted_gold"
+    },
+    "C": {
+      "item": "the-virus-block:cured_infectious_cube"
+    },
+    "T": {
+      "item": "minecraft:totem_of_undying"
+    }
+  },
+  "result": {
+    "item": "the-virus-block:purification_totem"
+  }
+}
+

@@ -1,0 +1,7 @@
+{
+  "name": "Desaturated",
+  "description": "Muted, washed-out colors",
+  "color": "@primary",
+  "alpha": 1.0,
+  "saturation": 0.3
+}

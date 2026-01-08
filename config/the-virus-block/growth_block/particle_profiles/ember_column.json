@@ -1,0 +1,20 @@
+{
+  "id": "the-virus-block:ember_column",
+  "particle": "minecraft:campfire_cosy_smoke",
+  "count": 12,
+  "speed": 0.01,
+  "sound": "minecraft:block.fire.ambient",
+  "sound_interval": 30,
+  "interval_ticks": 6,
+  "shape": "column",
+  "radius": 0.5,
+  "height": 2.8,
+  "offset_x": 0.0,
+  "offset_y": 0.0,
+  "offset_z": 0.0,
+  "jitter_x": 0.15,
+  "jitter_y": 0.2,
+  "jitter_z": 0.15,
+  "follow_scale": true
+}
+

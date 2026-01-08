@@ -1,0 +1,29 @@
+{
+  "id": "the-virus-block:ring_hold",
+  "interval_ticks": 12,
+  "radius": 9.5,
+  "strength": 0.0,
+  "vertical_boost": 0.0,
+  "falloff": 1.0,
+  "start_progress": 0.0,
+  "end_progress": 1.0,
+  "guardian_beams": false,
+  "edge_falloff": 0.0,
+  "beam_color": "#ffffffff",
+  "particle": "minecraft:enchant",
+  "particle_count": 0,
+  "particle_speed": 0.0,
+  "sound": "minecraft:entity.enderman.teleport",
+  "impact_damage": 0.0,
+  "impact_cooldown_ticks": 10,
+  "ring_behavior": "keep_on_ring",
+  "ring_count": 1,
+  "ring_spacing": 0.0,
+  "ring_width": 1.1,
+  "ring_strength": 1.2,
+  "ring_field_profiles": [
+    "the-virus-block:ring_default"
+  ],
+  "particle_profile": "the-virus-block:ember_column"
+}
+

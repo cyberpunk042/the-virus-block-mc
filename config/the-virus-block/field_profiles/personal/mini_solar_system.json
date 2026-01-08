@@ -1,0 +1,391 @@
+{
+    "version": 1,
+    "id": "mini_solar_system",
+    "name": "Mini Solar System",
+    "description": "Planet with moons on different orbital planes",
+    "type": "SHIELD",
+    "category": "orbital",
+    "tags": [
+        "orbit",
+        "planets",
+        "moons",
+        "linking",
+        "dynamic",
+        "tilted"
+    ],
+    "definition": {
+        "id": "mini_solar_system",
+        "type": "SHIELD",
+        "baseRadius": 0.1,
+        "layers": [
+            {
+                "id": "solar_layer",
+                "primitives": [
+                    {
+                        "id": "sun",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.25,
+                            "latSteps": 16,
+                            "lonSteps": 32
+                        },
+                        "transform": {},
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#FFDD44",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.8
+                        },
+                        "animation": {
+                            "spin": {
+                                "speed": 0.1,
+                                "axis": "Y"
+                            }
+                        }
+                    },
+                    {
+                        "id": "earth",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.12,
+                            "latSteps": 16,
+                            "lonSteps": 32
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.8,
+                                    "frequency": 0.3
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#4488FF",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.2
+                        },
+                        "animation": {}
+                    },
+                    {
+                        "id": "moon_equatorial",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.05,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.35,
+                                    "frequency": 1.5
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#CCCCCC",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.1
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "earth",
+                            "followDynamic": true,
+                            "orbitSpeedMult": 1.0
+                        }
+                    },
+                    {
+                        "id": "moon_polar",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.04,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.45,
+                                    "frequency": 1.0
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 1.5,
+                                    "frequency": 0.3
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#AADDFF",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.1
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "earth",
+                            "followDynamic": true,
+                            "orbitSpeedMult": 1.0
+                        }
+                    },
+                    {
+                        "id": "mars",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.08,
+                            "latSteps": 16,
+                            "lonSteps": 32
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 2.8,
+                                    "frequency": 0.15,
+                                    "phase": 0.25
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#CC4422",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.2
+                        },
+                        "animation": {}
+                    },
+                    {
+                        "id": "jupiter",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.2,
+                            "latSteps": 16,
+                            "lonSteps": 32
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 4.0,
+                                    "frequency": 0.08,
+                                    "phase": 0.6
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.3,
+                                    "frequency": 0.15
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#DDAA77",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.2
+                        },
+                        "animation": {
+                            "spin": {
+                                "speed": 0.3,
+                                "axis": "Y"
+                            }
+                        }
+                    },
+                    {
+                        "id": "io",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.04,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.4,
+                                    "frequency": 2.0
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#FFCC44",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.1
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "jupiter",
+                            "followDynamic": true,
+                            "orbitSpeedMult": 1.0
+                        }
+                    },
+                    {
+                        "id": "europa",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.035,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.55,
+                                    "frequency": 1.2
+                                },
+                                "y": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.8,
+                                    "frequency": 0.5
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#88CCFF",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.1
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "jupiter",
+                            "followDynamic": true,
+                            "orbitPhaseOffset": 0.333,
+                            "orbitSpeedMult": 1.0
+                        }
+                    },
+                    {
+                        "id": "ganymede",
+                        "type": "sphere",
+                        "shape": {
+                            "radius": 0.045,
+                            "latSteps": 12,
+                            "lonSteps": 24
+                        },
+                        "transform": {
+                            "orbit3d": {
+                                "enabled": true,
+                                "x": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.7,
+                                    "frequency": 0.7
+                                },
+                                "z": {
+                                    "mode": "CIRCULAR",
+                                    "amplitude": 0.5,
+                                    "frequency": 0.4
+                                },
+                                "coupling": "INDEPENDENT"
+                            }
+                        },
+                        "fill": {
+                            "mode": "SOLID",
+                            "depthTest": true,
+                            "depthWrite": false
+                        },
+                        "appearance": {
+                            "color": "#BBAA99",
+                            "alpha": {
+                                "min": 1.0,
+                                "max": 1.0
+                            },
+                            "glow": 0.1
+                        },
+                        "animation": {},
+                        "link": {
+                            "target": "jupiter",
+                            "followDynamic": true,
+                            "orbitPhaseOffset": 0.667,
+                            "orbitSpeedMult": 1.0
+                        }
+                    }
+                ],
+                "alpha": 1.0,
+                "visible": true,
+                "blendMode": "NORMAL"
+            }
+        ],
+        "follow": {
+            "enabled": true,
+            "leadOffset": 0.0,
+            "responsiveness": 1.0
+        }
+    }
+}

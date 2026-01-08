@@ -1,0 +1,11 @@
+{
+    "id": "vortex_fast",
+    "name": "Vortex (Fast)",
+    "description": "Very fast orbital - small tight field",
+    "strength": 0.8,
+    "radius": 6.0,
+    "maxVelocity": 10.0,
+    "damping": 0.0,
+    "groundLift": 0.2,
+    "falloff": "inverse"
+}

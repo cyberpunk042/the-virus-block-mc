@@ -1,0 +1,8 @@
+{
+  "name": "Solid",
+  "description": "Standard solid fill - default rendering",
+  "mode": "SOLID",
+  "doubleSided": false,
+  "depthTest": true,
+  "depthWrite": true
+}

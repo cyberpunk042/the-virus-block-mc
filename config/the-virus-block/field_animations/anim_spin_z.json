@@ -1,0 +1,9 @@
+{
+  "name": "Spin Z",
+  "description": "Z-axis rotation (roll)",
+  "spin": {
+    "axis": "Z",
+    "speed": 30.0,
+    "oscillate": false
+  }
+}

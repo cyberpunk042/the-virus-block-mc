@@ -1,0 +1,15 @@
+{
+    "id": "maelstrom_3d",
+    "name": "Maelstrom 3D",
+    "description": "Maelstrom with 3D orbit rotation - continuous tilt and orientation precession",
+    "strength": 3.0,
+    "radius": 35.0,
+    "maxVelocity": 5.0,
+    "damping": 0.005,
+    "groundLift": 0.2,
+    "falloff": "inverse",
+    "tiltMode": "fullcycle",
+    "tiltRate": 0.04,
+    "orientationMode": "fullcycle",
+    "orientationRate": 0.05
+}

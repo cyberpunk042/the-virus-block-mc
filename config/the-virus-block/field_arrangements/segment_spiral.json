@@ -1,0 +1,8 @@
+{
+  "name": "Spiral",
+  "description": "Segments arranged in spiral pattern",
+  "cellType": "SEGMENT",
+  "pattern": "spiral",
+  "turns": 1.5,
+  "segmentCount": 12
+}

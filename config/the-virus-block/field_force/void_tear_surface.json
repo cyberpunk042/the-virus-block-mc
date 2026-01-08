@@ -1,0 +1,19 @@
+{
+    "id": "void_tear_surface",
+    "name": "Void Tear (Surface)",
+    "description": "Shell orbit with wobble - entities orbit a spherical surface",
+    "strength": 2.0,
+    "radius": 18.0,
+    "orbitRadius": 0.6,
+    "coreRadius": 0.3,
+    "tangentialStrength": 0.25,
+    "slingshotFactor": 0.0,
+    "maxVelocity": 4.0,
+    "damping": 0.01,
+    "groundLift": 0.15,
+    "falloff": "linear",
+    "tiltMode": "wobble",
+    "tiltRate": 0.04,
+    "orientationMode": "wobble",
+    "orientationRate": 0.05
+}

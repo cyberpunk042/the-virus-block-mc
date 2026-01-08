@@ -1,0 +1,9 @@
+{
+  "name": "Orbit Tight",
+  "description": "Small tight orbit",
+  "enabled": true,
+  "radius": 0.5,
+  "speed": 2.0,
+  "axis": "Y",
+  "phase": 0.0
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "the-virus-block:block/corrupted_tnt_top",
+    "bottom": "the-virus-block:block/corrupted_tnt_bottom",
+    "side": "the-virus-block:block/corrupted_tnt_side"
+  }
+}
+

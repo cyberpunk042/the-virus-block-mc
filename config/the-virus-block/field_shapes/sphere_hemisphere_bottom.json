@@ -1,0 +1,11 @@
+{
+  "name": "Hemisphere Bottom",
+  "description": "Bottom half of sphere",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 16,
+  "lonSteps": 64,
+  "latStart": 0.5,
+  "latEnd": 1.0,
+  "algorithm": "LAT_LON"
+}

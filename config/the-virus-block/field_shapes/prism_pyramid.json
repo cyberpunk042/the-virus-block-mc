@@ -1,0 +1,9 @@
+{
+  "name": "Prism Pyramid",
+  "description": "Pyramid (topRadius=0)",
+  "type": "prism",
+  "sides": 4,
+  "radius": 1.0,
+  "height": 2.0,
+  "topRadius": 0.0
+}

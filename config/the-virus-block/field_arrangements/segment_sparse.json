@@ -1,0 +1,8 @@
+{
+  "name": "Sparse",
+  "description": "Few segments visible - minimal look",
+  "cellType": "SEGMENT",
+  "pattern": "sparse",
+  "visibility": 0.25,
+  "skip": 3
+}

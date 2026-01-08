@@ -1,0 +1,9 @@
+{
+  "name": "Spin Slow",
+  "description": "Slow Y-axis rotation",
+  "spin": {
+    "axis": "Y",
+    "speed": 15.0,
+    "oscillate": false
+  }
+}

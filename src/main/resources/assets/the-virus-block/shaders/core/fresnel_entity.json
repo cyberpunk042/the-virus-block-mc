@@ -1,0 +1,16 @@
+{
+    "vertex": "the-virus-block:core/fresnel_entity",
+    "fragment": "the-virus-block:core/fresnel_entity",
+    "samplers": [
+        {
+            "name": "Sampler0"
+        },
+        {
+            "name": "Sampler1"
+        },
+        {
+            "name": "Sampler2"
+        }
+    ],
+    "uniforms": []
+}

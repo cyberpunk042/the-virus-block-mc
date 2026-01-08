@@ -1,0 +1,7 @@
+{
+  "name": "Thin Bands",
+  "description": "Narrow horizontal bands",
+  "mask": "BANDS",
+  "count": 6,
+  "thickness": 0.3
+}

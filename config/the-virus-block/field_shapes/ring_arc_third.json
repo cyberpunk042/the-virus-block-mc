@@ -1,0 +1,10 @@
+{
+  "name": "Ring Third Arc",
+  "description": "120\u00b0 arc",
+  "type": "ring",
+  "innerRadius": 0.8,
+  "outerRadius": 1.0,
+  "segments": 24,
+  "arcStart": 0,
+  "arcEnd": 120
+}

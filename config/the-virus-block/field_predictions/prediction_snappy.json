@@ -1,0 +1,9 @@
+{
+  "name": "Prediction Snappy",
+  "description": "Quick response",
+  "enabled": true,
+  "leadTicks": 2,
+  "maxDistance": 3.0,
+  "lookAhead": true,
+  "verticalBoost": 1.5
+}

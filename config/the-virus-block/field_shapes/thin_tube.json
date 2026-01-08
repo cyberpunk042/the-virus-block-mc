@@ -1,0 +1,10 @@
+{
+  "name": "Tube Thin",
+  "description": "Thin tall tube",
+  "type": "cylinder",
+  "radius": 0.4,
+  "height": 8.0,
+  "segments": 96,
+  "topRadius": 0.4
+}
+

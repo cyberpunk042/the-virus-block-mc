@@ -1,0 +1,11 @@
+{
+  "name": "Beam Wide",
+  "description": "Wide pillar beam",
+  "enabled": true,
+  "innerRadius": 0.0,
+  "outerRadius": 1.0,
+  "height": 4.0,
+  "glow": 0.3,
+  "color": "#0088FF",
+  "pulseEnabled": false
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Dots",
+  "description": "Scattered dot pattern",
+  "cellType": "QUAD",
+  "pattern": "dots",
+  "spacing": 4
+}

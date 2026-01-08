@@ -1,0 +1,10 @@
+{
+  "name": "Prism Open",
+  "description": "No caps (tube-like)",
+  "type": "prism",
+  "sides": 6,
+  "radius": 1.0,
+  "height": 2.0,
+  "capTop": false,
+  "capBottom": false
+}

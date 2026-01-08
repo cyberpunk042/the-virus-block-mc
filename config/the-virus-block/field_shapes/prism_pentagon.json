@@ -1,0 +1,8 @@
+{
+  "name": "Prism Pentagon",
+  "description": "5-sided prism",
+  "type": "prism",
+  "sides": 5,
+  "radius": 1.0,
+  "height": 2.0
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Tech Grid",
+  "description": "Sci-fi wireframe cage with slow spin",
+  "merge": {
+    "fill": {
+      "mode": "CAGE",
+      "wireThickness": 0.5,
+      "cage": {
+        "latitudeCount": 12,
+        "longitudeCount": 24
+      }
+    },
+    "visibility": {
+      "mask": "CHECKER",
+      "count": 8,
+      "feather": 0.02
+    },
+    "animation": {
+      "spin": {
+        "enabled": true,
+        "axis": "Y",
+        "speed": 30.0
+      }
+    },
+    "appearance": {
+      "primaryColor": "#00FFFF",
+      "glow": 0.4
+    }
+  }
+}
+

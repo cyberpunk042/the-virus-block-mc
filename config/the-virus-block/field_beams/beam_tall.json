@@ -1,0 +1,11 @@
+{
+  "name": "Beam Tall",
+  "description": "Very tall beacon beam",
+  "enabled": true,
+  "innerRadius": 0.0,
+  "outerRadius": 0.4,
+  "height": 20.0,
+  "glow": 0.4,
+  "color": "#FFFFFF",
+  "pulseEnabled": false
+}

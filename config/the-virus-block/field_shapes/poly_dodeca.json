@@ -1,0 +1,7 @@
+{
+  "name": "Dodecahedron",
+  "description": "12-faced shape",
+  "type": "polyhedron",
+  "polyType": "DODECAHEDRON",
+  "radius": 1.0
+}

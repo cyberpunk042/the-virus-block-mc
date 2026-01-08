@@ -1,0 +1,8 @@
+{
+  "name": "Single Arc",
+  "description": "Just one segment visible",
+  "cellType": "SEGMENT",
+  "pattern": "arc",
+  "arcStart": 0.0,
+  "arcEnd": 0.15
+}

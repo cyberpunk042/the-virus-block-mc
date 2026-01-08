@@ -1,0 +1,7 @@
+{
+  "name": "Octahedron",
+  "description": "8-faced diamond",
+  "type": "polyhedron",
+  "polyType": "OCTAHEDRON",
+  "radius": 1.0
+}

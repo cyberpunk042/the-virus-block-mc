@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "stage=stage_1": { "model": "the-virus-block:block/corrupted_glass_stage_1" },
+    "stage=stage_2": { "model": "the-virus-block:block/corrupted_glass_stage_2" }
+  }
+}
+

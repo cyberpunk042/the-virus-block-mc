@@ -1,0 +1,9 @@
+{
+  "name": "Alternating Lines",
+  "description": "Every other line visible",
+  "quad": "TRIANGLE_1",
+  "segment": "ALTERNATING",
+  "sector": "HALF",
+  "multiPart": false
+}
+

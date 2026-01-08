@@ -1,0 +1,7 @@
+{
+  "name": "Saturated",
+  "description": "Vibrant, intense colors",
+  "color": "@primary",
+  "alpha": 1.0,
+  "saturation": 1.5
+}

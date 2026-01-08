@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/tinted_glass",
+  "textures": {
+    "texture": "the-virus-block:block/inflected_glass"
+  }
+}
+

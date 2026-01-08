@@ -1,0 +1,8 @@
+{
+  "name": "Radial Fade",
+  "description": "Fade from center outward",
+  "cellType": "SECTOR",
+  "pattern": "radialGradient",
+  "centerVisibility": 1.0,
+  "edgeVisibility": 0.0
+}

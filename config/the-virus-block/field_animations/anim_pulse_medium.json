@@ -1,0 +1,11 @@
+{
+  "name": "Pulse Medium",
+  "description": "Medium scale pulse",
+  "pulse": {
+    "scale": 1.0,
+    "speed": 1.0,
+    "waveform": "SINE",
+    "min": 0.9,
+    "max": 1.1
+  }
+}

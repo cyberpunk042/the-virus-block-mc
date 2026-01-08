@@ -1,0 +1,15 @@
+{
+    "id": "maelstrom_tilt",
+    "name": "Maelstrom Tilt Only",
+    "description": "Maelstrom with only TILT rotation - orbit tips forward/backward",
+    "strength": 3.0,
+    "radius": 35.0,
+    "maxVelocity": 5.0,
+    "damping": 0.005,
+    "groundLift": 0.2,
+    "falloff": "inverse",
+    "tiltMode": "fullcycle",
+    "tiltRate": 0.03,
+    "orientationMode": "fixed",
+    "orientationRate": 0.0
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Thick Wire",
+  "description": "Bold wireframe lines",
+  "mode": "WIREFRAME",
+  "wireThickness": 2.0,
+  "doubleSided": false,
+  "depthTest": true,
+  "depthWrite": true,
+  "cage": {
+    "latitudeCount": 6,
+    "longitudeCount": 12
+  },
+  "pointSize": 2.0
+}
+

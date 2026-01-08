@@ -1,0 +1,15 @@
+{
+    "id": "gentle_pull",
+    "name": "Gentle Pull",
+    "description": "Soft attraction with stable orbit",
+    "strength": 0.15,
+    "radius": 10.0,
+    "orbitRadius": 0.45,
+    "coreRadius": 0.08,
+    "tangentialStrength": 0.12,
+    "slingshotFactor": 0.5,
+    "maxVelocity": 1.2,
+    "damping": 0.025,
+    "groundLift": 0.04,
+    "falloff": "linear"
+}

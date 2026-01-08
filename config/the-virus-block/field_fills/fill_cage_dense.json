@@ -1,0 +1,13 @@
+{
+  "name": "Cage Dense",
+  "description": "High density grid",
+  "mode": "CAGE",
+  "wireThickness": 0.5,
+  "doubleSided": true,
+  "cage": {
+    "latitudeCount": 16,
+    "longitudeCount": 32,
+    "showEquator": true,
+    "showPoles": true
+  }
+}

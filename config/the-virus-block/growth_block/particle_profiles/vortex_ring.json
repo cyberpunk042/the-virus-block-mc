@@ -1,0 +1,20 @@
+{
+  "id": "the-virus-block:vortex_ring",
+  "particle": "minecraft:portal",
+  "count": 18,
+  "speed": 0.02,
+  "sound": "minecraft:entity.evoker.prepare_summon",
+  "sound_interval": 40,
+  "interval_ticks": 8,
+  "shape": "ring",
+  "radius": 1.4,
+  "height": 0.6,
+  "offset_x": 0.0,
+  "offset_y": 0.6,
+  "offset_z": 0.0,
+  "jitter_x": 0.1,
+  "jitter_y": 0.05,
+  "jitter_z": 0.1,
+  "follow_scale": true
+}
+

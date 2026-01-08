@@ -1,0 +1,11 @@
+{
+    "id": "singularity",
+    "name": "Singularity",
+    "description": "Ultimate gravitational field - massive range",
+    "strength": 0.8,
+    "radius": 80.0,
+    "maxVelocity": 3.5,
+    "damping": 0.005,
+    "groundLift": 0.18,
+    "falloff": "inverse"
+}

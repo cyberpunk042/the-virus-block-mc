@@ -1,0 +1,29 @@
+{
+  "id": "the-virus-block:vortex_pull",
+  "interval_ticks": 10,
+  "radius": 14.0,
+  "strength": 0.9,
+  "vertical_boost": 0.4,
+  "falloff": 0.65,
+  "start_progress": 0.15,
+  "end_progress": 0.95,
+  "guardian_beams": true,
+  "edge_falloff": 0.15,
+  "beam_color": "#ff1e90",
+  "particle": "minecraft:portal",
+  "particle_count": 10,
+  "particle_speed": 0.04,
+  "sound": "minecraft:entity.guardian.attack",
+  "impact_damage": 3.0,
+  "impact_cooldown_ticks": 15,
+  "ring_behavior": "keep_on_ring",
+  "ring_count": 1,
+  "ring_spacing": 0.0,
+  "ring_width": 0.8,
+  "ring_strength": 1.4,
+  "ring_field_profiles": [
+    "the-virus-block:ember_ring"
+  ],
+  "particle_profile": "the-virus-block:vortex_ring"
+}
+

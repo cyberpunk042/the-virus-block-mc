@@ -1,0 +1,11 @@
+{
+  "id": "the-virus-block:glowstone",
+  "primary_texture": "the-virus-block:textures/block/glow_glowstone_primary.png",
+  "secondary_texture": "the-virus-block:textures/block/glow_glowstone_secondary.png",
+  "primary_color": "#FFEFA1",
+  "secondary_color": "#FFD764",
+  "light_level": 14,
+  "primary_use_mesh": false,
+  "secondary_use_mesh": false
+}
+

@@ -1,0 +1,21 @@
+{
+  "id": "the-virus-block:none_particle",
+  "particle": null,
+  "count": 0,
+  "speed": 0.0,
+  "sound": null,
+  "sound_interval": 20,
+  "interval_ticks": 20,
+  "shape": "sphere",
+  "radius": 0.5,
+  "height": 0.5,
+  "offset_x": 0.0,
+  "offset_y": 0.0,
+  "offset_z": 0.0,
+  "jitter_x": 0.0,
+  "jitter_y": 0.0,
+  "jitter_z": 0.0,
+  "follow_scale": false
+}
+
+

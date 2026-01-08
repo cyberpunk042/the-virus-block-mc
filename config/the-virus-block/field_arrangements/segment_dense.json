@@ -1,0 +1,9 @@
+{
+  "name": "Dense",
+  "description": "Most segments visible - nearly complete",
+  "cellType": "SEGMENT",
+  "pattern": "dense",
+  "visibility": 0.75,
+  "skip": 0,
+  "show": 3
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Sixths",
+  "description": "Six pie pieces",
+  "cellType": "SECTOR",
+  "pattern": "uniform",
+  "count": 6,
+  "gapRatio": 0.4
+}

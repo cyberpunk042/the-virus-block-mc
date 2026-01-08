@@ -1,0 +1,8 @@
+{
+  "name": "Random",
+  "description": "Pseudo-random distribution",
+  "cellType": "QUAD",
+  "pattern": "random",
+  "seed": 42,
+  "density": 0.5
+}

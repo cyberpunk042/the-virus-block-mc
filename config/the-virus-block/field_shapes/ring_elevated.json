@@ -1,0 +1,9 @@
+{
+  "name": "Ring Elevated",
+  "description": "Ring at Y=1.0",
+  "type": "ring",
+  "innerRadius": 0.8,
+  "outerRadius": 1.0,
+  "segments": 64,
+  "y": 1.0
+}

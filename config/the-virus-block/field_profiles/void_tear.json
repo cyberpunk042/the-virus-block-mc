@@ -1,0 +1,87 @@
+{
+    "id": "void_tear",
+    "name": "Void Tear Field",
+    "description": "Dark Purple sphere with wave pattern - with strong gravitational pull",
+    "type": "force",
+    "baseRadius": 18.0,
+    "theme": "antivirus_pink",
+    "forceConfig": {
+        "strength": 2.0,
+        "radius": 18.0,
+        "orbitRadius": 0.25,
+        "coreRadius": 0.1,
+        "tangentialStrength": 0.15,
+        "maxVelocity": 4.0,
+        "damping": 0.015,
+        "groundLift": 0.2,
+        "falloff": "inverse",
+        "tiltMode": "wobble",
+        "tiltRate": 0.04,
+        "orientationMode": "wobble",
+        "orientationRate": 0.05
+    },
+    "layers": [
+        {
+            "id": "shell",
+            "primitives": [
+                {
+                    "id": "primitive_1765899260593",
+                    "type": "sphere",
+                    "shape": {
+                        "radius": 0.839527,
+                        "latSteps": 32,
+                        "lonSteps": 64
+                    },
+                    "fill": {
+                        "mode": "SOLID",
+                        "depthTest": true,
+                        "depthWrite": false
+                    },
+                    "arrangement": {
+                        "defaultPattern": "wave_1"
+                    },
+                    "appearance": {
+                        "color": "#160020",
+                        "alpha": {
+                            "min": 1.0,
+                            "max": 1.0
+                        },
+                        "glow": 1.6216216,
+                        "emissive": 1.0,
+                        "saturation": 1.0067568,
+                        "brightness": 0.8175676,
+                        "hueShift": 0.0,
+                        "secondaryColor": "#FFFFFF",
+                        "colorBlend": 0.0
+                    },
+                    "animation": {
+                        "spin": {
+                            "axis": "Z",
+                            "speed": 30.0
+                        },
+                        "alphaPulse": {
+                            "speed": 1.0,
+                            "min": 0.4,
+                            "max": 1.0,
+                            "waveform": "SINE"
+                        }
+                    }
+                }
+            ],
+            "alpha": 1.0,
+            "visible": true,
+            "blendMode": "NORMAL"
+        }
+    ],
+    "modifiers": {
+        "visualScale": 0.3,
+        "swirl": 0.6
+    },
+    "beam": {
+        "enabled": false,
+        "innerRadius": 0.045,
+        "outerRadius": 0.06,
+        "height": 0,
+        "color": "#FFEAFAFF"
+    }
+}

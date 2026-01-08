@@ -1,0 +1,8 @@
+{
+  "name": "Dashed",
+  "description": "Long-short dash pattern",
+  "cellType": "SEGMENT",
+  "pattern": "dashed",
+  "dashLength": 0.15,
+  "gapLength": 0.05
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Follow Locked",
+  "description": "Locked to entity (default)",
+  "enabled": true,
+  "mode": "LOCKED",
+  "playerOverride": false
+}

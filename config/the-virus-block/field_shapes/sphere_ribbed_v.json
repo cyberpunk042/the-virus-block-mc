@@ -1,0 +1,9 @@
+{
+  "name": "Sphere Ribbed Vertical",
+  "description": "Dense longitude meridians, sparse latitude",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 32,
+  "lonSteps": 256,
+  "algorithm": "LAT_LON"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "All Segments",
+  "description": "Complete ring - all segments visible",
+  "cellType": "SEGMENT",
+  "pattern": "full",
+  "visibility": 1.0
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Pinwheel",
+  "description": "Spinning pinwheel pattern",
+  "cellType": "SECTOR",
+  "pattern": "pinwheel",
+  "blades": 6,
+  "twist": 30
+}

@@ -1,0 +1,10 @@
+{
+  "name": "Alpha Fade",
+  "description": "Breathing alpha animation",
+  "alphaPulse": {
+    "speed": 1.0,
+    "min": 0.4,
+    "max": 1.0,
+    "waveform": "SINE"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Ring Twisted",
+  "description": "Ring with 90\u00b0 twist",
+  "type": "ring",
+  "innerRadius": 0.8,
+  "outerRadius": 1.0,
+  "segments": 64,
+  "twist": 90
+}

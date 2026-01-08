@@ -1,0 +1,17 @@
+{
+  "variants": {
+    "stage=stage_1": [
+      { "model": "the-virus-block:block/corrupted_stone_stage_1", "y": 0 },
+      { "model": "the-virus-block:block/corrupted_stone_stage_1", "y": 90 },
+      { "model": "the-virus-block:block/corrupted_stone_stage_1", "y": 180 },
+      { "model": "the-virus-block:block/corrupted_stone_stage_1", "y": 270 }
+    ],
+    "stage=stage_2": [
+      { "model": "the-virus-block:block/corrupted_stone_stage_2", "y": 0 },
+      { "model": "the-virus-block:block/corrupted_stone_stage_2", "y": 90 },
+      { "model": "the-virus-block:block/corrupted_stone_stage_2", "y": 180 },
+      { "model": "the-virus-block:block/corrupted_stone_stage_2", "y": 270 }
+    ]
+  }
+}
+

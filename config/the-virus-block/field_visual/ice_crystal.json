@@ -1,0 +1,29 @@
+{
+    "name": "Ice Crystal",
+    "description": "Cold blue ice-like energy",
+    "enabled": true,
+    "effectType": "ENERGY_ORB",
+    "intensity": 1.3,
+    "animationSpeed": 0.5,
+    "primaryColor": [
+        0.8,
+        0.95,
+        1.0
+    ],
+    "secondaryColor": [
+        0.3,
+        0.7,
+        1.0
+    ],
+    "tertiaryColor": [
+        0.1,
+        0.3,
+        0.8
+    ],
+    "coreSize": 0.18,
+    "edgeSharpness": 8.0,
+    "spiralDensity": 3.0,
+    "spiralTwist": 2.0,
+    "glowLineCount": 8.0,
+    "glowLineIntensity": 0.6
+}

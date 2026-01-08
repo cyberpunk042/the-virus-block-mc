@@ -1,0 +1,18 @@
+{
+    "id": "void_tear",
+    "name": "Void Tear",
+    "description": "Strong gravitational pull with 3D orbit - entities orbit close to center",
+    "strength": 2.0,
+    "radius": 18.0,
+    "orbitRadius": 0.25,
+    "coreRadius": 0.1,
+    "tangentialStrength": 0.15,
+    "maxVelocity": 4.0,
+    "damping": 0.015,
+    "groundLift": 0.2,
+    "falloff": "inverse",
+    "tiltMode": "wobble",
+    "tiltRate": 0.04,
+    "orientationMode": "wobble",
+    "orientationRate": 0.05
+}

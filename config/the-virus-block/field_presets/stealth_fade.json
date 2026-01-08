@@ -1,0 +1,26 @@
+{
+  "name": "Stealth Fade",
+  "description": "Low visibility subtle effect",
+  "merge": {
+    "appearance": {
+      "glow": 0.1,
+      "saturation": 0.2
+    },
+    "animation": {
+      "alphaPulse": {
+        "enabled": true,
+        "min": 0.1,
+        "max": 0.3
+      }
+    },
+    "fill": {
+      "depthTest": false,
+      "depthWrite": false
+    },
+    "visibility": {
+      "mask": "GRADIENT",
+      "feather": 0.3
+    }
+  }
+}
+

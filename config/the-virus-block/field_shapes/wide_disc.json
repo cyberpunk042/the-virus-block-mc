@@ -1,0 +1,10 @@
+{
+  "name": "Flat Wide",
+  "description": "Large flat disc",
+  "type": "disc",
+  "radius": 6.0,
+  "segments": 128,
+  "y": 0.0,
+  "innerRadius": 0.0
+}
+

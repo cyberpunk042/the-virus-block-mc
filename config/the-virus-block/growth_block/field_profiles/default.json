@@ -1,0 +1,10 @@
+{
+  "id": "the-virus-block:default_field",
+  "mesh": "sphere",
+  "texture": "the-virus-block:textures/misc/singularity_sphere_1.png",
+  "alpha": 0.45,
+  "spin_speed": 1.0,
+  "scale_multiplier": 1.35,
+  "color": "#FFFFFFFF"
+}
+

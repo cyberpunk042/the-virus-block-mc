@@ -1,0 +1,11 @@
+{
+  "name": "Cylinder Half Pipe",
+  "description": "180\u00b0 half pipe",
+  "type": "cylinder",
+  "radius": 1.0,
+  "height": 3.0,
+  "segments": 16,
+  "arc": 180,
+  "capTop": false,
+  "capBottom": false
+}

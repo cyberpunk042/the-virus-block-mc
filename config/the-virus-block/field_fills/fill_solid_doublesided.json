@@ -1,0 +1,8 @@
+{
+  "name": "Solid Double-Sided",
+  "description": "Solid fill visible from both sides",
+  "mode": "SOLID",
+  "doubleSided": true,
+  "depthTest": true,
+  "depthWrite": true
+}

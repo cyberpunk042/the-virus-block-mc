@@ -1,0 +1,7 @@
+{
+  "name": "Follow Player Override",
+  "description": "Always follows player camera",
+  "enabled": true,
+  "mode": "SMOOTH",
+  "playerOverride": true
+}

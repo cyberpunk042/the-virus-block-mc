@@ -1,0 +1,37 @@
+{
+    "vertex": "the-virus-block:post/shockwave_fullscreen",
+    "fragment": "the-virus-block:post/shockwave_fullscreen",
+    "samplers": [
+        {
+            "name": "InSampler"
+        },
+        {
+            "name": "DepthSampler"
+        }
+    ],
+    "uniforms": [
+        {
+            "name": "ShockwaveParams",
+            "type": "matrix4x4",
+            "count": 2,
+            "values": [
+                20.0,
+                4.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                1.0,
+                1.0,
+                1.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    ]
+}

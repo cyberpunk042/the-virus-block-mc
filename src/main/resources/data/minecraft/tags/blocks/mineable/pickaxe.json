@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "the-virus-block:virus_block",
+    "the-virus-block:corrupted_stone",
+    "the-virus-block:corrupted_glass",
+    "the-virus-block:corrupted_iron",
+    "the-virus-block:corrupted_gold",
+    "the-virus-block:corrupted_diamond",
+    "the-virus-block:corrupted_crying_obsidian",
+    "the-virus-block:corrupted_ice"
+  ]
+}
+

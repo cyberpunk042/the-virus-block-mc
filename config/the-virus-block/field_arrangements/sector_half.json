@@ -1,0 +1,7 @@
+{
+  "name": "Half",
+  "description": "Semicircle - half disc",
+  "cellType": "SECTOR",
+  "pattern": "arc",
+  "arcEnd": 0.5
+}

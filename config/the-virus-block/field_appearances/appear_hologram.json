@@ -1,0 +1,9 @@
+{
+  "name": "Hologram",
+  "description": "Sci-fi holographic look",
+  "color": "@primary",
+  "alpha": 0.6,
+  "glow": 0.7,
+  "emissive": 0.4,
+  "saturation": 0.8
+}

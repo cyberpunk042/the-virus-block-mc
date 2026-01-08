@@ -1,0 +1,12 @@
+{
+  "name": "Morse",
+  "description": "Dot-dash alternating pattern",
+  "cellType": "SEGMENT",
+  "pattern": "morse",
+  "sequence": [
+    0.05,
+    0.02,
+    0.15,
+    0.02
+  ]
+}

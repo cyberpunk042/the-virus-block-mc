@@ -1,0 +1,9 @@
+{
+  "name": "Multi-Part",
+  "description": "Pinwheel multi-part arrangement",
+  "quad": "FILLED",
+  "segment": "ALTERNATING",
+  "sector": "PINWHEEL",
+  "multiPart": true
+}
+

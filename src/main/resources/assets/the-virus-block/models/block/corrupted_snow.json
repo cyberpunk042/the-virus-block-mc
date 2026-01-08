@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/carpet",
+  "textures": {
+    "wool": "the-virus-block:block/corrupted_snow"
+  }
+}
+

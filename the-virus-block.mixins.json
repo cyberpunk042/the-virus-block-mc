@@ -1,0 +1,35 @@
+{
+	"required": true,
+	"package": "net.cyberpunk042.mixin",
+	"refmap": "the-virus-block.refmap.json",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"WitherEntityMixin",
+		"LivingEntityMixin",
+		"ZombieEntityMixin",
+		"AbstractSkeletonEntityMixin",
+		"FallingBlockEntityAccessor",
+		"ServerRecipeManagerMixin",
+		"BedBlockMixin",
+		"GuardianEntityAccessor",
+		"ExplosionMixin",
+		"ItemEntityMixin",
+		"ItemStackMixin",
+		"FireworkRocketEntityMixin",
+		"MobEntityMixin",
+		"ServerChunkManagerMixin",
+		"ServerWorldChunkGuardMixin",
+		"WorldBorderMixin",
+		"EntityGrowthCollisionMixin",
+		"EntityGrowthCollisionIntermediaryMixin",
+		"ServerPlayNetworkHandlerMixin",
+		"CollisionViewGrowthCollisionMixin",
+		"WorldCollisionGrowthIntermediaryMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

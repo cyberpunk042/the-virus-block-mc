@@ -1,0 +1,21 @@
+{
+  "name": "Static",
+  "description": "No animation",
+  "spin": {
+    "enabled": false,
+    "axis": "Y",
+    "speed": 0.0
+  },
+  "pulse": {
+    "enabled": false,
+    "mode": "SCALE",
+    "frequency": 1.0,
+    "amplitude": 0.0
+  },
+  "alphaPulse": {
+    "enabled": false,
+    "min": 1.0,
+    "max": 1.0
+  }
+}
+

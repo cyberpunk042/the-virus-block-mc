@@ -1,0 +1,7 @@
+{
+  "name": "Triangle Split",
+  "description": "Triangular subdivisions",
+  "cellType": "QUAD",
+  "pattern": "triangle",
+  "subdivision": "diagonal"
+}

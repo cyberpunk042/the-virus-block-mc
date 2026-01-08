@@ -1,0 +1,8 @@
+{
+  "name": "Prism Triangle",
+  "description": "3-sided prism",
+  "type": "prism",
+  "sides": 3,
+  "radius": 1.0,
+  "height": 2.0
+}

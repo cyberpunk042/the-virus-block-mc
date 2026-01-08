@@ -1,0 +1,49 @@
+{
+    "name": "Geodesic Dome",
+    "description": "Animated hexagonal geodesic dome - hemisphere variant",
+    "enabled": true,
+    "effectType": "GEODESIC",
+    "version": 1,
+    "primaryColor": [
+        0.9,
+        0.9,
+        1.0
+    ],
+    "secondaryColor": [
+        0.1,
+        0.1,
+        0.15
+    ],
+    "tertiaryColor": [
+        0.0,
+        0.005,
+        0.03
+    ],
+    "highlightColor": [
+        1.0,
+        1.0,
+        1.0
+    ],
+    "rayColor": [
+        0.0,
+        0.33,
+        0.67
+    ],
+    "params": {
+        "intensity": 1.0,
+        "animationSpeed": 1.0,
+        "previewRadius": 5.0,
+        "geoSubdivisions": 3.0,
+        "geoHeight": 2.0,
+        "geoThickness": 2.0,
+        "geoGap": 0.005,
+        "geoRoundTop": 0.05,
+        "geoRoundCorner": 0.1,
+        "geoAnimMode": 1.0,
+        "geoRotationSpeed": 0.2,
+        "geoDomeClip": 0.5,
+        "geoWaveResolution": 30.0,
+        "geoWaveAmplitude": 0.1,
+        "lightFresnel": 5.0
+    }
+}

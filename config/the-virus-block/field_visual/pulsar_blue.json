@@ -1,0 +1,46 @@
+{
+    "name": "Blue Pulsar",
+    "description": "Cool blue star variant",
+    "enabled": true,
+    "effectType": "ENERGY_ORB",
+    "version": 5,
+    "intensity": 1.2,
+    "animationSpeed": 0.8,
+    "primaryColor": [
+        0.7,
+        0.8,
+        1.0
+    ],
+    "secondaryColor": [
+        0.3,
+        0.5,
+        1.0
+    ],
+    "tertiaryColor": [
+        0.1,
+        0.2,
+        0.8
+    ],
+    "coreSize": 0.24,
+    "fadePower": 0.5,
+    "fadeScale": 2.0,
+    "insideFalloffPower": 24.0,
+    "coronaEdge": 1.1,
+    "noiseResLow": 15.0,
+    "noiseResHigh": 45.0,
+    "noiseAmplitude": 0.5,
+    "noiseOctaves": 7,
+    "noiseBaseScale": 10.0,
+    "noiseScaleMultiplier": 25.0,
+    "speedLow": 0.1,
+    "speedHigh": 0.2,
+    "radialSpeed1": 0.35,
+    "radialSpeed2": 0.15,
+    "axialSpeed": 0.015,
+    "coronaPower": 2.0,
+    "coronaMultiplier": 50.0,
+    "lightAmbient": 0.75,
+    "lightDiffuse": 0.3,
+    "transScale": 2.0,
+    "v2AlphaScale": 1.0
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Dense",
+  "description": "High detail sphere for smooth appearance",
+  "type": "sphere",
+  "radius": 1.0,
+  "latSteps": 96,
+  "lonSteps": 192,
+  "latStart": 0.0,
+  "latEnd": 1.0,
+  "algorithm": "LAT_LON"
+}
+

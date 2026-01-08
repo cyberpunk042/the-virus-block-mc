@@ -1,0 +1,68 @@
+{
+  "id": "the-virus-block:nether",
+  "core_charge": {
+    "particle": "minecraft:soul_fire_flame",
+    "sound": {
+      "id": "minecraft:block.respawn_anchor.charge",
+      "category": "hostile",
+      "volume": 1.4,
+      "pitch": 0.8,
+      "interval_ticks": 8
+    }
+  },
+  "core_detonation": {
+    "particle": "minecraft:explosion_emitter",
+    "sound": {
+      "id": "minecraft:entity.blaze.shoot",
+      "category": "hostile",
+      "volume": 4.0,
+      "pitch": 0.4,
+      "interval_ticks": 0
+    }
+  },
+  "ring_charge": {
+    "particle": "minecraft:dripping_lava"
+  },
+  "ring_pulse": {
+    "primary_particle": "minecraft:lava",
+    "secondary_particle": "minecraft:ash",
+    "debris_block": "minecraft:netherrack",
+    "ambient_sound": {
+      "id": "minecraft:ambient.nether_wastes.mood",
+      "category": "ambient",
+      "volume": 1.0,
+      "pitch": 0.7,
+      "interval_ticks": 16
+    },
+    "pulse_sound": {
+      "id": "minecraft:block.respawn_anchor.deplete",
+      "category": "hostile",
+      "volume": 1.1,
+      "pitch": 0.8,
+      "interval_ticks": 12
+    }
+  },
+  "dissipation": {
+    "primary_particle": "minecraft:smoke",
+    "secondary_particle": "minecraft:ash",
+    "sound": {
+      "id": "minecraft:entity.piglin_brute.angry",
+      "category": "hostile",
+      "volume": 0.8,
+      "pitch": 0.5,
+      "interval_ticks": 4
+    }
+  },
+  "collapse_veil": {
+    "primary_particle": "minecraft:ash",
+    "secondary_particle": "minecraft:smoke",
+    "sound": {
+      "id": "minecraft:entity.ghast.scream",
+      "category": "hostile",
+      "volume": 1.3,
+      "pitch": 0.7,
+      "interval_ticks": 0
+    }
+  }
+}
+

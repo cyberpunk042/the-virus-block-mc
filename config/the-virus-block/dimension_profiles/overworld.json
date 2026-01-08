@@ -1,0 +1,80 @@
+{
+  "id": "the-virus-block:overworld",
+  "collapse": {
+    "columns_per_tick": 1,
+    "tick_interval": 20,
+    "max_radius_chunks": 12,
+    "mode": "erode",
+    "ring_start_delay_ticks": 40,
+    "ring_duration_ticks": 200,
+    "barrier_start_radius": 120.0,
+    "barrier_end_radius": 0.5,
+    "barrier_duration_ticks": 1100,
+    "barrier_auto_reset": false,
+    "barrier_reset_delay_ticks": 200,
+    "chunk_pregen_enabled": true,
+    "chunk_pregen_radius_blocks": 0,
+    "chunk_pregen_chunks_per_tick": 8,
+    "chunk_preload_enabled": true,
+    "chunk_preload_chunks_per_tick": 4,
+    "view_distance_chunks": 0,
+    "simulation_distance_chunks": 0,
+    "broadcast_mode": "immediate",
+    "broadcast_radius_blocks": 96,
+    "default_sync_profile": "full",
+    "water_drain": {
+      "mode": "ahead",
+      "offset": 1,
+      "deferred": {
+        "enabled": false,
+        "initial_delay_ticks": 20,
+        "columns_per_tick": 16
+      }
+    },
+    "pre_collapse_water_drainage": {
+      "enabled": false,
+      "profile": "default",
+      "tick_rate": 5,
+      "batch_size": 8,
+      "start_delay_ticks": 60,
+      "start_from_center": false
+    },
+    "collapse_particles": false,
+    "outline_thickness": 2,
+    "fill_shape": "walls",
+    "fill_profile": "default",
+    "fill_mode": "air",
+    "collapse_inward": true,
+    "use_native_fill": false,
+    "respect_protected_blocks": true,
+    "radius_delays": [
+      {
+        "side": 1,
+        "ticks": 150
+      },
+      {
+        "side": 3,
+        "ticks": 100
+      },
+      {
+        "side": 9,
+        "ticks": 40
+      },
+      {
+        "side": 15,
+        "ticks": 20
+      }
+    ]
+  },
+  "effects": {
+    "beam_color": "#C600FFFF",
+    "veil_particles": "minecraft:sculk_soul",
+    "ring_particles": "minecraft:portal",
+    "palette": "the-virus-block:overworld"
+  },
+  "physics": {
+    "ring_pull_strength": 0.35,
+    "push_radius": 12
+  }
+}
+

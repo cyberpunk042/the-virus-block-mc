@@ -1,0 +1,9 @@
+{
+  "name": "Spin X",
+  "description": "X-axis rotation (tumble)",
+  "spin": {
+    "axis": "X",
+    "speed": 30.0,
+    "oscillate": false
+  }
+}

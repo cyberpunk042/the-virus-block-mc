@@ -1,0 +1,892 @@
+{
+    "targets": {
+        "swap": {}
+    },
+    "passes": [
+        {
+            "vertex_shader": "minecraft:post/sobel",
+            "fragment_shader": "the-virus-block:post/field_visual_v7",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "minecraft:main"
+                },
+                {
+                    "sampler_name": "Depth",
+                    "target": "minecraft:main",
+                    "use_depth_buffer": true
+                }
+            ],
+            "uniforms": {
+                "FieldVisualConfig": [
+                    {
+                        "name": "CenterX",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "CenterY",
+                        "type": "float",
+                        "value": 64.0
+                    },
+                    {
+                        "name": "CenterZ",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "Radius",
+                        "type": "float",
+                        "value": 3.0
+                    },
+                    {
+                        "name": "PrimaryR",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "PrimaryG",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "PrimaryB",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "PrimaryA",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "SecondaryR",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "SecondaryG",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "SecondaryB",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "SecondaryA",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "TertiaryR",
+                        "type": "float",
+                        "value": 0.1
+                    },
+                    {
+                        "name": "TertiaryG",
+                        "type": "float",
+                        "value": 0.4
+                    },
+                    {
+                        "name": "TertiaryB",
+                        "type": "float",
+                        "value": 0.8
+                    },
+                    {
+                        "name": "TertiaryA",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "HighlightR",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "HighlightG",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "HighlightB",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "HighlightA",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "RayColorR",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "RayColorG",
+                        "type": "float",
+                        "value": 0.6
+                    },
+                    {
+                        "name": "RayColorB",
+                        "type": "float",
+                        "value": 0.2
+                    },
+                    {
+                        "name": "RayColorA",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "Phase",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "AnimSpeed",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "Intensity",
+                        "type": "float",
+                        "value": 1.2
+                    },
+                    {
+                        "name": "EffectType",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "SpeedHigh",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "SpeedLow",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "SpeedRay",
+                        "type": "float",
+                        "value": 5.0
+                    },
+                    {
+                        "name": "SpeedRing",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "TimeScale",
+                        "type": "float",
+                        "value": 0.1
+                    },
+                    {
+                        "name": "RadialSpeed1",
+                        "type": "float",
+                        "value": 0.35
+                    },
+                    {
+                        "name": "RadialSpeed2",
+                        "type": "float",
+                        "value": 0.15
+                    },
+                    {
+                        "name": "AxialSpeed",
+                        "type": "float",
+                        "value": 0.015
+                    },
+                    {
+                        "name": "CoreSize",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "EdgeSharpness",
+                        "type": "float",
+                        "value": 4.0
+                    },
+                    {
+                        "name": "ShapeType",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "CoreFalloff",
+                        "type": "float",
+                        "value": 4.0
+                    },
+                    {
+                        "name": "FadePower",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "FadeScale",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "InsideFalloffPower",
+                        "type": "float",
+                        "value": 24.0
+                    },
+                    {
+                        "name": "CoronaEdge",
+                        "type": "float",
+                        "value": 1.1
+                    },
+                    {
+                        "name": "NoiseResLow",
+                        "type": "float",
+                        "value": 5.0
+                    },
+                    {
+                        "name": "NoiseResHigh",
+                        "type": "float",
+                        "value": 5.0
+                    },
+                    {
+                        "name": "NoiseAmplitude",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "NoiseSeed",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "NoiseBaseScale",
+                        "type": "float",
+                        "value": 0.03125
+                    },
+                    {
+                        "name": "NoiseScaleMultiplier",
+                        "type": "float",
+                        "value": 4.0
+                    },
+                    {
+                        "name": "NoiseOctaves",
+                        "type": "float",
+                        "value": 7.0
+                    },
+                    {
+                        "name": "NoiseBaseLevel",
+                        "type": "float",
+                        "value": 0.4
+                    },
+                    {
+                        "name": "GlowLineCount",
+                        "type": "float",
+                        "value": 16.0
+                    },
+                    {
+                        "name": "GlowLineIntensity",
+                        "type": "float",
+                        "value": 0.8
+                    },
+                    {
+                        "name": "RayPower",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "RaySharpness",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "CoronaWidth",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "CoronaPower",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "CoronaMultiplier",
+                        "type": "float",
+                        "value": 50.0
+                    },
+                    {
+                        "name": "RingPower",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GeoSubdivisions",
+                        "type": "float",
+                        "value": 3.0
+                    },
+                    {
+                        "name": "GeoRoundTop",
+                        "type": "float",
+                        "value": 0.05
+                    },
+                    {
+                        "name": "GeoRoundCorner",
+                        "type": "float",
+                        "value": 0.1
+                    },
+                    {
+                        "name": "GeoThickness",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "GeoGap",
+                        "type": "float",
+                        "value": 0.005
+                    },
+                    {
+                        "name": "GeoHeight",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "GeoSmoothRadius",
+                        "type": "float",
+                        "value": 0.1
+                    },
+                    {
+                        "name": "GeoReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "TransRotationX",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "TransRotationY",
+                        "type": "float",
+                        "value": 0.25
+                    },
+                    {
+                        "name": "TransScale",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "TransReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "LightDiffuse",
+                        "type": "float",
+                        "value": 1.2
+                    },
+                    {
+                        "name": "LightAmbient",
+                        "type": "float",
+                        "value": 0.8
+                    },
+                    {
+                        "name": "LightBackLight",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "LightFresnel",
+                        "type": "float",
+                        "value": 0.2
+                    },
+                    {
+                        "name": "TimingSceneDuration",
+                        "type": "float",
+                        "value": 6.0
+                    },
+                    {
+                        "name": "TimingCrossfade",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "TimingLoopMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "TimingAnimFrequency",
+                        "type": "float",
+                        "value": 10.0
+                    },
+                    {
+                        "name": "Blackout",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VignetteAmount",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VignetteRadius",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "TintAmount",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "DistortionStrength",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "DistortionRadius",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "DistortionFrequency",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "DistortionSpeed",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "BlendReserved",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "BlendMode",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "FadeIn",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "FadeOut",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "Version",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "RayCoronaFlags",
+                        "type": "float",
+                        "value": 3.0
+                    },
+                    {
+                        "name": "ReservedSlot3",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "ReservedSlot4",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "V2CoronaStart",
+                        "type": "float",
+                        "value": 0.15
+                    },
+                    {
+                        "name": "V2CoronaBrightness",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "V2CoreRadiusScale",
+                        "type": "float",
+                        "value": 0.1
+                    },
+                    {
+                        "name": "V2CoreMaskRadius",
+                        "type": "float",
+                        "value": 0.35
+                    },
+                    {
+                        "name": "V2CoreSpread",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "V2CoreGlow",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "V2CoreMaskSoft",
+                        "type": "float",
+                        "value": 0.05
+                    },
+                    {
+                        "name": "V2EdgeRadius",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "V2EdgeSpread",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "V2EdgeGlow",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "V2SharpScale",
+                        "type": "float",
+                        "value": 4.0
+                    },
+                    {
+                        "name": "V2LinesUVScale",
+                        "type": "float",
+                        "value": 3.0
+                    },
+                    {
+                        "name": "V2LinesDensityMult",
+                        "type": "float",
+                        "value": 1.6
+                    },
+                    {
+                        "name": "V2LinesContrast1",
+                        "type": "float",
+                        "value": 2.5
+                    },
+                    {
+                        "name": "V2LinesContrast2",
+                        "type": "float",
+                        "value": 3.0
+                    },
+                    {
+                        "name": "V2LinesMaskRadius",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "V2LinesMaskSoft",
+                        "type": "float",
+                        "value": 0.02
+                    },
+                    {
+                        "name": "V2RayRotSpeed",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "V2RayStartRadius",
+                        "type": "float",
+                        "value": 0.32
+                    },
+                    {
+                        "name": "V2AlphaScale",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "CameraX",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "CameraY",
+                        "type": "float",
+                        "value": 64.0
+                    },
+                    {
+                        "name": "CameraZ",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "Time",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "ForwardX",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "ForwardY",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "ForwardZ",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "AspectRatio",
+                        "type": "float",
+                        "value": 1.78
+                    },
+                    {
+                        "name": "UpX",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "UpY",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "UpZ",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "Fov",
+                        "type": "float",
+                        "value": 1.22
+                    },
+                    {
+                        "name": "NearPlane",
+                        "type": "float",
+                        "value": 0.05
+                    },
+                    {
+                        "name": "FarPlane",
+                        "type": "float",
+                        "value": 1000.0
+                    },
+                    {
+                        "name": "RenderReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "IsFlying",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP00",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "InvVP10",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP20",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP30",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP01",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP11",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "InvVP21",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP31",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP02",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP12",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP22",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "InvVP32",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP03",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP13",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP23",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "InvVP33",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "VP00",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "VP10",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP20",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP30",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP01",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP11",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "VP21",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP31",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP02",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP12",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP22",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "VP32",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP03",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP13",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP23",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "VP33",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "CamMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "DebugMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "DebugReserved1",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "DebugReserved2",
+                        "type": "float",
+                        "value": 0.0
+                    }
+                ]
+            },
+            "output": "swap"
+        },
+        {
+            "vertex_shader": "minecraft:post/blit",
+            "fragment_shader": "minecraft:post/blit",
+            "inputs": [
+                {
+                    "sampler_name": "In",
+                    "target": "swap"
+                }
+            ],
+            "uniforms": {
+                "BlitConfig": [
+                    {
+                        "name": "ColorModulate",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            1.0,
+                            1.0,
+                            1.0
+                        ]
+                    }
+                ]
+            },
+            "output": "minecraft:main"
+        }
+    ]
+}

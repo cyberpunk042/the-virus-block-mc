@@ -1,0 +1,29 @@
+{
+    "name": "Fire Orb",
+    "description": "Warm fire-like energy orb",
+    "enabled": true,
+    "effectType": "ENERGY_ORB",
+    "intensity": 1.5,
+    "animationSpeed": 0.8,
+    "primaryColor": [
+        1.0,
+        0.8,
+        0.2
+    ],
+    "secondaryColor": [
+        1.0,
+        0.4,
+        0.0
+    ],
+    "tertiaryColor": [
+        0.8,
+        0.1,
+        0.0
+    ],
+    "coreSize": 0.25,
+    "edgeSharpness": 3.0,
+    "spiralDensity": 6.0,
+    "spiralTwist": 4.0,
+    "glowLineCount": 12.0,
+    "glowLineIntensity": 0.7
+}

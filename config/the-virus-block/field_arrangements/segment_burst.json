@@ -1,0 +1,24 @@
+{
+  "name": "Burst",
+  "description": "Clustered segments at one point",
+  "cellType": "SEGMENT",
+  "pattern": "custom",
+  "arcs": [
+    {
+      "start": 0.0,
+      "end": 0.08
+    },
+    {
+      "start": 0.1,
+      "end": 0.15
+    },
+    {
+      "start": 0.17,
+      "end": 0.2
+    },
+    {
+      "start": 0.22,
+      "end": 0.24
+    }
+  ]
+}

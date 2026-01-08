@@ -1,0 +1,8 @@
+{
+  "name": "Cross",
+  "description": "Four segments at 90\u00b0 intervals",
+  "cellType": "SEGMENT",
+  "pattern": "uniform",
+  "count": 4,
+  "gapRatio": 0.7
+}

@@ -1,0 +1,11 @@
+{
+    "id": "maelstrom",
+    "name": "Maelstrom",
+    "description": "Very high force - violent gravitational churning",
+    "strength": 3.0,
+    "radius": 35.0,
+    "maxVelocity": 5.0,
+    "damping": 0.005,
+    "groundLift": 0.2,
+    "falloff": "inverse"
+}

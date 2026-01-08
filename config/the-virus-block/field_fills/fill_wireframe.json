@@ -1,0 +1,7 @@
+{
+  "name": "Wireframe",
+  "description": "All edges rendered as lines",
+  "mode": "WIREFRAME",
+  "wireThickness": 1.0,
+  "doubleSided": true
+}

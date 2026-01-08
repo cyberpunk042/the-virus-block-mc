@@ -1,0 +1,26 @@
+{
+  "name": "Danger Pulse",
+  "description": "Red pulsing warning effect",
+  "merge": {
+    "appearance": {
+      "primaryColor": "#FF2222",
+      "secondaryColor": "#880000",
+      "glow": 0.9,
+      "emissive": true
+    },
+    "animation": {
+      "pulse": {
+        "enabled": true,
+        "mode": "SCALE",
+        "frequency": 2.0,
+        "amplitude": 0.15
+      },
+      "alphaPulse": {
+        "enabled": true,
+        "min": 0.7,
+        "max": 1.0
+      }
+    }
+  }
+}
+

@@ -1,0 +1,9 @@
+{
+  "name": "Prediction Default",
+  "description": "Standard prediction settings",
+  "enabled": true,
+  "leadTicks": 3,
+  "maxDistance": 5.0,
+  "lookAhead": true,
+  "verticalBoost": 1.0
+}
