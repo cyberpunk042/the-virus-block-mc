@@ -267,7 +267,7 @@ public final class ClientFieldNodes {
         "depth_test_shader", "Depth Test Shader",
         () -> {
             net.cyberpunk042.client.visual.shader.DepthTestShader.init();
-            net.cyberpunk042.client.visual.shader.DirectDepthRenderer.init();
+            net.cyberpunk042.client.visual.shader.DirectDepthRendererArchive.init();
             net.cyberpunk042.client.visual.shader.ShockwaveGlowRenderer.init();
             net.cyberpunk042.client.visual.shader.ShockwavePostEffect.init();
             net.cyberpunk042.client.visual.shader.MagicCirclePostEffect.init();
@@ -281,8 +281,8 @@ public final class ClientFieldNodes {
                         int width = client.getWindow().getScaledWidth();
                         int height = client.getWindow().getScaledHeight();
                         
-                        // DirectDepthRenderer overlay (if enabled)
-                        net.cyberpunk042.client.visual.shader.DirectDepthRenderer.renderOverlay(context, width, height);
+                        // DirectDepthRendererArchive overlay (if enabled)
+                        net.cyberpunk042.client.visual.shader.DirectDepthRendererArchive.renderOverlay(context, width, height);
                         
                         // ShockwaveGlowRenderer overlay - ONLY RENDER (capture is in WorldRenderer)
                         net.cyberpunk042.client.visual.shader.ShockwaveGlowRenderer.render(context, client, width, height);

@@ -26,7 +26,7 @@ import java.nio.IntBuffer;
  * Mode 3: FBO Info - Shows FBO binding status as colored indicators
  * Mode 4: Full Visualization - Shows complete depth buffer as grayscale image
  */
-public class DirectDepthRenderer {
+public class DirectDepthRendererArchive {
     
     private static final Identifier DEPTH_TEXTURE_ID = Identifier.of("the-virus-block", "debug/depth_buffer");
     
@@ -101,7 +101,7 @@ public class DirectDepthRenderer {
     
     public static void init() {
         initialized = true;
-        Logging.RENDER.topic("direct_depth").info("DirectDepthRenderer initialized");
+        Logging.RENDER.topic("direct_depth").info("DirectDepthRendererArchive initialized");
     }
     
     public static boolean isEnabled() {

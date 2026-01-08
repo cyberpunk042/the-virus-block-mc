@@ -3,7 +3,7 @@ package net.cyberpunk042.mixin.client;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.textures.GpuTexture;
 import com.mojang.blaze3d.textures.GpuTextureView;
-import net.cyberpunk042.client.visual.shader.DirectDepthRenderer;
+import net.cyberpunk042.client.visual.shader.DirectDepthRendererArchive;
 import net.cyberpunk042.client.visual.shader.DepthTestShader;
 import net.cyberpunk042.log.Logging;
 import net.minecraft.client.MinecraftClient;
@@ -65,8 +65,8 @@ public abstract class WorldRendererDepthTestMixin {
             CallbackInfo ci
     ) {
         // First try the new direct depth approach
-        if (DirectDepthRenderer.isEnabled()) {
-            DirectDepthRenderer.render();
+        if (DirectDepthRendererArchive.isEnabled()) {
+            DirectDepthRendererArchive.render();
             return;
         }
         
