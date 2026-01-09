@@ -106,14 +106,44 @@ public final class ReflectiveUBOWriter {
     
     /**
      * Writes a value as vec4 (4 floats).
+     * 
+     * <p>Supports multiple input types in order of preference:</p>
+     * <ol>
+     *   <li>{@link Vec4Serializable} - explicit slot mapping (legacy support)</li>
+     *   <li>{@code Record} with 4 float components - auto-detected by component order</li>
+     *   <li>{@code float[4]} - direct array</li>
+     * </ol>
+     * 
+     * <p>The record auto-detection means you can write clean records like:</p>
+     * <pre>{@code
+     * public record PositionVec4(float x, float y, float z, float w) {}
+     * }</pre>
+     * <p>Without implementing Vec4Serializable or overriding slot0-3 methods.</p>
      */
     private static void writeVec4(Std140Builder builder, Object value, String componentName) {
+        // 1. Legacy: explicit Vec4Serializable implementation
         if (value instanceof Vec4Serializable v4) {
             builder.putFloat(v4.slot0());
             builder.putFloat(v4.slot1());
             builder.putFloat(v4.slot2());
             builder.putFloat(v4.slot3());
-        } else if (value instanceof float[] arr) {
+            return;
+        }
+        
+        // 2. Modern: auto-detect record with 4 float/Float components
+        if (value.getClass().isRecord()) {
+            float[] floats = extractRecordAsVec4(value, componentName);
+            if (floats != null) {
+                builder.putFloat(floats[0]);
+                builder.putFloat(floats[1]);
+                builder.putFloat(floats[2]);
+                builder.putFloat(floats[3]);
+                return;
+            }
+        }
+        
+        // 3. Direct float array
+        if (value instanceof float[] arr) {
             if (arr.length < 4) {
                 throw new IllegalArgumentException(
                     "float[] for @Vec4 component '" + componentName + 
@@ -124,13 +154,66 @@ public final class ReflectiveUBOWriter {
             builder.putFloat(arr[1]);
             builder.putFloat(arr[2]);
             builder.putFloat(arr[3]);
-        } else {
-            throw new IllegalArgumentException(
-                "Cannot write component '" + componentName + "' as Vec4: " + 
-                value.getClass().getSimpleName() +
-                ". Must implement Vec4Serializable or be float[4]."
-            );
+            return;
         }
+        
+        throw new IllegalArgumentException(
+            "Cannot write component '" + componentName + "' as Vec4: " + 
+            value.getClass().getSimpleName() +
+            ". Must be: Vec4Serializable, Record with 4 float components, or float[4]."
+        );
+    }
+    
+    /**
+     * Extracts 4 floats from a record by reading its components in declaration order.
+     * 
+     * <p>This enables clean record definitions without boilerplate:</p>
+     * <pre>{@code
+     * // Before: had to implement Vec4Serializable with slot0-3 methods
+     * public record PosVec4(float x, float y, float z, float w) implements Vec4Serializable {
+     *     @Override public float slot0() { return x; }
+     *     @Override public float slot1() { return y; }
+     *     // ... 2 more overrides
+     * }
+     * 
+     * // After: just declare the record
+     * public record PosVec4(float x, float y, float z, float w) {}
+     * }</pre>
+     * 
+     * @param record the record instance
+     * @param componentName name for error messages
+     * @return float[4] or null if record doesn't have exactly 4 float components
+     */
+    private static float[] extractRecordAsVec4(Object record, String componentName) {
+        java.lang.reflect.RecordComponent[] components = record.getClass().getRecordComponents();
+        
+        if (components.length != 4) {
+            return null;  // Not a vec4-shaped record
+        }
+        
+        float[] result = new float[4];
+        
+        for (int i = 0; i < 4; i++) {
+            java.lang.reflect.RecordComponent comp = components[i];
+            Class<?> type = comp.getType();
+            
+            // Verify it's a float or Float
+            if (type != float.class && type != Float.class) {
+                return null;  // Not a vec4 record
+            }
+            
+            try {
+                Object val = comp.getAccessor().invoke(record);
+                result[i] = (val instanceof Float f) ? f : (float) val;
+            } catch (Exception e) {
+                throw new RuntimeException(
+                    "Failed to read component " + i + " (" + comp.getName() + 
+                    ") from record for @Vec4 '" + componentName + "'", e
+                );
+            }
+        }
+        
+        return result;
     }
     
     /**

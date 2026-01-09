@@ -1,9 +1,19 @@
 # Tornado Field Visual Effect - Implementation Plan
 
-> **STATUS: BEFORE THE SHADER ARCHITECTURE AND UBO REFACTOR**
+> **STATUS: BLOCKED - AWAITING UBO ARCHITECTURE REFACTOR**
 > 
-> This plan was created before the planned refactor. It will need to be updated
-> after the refactor is complete to align with the new architecture.
+> This plan was created before the UBO refactor (see `ubo_architecture_refactor.md`).
+> 
+> **Dependencies:**
+> - Complete UBO Architecture Refactor (Phases 1-4 minimum)
+> - FrameUBO and CameraUBO must exist
+> - Effect-specific UBO pattern must be established
+> 
+> Once refactor is complete, update this plan with:
+> - Correct file paths matching new folder layout
+> - Binding index from centralized registry
+> - Nested section pattern for TornadoConfigUBO
+> - Reserved lanes strategy
 
 ---
 

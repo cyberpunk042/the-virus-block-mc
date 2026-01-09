@@ -29,6 +29,13 @@ layout(std140) uniform SamplerInfo {
 out vec4 fragColor;
 
 // ═══════════════════════════════════════════════════════════════════════════
+// BASE UBOs - Shared Frame and Camera data
+// These are bound once per frame by BaseUBOBinder
+// ═══════════════════════════════════════════════════════════════════════════
+#include "../ubo/frame_ubo.glsl"
+#include "../ubo/camera_ubo.glsl"
+
+// ═══════════════════════════════════════════════════════════════════════════
 // UNIFORM BUFFER - Field Visual Configuration
 // Layout: 50 vec4s = 200 floats = 800 bytes (including 2 mat4s = 8 vec4s)
 // 

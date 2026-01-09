@@ -12,6 +12,7 @@ import net.cyberpunk042.client.visual.effect.FieldVisualUBO;
 import net.cyberpunk042.client.visual.effect.ShaderTimeSource;
 import net.cyberpunk042.client.visual.effect.uniform.FieldVisualUniformBinder;
 import net.cyberpunk042.client.visual.ubo.ReflectiveUBOWriter;
+import net.cyberpunk042.client.visual.ubo.BaseUBOBinder;
 import net.cyberpunk042.client.visual.shader.ShockwavePostEffect;
 import net.cyberpunk042.client.visual.shader.MagicCirclePostEffect;
 import net.cyberpunk042.client.visual.shader.VirusBlockPostEffect;
@@ -76,6 +77,12 @@ public class PostEffectPassMixin {
             GpuBufferSlice bufferSlice,
             CallbackInfo ci
     ) {
+        
+        // ═══════════════════════════════════════════════════════════════════════════
+        // BASE UBOs - Update once per frame (FrameData, CameraData)
+        // These are shared across all effects, written before effect-specific updates
+        // ═══════════════════════════════════════════════════════════════════════════
+        BaseUBOBinder.updateBaseUBOs(uniformBuffers);
         
         // Handle Shockwave pass
         if (ShockwavePostEffect.isEnabled() && id != null && id.contains("shockwave")) {

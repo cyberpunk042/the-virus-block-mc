@@ -34,9 +34,17 @@
 
 // ═══════════════════════════════════════════════════════════════════════════
 // PREAMBLE MACRO - Defines all common variables
+// 
+// Uses CameraDataUBO (from camera_ubo.glsl) for camera state:
+//   CameraPositionUBO.xyz  → camera position (0,0,0 in camera-relative coords)
+//   CameraForwardUBO.xyz   → forward direction, .w = aspect ratio
+//   CameraUpUBO.xyz        → up direction, .w = fov (radians)
+//   CameraClipUBO.x        → near plane
+//   CameraClipUBO.y        → far plane
+//   CameraClipUBO.z        → isFlying (0.0 or 1.0)
 // ═══════════════════════════════════════════════════════════════════════════
 
-#define FIELD_VISUAL_PREAMBLE() vec4 sceneColor = texture(InSampler, texCoord); float rawDepth = texture(DepthSampler, texCoord).r; bool isSky = (rawDepth > 0.9999); float linearDist = linearizeDepth(rawDepth, NearPlane, FarPlane); float sceneDepth = isSky ? 10000.0 : linearDist; vec3 camPos = vec3(CameraX, CameraY, CameraZ); vec3 forward = normalize(vec3(ForwardX, ForwardY, ForwardZ)); vec3 worldUp = vec3(0.0, 1.0, 0.0); CameraData cam = buildCameraData(camPos, forward, Fov, AspectRatio, NearPlane, FarPlane); Ray ray = getRayAdaptive(texCoord, cam, InvViewProj, IsFlying); FieldData field = buildFieldDataFromUBO(); vec3 sphereCenter = field.CenterAndRadius.xyz; float sphereRadius = field.CenterAndRadius.w
+#define FIELD_VISUAL_PREAMBLE() vec4 sceneColor = texture(InSampler, texCoord); float rawDepth = texture(DepthSampler, texCoord).r; bool isSky = (rawDepth > 0.9999); float linearDist = linearizeDepth(rawDepth, CameraClipUBO.x, CameraClipUBO.y); float sceneDepth = isSky ? 10000.0 : linearDist; vec3 camPos = CameraPositionUBO.xyz; vec3 forward = normalize(CameraForwardUBO.xyz); vec3 worldUp = vec3(0.0, 1.0, 0.0); CameraData cam = buildCameraData(camPos, forward, CameraUpUBO.w, CameraForwardUBO.w, CameraClipUBO.x, CameraClipUBO.y); Ray ray = getRayAdaptive(texCoord, cam, InvViewProj, CameraClipUBO.z); FieldData field = buildFieldDataFromUBO(); vec3 sphereCenter = field.CenterAndRadius.xyz; float sphereRadius = field.CenterAndRadius.w
 
 // ═══════════════════════════════════════════════════════════════════════════
 // EARLY EXIT MACRO - Check effect type and exit if mismatch
