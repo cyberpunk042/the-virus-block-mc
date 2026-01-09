@@ -29,22 +29,22 @@ layout(std140) uniform MagicCircleConfig {
     float CenterZ;
     float EffectRadius;
     
-    // vec4 1: Camera position
-    float CameraX;
-    float CameraY;
-    float CameraZ;
-    float AspectRatio;
+    // vec4 1: [DEPRECATED] Was Camera - Now use CameraWorldPositionUBO
+    float Reserved1_0;
+    float Reserved1_1;
+    float Reserved1_2;
+    float Reserved1_3;
     
-    // vec4 2: Camera forward direction
-    float ForwardX;
-    float ForwardY;
-    float ForwardZ;
-    float Fov;
+    // vec4 2: [DEPRECATED] Was Camera forward - Now use CameraForwardUBO
+    float Reserved2_0;
+    float Reserved2_1;
+    float Reserved2_2;
+    float Reserved2_3;
     
-    // vec4 3: Camera up XY + BreathTime + RotationTime
-    float UpX;
-    float UpY;
-    float BreathTime;      // time * breathingSpeed (was UpZ)
+    // vec4 3: Reserved + BreathTime + RotationTime (BreathTime/Time still used)
+    float Reserved3_0;
+    float Reserved3_1;
+    float BreathTime;      // time * breathingSpeed
     float Time;            // time * rotationSpeed
     
     // vec4 4: Visual settings
@@ -57,10 +57,10 @@ layout(std140) uniform MagicCircleConfig {
     float PrimaryR;
     float PrimaryG;
     float PrimaryB;
-    float BreathingAmount;  // Global breathing amplitude (was PrimaryA)
+    float BreathingAmount;  // Global breathing amplitude
     
-    // mat4 (vec4 6-9): Inverse view-projection matrix
-    mat4 InvViewProj;
+    // mat4 (vec4 6-9): [DEPRECATED] Was InvViewProj - Now use InvViewProjUBO
+    mat4 Reserved_InvViewProj;
     
     // vec4 10-11: Layer enables (8 floats)
     vec4 LayerEnables1;  // Layers 1-4

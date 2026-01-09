@@ -15,7 +15,7 @@ void main() {
     vec4 fieldEffect = renderEnergyOrbRaymarched(
         sphereCenter, sphereRadius,
         field.PrimaryColor.rgb, field.SecondaryColor.rgb, field.TertiaryColor.rgb,
-        Time, field.AnimParams.y, field.AnimParams.x, field.AnimParams.z,
+        FrameTimeUBO.x, field.AnimParams.y, field.AnimParams.x, field.AnimParams.z,
         field.CoreEdgeParams.x, field.CoreEdgeParams.y,
         field.SpiralParams.x, field.SpiralParams.y,
         field.GlowLineParams.x, field.GlowLineParams.y,

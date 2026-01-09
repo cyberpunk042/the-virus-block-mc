@@ -43,23 +43,23 @@ layout(std140) uniform ShockwaveConfig {
     float TargetZ;
     float UseWorldOrigin;   // 0 = camera-centered, 1 = world-anchored
     
-    // vec4 3: Camera world position
-    float CameraX;
-    float CameraY;
-    float CameraZ;
-    float AspectRatio;      // width / height
+    // vec4 3: [DEPRECATED] Was Camera world position - Now use CameraWorldPositionUBO
+    float Reserved3_0;
+    float Reserved3_1;
+    float Reserved3_2;
+    float Reserved3_3;
     
-    // vec4 4: Camera forward direction (normalized)
-    float ForwardX;
-    float ForwardY;
-    float ForwardZ;
-    float Fov;              // Field of view in radians
+    // vec4 4: [DEPRECATED] Was Camera forward - Now use CameraForwardUBO
+    float Reserved4_0;
+    float Reserved4_1;
+    float Reserved4_2;
+    float Reserved4_3;
     
-    // vec4 5: Camera up direction (normalized)
-    float UpX;
-    float UpY;
-    float UpZ;
-    float IsFlying;         // 0 = walking, 1 = flying (affects ray generation)
+    // vec4 5: [DEPRECATED] Was Camera up - Now use CameraUpUBO/CameraClipUBO
+    float Reserved5_0;
+    float Reserved5_1;
+    float Reserved5_2;
+    float Reserved5_3;
     
     // vec4 6: Screen blackout / vignette
     float BlackoutAmount;   // 0 = no blackout, 1 = full black
@@ -133,8 +133,8 @@ layout(std140) uniform ShockwaveConfig {
     float BeamRimPower;
     float BeamRimFalloff;
     
-    // mat4 (vec4 18-21): Inverse view-projection matrix for accurate ray generation
-    mat4 InvViewProj;
+    // mat4 (vec4 18-21): [DEPRECATED] Was InvViewProj - Now use InvViewProjUBO
+    mat4 Reserved_InvViewProj;
 };
 
 out vec4 fragColor;

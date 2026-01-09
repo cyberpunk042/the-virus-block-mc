@@ -228,42 +228,40 @@ layout(std140) uniform FieldVisualConfig {
     float V2AlphaScale;        // Output alpha multiplier (0.5)
     
     // ═══════════════════════════════════════════════════════════════════════
-    // CAMERA/RUNTIME PARAMS (Slots 29-32)
+    // DEPRECATED - Camera data now in CameraDataUBO (Slots 29-40)
+    // These slots are RESERVED to maintain layout compatibility.
+    // DO NOT use for new params - they will be removed in a future version.
     // ═══════════════════════════════════════════════════════════════════════
     
-    // vec4 29: Camera position + time
-    float CameraX;
-    float CameraY;
-    float CameraZ;
-    float Time;            // Global animation time
+    // vec4 29: [DEPRECATED] Was Camera position + time - Now use CameraDataUBO
+    float Reserved29_0;
+    float Reserved29_1;
+    float Reserved29_2;
+    float Reserved29_3;
     
-    // vec4 30: Camera forward direction + aspect
-    float ForwardX;
-    float ForwardY;
-    float ForwardZ;
-    float AspectRatio;
+    // vec4 30: [DEPRECATED] Was Camera forward + aspect - Now use CameraDataUBO
+    float Reserved30_0;
+    float Reserved30_1;
+    float Reserved30_2;
+    float Reserved30_3;
     
-    // vec4 31: Camera up direction + fov
-    float UpX;
-    float UpY;
-    float UpZ;
-    float Fov;             // Field of view in radians
+    // vec4 31: [DEPRECATED] Was Camera up + fov - Now use CameraDataUBO
+    float Reserved31_0;
+    float Reserved31_1;
+    float Reserved31_2;
+    float Reserved31_3;
     
-    // vec4 32: Render params
-    float NearPlane;
-    float FarPlane;
-    float RenderReserved;
-    float IsFlying;        // 1.0 if player is flying, else 0.0
+    // vec4 32: [DEPRECATED] Was Render params - Now use CameraDataUBO
+    float Reserved32_0;
+    float Reserved32_1;
+    float Reserved32_2;
+    float Reserved32_3;
     
-    // ═══════════════════════════════════════════════════════════════════════
-    // MATRICES (Slots 33-40)
-    // ═══════════════════════════════════════════════════════════════════════
+    // mat4 (vec4 33-36): [DEPRECATED] Was InvViewProj - Now use InvViewProjUBO
+    mat4 Reserved_InvViewProj;
     
-    // mat4 (vec4 33-36): Inverse View-Projection matrix
-    mat4 InvViewProj;
-    
-    // mat4 (vec4 37-40): View-Projection matrix
-    mat4 ViewProj;
+    // mat4 (vec4 37-40): [DEPRECATED] Was ViewProj - Now use ViewProjUBO
+    mat4 Reserved_ViewProj;
     
     // ═══════════════════════════════════════════════════════════════════════
     // DEBUG (Slot 41)

@@ -17,6 +17,20 @@ public final class FieldVisualVec4Types {
     private FieldVisualVec4Types() {} // Utility class
     
     // ═══════════════════════════════════════════════════════════════════════════
+    // RESERVED/DEPRECATED SLOTS
+    // Used for maintaining UBO layout when slots are deprecated
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    /** Reserved slot - writes zeros. Used for deprecated UBO slots. */
+    public record ReservedVec4(float x, float y, float z, float w) implements Vec4Serializable {
+        public static final ReservedVec4 ZERO = new ReservedVec4(0f, 0f, 0f, 0f);
+        @Override public float slot0() { return x; }
+        @Override public float slot1() { return y; }
+        @Override public float slot2() { return z; }
+        @Override public float slot3() { return w; }
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
     // COLOR EXTRACTORS (Slots 1-5)
     // ColorParams has 5 colors, each needs its own vec4 wrapper
     // ═══════════════════════════════════════════════════════════════════════════

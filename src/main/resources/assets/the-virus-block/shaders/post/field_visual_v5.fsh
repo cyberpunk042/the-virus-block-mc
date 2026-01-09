@@ -20,9 +20,9 @@ void main() {
         camPos,
         forward,
         worldUp,
-        Fov,
-        AspectRatio,
-        Time * AnimSpeed,
+        CameraUpUBO.w,       // Fov from CameraDataUBO
+        CameraForwardUBO.w,  // AspectRatio from CameraDataUBO
+        FrameTimeUBO.x * AnimSpeed,  // Time from FrameDataUBO
         field.PrimaryColor.rgb,
         field.SecondaryColor.rgb,
         field.TertiaryColor.rgb,

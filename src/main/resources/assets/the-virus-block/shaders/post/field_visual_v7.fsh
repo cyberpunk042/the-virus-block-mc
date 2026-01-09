@@ -17,7 +17,7 @@ void main() {
     PulsarV7Result pulsar = renderPulsarV7(
         camPos, ray.direction, forward, maxDist,
         sphereCenter, sphereRadius,
-        Time * AnimSpeed,
+        FrameTimeUBO.x * AnimSpeed,
         field.HighlightColor.rgb, field.PrimaryColor.rgb,
         field.SecondaryColor.rgb, field.TertiaryColor.rgb,
         vec3(RayColorR, RayColorG, RayColorB),

@@ -23,11 +23,11 @@ layout(std140) uniform SamplerInfo {
 };
 
 layout(std140) uniform VirusBlockParams {
-    vec4 CameraPosTime;       // xyz = camera position, w = time
+    vec4 CameraPosTime;       // [DEPRECATED] xyz was camera pos, w was time - Now use FrameTimeUBO.x
     vec4 EffectFlags;         // x = blockCount, y = espEnabled, z = smokeEnabled (3D gas), w = fumeEnabled (2D screen)
-    vec4 InvProjParams;       // x = near, y = far, z = fov, w = aspect
-    vec4 CameraForward;       // xyz = forward vector, w = closestBlockDist
-    vec4 CameraUp;            // xyz = up vector, w = isFlying
+    vec4 InvProjParams;       // [DEPRECATED] near/far/fov/aspect - Now use CameraClipUBO and CameraForwardUBO
+    vec4 CameraForward;       // xyz = [DEPRECATED], w = closestBlockDist (STILL USED - effect-specific)
+    vec4 CameraUp;            // [DEPRECATED] xyz was up, w was isFlying - Now use CameraClipUBO.z
     vec4 SmokeShape;          // x = height, y = spread, z = density, w = turbulence
     vec4 SmokeAnim;           // x = riseSpeed, y = swirl, z = noiseScale, w = fadeHeight
     vec4 SmokeColor;          // xyz = RGB, w = intensity
@@ -36,7 +36,7 @@ layout(std140) uniform VirusBlockParams {
     vec4 ESPMedium;
     vec4 ESPFar;
     vec4 ESPStyle;
-    mat4 InvViewProj;         // Inverse view-projection matrix for accurate rays
+    mat4 Reserved_InvViewProj; // [DEPRECATED] Was InvViewProj - Now use InvViewProjUBO
     vec4 BlockPos[32];
 };
 
@@ -82,14 +82,14 @@ void main() {
     vec2 uv = texCoord;
     float rawDepth = texture(DepthSampler, texCoord).r;
     
-    float time = CameraPosTime.w;
-    float closestDist = CameraForward.w;
+    float time = FrameTimeUBO.x;              // Time from FrameDataUBO
+    float closestDist = CameraForward.w;       // EFFECT-SPECIFIC: closest block distance
     vec3 toxicColor = SmokeColor.rgb;
     int blockCount = int(min(EffectFlags.x, 32.0));
-    float aspect = InvProjParams.w;
-    float near = InvProjParams.x;
-    float far = InvProjParams.y;
-    float isFlying = CameraUp.w;
+    float aspect = CameraForwardUBO.w;         // Aspect from CameraDataUBO
+    float near = CameraClipUBO.x;              // Near plane from CameraDataUBO
+    float far = CameraClipUBO.y;               // Far plane from CameraDataUBO
+    float isFlying = CameraClipUBO.z;
     
     vec3 finalColor = texture(InSampler, uv).rgb;
     

@@ -14,7 +14,8 @@ void main() {
     FIELD_VISUAL_DEPTH_OCCLUSION();
     
     // Correct forward vector when flying
-    vec3 forwardForV2 = IsFlying > 0.5 ? forward : vec3(ForwardX, ForwardY, ForwardZ);
+    float isFlying = CameraClipUBO.z;
+    vec3 forwardForV2 = isFlying > 0.5 ? forward : CameraForwardUBO.xyz;
     
     // Extract V2 parameters
     float rayCoronaFlags = field.GlowLineParams.z;
@@ -28,9 +29,9 @@ void main() {
         camPos,
         forwardForV2,
         worldUp,
-        Fov,
-        AspectRatio,
-        Time * AnimSpeed,
+        CameraUpUBO.w,       // Fov from CameraDataUBO
+        CameraForwardUBO.w,  // AspectRatio from CameraDataUBO
+        FrameTimeUBO.x * AnimSpeed,  // Time from FrameDataUBO
         field.PrimaryColor.rgb,
         field.SecondaryColor.rgb,
         field.TertiaryColor.rgb,

@@ -19,7 +19,7 @@ void main() {
     PulsarV6Result pulsar = renderPulsarV6(
         camPos, ray.direction, maxDist,
         sphereCenter, sphereRadius * 10.0,
-        Time * AnimSpeed,
+        FrameTimeUBO.x * AnimSpeed,
         field.PrimaryColor.rgb,
         field.SecondaryColor.rgb,
         field.TertiaryColor.rgb,

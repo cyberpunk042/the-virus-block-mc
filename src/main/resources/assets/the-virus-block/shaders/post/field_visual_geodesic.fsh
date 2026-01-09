@@ -18,7 +18,7 @@ void main() {
     GeodesicV1Result geo = renderGeodesicV1(
         camPos, ray.direction, forward, maxDist,
         sphereCenter, sphereRadius,
-        Time * AnimSpeed, GeoRotationSpeed,
+        FrameTimeUBO.x * AnimSpeed, GeoRotationSpeed,
         field.PrimaryColor.rgb, field.SecondaryColor.rgb, field.TertiaryColor.rgb,
         max(GeoSubdivisions, 1.0),
         GeoHeight, GeoThickness, GeoGap,

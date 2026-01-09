@@ -21,7 +21,7 @@ void main() {
     EnergyOrbV3Result v3result = renderEnergyOrbV3(
         camPos, ray.direction, forward,
         sceneDepth, sphereCenter, sphereRadius,
-        Time * field.AnimParams.y,
+        FrameTimeUBO.x * field.AnimParams.y,
         field.PrimaryColor.rgb, field.SecondaryColor.rgb, field.TertiaryColor.rgb,
         field.AnimParams.z,
         field.CoreEdgeParams.x, field.V2CoreSpread, field.V2CoreGlow,

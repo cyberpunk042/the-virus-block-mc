@@ -66,20 +66,16 @@ public record FieldVisualUBO(
     @Vec4 V2AlphaDetail v2Alpha,                // Slot 28: linesMaskSoft, rayRotSpeed, rayStartRadius, alphaScale
     
     // ═══════════════════════════════════════════════════════════════════════════
-    // CAMERA/RUNTIME (Slots 29-32)
+    // DEPRECATED - Camera now in CameraDataUBO (Slots 29-40)
+    // These are RESERVED slots to maintain UBO layout. Written as zeros.
     // ═══════════════════════════════════════════════════════════════════════════
     
-    @Vec4 CameraPosTimeVec4 cameraPosTime,      // Slot 29: posX, posY, posZ, time
-    @Vec4 CameraForwardVec4 cameraForward,      // Slot 30: forwardX, forwardY, forwardZ, aspect
-    @Vec4 CameraUpVec4 cameraUp,                // Slot 31: upX, upY, upZ, fov
-    @Vec4 RenderParamsVec4 renderParams,        // Slot 32: nearPlane, farPlane, reserved, isFlying
-    
-    // ═══════════════════════════════════════════════════════════════════════════
-    // MATRICES (Slots 33-40)
-    // ═══════════════════════════════════════════════════════════════════════════
-    
-    @Mat4 Matrix4f invViewProj,                 // Slots 33-36: inverse view-projection
-    @Mat4 Matrix4f viewProj,                    // Slots 37-40: view-projection
+    @Vec4 ReservedVec4 reserved29,              // Slot 29: [DEPRECATED] Was camera pos+time
+    @Vec4 ReservedVec4 reserved30,              // Slot 30: [DEPRECATED] Was camera forward+aspect
+    @Vec4 ReservedVec4 reserved31,              // Slot 31: [DEPRECATED] Was camera up+fov
+    @Vec4 ReservedVec4 reserved32,              // Slot 32: [DEPRECATED] Was render params
+    @Mat4 Matrix4f reservedInvViewProj,         // Slots 33-36: [DEPRECATED] Was inverse view-projection
+    @Mat4 Matrix4f reservedViewProj,            // Slots 37-40: [DEPRECATED] Was view-projection
     
     // ═══════════════════════════════════════════════════════════════════════════
     // DEBUG (Slot 41)
@@ -174,15 +170,13 @@ public record FieldVisualUBO(
             config.v2Lines(),
             config.v2Alpha(),
             
-            // Camera/runtime (slots 29-32)
-            CameraPosTimeVec4.from(camera),
-            CameraForwardVec4.from(camera),
-            CameraUpVec4.from(camera),
-            RenderParamsVec4.from(render),
-            
-            // Matrices (slots 33-40)
-            invViewProj,
-            viewProj,
+            // DEPRECATED Camera slots (29-40) - now use CameraDataUBO
+            ReservedVec4.ZERO,
+            ReservedVec4.ZERO,
+            ReservedVec4.ZERO,
+            ReservedVec4.ZERO,
+            new Matrix4f().identity(),
+            new Matrix4f().identity(),
             
             // Debug (slot 41)
             DebugParamsVec4.from(debug),
@@ -273,15 +267,13 @@ public record FieldVisualUBO(
             config.v2Lines(),
             config.v2Alpha(),
             
-            // Camera/runtime (slots 29-32)
-            CameraPosTimeVec4.from(camera),
-            CameraForwardVec4.from(camera),
-            CameraUpVec4.from(camera),
-            RenderParamsVec4.from(render),
-            
-            // Matrices (slots 33-40)
-            invViewProj,
-            viewProj,
+            // DEPRECATED Camera slots (29-40) - now use CameraDataUBO
+            ReservedVec4.ZERO,
+            ReservedVec4.ZERO,
+            ReservedVec4.ZERO,
+            ReservedVec4.ZERO,
+            new Matrix4f().identity(),
+            new Matrix4f().identity(),
             
             // Debug (slot 41)
             DebugParamsVec4.from(debug),
