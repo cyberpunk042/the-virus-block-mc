@@ -145,5 +145,7 @@
   "difficulty.the-virus-block.extreme.desc": "Aggressive spread and max-health drained each tier.",
   "entity.the-virus-block.corrupted_passive": "Corrupted Husk",
   "entity.the-virus-block.corrupted_worm": "Bitey Worm",
-  "effect.the-virus-block.personal_shield": "Personal Shield"
+  "effect.the-virus-block.personal_shield": "Personal Shield",
+  "key.the-virus-block.charge_orb": "Charge Orb",
+  "category.the-virus-block.effects": "The Virus Block"
 }

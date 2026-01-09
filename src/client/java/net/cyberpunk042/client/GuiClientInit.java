@@ -36,8 +36,8 @@ public class GuiClientInit implements ClientModInitializer {
         // G141: Register packet handlers
         GuiClientHandlers.register();
         
-        // G142: Keybinds (placeholder for future)
-        // KeyBindings.register();
+        // G142: Keybinds
+        net.cyberpunk042.client.input.OrbChargeHandler.register();
         
         // G143: Load client config
         // GuiConfig.load();

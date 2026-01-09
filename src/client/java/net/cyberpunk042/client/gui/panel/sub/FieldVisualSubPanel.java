@@ -179,21 +179,21 @@ public class FieldVisualSubPanel extends BoundPanel {
         List<Integer> versions = EffectSchemaRegistry.versionsFor(currentType);
         if (versions.isEmpty()) versions = List.of(1, 2);
         final List<Integer> fVersions = versions;
+        final EffectType fCurrentType = currentType;
         
-        EffectSchema schema = EffectSchemaRegistry.get(currentType, ver);
-        String verLabel = schema != null ? schema.displayName() : "V" + ver;
-        // Shorten the label
-        verLabel = verLabel.replace("Energy Orb ", "").replace("Volumetric ", "Vol ");
-        
-        widgets.add(ButtonWidget.builder(Text.literal(verLabel), btn -> {
-            int idx = fVersions.indexOf(fVer);
-            int next = fVersions.get((idx + 1) % fVersions.size());
-            state.set("fieldVisual.version", next);
-            // Apply schema defaults for the new version
-            state.applyFieldVisualSchemaDefaults();
-            rebuildContent();
-            syncToEffect();
-        }).dimensions(x3, y, thirdW, 20).build());
+        widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<Integer>builder(
+            v -> {
+                EffectSchema s = EffectSchemaRegistry.get(fCurrentType, v);
+                String lbl = s != null ? s.displayName() : "V" + v;
+                return Text.literal(lbl.replace("Energy Orb ", "").replace("Volumetric ", "Vol "));
+            })
+            .values(fVersions).initially(fVer)
+            .build(x3, y, thirdW, 20, Text.literal("Ver"), (btn, next) -> {
+                state.set("fieldVisual.version", next);
+                state.applyFieldVisualSchemaDefaults();
+                rebuildContent();
+                syncToEffect();
+            }));
         content.advanceBy(22);
         
         // ─── Row 3: Follow + Position + Radius ───
@@ -209,14 +209,16 @@ public class FieldVisualSubPanel extends BoundPanel {
         
         String pos = (String) state.get("fieldVisual.orbStartPosition");
         if (pos == null) pos = "center";
-        String[] positions = {"center", "front", "left", "right", "behind", "above"};
-        int posIdx = java.util.Arrays.asList(positions).indexOf(pos);
-        if (posIdx < 0) posIdx = 0;
-        final int fPosIdx = posIdx;
-        widgets.add(ButtonWidget.builder(Text.literal("Pos: " + pos.substring(0,1).toUpperCase() + pos.substring(1)), btn -> {
-            state.set("fieldVisual.orbStartPosition", positions[(fPosIdx + 1) % positions.length]);
-            rebuildContent();
-        }).dimensions(x2, y, thirdW, 20).build());
+        List<String> positions = List.of("center", "front", "left", "right", "behind", "above", 
+                                         "left-hand", "right-hand", "left-front", "right-front");
+        final String fPos = pos;
+        widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
+            p -> Text.literal("Pos: " + p.substring(0,1).toUpperCase() + p.substring(1)))
+            .values(positions).initially(fPos)
+            .build(x2, y, thirdW, 20, Text.literal("Pos"), (btn, newPos) -> {
+                state.set("fieldVisual.orbStartPosition", newPos);
+                rebuildContent();
+            }));
         
         if (!hasSourcePrimitive) {
             Float radius = getFloat("fieldVisual.previewRadius", 3f);

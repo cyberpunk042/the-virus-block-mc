@@ -36,4 +36,15 @@ public final class ClientGuiNodes {
             return 1;
         }
     );
+    
+    /**
+     * Keybinding registrations.
+     */
+    public static final InitNode KEYBINDINGS = InitNode.simple(
+        "keybindings", "Keybindings",
+        () -> {
+            net.cyberpunk042.client.input.OrbChargeHandler.register();
+            return 1;
+        }
+    );
 }

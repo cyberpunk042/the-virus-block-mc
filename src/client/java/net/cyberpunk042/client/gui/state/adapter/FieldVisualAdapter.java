@@ -785,13 +785,11 @@ public class FieldVisualAdapter extends AbstractAdapter {
         Vec3d startOffset = getOrbStartOffset(lookDir, rightDir);
         throwStartPos = playerPos.add(startOffset);
         
-        if (startOffset.lengthSquared() > 0.01) {
-            throwDirection = startOffset.normalize();
-        } else {
-            throwDirection = lookDir;
-        }
+        // ALWAYS throw toward where player is looking (crosshair), NOT based on orb position
+        throwDirection = lookDir;
         
-        throwTargetPos = throwStartPos.add(throwDirection.multiply(throwRange));
+        // Target is where crosshair points at throwRange distance from PLAYER
+        throwTargetPos = playerPos.add(lookDir.multiply(throwRange));
         
         throwActive = true;
         throwProgress = 0.0f;
@@ -815,13 +813,25 @@ public class FieldVisualAdapter extends AbstractAdapter {
     private Vec3d getOrbStartOffset(Vec3d lookDir, Vec3d rightDir) {
         float offsetDist = 2.0f;
         
+        // Up vector for hand positioning
+        Vec3d upDir = new Vec3d(0, 1, 0);
+        
         return switch (orbStartPosition) {
             case "center" -> Vec3d.ZERO;
             case "front" -> lookDir.multiply(offsetDist);
             case "behind" -> lookDir.multiply(-offsetDist);
             case "left" -> rightDir.multiply(-offsetDist);
             case "right" -> rightDir.multiply(offsetDist);
-            case "above" -> new Vec3d(0, offsetDist, 0);
+            case "above" -> upDir.multiply(offsetDist);
+            
+            // New positions: Hand-like (visible in first person, like holding a block)
+            case "left-hand" -> rightDir.multiply(-0.6).add(lookDir.multiply(0.8)).add(upDir.multiply(-0.3));
+            case "right-hand" -> rightDir.multiply(0.6).add(lookDir.multiply(0.8)).add(upDir.multiply(-0.3));
+            
+            // Front corners (visible but not centered)
+            case "left-front" -> lookDir.multiply(offsetDist).add(rightDir.multiply(-offsetDist * 0.7));
+            case "right-front" -> lookDir.multiply(offsetDist).add(rightDir.multiply(offsetDist * 0.7));
+            
             default -> Vec3d.ZERO;
         };
     }
@@ -978,8 +988,8 @@ public class FieldVisualAdapter extends AbstractAdapter {
      * Applies default values from an EffectSchema.
      * 
      * <p>This makes the schema the single source of truth for defaults.
-     * Iterates through all parameters in the schema and applies their
-     * {@code defaultValue()} to this adapter.</p>
+     * First resets all shader params to Java defaults to clear any version-specific
+     * values (e.g., V8 params when switching to V1), then applies the schema defaults.</p>
      * 
      * @param schema The effect schema containing parameter defaults
      */
@@ -989,6 +999,11 @@ public class FieldVisualAdapter extends AbstractAdapter {
             return;
         }
         
+        // FIRST: Reset all shader params to Java defaults
+        // This clears version-specific values (e.g., V8 params when switching to V1)
+        resetShaderParamsToDefaults();
+        
+        // THEN: Apply schema defaults on top
         int applied = 0;
         for (var param : schema.allParameters()) {
             try {
@@ -1013,6 +1028,49 @@ public class FieldVisualAdapter extends AbstractAdapter {
         
         Logging.GUI.topic("fieldVisual").info("Applied {} schema defaults from {}", 
             applied, schema.displayName());
+    }
+    
+    /**
+     * Resets all shader parameters to their Java defaults.
+     * Called before applying schema defaults to ensure clean state.
+     */
+    private void resetShaderParamsToDefaults() {
+        // Core shader params
+        colors = ColorParams.DEFAULT;
+        anim = anim.withEffectType(anim.effectType()); // Preserve effect type
+        animTiming = AnimTimingParams.DEFAULT;
+        coreEdge = CoreEdgeParams.DEFAULT;
+        falloff = FalloffParams.DEFAULT;
+        noiseConfig = NoiseConfigParams.DEFAULT;
+        noiseDetail = NoiseDetailParams.DEFAULT;
+        glowLine = GlowLineParams.DEFAULT;
+        corona = CoronaParams.DEFAULT;
+        geometry = GeometryParams.DEFAULT;
+        geometry2 = GeometryParams2.DEFAULT;
+        geoAnim = GeoAnimParams.DEFAULT;
+        transform = TransformParams.DEFAULT;
+        lighting = LightingParams.DEFAULT;
+        timing = TimingParams.DEFAULT;
+        screen = ScreenEffects.NONE;
+        distortion = DistortionParams.NONE;
+        blend = BlendParams.DEFAULT;
+        flames = FlamesParams.DEFAULT;
+        
+        // V2 detail params
+        v2Corona = V2CoronaDetail.DEFAULT;
+        v2Core = V2CoreDetail.DEFAULT;
+        v2Edge = V2EdgeDetail.DEFAULT;
+        v2Lines = V2LinesDetail.DEFAULT;
+        v2Alpha = V2AlphaDetail.DEFAULT;
+        
+        // V8 specific params - critical for V8→V1 transition!
+        v8Plasma = V8PlasmaParams.DEFAULT;
+        v8Ring = V8RingParams.DEFAULT;
+        v8Corona = V8CoronaParams.DEFAULT;
+        v8Electric = V8ElectricParams.DEFAULT;
+        
+        // Note: reserved.version is preserved (set externally before this is called)
+        // Note: anim.intensity and anim.speed could be preserved, but schema will override
     }
     
     // ═══════════════════════════════════════════════════════════════════════════
