@@ -4,6 +4,7 @@ import net.cyberpunk042.client.visual.effect.FieldVisualConfig;
 import net.cyberpunk042.client.visual.effect.FieldVisualInstance;
 import net.cyberpunk042.client.visual.effect.FieldVisualPostEffect;
 import net.cyberpunk042.client.visual.effect.FieldVisualRegistry;
+import net.cyberpunk042.client.visual.ubo.CameraStateManager;
 import net.cyberpunk042.log.Logging;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.PostEffectProcessor;
@@ -77,6 +78,14 @@ public abstract class WorldRendererFieldVisualMixin {
             Matrix4fStack modelViewStack,
             FrameGraphBuilder frameGraphBuilder
     ) {
+        // ═══════════════════════════════════════════════════════════════════════════
+        CameraStateManager.updateFromRender(
+            (float)camX, (float)camY, (float)camZ,
+            camera.getYaw(), camera.getPitch(),
+            positionMatrix, projectionMatrix,
+            tickDelta
+        );
+        
         // Check if field visual effect is enabled
         if (!FieldVisualPostEffect.isEnabled()) {
             return;

@@ -19,7 +19,8 @@
 #define CAMERA_UBO_GLSL
 
 layout(std140) uniform CameraDataUBO {
-    // vec4 0: Camera world position (xyz), reserved (w)
+    // vec4 0: Camera-relative position (0,0,0), reserved (w)
+    // Use this for effects that work in camera-relative space (FieldVisual)
     vec4 CameraPositionUBO;
     
     // vec4 1: Camera forward direction (xyz), aspect ratio (w)
@@ -37,8 +38,11 @@ layout(std140) uniform CameraDataUBO {
     // mat4 (vec4 8-11): Inverse View-Projection matrix
     mat4 InvViewProjUBO;
     
-    // vec4 12-13: Reserved for future (e.g., PrevViewProj)
-    vec4 CameraReserved1UBO;
+    // vec4 12: Camera WORLD position (actual world coordinates)
+    // Use this for world-anchored effects (Shockwave, MagicCircle)
+    vec4 CameraWorldPositionUBO;
+    
+    // vec4 13: Reserved for future
     vec4 CameraReserved2UBO;
 };
 

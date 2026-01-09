@@ -139,6 +139,160 @@
                         "type": "float",
                         "value": 1.0
                     }
+                ],
+                "FrameDataUBO": [
+                    {
+                        "name": "FrameTimeUBO",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.016,
+                            0.0,
+                            1.0
+                        ]
+                    }
+                ],
+                "CameraDataUBO": [
+                    {
+                        "name": "CameraPositionUBO",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            64.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "CameraForwardUBO",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.0,
+                            1.0,
+                            1.78
+                        ]
+                    },
+                    {
+                        "name": "CameraUpUBO",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            1.0,
+                            0.0,
+                            1.22
+                        ]
+                    },
+                    {
+                        "name": "CameraClipUBO",
+                        "type": "vec4",
+                        "value": [
+                            0.05,
+                            1000.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "ViewProjRow0",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "ViewProjRow1",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            1.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "ViewProjRow2",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.0,
+                            1.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "ViewProjRow3",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    {
+                        "name": "InvViewProjRow0",
+                        "type": "vec4",
+                        "value": [
+                            1.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "InvViewProjRow1",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            1.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "InvViewProjRow2",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.0,
+                            1.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "InvViewProjRow3",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0
+                        ]
+                    },
+                    {
+                        "name": "CameraWorldPositionUBO",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    {
+                        "name": "CameraReserved2UBO",
+                        "type": "vec4",
+                        "value": [
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    }
                 ]
             },
             "output": "swap"

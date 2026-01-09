@@ -2,6 +2,7 @@ package net.cyberpunk042.mixin.client;
 
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import net.cyberpunk042.client.visual.shader.MagicCirclePostEffect;
+import net.cyberpunk042.client.visual.ubo.CameraStateManager;
 import net.cyberpunk042.log.Logging;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.PostEffectProcessor;
@@ -73,6 +74,14 @@ public abstract class WorldRendererMagicCircleMixin {
             Matrix4fStack modelViewStack,
             FrameGraphBuilder frameGraphBuilder
     ) {
+        // ═══════════════════════════════════════════════════════════════════════════
+        CameraStateManager.updateFromRender(
+            (float)camX, (float)camY, (float)camZ,
+            camera.getYaw(), camera.getPitch(),
+            positionMatrix, projectionMatrix,
+            tickDelta
+        );
+        
         // Early exit if not enabled at all
         if (!MagicCirclePostEffect.isEnabled()) {
             return;

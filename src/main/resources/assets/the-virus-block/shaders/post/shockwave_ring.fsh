@@ -140,6 +140,12 @@ layout(std140) uniform ShockwaveConfig {
 out vec4 fragColor;
 
 // ═══════════════════════════════════════════════════════════════════════════
+// BASE UBOs - Shared Frame and Camera data
+// ═══════════════════════════════════════════════════════════════════════════
+#include "include/ubo/frame_ubo.glsl"
+#include "include/ubo/camera_ubo.glsl"
+
+// ═══════════════════════════════════════════════════════════════════════════
 // LIBRARY INCLUDES
 // ═══════════════════════════════════════════════════════════════════════════
 // Organized by domain: core -> camera -> sdf -> rendering -> effects
@@ -268,9 +274,12 @@ void main() {
     
     if (UseWorldOrigin > 0.5) {
         // WORLD-ANCHORED MODE: Calculate distance from target world position
-        vec3 camPos = vec3(CameraX, CameraY, CameraZ);
-        vec3 forward = normalize(vec3(ForwardX, ForwardY, ForwardZ));
-        CameraData cam = buildCameraData(camPos, forward, Fov, AspectRatio, near, far);
+        // Use CameraWorldPositionUBO for actual world coordinates
+        vec3 camPos = CameraWorldPositionUBO.xyz;
+        vec3 forward = normalize(CameraForwardUBO.xyz);
+        float fov = CameraUpUBO.w;
+        float aspect = CameraForwardUBO.w;
+        CameraData cam = buildCameraData(camPos, forward, fov, aspect, near, far);
         
         vec3 worldPos = reconstructWorldPos(texCoord, linearDepth, cam);
         vec3 targetPos = vec3(TargetX, TargetY, TargetZ);
@@ -288,17 +297,21 @@ void main() {
     float orbitalAlpha = 0.0;
     
     if (int(ShapeType) == SHAPE_ORBITAL && UseWorldOrigin > 0.5) {
-        vec3 worldCamPos = vec3(CameraX, CameraY, CameraZ);
-        vec3 rawForward = vec3(ForwardX, ForwardY, ForwardZ);
+        // Use CameraWorldPositionUBO for world-anchored orbital rendering
+        vec3 worldCamPos = CameraWorldPositionUBO.xyz;
+        vec3 rawForward = CameraForwardUBO.xyz;
         float fwdLen = length(rawForward);
         
         if (fwdLen > 0.001 && OrbitDistance > 0.1 && ShapeSideCount > 0.5) {
             vec3 forward = rawForward / fwdLen;
             vec3 worldTargetPos = vec3(TargetX, TargetY, TargetZ);
             
-            // Build CameraData and generate ray
-            CameraData cam = buildCameraData(worldCamPos, forward, Fov, AspectRatio, near, far);
-            Ray ray = getRayAdaptive(texCoord, cam, InvViewProj, IsFlying);
+            // Build CameraData and generate ray using base UBO values
+            float fov = CameraUpUBO.w;
+            float aspect = CameraForwardUBO.w;
+            float isFlying = CameraClipUBO.z;
+            CameraData cam = buildCameraData(worldCamPos, forward, fov, aspect, near, far);
+            Ray ray = getRayAdaptive(texCoord, cam, InvViewProjUBO, isFlying);
             vec3 rayDir = ray.direction;
             vec3 rayOrigin = worldCamPos;  // Always use world camera position
             vec3 targetPos = worldTargetPos;  // Always use world target position

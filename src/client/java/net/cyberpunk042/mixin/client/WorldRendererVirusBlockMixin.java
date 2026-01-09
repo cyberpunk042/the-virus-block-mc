@@ -4,6 +4,7 @@ import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import net.cyberpunk042.client.visual.shader.VirusBlockPostEffect;
 import net.cyberpunk042.client.visual.shader.VirusBlockScanner;
 import net.cyberpunk042.client.visual.shader.VirusBlockUniformBinder;
+import net.cyberpunk042.client.visual.ubo.CameraStateManager;
 import net.cyberpunk042.log.Logging;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.PostEffectProcessor;
@@ -76,6 +77,14 @@ public abstract class WorldRendererVirusBlockMixin {
             Matrix4fStack modelViewStack,
             FrameGraphBuilder frameGraphBuilder
     ) {
+        // ═══════════════════════════════════════════════════════════════════════════
+        CameraStateManager.updateFromRender(
+            (float)camX, (float)camY, (float)camZ,
+            camera.getYaw(), camera.getPitch(),
+            positionMatrix, projectionMatrix,
+            tickDelta
+        );
+        
         // Check if virus block effect is enabled
         if (!VirusBlockUniformBinder.isEnabled()) {
             return;

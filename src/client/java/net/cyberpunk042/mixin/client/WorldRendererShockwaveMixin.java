@@ -3,6 +3,7 @@ package net.cyberpunk042.mixin.client;
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import net.cyberpunk042.client.visual.shader.ShockwavePostEffect;
 import net.cyberpunk042.client.visual.shader.ShockwaveRenderer;
+import net.cyberpunk042.client.visual.ubo.CameraStateManager;
 import net.cyberpunk042.log.Logging;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.PostEffectProcessor;
@@ -75,6 +76,14 @@ public abstract class WorldRendererShockwaveMixin {
             Matrix4fStack modelViewStack,
             FrameGraphBuilder frameGraphBuilder
     ) {
+        // ═══════════════════════════════════════════════════════════════════════════
+        CameraStateManager.updateFromRender(
+            (float)camX, (float)camY, (float)camZ,
+            camera.getYaw(), camera.getPitch(),
+            positionMatrix, projectionMatrix,
+            tickDelta
+        );
+        
         // Check if shockwave is enabled
         if (!ShockwavePostEffect.isEnabled()) {
             return;

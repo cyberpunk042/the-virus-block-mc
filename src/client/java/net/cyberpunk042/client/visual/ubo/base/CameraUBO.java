@@ -75,8 +75,8 @@ public record CameraUBO(
     /** Inverse view-projection (clip to world, for ray reconstruction) */
     @Mat4 Matrix4f invViewProj,
     
-    /** Reserved slot 1 (future: PrevViewProj for motion vectors) */
-    @Vec4 ReservedVec4 reserved1,
+    /** Reserved slot 1: Camera WORLD position (actual coordinates, not camera-relative) */
+    @Vec4 WorldPositionVec4 worldPosition,
     
     /** Reserved slot 2 */
     @Vec4 ReservedVec4 reserved2
@@ -117,6 +117,14 @@ public record CameraUBO(
         }
     }
     
+    /** World camera position: x, y, z, reserved */
+    public record WorldPositionVec4(float x, float y, float z, float w) {
+        public static WorldPositionVec4 from(float x, float y, float z) {
+            return new WorldPositionVec4(x, y, z, 0f);
+        }
+        public static final WorldPositionVec4 ZERO = new WorldPositionVec4(0, 0, 0, 0);
+    }
+    
     /** Reserved vec4 (all zeros) */
     public record ReservedVec4(float x, float y, float z, float w) {
         public static final ReservedVec4 ZERO = new ReservedVec4(0, 0, 0, 0);
@@ -139,7 +147,8 @@ public record CameraUBO(
             float far,
             boolean isFlying,
             Matrix4f viewProj,
-            Matrix4f invViewProj
+            Matrix4f invViewProj,
+            float worldPosX, float worldPosY, float worldPosZ
     ) {
         return new CameraUBO(
             PositionVec4.from(position),
@@ -148,7 +157,7 @@ public record CameraUBO(
             ClipVec4.from(near, far, isFlying),
             viewProj,
             invViewProj,
-            ReservedVec4.ZERO,
+            WorldPositionVec4.from(worldPosX, worldPosY, worldPosZ),
             ReservedVec4.ZERO
         );
     }
@@ -164,7 +173,8 @@ public record CameraUBO(
             float near, float far,
             boolean isFlying,
             Matrix4f viewProj,
-            Matrix4f invViewProj
+            Matrix4f invViewProj,
+            float worldPosX, float worldPosY, float worldPosZ
     ) {
         return new CameraUBO(
             new PositionVec4(posX, posY, posZ, 0),
@@ -173,7 +183,7 @@ public record CameraUBO(
             ClipVec4.from(near, far, isFlying),
             viewProj,
             invViewProj,
-            ReservedVec4.ZERO,
+            WorldPositionVec4.from(worldPosX, worldPosY, worldPosZ),
             ReservedVec4.ZERO
         );
     }

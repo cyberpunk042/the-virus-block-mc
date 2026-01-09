@@ -13,6 +13,7 @@ import net.cyberpunk042.client.visual.effect.ShaderTimeSource;
 import net.cyberpunk042.client.visual.effect.uniform.FieldVisualUniformBinder;
 import net.cyberpunk042.client.visual.ubo.ReflectiveUBOWriter;
 import net.cyberpunk042.client.visual.ubo.BaseUBOBinder;
+import net.cyberpunk042.client.visual.ubo.CameraStateManager;
 import net.cyberpunk042.client.visual.shader.ShockwavePostEffect;
 import net.cyberpunk042.client.visual.shader.MagicCirclePostEffect;
 import net.cyberpunk042.client.visual.shader.VirusBlockPostEffect;
@@ -153,7 +154,8 @@ public class PostEffectPassMixin {
                           (float) client.getWindow().getFramebufferHeight();
             
             var camera = client.gameRenderer.getCamera();
-            float tickDelta = client.getRenderTickCounter().getTickProgress(false);
+            // Use the CAPTURED tickDelta for consistent FOV with matrices
+            float tickDelta = CameraStateManager.getTickDelta();
             float dynamicFov = ((GameRendererAccessor) client.gameRenderer).invokeGetFov(camera, tickDelta, true);
             float fov = (float) Math.toRadians(dynamicFov);
             
@@ -328,7 +330,8 @@ public class PostEffectPassMixin {
                           (float) client.getWindow().getFramebufferHeight();
             
             var camera = client.gameRenderer.getCamera();
-            float tickDelta = client.getRenderTickCounter().getTickProgress(false);
+            // Use the CAPTURED tickDelta for consistent FOV with matrices
+            float tickDelta = CameraStateManager.getTickDelta();
             float dynamicFov = ((GameRendererAccessor) client.gameRenderer).invokeGetFov(camera, tickDelta, true);
             float fov = (float) Math.toRadians(dynamicFov);
             

@@ -113,6 +113,12 @@ layout(std140) uniform MagicCircleConfig {
 out vec4 fragColor;
 
 // ═══════════════════════════════════════════════════════════════════════════
+// BASE UBOs - Shared Frame and Camera data
+// ═══════════════════════════════════════════════════════════════════════════
+#include "include/ubo/frame_ubo.glsl"
+#include "include/ubo/camera_ubo.glsl"
+
+// ═══════════════════════════════════════════════════════════════════════════
 // INCLUDES
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -150,10 +156,13 @@ void main() {
     float far = 1000.0;
     float linearDepth = linearizeDepth(rawDepth, near, far);
     
-    vec3 camPos = vec3(CameraX, CameraY, CameraZ);
-    vec3 forward = normalize(vec3(ForwardX, ForwardY, ForwardZ));
+    // Use CameraWorldPositionUBO for world-anchored ground projection
+    vec3 camPos = CameraWorldPositionUBO.xyz;
+    vec3 forward = normalize(CameraForwardUBO.xyz);
+    float fov = CameraUpUBO.w;
+    float aspect = CameraForwardUBO.w;
     
-    CameraData cam = buildCameraData(camPos, forward, Fov, AspectRatio, near, far);
+    CameraData cam = buildCameraData(camPos, forward, fov, aspect, near, far);
     vec3 worldPos = reconstructWorldPos(texCoord, linearDepth, cam);
     
     // ═══════════════════════════════════════════════════════════════════════

@@ -11,6 +11,7 @@ import net.cyberpunk042.client.visual.ubo.base.LightUBO;
 import net.cyberpunk042.mixin.client.GameRendererAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.Camera;
+import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
 import org.lwjgl.system.MemoryStack;
 
@@ -56,6 +57,10 @@ public final class BaseUBOBinder {
      * <p>This should be called once per frame, before any effect-specific
      * uniform updates. It writes FrameData and CameraData to the buffer map.</p>
      * 
+     * <p><b>IMPORTANT:</b> Each PostEffectPass has its OWN uniformBuffers map.
+     * We only recreate the buffers once per frame, but we must put them into
+     * EVERY pass's map that calls this method.</p>
+     * 
      * @param uniformBuffers the buffer map from PostEffectPass
      */
     public static void updateBaseUBOs(Map<String, GpuBuffer> uniformBuffers) {
@@ -64,26 +69,21 @@ public final class BaseUBOBinder {
             return;
         }
         
-        // Only update once per frame (use our own counter)
-        // Note: No public getTickCount() available, so we use world time
-        long currentFrame = (long) (client.world.getTime());
-        if (currentFrame == lastFrameUpdate) {
-            return;
-        }
-        lastFrameUpdate = currentFrame;
+        // ALWAYS update camera data every render pass - camera changes faster than game ticks
+        // The old caching used world.getTime() which is game ticks (20/sec), not render frames (60+/sec)
+        // This caused stale camera data when framerate > tick rate
         frameCounter++;
         
         try {
             updateFrameUBO(uniformBuffers, client);
             updateCameraUBO(uniformBuffers, client);
-            // LightUBO only updated when needed (Tornado effect)
         } catch (Exception e) {
-            // Log but don't crash - base UBOs failing shouldn't break effects
             if (frameCounter % 60 == 1) {
                 System.err.println("[BaseUBOBinder] Failed to update base UBOs: " + e.getMessage());
             }
         }
     }
+    
     
     /**
      * Updates FrameData UBO (binding 0).
@@ -135,7 +135,9 @@ public final class BaseUBOBinder {
             Std140Builder builder = Std140Builder.onStack(stack, size + 16);
             
             Camera camera = client.gameRenderer.getCamera();
-            float tickDelta = client.getRenderTickCounter().getTickProgress(false);
+            // CRITICAL: Use the SAME tickDelta that Minecraft used for this frame
+            // Getting it from CameraStateManager ensures consistency with matrices
+            float tickDelta = CameraStateManager.getTickDelta();
             
             // Aspect ratio - SAME as PostEffectPassMixin
             float aspect = (float) client.getWindow().getFramebufferWidth() / 
@@ -145,19 +147,19 @@ public final class BaseUBOBinder {
             float dynamicFov = ((GameRendererAccessor) client.gameRenderer).invokeGetFov(camera, tickDelta, true);
             float fov = (float) Math.toRadians(dynamicFov);
             
-            // Forward vector - FROM FieldVisualUniformBinder (SAME as PostEffectPassMixin)
-            float forwardX = FieldVisualUniformBinder.getForwardX();
-            float forwardY = FieldVisualUniformBinder.getForwardY();
-            float forwardZ = FieldVisualUniformBinder.getForwardZ();
+            // Forward vector - FROM CameraStateManager (shared source, updated by mixins)
+            float forwardX = CameraStateManager.getForwardX();
+            float forwardY = CameraStateManager.getForwardY();
+            float forwardZ = CameraStateManager.getForwardZ();
             
-            // Up vector (world up, same as PostEffectPassMixin)
+            // Up vector (world up, same as all mixins)
             float upX = 0f;
             float upY = 1f;
             float upZ = 0f;
             
-            // Matrices - FROM FieldVisualUniformBinder (SAME as PostEffectPassMixin)
-            Matrix4f viewProj = FieldVisualUniformBinder.getViewProjection();
-            Matrix4f invViewProj = FieldVisualUniformBinder.getInvViewProjection();
+            // Matrices - FROM CameraStateManager (computed from positionMatrix/projectionMatrix)
+            Matrix4f viewProj = CameraStateManager.getViewProjection();
+            Matrix4f invViewProj = CameraStateManager.getInvViewProjection();
             
             if (viewProj == null) {
                 viewProj = new Matrix4f().identity();
@@ -180,22 +182,29 @@ public final class BaseUBOBinder {
             float near = 0.05f;
             float far = 1000f;
             
-            // Camera position: 0,0,0 in camera-relative coordinates
-            // (The shader uses camera-relative coords where camera is at origin)
+            // Camera-relative position: (0,0,0) 
+            // Used by FieldVisual and effects that work in camera-relative space
             float camX = 0f;
             float camY = 0f;
             float camZ = 0f;
             
-            // Build CameraUBO with SAME values as PostEffectPassMixin
+            // Camera WORLD position: FROM CameraStateManager (updated by mixins)
+            // Used by Shockwave/MagicCircle for world-anchored distance calculations
+            float worldCamX = CameraStateManager.getWorldPosX();
+            float worldCamY = CameraStateManager.getWorldPosY();
+            float worldCamZ = CameraStateManager.getWorldPosZ();
+            
+            // Build CameraUBO with both position types
             CameraUBO cameraUbo = CameraUBO.from(
-                camX, camY, camZ,
+                camX, camY, camZ,                    // camera-relative position
                 forwardX, forwardY, forwardZ,
                 upX, upY, upZ,
                 fov, aspect,
                 near, far,
                 isFlying > 0.5f,
                 viewProj,
-                invViewProj
+                invViewProj,
+                worldCamX, worldCamY, worldCamZ      // world position
             );
             ReflectiveUBOWriter.write(builder, cameraUbo);
             

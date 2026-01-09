@@ -994,7 +994,7 @@
                         ]
                     },
                     {
-                        "name": "CameraReserved1UBO",
+                        "name": "CameraWorldPositionUBO",
                         "type": "vec4",
                         "value": [
                             0.0,
