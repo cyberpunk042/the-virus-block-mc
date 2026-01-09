@@ -81,7 +81,7 @@ def get_all_shaders():
     shaders = []
     if os.path.exists(shader_dir):
         for f in sorted(os.listdir(shader_dir)):
-            if f.endswith('.fsh') and f.startswith('field_visual'):
+            if f.endswith('.fsh') and f.startswith(''):
                 shaders.append(os.path.join(shader_dir, f))
     return shaders
 

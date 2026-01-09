@@ -170,6 +170,55 @@ public final class ClientFieldNodes {
     );
     
     /**
+     * Augmented Helmet HUD system.
+     */
+    public static final InitNode HELMET_HUD = InitNode.simple(
+        "helmet_hud", "Helmet HUD",
+        () -> {
+            // Register payload receiver
+            ClientPlayNetworking.registerGlobalReceiver(HelmetHudPayload.ID, (payload, context) -> {
+                context.client().execute(() -> 
+                    net.cyberpunk042.client.helmet.HelmetHudState.get().updateFromPayload(payload));
+            });
+            
+            // Register visor overlay effect (renders first, behind everything)
+            net.cyberpunk042.client.helmet.HelmetVisorEffect.init();
+            
+            // TODO: World-space threat outlines - needs shader implementation
+            
+            // Register HUD overlay (renders on top)
+            net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback.EVENT.register(
+                net.cyberpunk042.client.helmet.AugmentedHelmetOverlay::render);
+            
+            // Register client commands
+            net.cyberpunk042.client.helmet.HelmetHudCommands.register();
+            
+            // Clear state on disconnect
+            ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
+                client.execute(() -> net.cyberpunk042.client.helmet.HelmetHudState.get().clear()));
+            
+            Logging.RENDER.topic("helmet_hud").info("Helmet HUD system initialized");
+            return 1;
+        }
+    );
+    
+    /**
+     * Virus Block Telemetry - sent to ALL players for shader effects.
+     */
+    public static final InitNode VIRUS_BLOCK_TELEMETRY = InitNode.simple(
+        "virus_block_telemetry", "Virus Block Telemetry",
+        () -> {
+            ClientPlayNetworking.registerGlobalReceiver(VirusBlockTelemetryPayload.ID, (payload, context) -> {
+                context.client().execute(() -> 
+                    net.cyberpunk042.client.visual.shader.VirusBlockTelemetryState.get().updateFromPayload(payload));
+            });
+            
+            Logging.RENDER.topic("virus_block").info("Virus block telemetry receiver registered");
+            return 1;
+        }
+    );
+    
+    /**
      * Rendering pipeline warmup (JIT compilation).
      */
     public static final InitNode RENDER_WARMUP = InitNode.simple(
@@ -268,9 +317,15 @@ public final class ClientFieldNodes {
         () -> {
             net.cyberpunk042.client.visual.shader.DepthTestShader.init();
             net.cyberpunk042.client.visual.shader.DirectDepthRendererArchive.init();
-            net.cyberpunk042.client.visual.shader.ShockwaveGlowRenderer.init();
+            net.cyberpunk042.client.visual.shader.ShockwaveGlowRendererArchive.init();
             net.cyberpunk042.client.visual.shader.ShockwavePostEffect.init();
             net.cyberpunk042.client.visual.shader.MagicCirclePostEffect.init();
+            net.cyberpunk042.client.visual.shader.VirusBlockPostEffect.init();
+            
+            // Register tick for virus block scanner (scans nearby chunks for smoke effect)
+            net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(
+                client -> net.cyberpunk042.client.visual.shader.VirusBlockScanner.tick()
+            );
             
             // Register HUD overlay for depth visualization and shockwave
             // NOTE: CAPTURE happens in WorldRenderer mixin, only RENDER here
@@ -284,8 +339,8 @@ public final class ClientFieldNodes {
                         // DirectDepthRendererArchive overlay (if enabled)
                         net.cyberpunk042.client.visual.shader.DirectDepthRendererArchive.renderOverlay(context, width, height);
                         
-                        // ShockwaveGlowRenderer overlay - ONLY RENDER (capture is in WorldRenderer)
-                        net.cyberpunk042.client.visual.shader.ShockwaveGlowRenderer.render(context, client, width, height);
+                        // ShockwaveGlowRendererArchive overlay - ONLY RENDER (capture is in WorldRenderer)
+                        net.cyberpunk042.client.visual.shader.ShockwaveGlowRendererArchive.render(context, client, width, height);
                     }
                 }
             );

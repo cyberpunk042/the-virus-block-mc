@@ -1,6 +1,6 @@
 package net.cyberpunk042.mixin.client;
 
-import net.cyberpunk042.client.visual.shader.ShockwaveTestRenderer;
+import net.cyberpunk042.client.visual.shader.ShockwaveTestRendererArchive;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * TEST MIXIN: Injects ShockwaveTestRenderer into HUD rendering.
+ * TEST MIXIN: Injects ShockwaveTestRendererArchive into HUD rendering.
  * 
  * <p>Uses DrawContext.fill() which is proven to work.
  */
@@ -34,8 +34,8 @@ public abstract class ShockwaveTestMixin {
             RenderTickCounter tickCounter, 
             CallbackInfo ci
     ) {
-        if (!ShockwaveTestRenderer.isEnabled()) return;
+        if (!ShockwaveTestRendererArchive.isEnabled()) return;
         
-        ShockwaveTestRenderer.render(context);
+        ShockwaveTestRendererArchive.render(context);
     }
 }

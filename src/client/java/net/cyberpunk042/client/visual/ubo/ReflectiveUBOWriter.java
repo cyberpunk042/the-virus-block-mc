@@ -50,6 +50,9 @@ public final class ReflectiveUBOWriter {
                 bytes += 16;  // 4 floats × 4 bytes
             } else if (comp.isAnnotationPresent(Mat4.class)) {
                 bytes += 64;  // 16 floats × 4 bytes
+            } else if (comp.isAnnotationPresent(Vec4Array.class)) {
+                Vec4Array arr = comp.getAnnotation(Vec4Array.class);
+                bytes += arr.count() * 16;  // count × 4 floats × 4 bytes
             } else if (comp.isAnnotationPresent(Floats.class)) {
                 Floats floats = comp.getAnnotation(Floats.class);
                 bytes += floats.count() * 4;
@@ -84,6 +87,9 @@ public final class ReflectiveUBOWriter {
                     writeVec4(builder, value, comp.getName());
                 } else if (comp.isAnnotationPresent(Mat4.class)) {
                     writeMatrix(builder, (Matrix4f) value);
+                } else if (comp.isAnnotationPresent(Vec4Array.class)) {
+                    Vec4Array arrAnnotation = comp.getAnnotation(Vec4Array.class);
+                    writeVec4Array(builder, value, arrAnnotation.count(), comp.getName());
                 } else if (comp.isAnnotationPresent(Floats.class)) {
                     writeFloats(builder, value, comp.getAnnotation(Floats.class), comp.getName());
                 }
@@ -124,6 +130,67 @@ public final class ReflectiveUBOWriter {
                 value.getClass().getSimpleName() +
                 ". Must implement Vec4Serializable or be float[4]."
             );
+        }
+    }
+    
+    /**
+     * Writes an array of vec4 values.
+     * 
+     * @param builder the Std140Builder to write to
+     * @param value the array (must be Object[] with Vec4Serializable elements)
+     * @param count the expected number of vec4 elements
+     * @param componentName the component name for error messages
+     */
+    private static void writeVec4Array(Std140Builder builder, Object value, int count, String componentName) {
+        if (value == null) {
+            // Write zeros for all slots
+            for (int i = 0; i < count; i++) {
+                builder.putFloat(0f);
+                builder.putFloat(0f);
+                builder.putFloat(0f);
+                builder.putFloat(0f);
+            }
+            return;
+        }
+        
+        if (!(value instanceof Object[] arr)) {
+            throw new IllegalArgumentException(
+                "Cannot write component '" + componentName + "' as Vec4Array: " +
+                value.getClass().getSimpleName() +
+                ". Must be an array of Vec4Serializable."
+            );
+        }
+        
+        // Write actual elements
+        int written = 0;
+        for (int i = 0; i < arr.length && i < count; i++) {
+            Object elem = arr[i];
+            if (elem instanceof Vec4Serializable v4) {
+                builder.putFloat(v4.slot0());
+                builder.putFloat(v4.slot1());
+                builder.putFloat(v4.slot2());
+                builder.putFloat(v4.slot3());
+                written++;
+            } else if (elem == null) {
+                builder.putFloat(0f);
+                builder.putFloat(0f);
+                builder.putFloat(0f);
+                builder.putFloat(0f);
+                written++;
+            } else {
+                throw new IllegalArgumentException(
+                    "Element " + i + " of component '" + componentName + 
+                    "' is not Vec4Serializable: " + elem.getClass().getSimpleName()
+                );
+            }
+        }
+        
+        // Fill remaining slots with zeros
+        for (int i = written; i < count; i++) {
+            builder.putFloat(0f);
+            builder.putFloat(0f);
+            builder.putFloat(0f);
+            builder.putFloat(0f);
         }
     }
     

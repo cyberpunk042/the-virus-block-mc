@@ -31,7 +31,7 @@ import java.nio.FloatBuffer;
  * [glReadPixels] → [CPU Ring Detection] → [Mask Texture] → [GPU Glow Shader] → [Screen]
  * </pre>
  */
-public class ShockwaveGlowRenderer {
+public class ShockwaveGlowRendererArchive {
     
     // Texture IDs
     private static final Identifier MASK_TEXTURE_ID = Identifier.of("the-virus-block", "shockwave_mask");
@@ -66,7 +66,7 @@ public class ShockwaveGlowRenderer {
      */
     public static void init() {
         Logging.RENDER.topic("shockwave_glow")
-            .info("ShockwaveGlowRenderer initialized");
+            .info("ShockwaveGlowRendererArchive initialized");
     }
     
     /**
@@ -83,7 +83,7 @@ public class ShockwaveGlowRenderer {
         enabled = !enabled;
         Logging.RENDER.topic("shockwave_glow")
             .kv("enabled", enabled)
-            .info("ShockwaveGlowRenderer toggled");
+            .info("ShockwaveGlowRendererArchive toggled");
     }
     
     /**

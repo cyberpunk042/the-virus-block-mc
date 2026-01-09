@@ -34,6 +34,8 @@ public class TheVirusBlockClient implements ClientModInitializer {
 				.add(net.cyberpunk042.client.init.nodes.ClientFieldNodes.BUNDLED_PROFILES)
 				.add(net.cyberpunk042.client.init.nodes.ClientFieldNodes.JOIN_WARMUP)
 				.add(net.cyberpunk042.client.init.nodes.ClientFieldNodes.WARMUP_OVERLAY)
+				.add(net.cyberpunk042.client.init.nodes.ClientFieldNodes.HELMET_HUD)
+				.add(net.cyberpunk042.client.init.nodes.ClientFieldNodes.VIRUS_BLOCK_TELEMETRY)
 				.add(net.cyberpunk042.client.init.nodes.ClientFieldNodes.RENDER_WARMUP)
 				.add(net.cyberpunk042.client.init.nodes.ClientFieldNodes.SHADER_WARMUP)
 				.add(net.cyberpunk042.client.init.nodes.ClientFieldNodes.TEST_RENDERER)

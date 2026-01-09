@@ -134,6 +134,11 @@ public final class CustomUniformBinder {
         if (ShockwavePostEffect.isEnabled()) {
             bindShockwaveParams(renderPass);
         }
+        
+        // Bind VirusBlock if enabled (toxic smoke + ESP outlines)
+        if (VirusBlockUniformBinder.isEnabled()) {
+            VirusBlockUniformBinder.bindUniforms(renderPass);
+        }
     }
     
     /**

@@ -8,6 +8,7 @@ import net.cyberpunk042.infection.service.AmbientPressureService;
 import net.cyberpunk042.infection.service.EffectService;
 import net.cyberpunk042.infection.service.HelmetTelemetryService;
 import net.cyberpunk042.infection.service.InfectionExposureService;
+import net.cyberpunk042.infection.service.VirusBlockTelemetryService;
 import net.cyberpunk042.infection.service.GuardianSpawnService;
 import net.cyberpunk042.infection.service.InfectionServiceContainer;
 import net.cyberpunk042.infection.service.InfectionServices;
@@ -29,6 +30,7 @@ public final class CombatModule {
 	private final InfectionExposureService exposureService;
 	private final AmbientPressureService ambientPressureService;
 	private final HelmetTelemetryService helmetTelemetryService;
+	private final VirusBlockTelemetryService virusBlockTelemetryService;
 	private final VoidTearService voidTearService;
 	private final TierEventService tierEventService;
 	@Nullable
@@ -39,6 +41,7 @@ public final class CombatModule {
 		this.exposureService = new InfectionExposureService(host);
 		this.ambientPressureService = new AmbientPressureService(host);
 		this.helmetTelemetryService = new HelmetTelemetryService(host);
+		this.virusBlockTelemetryService = new VirusBlockTelemetryService(host);
 		this.voidTearService = new VoidTearService(host);
 		this.tierEventService = new TierEventService(host, voidTearService);
 		InfectionServiceContainer services = InfectionServices.container();
@@ -103,6 +106,7 @@ public final class CombatModule {
 		tierEventService.runTierEvents(tier);
 		ambientPressureService.tick(tier);
 		helmetTelemetryService.tick();
+		virusBlockTelemetryService.tick();
 	}
 
 	// ─────────────────────────────────────────────────────────────────────────────

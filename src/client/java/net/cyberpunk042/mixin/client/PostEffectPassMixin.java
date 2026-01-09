@@ -14,6 +14,8 @@ import net.cyberpunk042.client.visual.effect.uniform.FieldVisualUniformBinder;
 import net.cyberpunk042.client.visual.ubo.ReflectiveUBOWriter;
 import net.cyberpunk042.client.visual.shader.ShockwavePostEffect;
 import net.cyberpunk042.client.visual.shader.MagicCirclePostEffect;
+import net.cyberpunk042.client.visual.shader.VirusBlockPostEffect;
+import net.cyberpunk042.client.visual.shader.VirusBlockUBO;
 import net.cyberpunk042.log.Logging;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.PostEffectPass;
@@ -48,6 +50,7 @@ public class PostEffectPassMixin {
     private static int injectCount = 0;
     private static int fieldVisualInjectCount = 0;
     private static int magicCircleInjectCount = 0;
+    private static int virusBlockInjectCount = 0;
     
     /**
      * Safely close an old buffer before replacing it.
@@ -80,7 +83,7 @@ public class PostEffectPassMixin {
         }
         
         // DEBUG: Log all passes to see what's happening
-        if (id != null && (id.contains("field") || id.contains("the-virus") || id.contains("magic_circle"))) {
+        if (id != null && (id.contains("field") || id.contains("the-virus") || id.contains("magic_circle") || id.contains("virus_block"))) {
             Logging.RENDER.topic("posteffect_debug")
                 .kv("passId", id)
                 .kv("fieldVisualEnabled", FieldVisualPostEffect.isEnabled())
@@ -96,6 +99,12 @@ public class PostEffectPassMixin {
         // Handle Magic Circle pass
         if (MagicCirclePostEffect.isEnabled() && id != null && id.contains("magic_circle")) {
             updateMagicCircleUniforms();
+        }
+        
+        // Handle Virus Block pass
+        if (net.cyberpunk042.client.visual.shader.VirusBlockUniformBinder.isEnabled() 
+            && id != null && id.contains("virus_block")) {
+            updateVirusBlockUniforms();
         }
     }
     
@@ -343,6 +352,100 @@ public class PostEffectPassMixin {
             Logging.RENDER.topic("posteffect_inject")
                 .kv("error", e.getMessage())
                 .warn("Failed to update MagicCircleConfig");
+        }
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // VIRUS BLOCK UNIFORM UPDATE
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    private void updateVirusBlockUniforms() {
+        virusBlockInjectCount++;
+        
+        if (!uniformBuffers.containsKey("VirusBlockParams")) {
+            return;
+        }
+        
+        // Get data from VirusBlockTelemetryState (server-provided, unlimited range)
+        var telemetryState = net.cyberpunk042.client.visual.shader.VirusBlockTelemetryState.get();
+        var blocks = telemetryState.getNearbyPositions();
+        float closestDist = telemetryState.hasData() ? telemetryState.getClosestDistance() : Float.MAX_VALUE;
+        
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            var client = net.minecraft.client.MinecraftClient.getInstance();
+            var camera = client.gameRenderer.getCamera();
+            Vec3d camPos = camera.getPos();
+            float time = (System.currentTimeMillis() % 60000) / 1000.0f;
+            
+            // Check helmet for ESP
+            boolean hasHelmet = false;
+            if (client.player != null) {
+                var headSlot = client.player.getEquippedStack(net.minecraft.entity.EquipmentSlot.HEAD);
+                hasHelmet = !headSlot.isEmpty() && headSlot.isOf(net.cyberpunk042.registry.ModItems.AUGMENTED_HELMET);
+            }
+            
+            // Camera params
+            float fov = (float) Math.toRadians(client.options.getFov().getValue());
+            float aspect = (float) client.getWindow().getFramebufferWidth() / 
+                          (float) client.getWindow().getFramebufferHeight();
+            Vec3d forward = Vec3d.fromPolar(camera.getPitch(), camera.getYaw());
+            Vec3d up = Vec3d.fromPolar(camera.getPitch() - 90, camera.getYaw());
+            boolean isFlying = client.player != null && client.player.getAbilities().flying;
+            
+            int blockCount = Math.min(blocks.size(), 32);
+            
+            // Build block positions array
+            VirusBlockUBO.BlockPosVec4[] blockPositions = new VirusBlockUBO.BlockPosVec4[blockCount];
+            for (int i = 0; i < blockCount; i++) {
+                var pos = blocks.get(i);
+                blockPositions[i] = new VirusBlockUBO.BlockPosVec4(pos.getX(), pos.getY(), pos.getZ(), 1.0f);
+            }
+            
+            // Build the UBO record
+            VirusBlockUBO ubo = new VirusBlockUBO(
+                new VirusBlockUBO.CameraPosTimeVec4((float) camPos.x, (float) camPos.y, (float) camPos.z, time),
+                new VirusBlockUBO.EffectFlagsVec4(blockCount, hasHelmet ? 1f : 0f, 1f, 1f),
+                new VirusBlockUBO.InvProjParamsVec4(0.05f, 1000f, fov, aspect),
+                new VirusBlockUBO.CameraForwardVec4((float) forward.x, (float) forward.y, (float) forward.z, closestDist),
+                new VirusBlockUBO.CameraUpVec4((float) up.x, (float) up.y, (float) up.z, isFlying ? 1f : 0f),
+                new VirusBlockUBO.SmokeShapeVec4(5f, 3f, 1.5f, 1f),
+                new VirusBlockUBO.SmokeAnimVec4(1.5f, 0.3f, 2f, 0.5f),
+                new VirusBlockUBO.SmokeColorVec4(0.1f, 0.6f, 0.15f, 1f),
+                new VirusBlockUBO.ScreenPoisonParamsVec4(15f, 1f, 64f, 0f),  // z = fumeNoiseScale
+                new VirusBlockUBO.ESPCloseVec4(0.9f, 0.2f, 0.2f, 30f),
+                new VirusBlockUBO.ESPMediumVec4(0.9f, 0.6f, 0.2f, 100f),
+                new VirusBlockUBO.ESPFarVec4(0.3f, 0.8f, 0.4f, 0f),
+                new VirusBlockUBO.ESPStyleVec4(2f, 2f, 0.02f, 10f),
+                VirusBlockPostEffect.getInvViewProj(),
+                blockPositions
+            );
+            
+            // Write using ReflectiveUBOWriter
+            Std140Builder builder = Std140Builder.onStack(stack, VirusBlockUBO.BUFFER_SIZE + 16);
+            net.cyberpunk042.client.visual.ubo.ReflectiveUBOWriter.write(builder, ubo);
+            
+            // Close old buffer and create new
+            closeOldBuffer("VirusBlockParams");
+            
+            GpuBuffer newBuffer = RenderSystem.getDevice().createBuffer(
+                () -> "VirusBlockParams Dynamic",
+                16,
+                builder.get()
+            );
+            
+            uniformBuffers.put("VirusBlockParams", newBuffer);
+            
+            if (virusBlockInjectCount % 300 == 1) {
+                Logging.RENDER.topic("posteffect_inject")
+                    .kv("blocks", blockCount)
+                    .kv("closest", String.format("%.1f", closestDist))
+                    .info("Updated VirusBlockParams via ReflectiveUBOWriter");
+            }
+            
+        } catch (Exception e) {
+            Logging.RENDER.topic("posteffect_inject")
+                .kv("error", e.getMessage())
+                .warn("Failed to update VirusBlockParams");
         }
     }
 }

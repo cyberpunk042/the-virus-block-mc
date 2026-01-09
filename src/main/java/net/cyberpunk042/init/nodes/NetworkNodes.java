@@ -39,7 +39,9 @@ public final class NetworkNodes {
             PayloadTypeRegistry.playS2C().register(GrowthRingFieldPayload.ID, GrowthRingFieldPayload.CODEC);
             PayloadTypeRegistry.playS2C().register(net.cyberpunk042.network.shader.ShaderTimeSyncS2CPayload.ID, 
                 net.cyberpunk042.network.shader.ShaderTimeSyncS2CPayload.CODEC);
-            return 18;
+            PayloadTypeRegistry.playS2C().register(HelmetHudPayload.ID, HelmetHudPayload.CODEC);
+            PayloadTypeRegistry.playS2C().register(VirusBlockTelemetryPayload.ID, VirusBlockTelemetryPayload.CODEC);
+            return 20;
         }
     );
     

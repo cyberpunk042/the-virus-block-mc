@@ -17,7 +17,7 @@ import net.minecraft.util.Identifier;
  * 
  * <p>Command: /shockwavetest
  */
-public final class ShockwaveTestPipeline {
+public final class ShockwaveTestPipelineArchive {
     
     private static final Identifier SHADER_ID = 
         Identifier.of("the-virus-block", "core/shockwave_test");
@@ -62,9 +62,9 @@ public final class ShockwaveTestPipeline {
     public static void init() {
         if (SHOCKWAVE_TEST != null) {
             net.cyberpunk042.log.Logging.RENDER.topic("shockwave_test")
-                .info("ShockwaveTestPipeline registered");
+                .info("ShockwaveTestPipelineArchive registered");
         }
     }
     
-    private ShockwaveTestPipeline() {}
+    private ShockwaveTestPipelineArchive() {}
 }

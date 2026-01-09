@@ -28,6 +28,7 @@
     "ShaderLoaderMixin",
     "WorldRendererFieldVisualMixin",
     "WorldRendererMagicCircleMixin",
+    "WorldRendererVirusBlockMixin",
     "GlBlendEquationMixin"
   ],
   "injectors": {

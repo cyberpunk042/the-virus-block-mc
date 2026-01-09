@@ -20,7 +20,7 @@ import org.joml.Matrix4f;
  * 
  * <p>Command: /shockwavetest
  */
-public final class ShockwaveTestRenderer {
+public final class ShockwaveTestRendererArchive {
     
     private static boolean enabled = false;
     private static float testRadius = 20.0f;
@@ -41,7 +41,7 @@ public final class ShockwaveTestRenderer {
         enabled = !enabled;
         Logging.RENDER.topic("shockwave_test")
             .kv("enabled", enabled)
-            .info("ShockwaveTestRenderer toggled");
+            .info("ShockwaveTestRendererArchive toggled");
     }
     
     public static void setRadius(float r) {
@@ -68,9 +68,9 @@ public final class ShockwaveTestRenderer {
     // ═══════════════════════════════════════════════════════════════════════════
     
     public static void init() {
-        ShockwaveTestPipeline.init();
+        ShockwaveTestPipelineArchive.init();
         Logging.RENDER.topic("shockwave_test")
-            .info("ShockwaveTestRenderer initialized");
+            .info("ShockwaveTestRendererArchive initialized");
     }
     
     // ═══════════════════════════════════════════════════════════════════════════
@@ -190,5 +190,5 @@ public final class ShockwaveTestRenderer {
             .texture(1f, 0f).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(entry, 0f, 0f, 1f);
     }
     
-    private ShockwaveTestRenderer() {}
+    private ShockwaveTestRendererArchive() {}
 }

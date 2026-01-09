@@ -205,6 +205,19 @@ public final class FieldRenderLayers extends RenderPhase {
         });
     }
     
+    /**
+     * Lines render layer intended for no-depth rendering.
+     * <p>Note: Caller must manually disable depth test before drawing
+     * and restore after.</p>
+     * 
+     * @param width Desired line width (0.01 to 10.0)
+     * @return RenderLayer for lines
+     */
+    public static RenderLayer linesNoDepthTest(float width) {
+        // Just return regular lines layer - caller handles depth state
+        return linesWithWidth(width);
+    }
+    
     // Legacy aliases
     public static RenderLayer glowTranslucent() { return SOLID_TRANSLUCENT; }
     public static RenderLayer glowAdditive() { return SOLID_TRANSLUCENT; }

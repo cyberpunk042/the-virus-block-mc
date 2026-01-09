@@ -70,12 +70,12 @@ public abstract class WorldRendererDepthTestMixin {
             return;
         }
         
-        // Try new ShockwaveGlowRenderer (hybrid approach)
-        if (net.cyberpunk042.client.visual.shader.ShockwaveGlowRenderer.isEnabled()) {
+        // Try new ShockwaveGlowRendererArchive (hybrid approach)
+        if (net.cyberpunk042.client.visual.shader.ShockwaveGlowRendererArchive.isEnabled()) {
             // Capture happens HERE (after frame graph, depth is valid)
             net.minecraft.client.gl.Framebuffer framebuffer = client.getFramebuffer();
             if (framebuffer != null) {
-                net.cyberpunk042.client.visual.shader.ShockwaveGlowRenderer.captureAndGenerateMask(
+                net.cyberpunk042.client.visual.shader.ShockwaveGlowRendererArchive.captureAndGenerateMask(
                     client, framebuffer.textureWidth, framebuffer.textureHeight);
             }
             return;  // Don't run legacy DepthTestShader
