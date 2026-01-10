@@ -46,8 +46,9 @@ public final class BaseUBOBinder {
     // Track frame to avoid double-updates
     private static long lastFrameUpdate = -1;
     private static int frameCounter = 0;
+    private static int lastBufferFrame = -1;  // Track which frame the buffers were created for
     
-    // Cached buffers (reused across frames)
+    // Cached buffers (reused across passes within a frame)
     private static GpuBuffer frameBuffer = null;
     private static GpuBuffer cameraBuffer = null;
     
@@ -69,14 +70,35 @@ public final class BaseUBOBinder {
             return;
         }
         
-        // ALWAYS update camera data every render pass - camera changes faster than game ticks
-        // The old caching used world.getTime() which is game ticks (20/sec), not render frames (60+/sec)
-        // This caused stale camera data when framerate > tick rate
         frameCounter++;
         
+        // Detect if this is a NEW render frame vs another pass within the same frame
+        // Use System.nanoTime() which updates at render rate (60+fps), not game tick rate (20/s)
+        // Multiple passes within the same render frame will have times very close together (< 1ms)
+        // A new render frame will have a gap of ~16ms (at 60fps)
+        long currentNanoTime = System.nanoTime();
+        long timeSinceLastUpdate = currentNanoTime - lastFrameUpdate;
+        
+        // If more than 1ms has passed, this is a new render frame
+        // (At 60fps, frames are ~16ms apart; passes within a frame are < 0.1ms apart)
+        boolean isNewFrame = (timeSinceLastUpdate > 1_000_000L);  // 1ms in nanoseconds
+        
         try {
-            updateFrameUBO(uniformBuffers, client);
-            updateCameraUBO(uniformBuffers, client);
+            if (isNewFrame) {
+                // NEW RENDER FRAME: Create fresh buffers (old ones closed inside update methods)
+                lastFrameUpdate = currentNanoTime;
+                updateFrameUBO(uniformBuffers, client, true);
+                updateCameraUBO(uniformBuffers, client, true);
+            } else {
+                // SAME RENDER FRAME, DIFFERENT PASS: Reuse existing buffers
+                // Do NOT close or recreate - they're still being used by other passes
+                if (frameBuffer != null) {
+                    uniformBuffers.put("FrameDataUBO", frameBuffer);
+                }
+                if (cameraBuffer != null) {
+                    uniformBuffers.put("CameraDataUBO", cameraBuffer);
+                }
+            }
         } catch (Exception e) {
             if (frameCounter % 60 == 1) {
                 System.err.println("[BaseUBOBinder] Failed to update base UBOs: " + e.getMessage());
@@ -87,8 +109,18 @@ public final class BaseUBOBinder {
     
     /**
      * Updates FrameData UBO (binding 0).
+     * 
+     * @param uniformBuffers the buffer map for this pass
+     * @param client the Minecraft client
+     * @param createNew if true, close old buffer and create new one; if false, just reuse existing
      */
-    private static void updateFrameUBO(Map<String, GpuBuffer> uniformBuffers, MinecraftClient client) {
+    private static void updateFrameUBO(Map<String, GpuBuffer> uniformBuffers, MinecraftClient client, boolean createNew) {
+        if (!createNew && frameBuffer != null) {
+            // Just reuse existing buffer
+            uniformBuffers.put("FrameDataUBO", frameBuffer);
+            return;
+        }
+        
         try (MemoryStack stack = MemoryStack.stackPush()) {
             int size = 16;  // 1 vec4
             Std140Builder builder = Std140Builder.onStack(stack, size + 16);
@@ -101,7 +133,7 @@ public final class BaseUBOBinder {
             FrameUBO frameUbo = FrameUBO.from(time, deltaTime, frameCounter);
             ReflectiveUBOWriter.write(builder, frameUbo);
             
-            // Close old buffer
+            // Close old buffer (safe because we only do this once per frame)
             GpuBuffer old = frameBuffer;
             if (old != null) {
                 old.close();
@@ -128,8 +160,18 @@ public final class BaseUBOBinder {
      * - FOV from GameRendererAccessor.invokeGetFov()
      * - Aspect from window dimensions
      * - IsFlying from getEffectiveIsFlying() pattern
+     * 
+     * @param uniformBuffers the buffer map for this pass
+     * @param client the Minecraft client
+     * @param createNew if true, close old buffer and create new one; if false, just reuse existing
      */
-    private static void updateCameraUBO(Map<String, GpuBuffer> uniformBuffers, MinecraftClient client) {
+    private static void updateCameraUBO(Map<String, GpuBuffer> uniformBuffers, MinecraftClient client, boolean createNew) {
+        if (!createNew && cameraBuffer != null) {
+            // Just reuse existing buffer
+            uniformBuffers.put("CameraDataUBO", cameraBuffer);
+            return;
+        }
+        
         try (MemoryStack stack = MemoryStack.stackPush()) {
             int size = 224;  // 4 vec4 + 2 mat4 + 2 reserved vec4
             Std140Builder builder = Std140Builder.onStack(stack, size + 16);
@@ -208,7 +250,7 @@ public final class BaseUBOBinder {
             );
             ReflectiveUBOWriter.write(builder, cameraUbo);
             
-            // Close old buffer
+            // Close old buffer (safe because we only do this once per frame)
             GpuBuffer old = cameraBuffer;
             if (old != null) {
                 old.close();
