@@ -334,7 +334,7 @@ public final class EffectSchemaRegistry {
                 slider(FV + "noiseAmplitude", "Noise Amplitude", 0f, 3f, 0.5f, "Noise", "Original: 0.5"),
                 intSlider(FV + "noiseOctaves", "Noise Octaves", 1, 10, 7, "Noise"),
                 slider(FV + "noiseBaseScale", "Base Scale", 0.01f, 50f, 0.1f, "Noise", "Original: 10"),
-                slider(FV + "noiseScaleMultiplier", "Scale Mult", 1f, 50f, 1f, "Noise", "Original: 25")
+                slider(FV + "noiseScaleMultiplier", "Scale Mult", 1f, 50f, 0.25f, 1f, "Noise")
             ))
             .group("Animation", List.of(
                 slider(FV + "speedLow", "Loop Speed", 0f, 1f, 0.2f, "Animation", "Original: 0.2"),

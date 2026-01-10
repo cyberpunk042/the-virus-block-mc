@@ -453,6 +453,46 @@ public final class GuiWidgets {
     }
     
     /**
+     * Create a float slider with step snapping.
+     */
+    public static SliderWidget sliderStepped(
+            int x, int y, int width,
+            String label, float min, float max, float step, float initial, String format, String tooltip,
+            Consumer<Float> onChange) {
+        
+        Logging.GUI.topic("widget").trace("Creating stepped slider: {} = {} [{}, {}] step {}", label, initial, min, max, step);
+        
+        // Snap initial value to step
+        float snappedInitial = Math.round(initial / step) * step;
+        double normalized = (snappedInitial - min) / (max - min);
+        
+        return new SliderWidget(x, y, width, GuiConstants.widgetHeight(), 
+                Text.literal(label + ": " + formatSliderValue(format, snappedInitial)), normalized) {
+            
+            private final float minVal = min;
+            private final float maxVal = max;
+            private final float stepVal = step;
+            private final String fmt = format;
+            private final String lbl = label;
+            
+            @Override
+            protected void updateMessage() {
+                float raw = (float) (minVal + value * (maxVal - minVal));
+                float val = Math.round(raw / stepVal) * stepVal;
+                setMessage(Text.literal(lbl + ": " + formatSliderValue(fmt, val)));
+            }
+            
+            @Override
+            protected void applyValue() {
+                float raw = (float) (minVal + value * (maxVal - minVal));
+                float val = Math.round(raw / stepVal) * stepVal;
+                Logging.GUI.topic("slider").trace("{} → {} (stepped)", lbl, val);
+                onChange.accept(val);
+            }
+        };
+    }
+    
+    /**
      * Formats slider value, handling both %d (int) and %f (float) format strings.
      */
     private static String formatSliderValue(String format, float value) {
