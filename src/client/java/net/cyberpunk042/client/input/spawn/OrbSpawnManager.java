@@ -41,29 +41,29 @@ public final class OrbSpawnManager {
      * @return UUID of the spawned orb
      */
     public static UUID spawnOrb(OrbSpawnConfig config, Vec3d referencePos) {
-        System.out.println("[SPAWN-MGR] spawnOrb called with referencePos=" + referencePos);
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) {
-            System.out.println("[SPAWN-MGR] ABORT: client.player is null");
             return null;
         }
         
+        // Clean up any existing spawn orbs first (only one spawn orb at a time)
+        for (UUID existingId : activeAnimations.keySet()) {
+            FieldVisualRegistry.unregister(existingId);
+            FieldVisualPostEffect.removeProcessor(existingId);
+        }
+        activeAnimations.clear();
+        
         // Get player look direction for spawn direction calculation
         Vec3d lookDir = client.player.getRotationVec(1.0f);
-        System.out.println("[SPAWN-MGR] lookDir=" + lookDir);
         
         // Calculate spawn position
-        System.out.println("[SPAWN-MGR] originMode=" + config.originMode() + " (" + config.originMode().name() + ")");
         Vec3d spawnDirection = config.originMode().getSpawnDirection(lookDir);
         Vec3d spawnPosition = referencePos.add(spawnDirection.multiply(config.spawnDistance()));
-        System.out.println("[SPAWN-MGR] spawnDirection=" + spawnDirection + ", spawnDistance=" + config.spawnDistance());
-        System.out.println("[SPAWN-MGR] spawnPosition=" + spawnPosition);
         
         // Calculate target position based on target mode
         Vec3d targetPosition;
         if (config.targetMode() == TargetMode.TRUE_TARGET && config.trueTargetCoords() != null) {
             targetPosition = config.trueTargetCoords();
-            System.out.println("[SPAWN-MGR] TRUE_TARGET mode, targetPosition=" + targetPosition);
         } else {
             // RELATIVE mode: target is between spawn and player
             // targetDistance is how far FROM PLAYER the orb stops
@@ -73,19 +73,14 @@ public final class OrbSpawnManager {
             Vec3d toPlayer = referencePos.subtract(spawnPosition).normalize();
             float distanceFromSpawn = config.spawnDistance() - config.targetDistance();
             targetPosition = spawnPosition.add(toPlayer.multiply(distanceFromSpawn));
-            System.out.println("[SPAWN-MGR] RELATIVE mode, targetDistance=" + config.targetDistance() + ", targetPosition=" + targetPosition);
         }
         
         // Get visual config from adapter
         FieldVisualConfig visualConfig = getVisualConfig();
         float orbRadius = getOrbRadius();
-        System.out.println("[SPAWN-MGR] orbRadius=" + orbRadius + ", visualConfig=" + (visualConfig != null ? "OK" : "NULL"));
-        System.out.println("[SPAWN-MGR] effectType=" + (visualConfig != null ? visualConfig.effectType() : "N/A") + 
-            ", version=" + (visualConfig != null ? visualConfig.reserved().version() : "N/A"));
         
         // Create orb ID
         UUID orbId = UUID.randomUUID();
-        System.out.println("[SPAWN-MGR] Created orbId=" + orbId);
         
         // Create orb instance at spawn position with 0 opacity
         FieldVisualInstance orb = new FieldVisualInstance(
@@ -98,19 +93,16 @@ public final class OrbSpawnManager {
         );
         orb.setSpawnOpacity(0f);  // Start invisible
         orb.setSpawnAnimationOrb(true);  // Mark as spawn orb - NOT affected by global follow
-        System.out.println("[SPAWN-MGR] Created FieldVisualInstance, marked as spawn animation orb");
         
         // Register orb
         FieldVisualRegistry.register(orb);
         FieldVisualPostEffect.setEnabled(true);
-        System.out.println("[SPAWN-MGR] Registered orb, enabled post effect");
         
         // Create animation state
         SpawnAnimationState state = new SpawnAnimationState(
             orbId, config, spawnPosition, targetPosition, referencePos
         );
         activeAnimations.put(orbId, state);
-        System.out.println("[SPAWN-MGR] Created animation state, activeAnimations.size=" + activeAnimations.size());
         
         Logging.GUI.topic(LOG_TOPIC)
             .kv("orbId", orbId.toString().substring(0, 8))
@@ -174,7 +166,6 @@ public final class OrbSpawnManager {
         }
         
         // Trace logging for debugging
-        System.out.println("[SPAWN-MGR] tick() called, activeAnimations=" + activeAnimations.size());
         
         // Process each animation
         var iterator = activeAnimations.entrySet().iterator();
@@ -191,7 +182,6 @@ public final class OrbSpawnManager {
             }
             
             // Process based on current phase
-            System.out.println("[SPAWN-MGR] Processing orb " + orbId.toString().substring(0, 8) + " phase=" + state.currentPhase + " elapsed=" + state.getPhaseElapsedMs() + "ms");
             switch (state.currentPhase) {
                 case FADE_IN -> tickFadeIn(state, orb);
                 case TRAVEL -> tickTravel(state, orb, client);
@@ -239,7 +229,6 @@ public final class OrbSpawnManager {
         
         if (elapsed >= duration) {
             // Travel complete
-            System.out.println("[SPAWN-MGR] TRAVEL complete, moving to target: " + formatVec(state.targetPosition));
             orb.updatePosition(state.targetPosition);
             state.advancePhase();
         } else {
@@ -248,7 +237,6 @@ public final class OrbSpawnManager {
             float eased = state.config.easingCurve().apply(progress);
             
             Vec3d currentPos = state.spawnPosition.lerp(state.targetPosition, eased);
-            System.out.println("[SPAWN-MGR] TRAVEL progress=" + String.format("%.2f", progress) + " eased=" + String.format("%.2f", eased) + " pos=" + formatVec(currentPos));
             orb.updatePosition(currentPos);
         }
     }
@@ -261,7 +249,6 @@ public final class OrbSpawnManager {
                 Vec3d playerPos = client.player.getBoundingBox().getCenter();
                 // Offset = target position relative to current player position
                 state.arrivalOffset = state.targetPosition.subtract(playerPos);
-                System.out.println("[SPAWN-MGR] ALIVE: calculated arrivalOffset=" + formatVec(state.arrivalOffset));
             }
             
             // Apply fixed offset to current player position
