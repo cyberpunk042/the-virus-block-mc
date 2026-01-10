@@ -93,6 +93,9 @@ public record ParameterSpec(
         /** Integer slider (step = 1) */
         INT_SLIDER,
         
+        /** Slider with explicit step snapping */
+        STEPPED_SLIDER,
+        
         /** Read-only display value */
         LABEL
     }
@@ -136,6 +139,13 @@ public record ParameterSpec(
     public static ParameterSpec slider(String path, String label, float min, float max, float defaultValue, String group, String tooltip) {
         float step = (max - min) / 100f;
         return new ParameterSpec(path, label, ControlType.SLIDER, min, max, step, defaultValue, group, tooltip);
+    }
+    
+    /**
+     * Creates a stepped slider with explicit step snapping.
+     */
+    public static ParameterSpec steppedSlider(String path, String label, float min, float max, float step, float defaultValue, String group) {
+        return new ParameterSpec(path, label, ControlType.STEPPED_SLIDER, min, max, step, defaultValue, group, null);
     }
     
     /**
@@ -210,6 +220,6 @@ public record ParameterSpec(
      * Returns true if this is a numeric slider.
      */
     public boolean isSlider() {
-        return type == ControlType.SLIDER || type == ControlType.INT_SLIDER;
+        return type == ControlType.SLIDER || type == ControlType.INT_SLIDER || type == ControlType.STEPPED_SLIDER;
     }
 }

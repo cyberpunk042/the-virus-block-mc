@@ -532,24 +532,22 @@ public class FieldVisualSubPanel extends BoundPanel {
                 Float val = getFloat(param.path(), param.defaultValue());
                 String fmt = param.type() == ParameterSpec.ControlType.INT_SLIDER ? "%.0f" : "%.2f";
                 final boolean isInt = param.type() == ParameterSpec.ControlType.INT_SLIDER;
-                // Use stepped slider if step is significant (>= 0.1), otherwise use regular slider
-                boolean useStepped = param.step() >= 0.1f && !isInt;
-                if (useStepped) {
-                    widgets.add(GuiWidgets.sliderStepped(x, y, width, param.label(), 
-                        param.min(), param.max(), param.step(), val, fmt, tooltip.isEmpty() ? null : tooltip,
-                        v -> { 
-                            state.set(param.path(), v); 
-                            syncToEffect(); 
-                        }));
-                } else {
-                    widgets.add(GuiWidgets.slider(x, y, width, param.label(), 
-                        param.min(), param.max(), val, fmt, tooltip.isEmpty() ? null : tooltip,
-                        v -> { 
-                            float storeVal = isInt ? Math.round(v) : v;
-                            state.set(param.path(), storeVal); 
-                            syncToEffect(); 
-                        }));
-                }
+                widgets.add(GuiWidgets.slider(x, y, width, param.label(), 
+                    param.min(), param.max(), val, fmt, tooltip.isEmpty() ? null : tooltip,
+                    v -> { 
+                        float storeVal = isInt ? Math.round(v) : v;
+                        state.set(param.path(), storeVal); 
+                        syncToEffect(); 
+                    }));
+            }
+            case STEPPED_SLIDER -> {
+                Float val = getFloat(param.path(), param.defaultValue());
+                widgets.add(GuiWidgets.sliderStepped(x, y, width, param.label(), 
+                    param.min(), param.max(), param.step(), val, "%.2f", tooltip.isEmpty() ? null : tooltip,
+                    v -> { 
+                        state.set(param.path(), v); 
+                        syncToEffect(); 
+                    }));
             }
             case TOGGLE -> {
                 // Handle both Boolean and Float storage (adapter uses Float)
