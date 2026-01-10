@@ -257,9 +257,10 @@ PulsarV6Result renderPulsarV6(
         
         // ═══════════════════════════════════════════════════════════════════
         // RIM GLOW (bright at edges - uses TERTIARY color)
+        // brightness now has less effect here (was * 2.0, now * 0.5)
         // ═══════════════════════════════════════════════════════════════════
         
-        float rimGlow = pow(sc.rimFactor, 2.0) * brightness * 2.0;
+        float rimGlow = pow(sc.rimFactor, 2.0) * (0.3 + brightness * 0.5);
         
         // ═══════════════════════════════════════════════════════════════════
         // COMPOSE SURFACE COLOR
@@ -272,6 +273,10 @@ PulsarV6Result renderPulsarV6(
         
         vec3 col = vec3(0.0);
         
+        // Apply brightness (Intensity) as overall multiplier
+        // This affects surface, flames, and glow uniformly
+        float intensityMult = 0.5 + brightness * 5.0;  // Maps 0.1 to 1.0, 0.2 to 1.5, etc.
+        
         // 1. Base surface with lighting (PRIMARY color)
         col += starSurface * (lightAmbient + lightDiffuse * (1.0 - sc.rimFactor));
         
@@ -280,6 +285,9 @@ PulsarV6Result renderPulsarV6(
         
         // 3. Rim glow at edges (TERTIARY color)
         col += rimGlow * glowColor;
+        
+        // 4. Apply intensity multiplier to entire surface result
+        col *= intensityMult;
         
         result.color = col;
         // Softer alpha at edges based on rim factor (more transparent at edges)

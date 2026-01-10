@@ -323,6 +323,9 @@ public final class EffectSchemaRegistry {
         
         // V6: Raymarched Pulsar - Same params as V5, rendered as true 3D geometry
         SCHEMAS.put("ENERGY_ORB_V6", EffectSchema.builder("Pulsar 3D", EffectType.ENERGY_ORB, 6)
+            .group("General", List.of(
+                slider(FV + "previewRadius", "Preview Radius", 0.01f, 15f, 0.5f, "General")
+            ))
             .group("Core", List.of(
                 slider(FV + "coreSize", "Core Size", 0.01f, 1f, 0.5f, "Core", "Java default: 0.5"),
                 slider(FV + "lightAmbient", "Surface Brightness", 0f, 2f, 0.8f, "Core", "Java default: 0.8"),
@@ -382,6 +385,9 @@ public final class EffectSchemaRegistry {
         // V7: Panteleymonov Sun - Full Unity SunShader parametrization
         // Source: SunShader 1.0 for Unity3D by Panteleymonov Aleksandr (2015-2016)
         SCHEMAS.put("ENERGY_ORB_V7", EffectSchema.builder("Panteleymonov Sun", EffectType.ENERGY_ORB, 7)
+            .group("General", List.of(
+                slider(FV + "previewRadius", "Preview Radius", 0.01f, 15f, 0.4f, "General")
+            ))
             .group("Body", List.of(
                 // _Zoom: Detail zoom level
                 slider(FV + "noiseBaseScale", "Zoom", 0.1f, 10f, 1f, "Body", "_Zoom: Detail zoom level"),

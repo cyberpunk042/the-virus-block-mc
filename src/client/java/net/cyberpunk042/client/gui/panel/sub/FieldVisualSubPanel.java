@@ -113,7 +113,12 @@ public class FieldVisualSubPanel extends BoundPanel {
                 .initially(fCurrentPreset)
                 .build(x, y, w, 20, Text.literal("Preset"), (btn, value) -> {
                     state.set("fieldVisual.currentPresetName", value);
-                    if (!"Default".equals(value) && !"Custom".equals(value)) {
+                    if ("Default".equals(value)) {
+                        // Reset to schema defaults for current version
+                        state.fieldVisualAdapter().reset();
+                        state.applyFieldVisualSchemaDefaults();
+                        state.markDirty();
+                    } else if (!"Custom".equals(value)) {
                         net.cyberpunk042.client.gui.util.FragmentRegistry.applyFieldVisualFragment(state, value);
                         state.markDirty();
                     }

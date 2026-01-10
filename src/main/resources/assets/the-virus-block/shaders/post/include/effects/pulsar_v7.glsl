@@ -113,6 +113,9 @@ PulsarV7Result renderPulsarV7(
     // ─── Core Scale (NEW) ───
     float coreScale,          // Multiplier for core size (default 1.0)
     
+    // ─── Intensity (overall brightness control) ───
+    float intensity,          // Overall brightness multiplier (0-2, default 1.0)
+    
     // ─── Ray/Glow Parameters ───
     float rayString,          // _RayString: ray thickness (0.02-10, default 1.0)
     float rayReach,           // NEW: Ray extent multiplier (1 = default, higher = rays extend further)
@@ -291,6 +294,9 @@ PulsarV7Result renderPulsarV7(
         
         // Apply occlusion bleed to body
         col.rgb *= effectVisibility;
+        
+        // Apply intensity (overall brightness control)
+        col.rgb *= intensity;
     }
     
     // ═══════════════════════════════════════════════════════════════════════
@@ -330,7 +336,7 @@ PulsarV7Result renderPulsarV7(
     // Rays use same effectVisibility as body/ring for smooth occlusion
     if (sqDist > sqRadius) {
         vec3 rayContrib = mix(rayColor, rayLightColor, s3 * s3 * s3) * s3;
-        col.rgb += rayContrib * effectVisibility;
+        col.rgb += rayContrib * effectVisibility * intensity;  // Apply intensity to rays
     }
     
     // ═══════════════════════════════════════════════════════════════════════

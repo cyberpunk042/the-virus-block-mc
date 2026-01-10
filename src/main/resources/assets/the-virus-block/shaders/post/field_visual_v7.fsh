@@ -24,13 +24,14 @@ void main() {
         mix(vec3(RayColorR, RayColorG, RayColorB), field.HighlightColor.rgb, 0.7),
         int(NoiseOctaves), max(0.1, NoiseBaseScale),
         CoreSize,
+        Intensity,  // Overall brightness control (NEW)
         RaySharpness, max(1.0, FadeScale), max(0.1, InsideFalloffPower),
         RayPower, CoronaPower, CoronaMultiplier * 0.02, CoreFalloff,
         CoronaWidth + 1.0, EdgeSharpness * 10.0 + 1.0, RingPower,
         SpeedHigh, SpeedLow, SpeedRay, SpeedRing,
         FadePower * 0.01,
         abs(NoiseSeed) < 0.001 ? 1.0 : NoiseSeed,
-        max(0.1, EruptionContrast)  // NEW: Controls ray discreteness
+        max(0.1, EruptionContrast)  // Controls ray discreteness
     );
     
     vec4 fieldEffect = vec4(pulsar.color, pulsar.alpha);

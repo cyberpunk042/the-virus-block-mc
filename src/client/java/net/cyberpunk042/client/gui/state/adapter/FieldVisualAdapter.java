@@ -1116,11 +1116,13 @@ public class FieldVisualAdapter extends AbstractAdapter {
         // - effectType: What kind of effect (ENERGY_ORB, GEODESIC, etc)
         // - version: Which shader version (V1-V8)
         // - currentPresetName: UI state
-        // These describe WHAT effect is being used, not HOW it looks.
+        // - followMode: UI preference for orb following player
+        // These describe WHAT effect is being used or UI state, not HOW it looks.
         
         // Save identity parameters before reset
         EffectType savedEffectType = anim.effectType();
         float savedVersion = reserved.version();
+        boolean savedFollowMode = followMode;  // Preserve UI state
         
         // Reset shader params to their defaults
         colors = ColorParams.DEFAULT;
@@ -1146,7 +1148,7 @@ public class FieldVisualAdapter extends AbstractAdapter {
         v8Corona = V8CoronaParams.DEFAULT;
         v8Electric = V8ElectricParams.DEFAULT;
         
-        followMode = true;
+        followMode = savedFollowMode;  // Restore UI state
         previewRadius = 1.0f;
         sourceRef = null;
         // NOTE: currentPresetName is UI state, managed by preset selector - NOT reset here
