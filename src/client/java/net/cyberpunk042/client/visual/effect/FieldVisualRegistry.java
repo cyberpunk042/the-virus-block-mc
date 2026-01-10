@@ -88,6 +88,9 @@ public final class FieldVisualRegistry {
         if (removed != null) {
             renderListDirty = true;
             
+            // Clean up the processor for this field
+            FieldVisualPostEffect.removeProcessor(id);
+            
             Logging.RENDER.topic(LOG_TOPIC)
                 .kv("id", id.toString().substring(0, 8))
                 .debug("Unregistered field visual");

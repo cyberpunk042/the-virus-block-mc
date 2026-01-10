@@ -31,14 +31,17 @@ public final class FieldVisualPostEffect {
     private static boolean enabled = false;
     private static boolean initialized = false;
     
-    /** Cached processors per shader key (version + effectType) */
-    private static final ConcurrentHashMap<ShaderKey, PostEffectProcessor> PROCESSOR_CACHE = new ConcurrentHashMap<>();
+    /** Cached processors per FIELD ID - each field gets its own processor instance */
+    private static final ConcurrentHashMap<java.util.UUID, PostEffectProcessor> PROCESSOR_CACHE = new ConcurrentHashMap<>();
+    
+    /** Reverse lookup: processor instance → field ID */
+    private static final ConcurrentHashMap<PostEffectProcessor, java.util.UUID> PROCESSOR_TO_FIELD = new ConcurrentHashMap<>();
+    
+    /** Direct pass-to-field lookup: pass instance → field instance */
+    private static final ConcurrentHashMap<net.minecraft.client.gl.PostEffectPass, FieldVisualInstance> PASS_TO_FIELD = new ConcurrentHashMap<>();
     
     /** Last used shader key (for logging) */
     private static ShaderKey lastShaderKey = null;
-    
-    /** Current field being rendered (set per-pass for multi-field support) */
-    private static FieldVisualInstance currentField = null;
     
     /** Current tick delta for position interpolation */
     private static float currentTickDelta = 0.0f;
@@ -141,6 +144,11 @@ public final class FieldVisualPostEffect {
         FieldVisualInstance field = FieldVisualRegistry.get(followFieldId);
         if (field == null) return;
         
+        // SKIP spawn animation orbs - they are managed by OrbSpawnManager
+        if (field.isSpawnAnimationOrb()) {
+            return;
+        }
+        
         // Use bounding box center - same as ClientFieldManager for consistency
         Vec3d playerCenter = client.player.getBoundingBox().getCenter();
         
@@ -213,40 +221,42 @@ public final class FieldVisualPostEffect {
     // ═══════════════════════════════════════════════════════════════════════════
     
     /**
-     * Loads (or returns cached) the post-effect processor for the given config.
+     * Loads (or returns cached) the post-effect processor for the given field.
      * 
-     * <p>Uses ShaderKey to determine which standalone shader to load:
-     * <ul>
-     *   <li>V2 → field_visual_v2.fsh</li>
-     *   <li>V3 → field_visual_v3.fsh</li>
-     *   <li>V6 → field_visual_v6.fsh</li>
-     *   <li>V7 → field_visual_v7.fsh</li>
-     *   <li>Geodesic → field_visual_geodesic.fsh</li>
-     *   <li>Other (V1/V5) → field_visual.fsh (monolith)</li>
-     * </ul></p>
+     * <p>Each field gets its own processor instance, cached by field ID.
+     * This allows multiple fields to render in parallel with different UBO data.</p>
      * 
-     * @param config The field's visual configuration
+     * @param field The field instance (contains ID and config)
      * @return The processor, or null if loading failed or disabled
      */
-    public static PostEffectProcessor loadProcessor(FieldVisualConfig config) {
+    public static PostEffectProcessor loadProcessor(FieldVisualInstance field) {
         if (!enabled) return null;
-        if (config == null) return null;
+        if (field == null) return null;
         
-        ShaderKey key = ShaderKey.fromConfig(config);
-        Identifier shaderId = key.toShaderId();
+        java.util.UUID fieldId = field.getId();
+        FieldVisualConfig config = field.getConfig();
         
-        if (shaderId == null) {
-            // EffectType.NONE - no shader needed
-            return null;
-        }
-        
-        // Check cache first
-        PostEffectProcessor cached = PROCESSOR_CACHE.get(key);
+        // Check cache by field ID
+        PostEffectProcessor cached = PROCESSOR_CACHE.get(fieldId);
         if (cached != null) {
             return cached;
         }
         
-        // Load new processor
+        // Determine shader to load
+        ShaderKey key = ShaderKey.fromConfig(config);
+        Identifier baseShaderId = key.toShaderId();
+        
+        if (baseShaderId == null) {
+            return null;
+        }
+        
+        // IMPORTANT: Append fieldId to shaderId to get UNIQUE processors per field
+        // This prevents Minecraft from reusing the same processor for multiple fields
+        // The ShaderLoaderMixin strips the _f_ suffix when loading actual files
+        String uniquePath = baseShaderId.getPath() + "_f_" + fieldId.toString().replace("-", "");
+        Identifier shaderId = Identifier.of(baseShaderId.getNamespace(), uniquePath);
+        
+        // Load new processor for this field
         MinecraftClient client = MinecraftClient.getInstance();
         if (client == null) return null;
         
@@ -258,29 +268,108 @@ public final class FieldVisualPostEffect {
         }
         
         try {
+            // IMPORTANT: Each field MUST have its own unique processor instance!
+            // Minecraft's loadPostEffect may return the same processor for the same shader,
+            // but we need unique instances so each field has its own passes.
+            // We cannot share processors between fields.
             PostEffectProcessor processor = shaderLoader.loadPostEffect(shaderId, REQUIRED_TARGETS);
             
-            // Cache it
-            PROCESSOR_CACHE.put(key, processor);
+            // Cache by field ID - ensures this specific field reuses its OWN processor
+            PROCESSOR_CACHE.put(fieldId, processor);
+            // Reverse lookup for PostEffectPassMixin
+            PROCESSOR_TO_FIELD.put(processor, fieldId);
             
-            // Log shader selection (only when shader changes)
-            if (lastShaderKey == null || !lastShaderKey.equals(key)) {
-                Logging.RENDER.topic(LOG_TOPIC)
-                    .kv("shader", shaderId.toString())
-                    .kv("effect", key.describe())
-                    .kv("standalone", key.isStandalone())
-                    .info("Loaded shader for effect");
-                lastShaderKey = key;
+            // Register each pass directly to this field for mixin lookup
+            var passes = ((net.cyberpunk042.mixin.client.access.PostEffectProcessorAccessor) processor).getPasses();
+            StringBuilder passHashes = new StringBuilder();
+            for (net.minecraft.client.gl.PostEffectPass pass : passes) {
+                PASS_TO_FIELD.put(pass, field);
+                passHashes.append(Integer.toHexString(System.identityHashCode(pass))).append(",");
             }
+            
+            Logging.RENDER.topic(LOG_TOPIC)
+                .kv("fieldId", fieldId.toString().substring(0, 8))
+                .kv("shader", shaderId.toString())
+                .kv("processorHash", Integer.toHexString(System.identityHashCode(processor)))
+                .kv("passHashes", passHashes.toString())
+                .info("Created processor for field");
             
             return processor;
             
         } catch (Exception e) {
             Logging.RENDER.topic(LOG_TOPIC)
-                .kv("id", shaderId.toString())
-                .kv("effect", key.describe())
+                .kv("fieldId", fieldId.toString().substring(0, 8))
                 .kv("error", e.getMessage())
-                .error("Failed to load post-effect processor");
+                .error("Failed to load processor for field");
+            return null;
+        }
+    }
+    
+    /**
+     * Removes the processor for a field when it's unregistered.
+     */
+    public static void removeProcessor(java.util.UUID fieldId) {
+        PostEffectProcessor processor = PROCESSOR_CACHE.remove(fieldId);
+        if (processor != null) {
+            PROCESSOR_TO_FIELD.remove(processor);
+            // Also remove all pass mappings for this processor
+            var passes = ((net.cyberpunk042.mixin.client.access.PostEffectProcessorAccessor) processor).getPasses();
+            for (net.minecraft.client.gl.PostEffectPass pass : passes) {
+                PASS_TO_FIELD.remove(pass);
+            }
+            Logging.RENDER.topic(LOG_TOPIC)
+                .kv("fieldId", fieldId.toString().substring(0, 8))
+                .debug("Removed processor for field");
+        }
+    }
+    
+    /**
+     * Gets the field instance associated with a pass.
+     * Used by PostEffectPassMixin to know which field to render.
+     */
+    public static FieldVisualInstance getFieldForPass(net.minecraft.client.gl.PostEffectPass pass) {
+        return PASS_TO_FIELD.get(pass);
+    }
+    
+    /**
+     * Gets the field ID associated with a processor instance.
+     * Used by PostEffectPassMixin to know which field to render.
+     */
+    public static java.util.UUID getFieldIdForProcessor(PostEffectProcessor processor) {
+        return PROCESSOR_TO_FIELD.get(processor);
+    }
+    
+    /**
+     * Loads a processor for warmup purposes only (not cached).
+     * Used by ShaderWarmupService to pre-compile shaders.
+     */
+    public static PostEffectProcessor loadProcessorForWarmup(FieldVisualConfig config) {
+        if (!enabled) return null;
+        if (config == null) return null;
+        
+        ShaderKey key = ShaderKey.fromConfig(config);
+        Identifier shaderId = key.toShaderId();
+        
+        if (shaderId == null) {
+            return null;
+        }
+        
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client == null) return null;
+        
+        ShaderLoader shaderLoader = client.getShaderLoader();
+        if (shaderLoader == null) {
+            return null;
+        }
+        
+        try {
+            // Load but don't cache - just for warmup
+            return shaderLoader.loadPostEffect(shaderId, REQUIRED_TARGETS);
+        } catch (Exception e) {
+            Logging.RENDER.topic(LOG_TOPIC)
+                .kv("shader", shaderId.toString())
+                .kv("error", e.getMessage())
+                .warn("Failed to load processor for warmup");
             return null;
         }
     }
@@ -290,6 +379,7 @@ public final class FieldVisualPostEffect {
      */
     public static void clearProcessorCache() {
         PROCESSOR_CACHE.clear();
+        PROCESSOR_TO_FIELD.clear();
         lastShaderKey = null;
         Logging.RENDER.topic(LOG_TOPIC)
             .info("Processor cache cleared");
@@ -353,27 +443,11 @@ public final class FieldVisualPostEffect {
     // CURRENT FIELD (for single-field-per-pass rendering)
     // ═══════════════════════════════════════════════════════════════════════════
     
-    /**
-     * Sets the current field to render.
-     * Called by WorldRendererFieldVisualMixin before each processor.render() call.
-     */
-    public static void setCurrentField(FieldVisualInstance field) {
-        currentField = field;
-    }
+    // Queue methods removed - now using pass counter approach in PostEffectPassMixin
     
-    /**
-     * Gets the current field being rendered.
-     * Called by PostEffectPassMixin to get field data for UBO.
-     */
-    public static FieldVisualInstance getCurrentField() {
-        return currentField;
-    }
-    
-    /**
-     * Clears the current field after rendering.
-     */
+    @Deprecated
     public static void clearCurrentField() {
-        currentField = null;
+        // No-op in queue model
     }
     
     /**

@@ -91,7 +91,7 @@ public final class ShaderWarmupService {
                 FieldVisualPostEffect.setEnabled(true);
                 
                 // Load version-specific processor (this triggers compilation)
-                var processor = FieldVisualPostEffect.loadProcessor(config);
+                var processor = FieldVisualPostEffect.loadProcessorForWarmup(config);
                 
                 // Restore original state
                 FieldVisualPostEffect.setEnabled(wasEnabled);
@@ -123,7 +123,7 @@ public final class ShaderWarmupService {
             
             boolean wasEnabled = FieldVisualPostEffect.isEnabled();
             FieldVisualPostEffect.setEnabled(true);
-            var processor = FieldVisualPostEffect.loadProcessor(geodesicConfig);
+            var processor = FieldVisualPostEffect.loadProcessorForWarmup(geodesicConfig);
             FieldVisualPostEffect.setEnabled(wasEnabled);
             
             long effectMs = (System.nanoTime() - effectStart) / 1_000_000;

@@ -46,6 +46,13 @@ public class FieldVisualInstance {
     private float animationPhase;  // Current time offset for unique animation
     private long creationTime;     // For animation phase calculation
     
+    // Spawn animation opacity (1.0 = fully visible, 0.0 = invisible)
+    private volatile float spawnOpacity = 1.0f;
+    
+    // Flag: if true, this orb is managed by OrbSpawnManager and should NOT be
+    // affected by the global followFieldId system in FieldVisualPostEffect
+    private volatile boolean spawnAnimationOrb = false;
+    
     // Warmup state (progressive loading for GPU efficiency)
     private static final long WARMUP_DURATION_MS = 2000;  // 2 seconds to reach full effect
     
@@ -145,10 +152,20 @@ public class FieldVisualInstance {
     
     /**
      * Updates the visual configuration.
+     * This also invalidates the cached processor if the shader version changed.
      */
     public void updateConfig(FieldVisualConfig newConfig) {
+        // Check if version changed - if so, we need a new processor
+        boolean versionChanged = this.config != null && newConfig != null &&
+            this.config.version() != newConfig.version();
+        
         this.config = newConfig;
         this.dirty = true;
+        
+        // If version changed, remove the old processor so a new one is created
+        if (versionChanged) {
+            FieldVisualPostEffect.removeProcessor(this.id);
+        }
     }
     
     /**
@@ -204,6 +221,31 @@ public class FieldVisualInstance {
     public void setAnchorOffset(Vec3d offset) {
         this.anchorOffset = offset != null ? offset : Vec3d.ZERO;
     }
+    
+    /**
+     * Get the spawn animation opacity (0.0 = invisible, 1.0 = fully visible).
+     */
+    public float getSpawnOpacity() { return spawnOpacity; }
+    
+    /**
+     * Set the spawn animation opacity (for fade in/out).
+     * @param spawnOpacity Value from 0.0 (invisible) to 1.0 (fully visible)
+     */
+    public void setSpawnOpacity(float spawnOpacity) {
+        this.spawnOpacity = Math.max(0f, Math.min(1f, spawnOpacity));
+        this.dirty = true;
+    }
+    
+    /**
+     * Returns whether this orb is managed by OrbSpawnManager.
+     * Spawn animation orbs should NOT be affected by global follow mode.
+     */
+    public boolean isSpawnAnimationOrb() { return spawnAnimationOrb; }
+    
+    /**
+     * Marks this orb as a spawn animation orb (managed by OrbSpawnManager).
+     */
+    public void setSpawnAnimationOrb(boolean value) { this.spawnAnimationOrb = value; }
     
     /**
      * Returns the current animation phase, including time offset.

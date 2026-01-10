@@ -47,4 +47,17 @@ public final class ClientGuiNodes {
             return 1;
         }
     );
+    
+    /**
+     * Orb spawn animation manager tick registration.
+     */
+    public static final InitNode ORB_SPAWN_MANAGER = InitNode.simple(
+        "orb_spawn_manager", "Orb Spawn Manager",
+        () -> {
+            net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(
+                net.cyberpunk042.client.input.spawn.OrbSpawnManager::tick
+            );
+            return 1;
+        }
+    );
 }

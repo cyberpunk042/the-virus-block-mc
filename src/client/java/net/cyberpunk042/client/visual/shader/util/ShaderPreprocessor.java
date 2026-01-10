@@ -63,17 +63,32 @@ public final class ShaderPreprocessor {
      * @return Processed shader source with includes resolved
      */
     public static String process(String source, Identifier baseIdentifier) {
+        return process(source, baseIdentifier, baseIdentifier.toString());
+    }
+    
+    /**
+     * Process shader source with a custom cache key.
+     * 
+     * <p>This overload allows field-specific caching - multiple fields can use
+     * the same shader file but get separate cached entries.</p>
+     * 
+     * @param source Raw shader source with #include directives
+     * @param baseIdentifier Identifier of the shader file (for resolving relative paths)
+     * @param cacheKey Custom cache key (e.g., includes fieldId for uniqueness)
+     * @return Processed shader source with includes resolved
+     */
+    public static String process(String source, Identifier baseIdentifier, String cacheKey) {
         // Only process our namespace
         if (!OUR_NAMESPACE.equals(baseIdentifier.getNamespace())) {
             return source;
         }
         
         // Check cache first
-        String cacheKey = baseIdentifier.toString();
         String cached = PREPROCESSED_CACHE.get(cacheKey);
         if (cached != null) {
             Logging.RENDER.topic("shader_preprocess")
                 .kv("shader", baseIdentifier.getPath())
+                .kv("cacheKey", cacheKey.length() > 40 ? cacheKey.substring(0, 40) + "..." : cacheKey)
                 .debug("Using cached preprocessed source");
             return cached;
         }
@@ -84,7 +99,7 @@ public final class ShaderPreprocessor {
         
         try {
             String processed = processIncludes(source, baseIdentifier, includedFiles, 0);
-            // Cache the result
+            // Cache the result with the custom key
             PREPROCESSED_CACHE.put(cacheKey, processed);
             return processed;
         } catch (Exception e) {

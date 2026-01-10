@@ -26,10 +26,12 @@
     "ShockwaveTestMixin",
     "PostEffectPassMixin",
     "ShaderLoaderMixin",
+    "ShaderLoaderCacheMixin",
     "WorldRendererFieldVisualMixin",
     "WorldRendererMagicCircleMixin",
     "WorldRendererVirusBlockMixin",
-    "GlBlendEquationMixin"
+    "GlBlendEquationMixin",
+    "access.PostEffectProcessorAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

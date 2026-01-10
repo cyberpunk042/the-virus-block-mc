@@ -16,6 +16,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 
 import java.util.List;
@@ -129,7 +130,15 @@ public class FieldVisualSubPanel extends BoundPanel {
         final boolean fEnabled = enabled;
         widgets.add(GuiWidgets.toggle(x, y, thirdW,
             fEnabled ? "§aEnabled" : "Disabled", fEnabled, "Toggle effect",
-            v -> { state.set("fieldVisual.enabled", v); rebuildContent(); }));
+            v -> { 
+                state.set("fieldVisual.enabled", v); 
+                // Sync to effect system to register/unregister preview orb
+                var client = net.minecraft.client.MinecraftClient.getInstance();
+                if (client != null && client.player != null) {
+                    state.fieldVisualAdapter().syncToEffect(client.player.getBoundingBox().getCenter());
+                }
+                rebuildContent(); 
+            }));
         
         widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(v -> Text.literal(v))
             .values(fOptions).initially(fOptions.get(fInitialIndex))
@@ -283,6 +292,184 @@ public class FieldVisualSubPanel extends BoundPanel {
             boolean useThreeColumns = "Colors".equals(groupName);
             buildParamsMultiColumn(content, params, x, w, halfW, thirdW, useThreeColumns);
         }
+        
+        content.gap();
+        
+        // ═══════════════════════════════════════════════════════════════════════
+        // SPAWN ANIMATION
+        // ═══════════════════════════════════════════════════════════════════════
+        
+        content.sectionHeader("Spawn Animation");
+        y = content.getCurrentY();
+        
+        // Origin and Target Mode dropdowns
+        var adapter = state.fieldVisualAdapter();
+        var originModes = List.of(
+            net.cyberpunk042.client.input.spawn.SpawnOriginMode.FROM_ABOVE,
+            net.cyberpunk042.client.input.spawn.SpawnOriginMode.FROM_BELOW,
+            net.cyberpunk042.client.input.spawn.SpawnOriginMode.FROM_HORIZON,
+            net.cyberpunk042.client.input.spawn.SpawnOriginMode.FROM_SKY_HORIZON
+        );
+        var currentOrigin = adapter.buildSpawnConfig().originMode();
+        System.out.println("[GUI] Origin button initial value: " + currentOrigin.name());
+        widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<net.cyberpunk042.client.input.spawn.SpawnOriginMode>builder(
+            m -> Text.literal(m.getDisplayName()))
+            .values(originModes).initially(currentOrigin)
+            .build(x, y, halfW, 20, Text.literal("Origin"), (btn, mode) -> {
+                System.out.println("[GUI] Origin button callback: mode=" + mode.name());
+                state.set("fieldVisual.spawnOriginMode", mode);
+            }));
+            
+        var targetModes = List.of(
+            net.cyberpunk042.client.input.spawn.TargetMode.RELATIVE,
+            net.cyberpunk042.client.input.spawn.TargetMode.TRUE_TARGET
+        );
+        var currentTarget = adapter.buildSpawnConfig().targetMode();
+        widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<net.cyberpunk042.client.input.spawn.TargetMode>builder(
+            m -> Text.literal(m.getDisplayName()))
+            .values(targetModes).initially(currentTarget)
+            .build(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 20, Text.literal("Target"), (btn, mode) -> {
+                state.set("fieldVisual.spawnTargetMode", mode);
+                // When switching to TRUE_TARGET, initialize coords to player position
+                if (mode == net.cyberpunk042.client.input.spawn.TargetMode.TRUE_TARGET) {
+                    var c = MinecraftClient.getInstance();
+                    if (c.player != null) {
+                        state.set("fieldVisual.trueTargetX", c.player.getX());
+                        state.set("fieldVisual.trueTargetY", c.player.getY());
+                        state.set("fieldVisual.trueTargetZ", c.player.getZ());
+                    }
+                }
+                rebuildContent();  // Refresh to show/hide true target coords
+            }));
+        content.advanceBy(22);
+        
+        // Target distance display (computed) + percent slider
+        y = content.getCurrentY();
+        // Get the already-computed target distance from buildSpawnConfig()
+        float targetDist = adapter.buildSpawnConfig().targetDistance();
+        // Get current percent for slider
+        Object tdpVal = state.get("fieldVisual.targetDistancePercent");
+        float targetPct = tdpVal instanceof Number n ? n.floatValue() : 50f;
+        widgets.add(ButtonWidget.builder(Text.literal(String.format("Target: %.0f", targetDist)), btn -> {})
+            .dimensions(x, y, halfW, 20).build());
+        widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, "Reach", 0f, 100f, targetPct, "%.0f%%", null,
+            v -> {
+                state.set("fieldVisual.targetDistancePercent", v);
+                rebuildContent();  // Update display
+            }));
+        content.advanceBy(22);
+        
+        // If TRUE_TARGET mode, show coordinate text inputs (default to player position)
+        if (currentTarget == net.cyberpunk042.client.input.spawn.TargetMode.TRUE_TARGET) {
+            y = content.getCurrentY();
+            var client = MinecraftClient.getInstance();
+            
+            // Get current values or default to player position
+            double px = client.player != null ? client.player.getX() : 0;
+            double py = client.player != null ? client.player.getY() : 64;
+            double pz = client.player != null ? client.player.getZ() : 0;
+            
+            net.minecraft.util.math.Vec3d trueTarget = adapter.buildSpawnConfig().trueTargetCoords();
+            double tx = trueTarget != null ? trueTarget.x : px;
+            double ty = trueTarget != null ? trueTarget.y : py;
+            double tz = trueTarget != null ? trueTarget.z : pz;
+            
+            // X field
+            var xField = new TextFieldWidget(client.textRenderer, x, y, thirdW, 18, Text.literal("X"));
+            xField.setPlaceholder(Text.literal("X"));
+            xField.setText(String.format("%.1f", tx));
+            xField.setTooltip(net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal("Target X coordinate (East/West)")));
+            xField.setChangedListener(s -> {
+                try { state.set("fieldVisual.trueTargetX", Double.parseDouble(s)); } catch (NumberFormatException ignored) {}
+            });
+            widgets.add(xField);
+            
+            // Y field
+            var yField = new TextFieldWidget(client.textRenderer, x + thirdW + 2, y, thirdW, 18, Text.literal("Y"));
+            yField.setPlaceholder(Text.literal("Y"));
+            yField.setText(String.format("%.1f", ty));
+            yField.setTooltip(net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal("Target Y coordinate (Height)")));
+            yField.setChangedListener(s -> {
+                try { state.set("fieldVisual.trueTargetY", Double.parseDouble(s)); } catch (NumberFormatException ignored) {}
+            });
+            widgets.add(yField);
+            
+            // Z field
+            var zField = new TextFieldWidget(client.textRenderer, x + thirdW * 2 + 4, y, thirdW, 18, Text.literal("Z"));
+            zField.setPlaceholder(Text.literal("Z"));
+            zField.setText(String.format("%.1f", tz));
+            zField.setTooltip(net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal("Target Z coordinate (North/South)")));
+            zField.setChangedListener(s -> {
+                try { state.set("fieldVisual.trueTargetZ", Double.parseDouble(s)); } catch (NumberFormatException ignored) {}
+            });
+            widgets.add(zField);
+            
+            content.advanceBy(22);
+        }
+        
+        // Travel time and easing
+        y = content.getCurrentY();
+        long travelMs = adapter.buildSpawnConfig().interpolationDurationMs();
+        widgets.add(GuiWidgets.slider(x, y, halfW, "Travel Time", 1000f, 60000f, (float)travelMs, "%.0fms", null,
+            v -> state.set("fieldVisual.spawnInterpolationDurationMs", v.longValue())));
+        var easingCurves = List.of(
+            net.cyberpunk042.client.input.spawn.EasingCurve.LINEAR,
+            net.cyberpunk042.client.input.spawn.EasingCurve.EASE_IN,
+            net.cyberpunk042.client.input.spawn.EasingCurve.EASE_OUT,
+            net.cyberpunk042.client.input.spawn.EasingCurve.EASE_IN_OUT
+        );
+        var currentEasing = adapter.buildSpawnConfig().easingCurve();
+        widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<net.cyberpunk042.client.input.spawn.EasingCurve>builder(
+            e -> Text.literal(e.getDisplayName()))
+            .values(easingCurves).initially(currentEasing)
+            .build(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 20, Text.literal("Ease"), (btn, curve) -> {
+                state.set("fieldVisual.spawnEasingCurve", curve);
+            }));
+        content.advanceBy(22);
+        
+        // Fade in/out and lifetime
+        y = content.getCurrentY();
+        long fadeIn = adapter.buildSpawnConfig().fadeInDurationMs();
+        widgets.add(GuiWidgets.slider(x, y, thirdW, "Fade In", 0f, 5000f, (float)fadeIn, "%.0fms", null,
+            v -> state.set("fieldVisual.spawnFadeInMs", v.longValue())));
+        long fadeOut = adapter.buildSpawnConfig().fadeOutDurationMs();
+        widgets.add(GuiWidgets.slider(x + thirdW + 2, y, thirdW, "Fade Out", 0f, 5000f, (float)fadeOut, "%.0fms", null,
+            v -> state.set("fieldVisual.spawnFadeOutMs", v.longValue())));
+        long lifetime = adapter.buildSpawnConfig().lifetimeMs();
+        // Lifetime in seconds for readability (0 = infinite)
+        widgets.add(GuiWidgets.slider(x + thirdW * 2 + 4, y, thirdW, "Life", 0f, 3600f, (float)(lifetime/1000), "%.0fs", null,
+            v -> state.set("fieldVisual.spawnLifetimeMs", (long)(v * 1000f))));
+        content.advanceBy(22);
+        
+        // Summon button
+        y = content.getCurrentY();
+        widgets.add(ButtonWidget.builder(Text.literal("§b⚡ SUMMON ORB"), btn -> {
+            System.out.println("[SPAWN] SUMMON button clicked!");
+            
+            // Multi-field rendering is now supported - each field gets its own shader
+            // Preview orb can coexist with spawn orbs
+            
+            var config = state.fieldVisualAdapter().buildSpawnConfig();
+            var visualConfig = state.fieldVisualAdapter().buildConfig();
+            System.out.println("[SPAWN] SpawnConfig: origin=" + config.originMode() + ", spawnDist=" + config.spawnDistance() + ", targetDist=" + config.targetDistance());
+            System.out.println("[SPAWN] VisualConfig: effectType=" + visualConfig.effectType() + ", version=" + visualConfig.reserved().version());
+            
+            var client = net.minecraft.client.MinecraftClient.getInstance();
+            if (client.player != null) {
+                net.minecraft.util.math.Vec3d referencePos;
+                if (config.targetMode() == net.cyberpunk042.client.input.spawn.TargetMode.TRUE_TARGET && config.trueTargetCoords() != null) {
+                    referencePos = config.trueTargetCoords();
+                } else {
+                    referencePos = client.player.getBoundingBox().getCenter();
+                }
+                System.out.println("[SPAWN] Calling OrbSpawnManager.spawnOrb with ref=" + referencePos);
+                var orbId = net.cyberpunk042.client.input.spawn.OrbSpawnManager.spawnOrb(config, referencePos);
+                System.out.println("[SPAWN] Spawned orb: " + orbId);
+            } else {
+                System.out.println("[SPAWN] client.player is null!");
+            }
+        }).dimensions(x, y, w, 20).build());
+        content.advanceBy(22);
         
         content.gap();
         

@@ -118,12 +118,12 @@ public abstract class WorldRendererFieldVisualMixin {
         
         FieldVisualPostEffect.updateCameraForward(fwdX, fwdY, fwdZ);
         
-        // Update follow position AFTER forward vector is calculated
-        // Pass forward direction so we can offset the orb in front of camera
-        FieldVisualPostEffect.tickFollowPosition(
-            (float)camX, (float)camY, (float)camZ,
-            fwdX, fwdY, fwdZ
-        );
+        // Update preview orb position if adapter exists
+        // Each orb source (preview, spawn, charge) manages its own position
+        var state = net.cyberpunk042.client.gui.state.FieldEditStateHolder.get();
+        if (state != null) {
+            state.fieldVisualAdapter().tickPreviewPosition();
+        }
         
         // Tick throw animation if active
         FieldVisualPostEffect.tickThrowAnimation();
@@ -152,41 +152,37 @@ public abstract class WorldRendererFieldVisualMixin {
             return;
         }
         
-        // Take first field (simplified like shockwave)
-        FieldVisualInstance field = fieldsToRender.get(0);
-        
-        // Load the version-specific processor for this field
-        FieldVisualConfig config = field.getConfig();
-        PostEffectProcessor processor = FieldVisualPostEffect.loadProcessor(config);
-        if (processor == null) {
-            return;
-        }
-        
         Logging.RENDER.topic("field_visual_render")
             .kv("fieldCount", fieldsToRender.size())
-            .kv("pos", String.format("%.1f,%.1f,%.1f", field.getWorldCenter().x, field.getWorldCenter().y, field.getWorldCenter().z))
-            .kv("radius", String.format("%.1f", field.getRadius()))
-            .debug("Rendering field visual");
+            .debug("Rendering {} field visuals", fieldsToRender.size());
         
-        try {
-            // Set current field for PostEffectPassMixin to pick up
-            FieldVisualPostEffect.setCurrentField(field);
+        // Render EACH field with its OWN processor instance
+        // Each processor is cached by field ID - passes are registered to fields on creation
+        for (FieldVisualInstance field : fieldsToRender) {
+            // Load processor for THIS field (creates new one if needed, cached by field ID)
+            // Passes are registered to this field in the PASS_TO_FIELD map
+            PostEffectProcessor processor = FieldVisualPostEffect.loadProcessor(field);
+            if (processor == null) {
+                continue; // Skip fields that fail to load processor
+            }
             
-            // NOTE: Hardware blend equations (glBlendEquation) don't work for post-processing
-            // because we read the scene from InSampler and output the composed result.
-            // All blend modes (MIX, SUBTRACT, etc.) are handled IN THE SHADER via ColorBlendMode.
-            
-            // Add the post-effect pass to the frame graph
-            processor.render(frameGraphBuilder, width, height, framebufferSet);
-            
-        } catch (Exception e) {
-            Logging.RENDER.topic("field_visual")
+            Logging.RENDER.topic("field_visual_render")
                 .kv("fieldId", field.getId().toString().substring(0, 8))
-                .kv("error", e.getMessage())
-                .error("Failed to render field visual");
-        } finally {
-            // Clear current field after rendering
-            FieldVisualPostEffect.clearCurrentField();
+                .kv("version", field.getConfig().version())
+                .kv("pos", String.format("%.1f,%.1f,%.1f", field.getWorldCenter().x, field.getWorldCenter().y, field.getWorldCenter().z))
+                .debug("Rendering field");
+            
+            try {
+                // Each field has its own processor with its own passes
+                // PASS_TO_FIELD maps each pass to its owning field
+                processor.render(frameGraphBuilder, width, height, framebufferSet);
+                
+            } catch (Exception e) {
+                Logging.RENDER.topic("field_visual")
+                    .kv("fieldId", field.getId().toString().substring(0, 8))
+                    .kv("error", e.getMessage())
+                    .error("Failed to render field visual");
+            }
         }
     }
 }

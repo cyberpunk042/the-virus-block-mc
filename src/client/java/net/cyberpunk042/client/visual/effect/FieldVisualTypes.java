@@ -724,8 +724,8 @@ public final class FieldVisualTypes {
         float frequency,   // Ripple frequency
         float speed        // Animation speed
     ) implements Vec4Serializable {
-        // Default for Proximity Darken: strength=1 (ON), radius=500 blocks, frequency=0.1 (fade), speed=1
-        public static final DistortionParams NONE = new DistortionParams(1f, 500f, 0.1f, 1.0f);
+        // Default for Proximity Darken: strength=1 (ON), radius=1000 blocks, frequency=0.1 (fade), speed=1
+        public static final DistortionParams NONE = new DistortionParams(1f, 1000f, 0.1f, 1.0f);
         
         @Override public float slot0() { return strength; }
         @Override public float slot1() { return radius; }

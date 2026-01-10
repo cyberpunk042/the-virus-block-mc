@@ -7,6 +7,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.cyberpunk042.client.visual.effect.FieldVisualPostEffect;
 import net.cyberpunk042.client.visual.effect.FieldVisualConfig;
 import net.cyberpunk042.client.visual.effect.FieldVisualInstance;
+import net.cyberpunk042.client.visual.effect.FieldVisualRegistry;
 import net.cyberpunk042.client.visual.effect.FieldVisualTypes.*;
 import net.cyberpunk042.client.visual.effect.FieldVisualUBO;
 import net.cyberpunk042.client.visual.effect.ShaderTimeSource;
@@ -53,6 +54,8 @@ public class PostEffectPassMixin {
     private static int fieldVisualInjectCount = 0;
     private static int magicCircleInjectCount = 0;
     private static int virusBlockInjectCount = 0;
+    
+    // Pass tracking moved to FieldPassTracker utility class
     
     /**
      * Safely close an old buffer before replacing it.
@@ -206,19 +209,20 @@ public class PostEffectPassMixin {
             return;
         }
         
-        FieldVisualInstance currentField = FieldVisualPostEffect.getCurrentField();
+        // Get the field for THIS pass using PASS_TO_FIELD lookup
+        // Each pass belongs to a specific processor created for a specific field
+        FieldVisualInstance currentField = FieldVisualPostEffect.getFieldForPass((PostEffectPass)(Object)this);
         if (currentField == null) {
-            if (fieldVisualInjectCount % 60 == 1) {
-                Logging.RENDER.topic("posteffect_inject")
-                    .warn("No current field set for rendering");
-            }
             return;
         }
+        
+        var client = net.minecraft.client.MinecraftClient.getInstance();
+        if (client == null || client.gameRenderer == null) return;
         
         try (MemoryStack stack = MemoryStack.stackPush()) {
             Std140Builder builder = Std140Builder.onStack(stack, FieldVisualUBO.BUFFER_SIZE + 16);
             
-            var client = net.minecraft.client.MinecraftClient.getInstance();
+            // client already defined above
             float aspect = (float) client.getWindow().getFramebufferWidth() / 
                           (float) client.getWindow().getFramebufferHeight();
             
@@ -231,15 +235,23 @@ public class PostEffectPassMixin {
             float globalTime = ShaderTimeSource.getTime();
             float isFlying = getEffectiveIsFlying();
             
-            Vec3d cameraPos = FieldVisualUniformBinder.getCameraPosition();
+            Vec3d uboCameraPos = FieldVisualUniformBinder.getCameraPosition();
             Matrix4f invViewProj = FieldVisualUniformBinder.getInvViewProjection();
             Matrix4f viewProj = FieldVisualUniformBinder.getViewProjection();
             
             FieldVisualConfig config = currentField.getConfig();
+            
+            // Apply spawn animation opacity to alphaScale
+            float spawnOpacity = currentField.getSpawnOpacity();
+            if (spawnOpacity < 1.0f) {
+                float originalAlpha = config.v2Alpha().alphaScale();
+                config = config.withV2Alpha(config.v2Alpha().withAlphaScale(originalAlpha * spawnOpacity));
+            }
+            
             Vec3d fieldPos = currentField.getRenderPosition(tickDelta);
             
             // Calculate camera-relative position
-            Vec3d relativePos = fieldPos.subtract(cameraPos);
+            Vec3d relativePos = fieldPos.subtract(uboCameraPos);
             
             // Build position params
             PositionParams position = new PositionParams(

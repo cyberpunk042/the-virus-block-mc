@@ -47,7 +47,8 @@ public class TheVirusBlockClient implements ClientModInitializer {
 			.stage(net.cyberpunk042.init.InitStage.of("client_gui", "GUI")
 				.add(net.cyberpunk042.client.init.nodes.ClientGuiNodes.SCREENS)
 				.add(net.cyberpunk042.client.init.nodes.ClientGuiNodes.GUI_HANDLERS)
-				.add(net.cyberpunk042.client.init.nodes.ClientGuiNodes.KEYBINDINGS))
+				.add(net.cyberpunk042.client.init.nodes.ClientGuiNodes.KEYBINDINGS)
+				.add(net.cyberpunk042.client.init.nodes.ClientGuiNodes.ORB_SPAWN_MANAGER))
 			
 			// Stage 5: Visual effects
 			.stage(net.cyberpunk042.init.InitStage.of("client_fx", "Effects")

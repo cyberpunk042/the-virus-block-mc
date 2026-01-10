@@ -98,6 +98,26 @@ public class FieldVisualAdapter extends AbstractAdapter {
     private String currentPresetName = "Default";
     
     // ═══════════════════════════════════════════════════════════════════════════
+    // SPAWN ANIMATION CONFIG
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    private net.cyberpunk042.client.input.spawn.SpawnOriginMode spawnOriginMode = 
+        net.cyberpunk042.client.input.spawn.SpawnOriginMode.FROM_ABOVE;
+    private net.cyberpunk042.client.input.spawn.TargetMode spawnTargetMode = 
+        net.cyberpunk042.client.input.spawn.TargetMode.RELATIVE;
+    private float targetDistancePercent = 99f;  // 0-100%, how far toward player (50% = halfway)
+    private double trueTargetX = 0;
+    private double trueTargetY = 64;
+    private double trueTargetZ = 0;
+    private long spawnInterpolationDurationMs = 10000L;
+    private net.cyberpunk042.client.input.spawn.EasingCurve spawnEasingCurve = 
+        net.cyberpunk042.client.input.spawn.EasingCurve.EASE_OUT;
+    private long spawnFadeInMs = 500L;
+    private long spawnFadeOutMs = 500L;
+    private long spawnLifetimeMs = 0L;  // 0 = infinite
+    private boolean followModeAfterArrival = false;  // Stay fixed at target position after arrival
+    
+    // ═══════════════════════════════════════════════════════════════════════════
     // THROW ANIMATION STATE
     // ═══════════════════════════════════════════════════════════════════════════
     
@@ -327,6 +347,9 @@ public class FieldVisualAdapter extends AbstractAdapter {
             case "orbStartPosition" -> orbStartPosition;
             case "throwRange" -> throwRange;
             
+            // Spawn animation
+            case "targetDistancePercent" -> targetDistancePercent;
+            
             default -> {
                 Logging.GUI.topic(LOG_TOPIC).warn("Unknown fieldVisual property: {}", prop);
                 yield null;
@@ -345,7 +368,8 @@ public class FieldVisualAdapter extends AbstractAdapter {
         switch (prop) {
             case "enabled" -> {
                 enabled = toBool(value);
-                FieldVisualPostEffect.setEnabled(enabled);
+                // DO NOT call setEnabled(enabled) here - it would affect ALL fields including spawn orbs
+                // Preview orb is managed through syncToEffect which registers/unregisters it
             }
             case "effectType" -> {
                 EffectType et = EffectType.ENERGY_ORB;
@@ -574,6 +598,51 @@ public class FieldVisualAdapter extends AbstractAdapter {
             case "orbStartPosition" -> orbStartPosition = value != null ? value.toString() : "front";
             case "throwRange" -> throwRange = toFloat(value);
             
+            // Spawn animation config
+            case "spawnOriginMode" -> {
+                if (value instanceof net.cyberpunk042.client.input.spawn.SpawnOriginMode m) {
+                    spawnOriginMode = m;
+                    System.out.println("[FVA] spawnOriginMode set to: " + m.name() + " (direct)");
+                } else if (value != null) {
+                    try { 
+                        spawnOriginMode = net.cyberpunk042.client.input.spawn.SpawnOriginMode.valueOf(value.toString());
+                        System.out.println("[FVA] spawnOriginMode set to: " + spawnOriginMode.name() + " (parsed)");
+                    }
+                    catch (IllegalArgumentException e) { 
+                        System.out.println("[FVA] Failed to parse spawnOriginMode: " + value);
+                    }
+                }
+            }
+            case "spawnTargetMode" -> {
+                if (value instanceof net.cyberpunk042.client.input.spawn.TargetMode m) {
+                    spawnTargetMode = m;
+                } else if (value != null) {
+                    try { spawnTargetMode = net.cyberpunk042.client.input.spawn.TargetMode.valueOf(value.toString()); }
+                    catch (IllegalArgumentException e) { /* keep current */ }
+                }
+            }
+            // spawnDistance and targetDistance are computed from proximityDarken, not user input
+            case "targetDistancePercent" -> {
+                targetDistancePercent = toFloat(value);
+                System.out.println("[FVA] SET targetDistancePercent=" + targetDistancePercent + " from value=" + value);
+            }
+            case "trueTargetX" -> trueTargetX = toDouble(value);
+            case "trueTargetY" -> trueTargetY = toDouble(value);
+            case "trueTargetZ" -> trueTargetZ = toDouble(value);
+            case "spawnInterpolationDurationMs" -> spawnInterpolationDurationMs = toLong(value);
+            case "spawnEasingCurve" -> {
+                if (value instanceof net.cyberpunk042.client.input.spawn.EasingCurve c) {
+                    spawnEasingCurve = c;
+                } else if (value != null) {
+                    try { spawnEasingCurve = net.cyberpunk042.client.input.spawn.EasingCurve.valueOf(value.toString()); }
+                    catch (IllegalArgumentException e) { /* keep current */ }
+                }
+            }
+            case "spawnFadeInMs" -> spawnFadeInMs = toLong(value);
+            case "spawnFadeOutMs" -> spawnFadeOutMs = toLong(value);
+            case "spawnLifetimeMs" -> spawnLifetimeMs = toLong(value);
+            case "followModeAfterArrival" -> followModeAfterArrival = toBool(value);
+            
             default -> Logging.GUI.topic(LOG_TOPIC).warn("Unknown fieldVisual property: {}", prop);
         }
     }
@@ -594,6 +663,14 @@ public class FieldVisualAdapter extends AbstractAdapter {
     
     private boolean toBool(Object v) { 
         return v instanceof Boolean b ? b : Boolean.parseBoolean(String.valueOf(v)); 
+    }
+    
+    private double toDouble(Object v) {
+        return v instanceof Number n ? n.doubleValue() : 0.0;
+    }
+    
+    private long toLong(Object v) {
+        return v instanceof Number n ? n.longValue() : 0L;
     }
     
     /** Modify just the R component of an ARGB color */
@@ -672,6 +749,42 @@ public class FieldVisualAdapter extends AbstractAdapter {
         );
     }
     
+    /**
+     * Builds an OrbSpawnConfig from current spawn animation settings.
+     * 
+     * <p>Spawn distance = proximityDarken (distortion.radius()).
+     * Target distance = spawnDistance * (1 - targetDistancePercent/100).
+     * At 0%: orb stays at spawn. At 100%: orb reaches player.</p>
+     */
+    public net.cyberpunk042.client.input.spawn.OrbSpawnConfig buildSpawnConfig() {
+        net.minecraft.util.math.Vec3d trueTarget = 
+            spawnTargetMode == net.cyberpunk042.client.input.spawn.TargetMode.TRUE_TARGET
+                ? new net.minecraft.util.math.Vec3d(trueTargetX, trueTargetY, trueTargetZ)
+                : null;
+        
+        // Spawn distance = proximityDarken, with fallback of 1000 if not configured
+        float spawnDistance = Math.max(distortion.radius(), 1000f);
+        
+        // Target distance = where orb stops
+        // 0% = stays at spawnDistance, 50% = halfway, 100% = at player
+        float targetDistance = spawnDistance * (1f - targetDistancePercent / 100f);
+        System.out.println("[FVA] buildSpawnConfig: originMode=" + spawnOriginMode.name() + " spawnDist=" + spawnDistance + " pct=" + targetDistancePercent + " targetDist=" + targetDistance);
+        
+        return new net.cyberpunk042.client.input.spawn.OrbSpawnConfig(
+            spawnOriginMode,
+            spawnTargetMode,
+            spawnDistance,
+            targetDistance,
+            trueTarget,
+            spawnInterpolationDurationMs,
+            spawnEasingCurve,
+            spawnFadeInMs,
+            spawnFadeOutMs,
+            spawnLifetimeMs,
+            followModeAfterArrival
+        );
+    }
+    
     // ═══════════════════════════════════════════════════════════════════════════
     // SYNC TO EFFECT SYSTEM
     // ═══════════════════════════════════════════════════════════════════════════
@@ -688,7 +801,8 @@ public class FieldVisualAdapter extends AbstractAdapter {
                 FieldVisualRegistry.unregister(previewFieldId);
                 previewFieldId = null;
             }
-            FieldVisualPostEffect.setEnabled(false);
+            // DO NOT call setEnabled(false) here - spawn orbs must continue running independently
+            // The effect will auto-disable when no fields exist at all
             return;
         }
         
@@ -717,9 +831,7 @@ public class FieldVisualAdapter extends AbstractAdapter {
             }
             FieldVisualRegistry.register(preview);
             
-            FieldVisualPostEffect.setFollowFieldId(previewFieldId);
-            FieldVisualPostEffect.setFollowMode(followMode);
-            
+            // Position updates handled by tickPreviewPosition()
             Logging.GUI.topic(LOG_TOPIC).info("Created preview field at pos={}, followMode={}", pos, followMode);
         } else {
             if (!followMode) {
@@ -734,10 +846,9 @@ public class FieldVisualAdapter extends AbstractAdapter {
                     existing.setAnchorOffset(linkedPosition);
                 }
             }
-            FieldVisualPostEffect.setFollowMode(followMode);
+            // Position updates handled by tickPreviewPosition()
         }
         
-        FieldVisualPostEffect.setThrowAdapter(this);
         FieldVisualPostEffect.setEnabled(true);
     }
     
@@ -746,6 +857,64 @@ public class FieldVisualAdapter extends AbstractAdapter {
             FieldVisualRegistry.unregister(previewFieldId);
             previewFieldId = null;
         }
+    }
+    
+    /**
+     * Updates preview orb position each frame when followMode is enabled.
+     * Called from render mixin - replaces the global tickFollowPosition system.
+     */
+    public void tickPreviewPosition() {
+        if (!enabled || !followMode || previewFieldId == null) {
+            return;
+        }
+        
+        var client = net.minecraft.client.MinecraftClient.getInstance();
+        if (client == null || client.player == null) return;
+        
+        FieldVisualInstance field = FieldVisualRegistry.get(previewFieldId);
+        if (field == null) return;
+        
+        // Use bounding box center
+        Vec3d playerCenter = client.player.getBoundingBox().getCenter();
+        
+        // Apply anchor offset from the primitive
+        Vec3d anchorOffset = field.getAnchorOffset();
+        Vec3d finalPos = playerCenter.add(anchorOffset);
+        
+        // Apply orb position offset if no linked primitive
+        if (field.getAnchorOffset().equals(Vec3d.ZERO)) {
+            String orbPos = orbStartPosition;
+            if (orbPos != null && !orbPos.equals("center")) {
+                // Get camera for forward/right calculation
+                var camera = client.gameRenderer.getCamera();
+                float yaw = (float) Math.toRadians(camera.getYaw());
+                float pitch = (float) Math.toRadians(camera.getPitch());
+                
+                float fwdX = (float) (-Math.sin(yaw) * Math.cos(pitch));
+                float fwdY = (float) (-Math.sin(pitch));
+                float fwdZ = (float) (Math.cos(yaw) * Math.cos(pitch));
+                
+                Vec3d forward = new Vec3d(fwdX, fwdY, fwdZ).normalize();
+                Vec3d worldUp = new Vec3d(0, 1, 0);
+                Vec3d right = forward.crossProduct(worldUp).normalize();
+                if (right.lengthSquared() < 0.01) {
+                    right = new Vec3d(1, 0, 0);
+                }
+                
+                float dist = 2.0f;
+                Vec3d orbOffset = switch (orbPos) {
+                    case "front" -> forward.multiply(dist);
+                    case "behind" -> forward.multiply(-dist);
+                    case "left" -> right.multiply(-dist);
+                    case "right" -> right.multiply(dist);
+                    case "above" -> new Vec3d(0, dist, 0);
+                    default -> Vec3d.ZERO;
+                };
+                finalPos = finalPos.add(orbOffset);
+            }
+        }
+        
+        FieldVisualRegistry.updatePosition(previewFieldId, finalPos);
     }
     
     // ═══════════════════════════════════════════════════════════════════════════
@@ -974,7 +1143,8 @@ public class FieldVisualAdapter extends AbstractAdapter {
         clearPreview();
         clearLinkedPrimitive();
         
-        FieldVisualPostEffect.setEnabled(false);
+        // DO NOT call setEnabled(false) - spawn orbs must continue running
+        // Preview is already cleared by clearPreview()
         
         // Apply schema defaults to override Java defaults with GUI defaults
         var schema = net.cyberpunk042.client.gui.schema.EffectSchemaRegistry.get(

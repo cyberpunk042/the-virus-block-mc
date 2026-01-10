@@ -130,10 +130,11 @@ public class OrbChargeHandler {
             config
         );
         
-        // Register and enable rendering
+        // Mark as independent orb (not affected by GUI toggle)
+        orb.setSpawnAnimationOrb(true);
+        
+        // Register - no need for global setFollowFieldId, each orb manages its own position
         FieldVisualRegistry.register(orb);
-        FieldVisualPostEffect.setFollowFieldId(orbId);
-        FieldVisualPostEffect.setFollowMode(true);
         FieldVisualPostEffect.setEnabled(true);
     }
     
@@ -174,10 +175,9 @@ public class OrbChargeHandler {
         float throwRange = getThrowRange();
         throwTarget = eyePos.add(lookDir.multiply(throwRange));
         
-        // Start throw
+        // Start throw - orb now manages its own position via FieldVisualRegistry.updatePosition
         isThrowing = true;
         throwStartTime = System.currentTimeMillis();
-        FieldVisualPostEffect.setFollowMode(false);
     }
     
     private static void updateThrow(MinecraftClient client) {
@@ -219,7 +219,7 @@ public class OrbChargeHandler {
             FieldVisualRegistry.unregister(orbId);
             orbId = null;
         }
-        FieldVisualPostEffect.setEnabled(false);
+        // Don't call setEnabled(false) - other orbs may still be rendering
     }
     
     private static void cancelCharge() {
@@ -229,7 +229,7 @@ public class OrbChargeHandler {
             FieldVisualRegistry.unregister(orbId);
             orbId = null;
         }
-        FieldVisualPostEffect.setEnabled(false);
+        // Don't call setEnabled(false) - other orbs may still be rendering
     }
     
     // ═══════════════════════════════════════════════════════════════════════════
