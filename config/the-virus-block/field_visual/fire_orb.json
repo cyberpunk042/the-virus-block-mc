@@ -3,8 +3,7 @@
     "description": "Warm fire-like energy orb",
     "enabled": true,
     "effectType": "ENERGY_ORB",
-    "intensity": 1.5,
-    "animationSpeed": 0.8,
+    "version": 3,
     "primaryColor": [
         1.0,
         0.8,
@@ -20,10 +19,14 @@
         0.1,
         0.0
     ],
-    "coreSize": 0.25,
-    "edgeSharpness": 3.0,
-    "spiralDensity": 6.0,
-    "spiralTwist": 4.0,
-    "glowLineCount": 12.0,
-    "glowLineIntensity": 0.7
+    "params": {
+        "intensity": 1.5,
+        "animationSpeed": 0.8,
+        "coreSize": 0.25,
+        "edgeSharpness": 3.0,
+        "noiseResLow": 6.0,
+        "noiseResHigh": 4.0,
+        "glowLineCount": 12.0,
+        "glowLineIntensity": 0.7
+    }
 }

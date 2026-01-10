@@ -3,8 +3,7 @@
     "description": "Bright neon core with sharp edges",
     "enabled": true,
     "effectType": "ENERGY_ORB",
-    "intensity": 1.8,
-    "animationSpeed": 1.2,
+    "version": 3,
     "primaryColor": [
         1.0,
         0.2,
@@ -20,10 +19,14 @@
         0.0,
         1.0
     ],
-    "coreSize": 0.2,
-    "edgeSharpness": 6.0,
-    "spiralDensity": 4.0,
-    "spiralTwist": 3.0,
-    "glowLineCount": 20.0,
-    "glowLineIntensity": 1.0
+    "params": {
+        "intensity": 1.8,
+        "animationSpeed": 1.2,
+        "coreSize": 0.2,
+        "edgeSharpness": 6.0,
+        "noiseResLow": 4.0,
+        "noiseResHigh": 3.0,
+        "glowLineCount": 20.0,
+        "glowLineIntensity": 1.0
+    }
 }

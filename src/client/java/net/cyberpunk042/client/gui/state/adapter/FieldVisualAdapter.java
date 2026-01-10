@@ -1110,8 +1110,8 @@ public class FieldVisualAdapter extends AbstractAdapter {
     
     @Override
     public void reset() {
-        enabled = false;
-        
+        // NOTE: We do NOT reset 'enabled' here - that's a separate toggle
+        // Reset only shader params to their defaults
         colors = ColorParams.DEFAULT;
         anim = AnimParams.DEFAULT;
         animTiming = AnimTimingParams.DEFAULT;
@@ -1138,7 +1138,7 @@ public class FieldVisualAdapter extends AbstractAdapter {
         followMode = true;
         previewRadius = 1.0f;
         sourceRef = null;
-        currentPresetName = "Default";
+        // NOTE: currentPresetName is UI state, managed by preset selector - NOT reset here
         
         clearPreview();
         clearLinkedPrimitive();

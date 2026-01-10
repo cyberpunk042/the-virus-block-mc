@@ -1192,113 +1192,18 @@ public final class FragmentRegistry {
             return;
         }
 
-        // Enable/type
-        if (json.has("enabled")) state.set("fieldVisual.enabled", json.get("enabled").getAsBoolean());
-        if (json.has("effectType")) {
-            try {
-                state.set("fieldVisual.effectType", 
-                    net.cyberpunk042.client.visual.effect.EffectType.valueOf(
-                        json.get("effectType").getAsString().toUpperCase()));
-            } catch (IllegalArgumentException ignored) {}
-        }
+        // Reset shader params to defaults first, then load the preset
+        // This ensures values not in the preset return to defaults
+        state.fieldVisualAdapter().reset();
         
-        // General
-        if (json.has("intensity")) state.set("fieldVisual.intensity", json.get("intensity").getAsFloat());
-        if (json.has("animationSpeed")) state.set("fieldVisual.animationSpeed", json.get("animationSpeed").getAsFloat());
-        if (json.has("previewRadius")) state.set("fieldVisual.previewRadius", json.get("previewRadius").getAsFloat());
+        // Use the adapter's loadFromJson which handles ALL params correctly
+        // including noiseResHigh, flames, corona, lighting, etc.
+        state.fieldVisualAdapter().loadFromJson(json);
         
-        // Primary color (core)
-        if (json.has("primaryColor")) {
-            var colorEl = json.get("primaryColor");
-            if (colorEl.isJsonArray()) {
-                var arr = colorEl.getAsJsonArray();
-                if (arr.size() >= 3) {
-                    state.set("fieldVisual.primaryR", arr.get(0).getAsFloat());
-                    state.set("fieldVisual.primaryG", arr.get(1).getAsFloat());
-                    state.set("fieldVisual.primaryB", arr.get(2).getAsFloat());
-                }
-            } else if (colorEl.isJsonObject()) {
-                JsonObject color = colorEl.getAsJsonObject();
-                if (color.has("r")) state.set("fieldVisual.primaryR", color.get("r").getAsFloat());
-                if (color.has("g")) state.set("fieldVisual.primaryG", color.get("g").getAsFloat());
-                if (color.has("b")) state.set("fieldVisual.primaryB", color.get("b").getAsFloat());
-            }
-        }
-        // Flat primary color fields
-        if (json.has("primaryR")) state.set("fieldVisual.primaryR", json.get("primaryR").getAsFloat());
-        if (json.has("primaryG")) state.set("fieldVisual.primaryG", json.get("primaryG").getAsFloat());
-        if (json.has("primaryB")) state.set("fieldVisual.primaryB", json.get("primaryB").getAsFloat());
-        
-        // Secondary color (edge)
-        if (json.has("secondaryColor")) {
-            var colorEl = json.get("secondaryColor");
-            if (colorEl.isJsonArray()) {
-                var arr = colorEl.getAsJsonArray();
-                if (arr.size() >= 3) {
-                    state.set("fieldVisual.secondaryR", arr.get(0).getAsFloat());
-                    state.set("fieldVisual.secondaryG", arr.get(1).getAsFloat());
-                    state.set("fieldVisual.secondaryB", arr.get(2).getAsFloat());
-                }
-            } else if (colorEl.isJsonObject()) {
-                JsonObject color = colorEl.getAsJsonObject();
-                if (color.has("r")) state.set("fieldVisual.secondaryR", color.get("r").getAsFloat());
-                if (color.has("g")) state.set("fieldVisual.secondaryG", color.get("g").getAsFloat());
-                if (color.has("b")) state.set("fieldVisual.secondaryB", color.get("b").getAsFloat());
-            }
-        }
-        // Flat secondary color fields
-        if (json.has("secondaryR")) state.set("fieldVisual.secondaryR", json.get("secondaryR").getAsFloat());
-        if (json.has("secondaryG")) state.set("fieldVisual.secondaryG", json.get("secondaryG").getAsFloat());
-        if (json.has("secondaryB")) state.set("fieldVisual.secondaryB", json.get("secondaryB").getAsFloat());
-        
-        // Tertiary color (outer glow)
-        if (json.has("tertiaryColor")) {
-            var colorEl = json.get("tertiaryColor");
-            if (colorEl.isJsonArray()) {
-                var arr = colorEl.getAsJsonArray();
-                if (arr.size() >= 3) {
-                    state.set("fieldVisual.tertiaryR", arr.get(0).getAsFloat());
-                    state.set("fieldVisual.tertiaryG", arr.get(1).getAsFloat());
-                    state.set("fieldVisual.tertiaryB", arr.get(2).getAsFloat());
-                }
-            } else if (colorEl.isJsonObject()) {
-                JsonObject color = colorEl.getAsJsonObject();
-                if (color.has("r")) state.set("fieldVisual.tertiaryR", color.get("r").getAsFloat());
-                if (color.has("g")) state.set("fieldVisual.tertiaryG", color.get("g").getAsFloat());
-                if (color.has("b")) state.set("fieldVisual.tertiaryB", color.get("b").getAsFloat());
-            }
-        }
-        // Flat tertiary color fields
-        if (json.has("tertiaryR")) state.set("fieldVisual.tertiaryR", json.get("tertiaryR").getAsFloat());
-        if (json.has("tertiaryG")) state.set("fieldVisual.tertiaryG", json.get("tertiaryG").getAsFloat());
-        if (json.has("tertiaryB")) state.set("fieldVisual.tertiaryB", json.get("tertiaryB").getAsFloat());
-        
-        // Effect params
-        if (json.has("coreSize")) state.set("fieldVisual.coreSize", json.get("coreSize").getAsFloat());
-        if (json.has("edgeSharpness")) state.set("fieldVisual.edgeSharpness", json.get("edgeSharpness").getAsFloat());
-        if (json.has("spiralDensity")) state.set("fieldVisual.spiralDensity", json.get("spiralDensity").getAsFloat());
-        if (json.has("spiralTwist")) state.set("fieldVisual.spiralTwist", json.get("spiralTwist").getAsFloat());
-        if (json.has("glowLineCount")) state.set("fieldVisual.glowLineCount", json.get("glowLineCount").getAsFloat());
-        if (json.has("glowLineIntensity")) state.set("fieldVisual.glowLineIntensity", json.get("glowLineIntensity").getAsFloat());
-        
-        // Proximity Darken / Distortion params (can be at root or in params section)
-        if (json.has("distortionStrength")) state.set("fieldVisual.distortionStrength", json.get("distortionStrength").getAsFloat());
-        if (json.has("blackout")) state.set("fieldVisual.blackout", json.get("blackout").getAsFloat());
-        if (json.has("distortionRadius")) state.set("fieldVisual.distortionRadius", json.get("distortionRadius").getAsFloat());
-        if (json.has("distortionFrequency")) state.set("fieldVisual.distortionFrequency", json.get("distortionFrequency").getAsFloat());
-        
-        // Process nested "params" section if present (common in profile format)
-        if (json.has("params")) {
-            JsonObject params = json.getAsJsonObject("params");
-            if (params.has("distortionStrength")) state.set("fieldVisual.distortionStrength", params.get("distortionStrength").getAsFloat());
-            if (params.has("blackout")) state.set("fieldVisual.blackout", params.get("blackout").getAsFloat());
-            if (params.has("distortionRadius")) state.set("fieldVisual.distortionRadius", params.get("distortionRadius").getAsFloat());
-            if (params.has("distortionFrequency")) state.set("fieldVisual.distortionFrequency", params.get("distortionFrequency").getAsFloat());
-            // Also load other params that might be nested
-            if (params.has("intensity")) state.set("fieldVisual.intensity", params.get("intensity").getAsFloat());
-            if (params.has("animationSpeed")) state.set("fieldVisual.animationSpeed", params.get("animationSpeed").getAsFloat());
-            if (params.has("coreSize")) state.set("fieldVisual.coreSize", params.get("coreSize").getAsFloat());
-            if (params.has("edgeSharpness")) state.set("fieldVisual.edgeSharpness", params.get("edgeSharpness").getAsFloat());
+        // Sync to shader effect
+        var client = net.minecraft.client.MinecraftClient.getInstance();
+        if (client != null && client.player != null) {
+            state.fieldVisualAdapter().syncToEffect(client.player.getBoundingBox().getCenter());
         }
         
         // Notify listeners that a fragment was applied
