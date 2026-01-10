@@ -1111,9 +1111,20 @@ public class FieldVisualAdapter extends AbstractAdapter {
     @Override
     public void reset() {
         // NOTE: We do NOT reset 'enabled' here - that's a separate toggle
-        // Reset only shader params to their defaults
+        // 
+        // IDENTITY PARAMETERS (preserved across reset):
+        // - effectType: What kind of effect (ENERGY_ORB, GEODESIC, etc)
+        // - version: Which shader version (V1-V8)
+        // - currentPresetName: UI state
+        // These describe WHAT effect is being used, not HOW it looks.
+        
+        // Save identity parameters before reset
+        EffectType savedEffectType = anim.effectType();
+        float savedVersion = reserved.version();
+        
+        // Reset shader params to their defaults
         colors = ColorParams.DEFAULT;
-        anim = AnimParams.DEFAULT;
+        anim = AnimParams.DEFAULT.withEffectType(savedEffectType);  // Preserve effectType
         animTiming = AnimTimingParams.DEFAULT;
         coreEdge = CoreEdgeParams.DEFAULT;
         falloff = FalloffParams.DEFAULT;
@@ -1129,7 +1140,7 @@ public class FieldVisualAdapter extends AbstractAdapter {
         screen = ScreenEffects.NONE;
         distortion = DistortionParams.NONE;
         blend = BlendParams.DEFAULT;
-        reserved = ReservedParams.DEFAULT;
+        reserved = ReservedParams.DEFAULT.withVersion(savedVersion);  // Preserve version
         v8Plasma = V8PlasmaParams.DEFAULT;
         v8Ring = V8RingParams.DEFAULT;
         v8Corona = V8CoronaParams.DEFAULT;
@@ -1146,12 +1157,9 @@ public class FieldVisualAdapter extends AbstractAdapter {
         // DO NOT call setEnabled(false) - spawn orbs must continue running
         // Preview is already cleared by clearPreview()
         
-        // Apply schema defaults to override Java defaults with GUI defaults
-        var schema = net.cyberpunk042.client.gui.schema.EffectSchemaRegistry.get(
-            anim.effectType(), (int) reserved.version());
-        if (schema != null) {
-            applySchemaDefaults(schema);
-        }
+        // NOTE: We do NOT apply schema defaults here. The caller should apply them
+        // after the version is known (e.g., after loadFromJson sets the version from preset).
+        // Applying schema defaults here would use the preserved version which may be wrong.
     }
     
     /**
@@ -1279,7 +1287,20 @@ public class FieldVisualAdapter extends AbstractAdapter {
         return json;
     }
     
+    /**
+     * Loads configuration from JSON, applying all fields including version.
+     */
     public void loadFromJson(com.google.gson.JsonObject json) {
+        loadFromJson(json, false);
+    }
+    
+    /**
+     * Loads configuration from JSON with optional version skipping.
+     * 
+     * @param json The JSON configuration
+     * @param skipVersion If true, the version field in the JSON is ignored (useful for version switching)
+     */
+    public void loadFromJson(com.google.gson.JsonObject json, boolean skipVersion) {
         if (json == null) return;
         
         if (json.has("enabled")) {
@@ -1292,7 +1313,7 @@ public class FieldVisualAdapter extends AbstractAdapter {
                 anim = anim.withEffectType(EffectType.ENERGY_ORB);
             }
         }
-        if (json.has("version")) {
+        if (!skipVersion && json.has("version")) {
             reserved = reserved.withVersion(json.get("version").getAsFloat());
         }
         if (json.has("sourceRef")) {

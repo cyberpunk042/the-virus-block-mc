@@ -913,6 +913,17 @@ public final class FragmentRegistry {
      * Replaces the field visual config with the preset values.
      */
     public static void applyFieldVisualFragment(FieldEditState state, String presetName) {
+        applyFieldVisualFragment(state, presetName, false);
+    }
+    
+    /**
+     * Apply a field visual preset to current state with optional version skipping.
+     * 
+     * @param state The state to modify
+     * @param presetName The preset to apply
+     * @param skipVersion If true, the version in the preset is ignored (for version switching)
+     */
+    public static void applyFieldVisualFragment(FieldEditState state, String presetName, boolean skipVersion) {
         ensureLoaded();
         if ("Custom".equals(presetName) || "Default".equals(presetName)) {
             return;
@@ -930,7 +941,7 @@ public final class FragmentRegistry {
         
         // Use the adapter's loadFromJson which handles ALL params correctly
         // including noiseResHigh, flames, corona, lighting, etc.
-        state.fieldVisualAdapter().loadFromJson(json);
+        state.fieldVisualAdapter().loadFromJson(json, skipVersion);
         
         // Sync to shader effect
         var client = net.minecraft.client.MinecraftClient.getInstance();
@@ -940,7 +951,7 @@ public final class FragmentRegistry {
         
         // Notify listeners that a fragment was applied
         state.notifyStateChanged(ChangeType.FRAGMENT_APPLIED);
-        LOGGER.info("Applied field visual preset: {}", presetName);
+        LOGGER.info("Applied field visual preset: {}{}", presetName, skipVersion ? " (version preserved)" : "");
     }
     
 }

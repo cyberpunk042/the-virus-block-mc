@@ -199,7 +199,18 @@ public class FieldVisualSubPanel extends BoundPanel {
             .values(fVersions).initially(fVer)
             .build(x3, y, thirdW, 20, Text.literal("Ver"), (btn, next) -> {
                 state.set("fieldVisual.version", next);
-                state.applyFieldVisualSchemaDefaults();
+                
+                // Check if a real preset is selected (not Default/Custom)
+                String currentPreset = (String) state.get("fieldVisual.currentPresetName");
+                if (currentPreset != null && !"Default".equals(currentPreset) && !"Custom".equals(currentPreset)) {
+                    // Reload the preset but skip its version field - keep the user's selected version
+                    net.cyberpunk042.client.gui.util.FragmentRegistry.applyFieldVisualFragment(state, currentPreset, true);
+                    Logging.GUI.topic("panel").info("Version changed to V{}, reloaded preset '{}' (version preserved)", next, currentPreset);
+                } else {
+                    // No preset selected, apply schema defaults for the new version
+                    state.applyFieldVisualSchemaDefaults();
+                }
+                
                 rebuildContent();
                 syncToEffect();
             }));
