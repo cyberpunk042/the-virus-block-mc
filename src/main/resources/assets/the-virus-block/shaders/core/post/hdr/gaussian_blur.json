@@ -1,0 +1,29 @@
+{
+    "vertex": "the-virus-block:post/hdr/passthrough",
+    "fragment": "the-virus-block:post/hdr/gaussian_blur",
+    "samplers": [
+        {
+            "name": "InSampler"
+        }
+    ],
+    "uniforms": [
+        {
+            "name": "Direction",
+            "type": "float",
+            "count": 2,
+            "values": [
+                1.0,
+                0.0
+            ]
+        },
+        {
+            "name": "InSize",
+            "type": "float",
+            "count": 2,
+            "values": [
+                1920.0,
+                1080.0
+            ]
+        }
+    ]
+}

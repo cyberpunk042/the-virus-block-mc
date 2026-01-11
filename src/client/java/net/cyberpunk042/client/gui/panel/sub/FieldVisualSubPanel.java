@@ -293,6 +293,50 @@ public class FieldVisualSubPanel extends BoundPanel {
         // NOTE: Hardware blend equations don't work for post-processing.
         // All blending is done in the shader via ColorBlendMode (including SUBTRACT for darkening).
         content.advanceBy(22);
+        
+        // ─── Row 5: HDR Targets Toggle ───
+        y = content.getCurrentY();
+        net.cyberpunk042.client.gui.config.RenderConfig renderConfig = net.cyberpunk042.client.gui.config.RenderConfig.get();
+        boolean hdrEnabled = renderConfig.isHdrEnabled();
+        widgets.add(GuiWidgets.toggle(x, y, halfW,
+            hdrEnabled ? "§aHDR Targets" : "§7HDR Targets", hdrEnabled, 
+            "Enable RGBA16F render targets for smoother glow (eliminates banding)",
+            v -> { 
+                Logging.GUI.topic("HDR_TOGGLE")
+                    .kv("newValue", v)
+                    .info("══════════════════════════════════════════════════════════════");
+                Logging.GUI.topic("HDR_TOGGLE")
+                    .kv("newValue", v)
+                    .info("[HDR_TOGGLE_START] User toggled HDR to: {}", v);
+                
+                renderConfig.setHdrEnabled(v);
+                net.cyberpunk042.client.visual.render.PostFxPipeline.getInstance().invalidateTargets();
+                
+                // Clear BOTH caches to force recreation with new format
+                net.cyberpunk042.client.visual.effect.FieldVisualPostEffect.clearProcessorCache();
+                net.cyberpunk042.client.visual.shader.util.ShaderLoaderCacheHelper.clearOurProcessors();
+                
+                Logging.GUI.topic("HDR_TOGGLE")
+                    .info("[HDR_TOGGLE_DONE] Caches cleared, next frame should reload processors");
+                Logging.GUI.topic("HDR_TOGGLE")
+                    .info("══════════════════════════════════════════════════════════════");
+                
+                rebuildContent(); 
+            }));
+        
+        // Blur quality slider (only shown when HDR is enabled)
+        if (hdrEnabled) {
+            float blurQuality = renderConfig.getBlurQuality();
+            // Display as 25-100%, apply as 0.25-1.0
+            widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
+                "Blur", 25f, 100f, blurQuality * 100f, "%.0f%%", 
+                "Lower = faster, Higher = smoother",
+                v -> {
+                    renderConfig.setBlurQuality(v / 100f);
+                    net.cyberpunk042.client.visual.render.PostFxPipeline.getInstance().invalidateTargets();
+                }));
+        }
+        content.advanceBy(22);
         content.gap();
         
         // ═══════════════════════════════════════════════════════════════════════════

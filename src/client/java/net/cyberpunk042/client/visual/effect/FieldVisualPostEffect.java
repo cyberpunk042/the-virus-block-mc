@@ -235,12 +235,20 @@ public final class FieldVisualPostEffect {
         
         java.util.UUID fieldId = field.getId();
         FieldVisualConfig config = field.getConfig();
+        String fieldIdShort = fieldId.toString().substring(0, 8);
         
         // Check cache by field ID
         PostEffectProcessor cached = PROCESSOR_CACHE.get(fieldId);
         if (cached != null) {
+            Logging.RENDER.topic("HDR_LOAD")
+                .kv("fieldId", fieldIdShort)
+                .info("[PROCESSOR_CACHE_HIT] Returning cached processor");
             return cached;
         }
+        
+        Logging.RENDER.topic("HDR_LOAD")
+            .kv("fieldId", fieldIdShort)
+            .info("[PROCESSOR_CACHE_MISS] No cached processor, will load new");
         
         // Determine shader to load
         ShaderKey key = ShaderKey.fromConfig(config);
@@ -251,10 +259,16 @@ public final class FieldVisualPostEffect {
         }
         
         // IMPORTANT: Append fieldId to shaderId to get UNIQUE processors per field
-        // This prevents Minecraft from reusing the same processor for multiple fields
-        // The ShaderLoaderMixin strips the _f_ suffix when loading actual files
-        String uniquePath = baseShaderId.getPath() + "_f_" + fieldId.toString().replace("-", "");
+        net.cyberpunk042.client.gui.config.RenderConfig cfg = 
+            net.cyberpunk042.client.gui.config.RenderConfig.get();
+        String hdrSuffix = cfg.isHdrEnabled() ? "_hdr" : "_ldr";
+        String uniquePath = baseShaderId.getPath() + "_f_" + fieldId.toString().replace("-", "") + hdrSuffix;
         Identifier shaderId = Identifier.of(baseShaderId.getNamespace(), uniquePath);
+        
+        Logging.RENDER.topic("HDR_LOAD")
+            .kv("shaderId", shaderId.toString())
+            .kv("hdrEnabled", cfg.isHdrEnabled())
+            .info("[PROCESSOR_LOADING] Loading processor with {} suffix", hdrSuffix);
         
         // Load new processor for this field
         MinecraftClient client = MinecraftClient.getInstance();
@@ -268,15 +282,15 @@ public final class FieldVisualPostEffect {
         }
         
         try {
-            // IMPORTANT: Each field MUST have its own unique processor instance!
-            // Minecraft's loadPostEffect may return the same processor for the same shader,
-            // but we need unique instances so each field has its own passes.
-            // We cannot share processors between fields.
-            PostEffectProcessor processor = shaderLoader.loadPostEffect(shaderId, REQUIRED_TARGETS);
+            PostEffectProcessor processor;
+            processor = shaderLoader.loadPostEffect(shaderId, REQUIRED_TARGETS);
             
-            // Cache by field ID - ensures this specific field reuses its OWN processor
+            Logging.RENDER.topic("HDR_LOAD")
+                .kv("processorHash", Integer.toHexString(System.identityHashCode(processor)))
+                .info("[PROCESSOR_LOADED] New processor created");
+            
+            // Cache by field ID
             PROCESSOR_CACHE.put(fieldId, processor);
-            // Reverse lookup for PostEffectPassMixin
             PROCESSOR_TO_FIELD.put(processor, fieldId);
             
             // Register each pass directly to this field for mixin lookup
@@ -378,11 +392,17 @@ public final class FieldVisualPostEffect {
      * Clears the processor cache. Call when shaders need to be reloaded.
      */
     public static void clearProcessorCache() {
+        int processorCount = PROCESSOR_CACHE.size();
+        int fieldMapCount = PROCESSOR_TO_FIELD.size();
+        
         PROCESSOR_CACHE.clear();
         PROCESSOR_TO_FIELD.clear();
         lastShaderKey = null;
-        Logging.RENDER.topic(LOG_TOPIC)
-            .info("Processor cache cleared");
+        
+        Logging.RENDER.topic("HDR_LOAD")
+            .kv("processorsCleared", processorCount)
+            .kv("fieldMapsCleared", fieldMapCount)
+            .info("[PROCESSOR_CACHE_CLEARED] Our processor cache cleared");
     }
     
     // ═══════════════════════════════════════════════════════════════════════════

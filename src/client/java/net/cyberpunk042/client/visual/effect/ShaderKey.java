@@ -42,17 +42,22 @@ public record ShaderKey(EffectType effectType, int version) {
     
     /**
      * Maps energy orb versions to their standalone shaders.
+     * V7 has a multi-pass HDR pipeline when HDR is enabled.
      */
     private Identifier energyOrbShaderId() {
+        boolean hdrEnabled = net.cyberpunk042.client.gui.config.RenderConfig.get().isHdrEnabled();
+        
         return switch (version) {
             case 1 -> Identifier.of("the-virus-block", "field_visual_v1");
             case 2 -> Identifier.of("the-virus-block", "field_visual_v2");
             case 3 -> Identifier.of("the-virus-block", "field_visual_v3");
             case 5 -> Identifier.of("the-virus-block", "field_visual_v5");
             case 6 -> Identifier.of("the-virus-block", "field_visual_v6");
-            case 7 -> Identifier.of("the-virus-block", "field_visual_v7");
+            // V7: Use 4-pass HDR pipeline with blur when HDR enabled
+            case 7 -> hdrEnabled 
+                ? Identifier.of("the-virus-block", "field_visual_v7_hdr")
+                : Identifier.of("the-virus-block", "field_visual_v7");
             case 8 -> Identifier.of("the-virus-block", "field_visual_v8");
-            // Unknown versions fall back to V1 (simplest)
             default -> Identifier.of("the-virus-block", "field_visual_v1");
         };
     }

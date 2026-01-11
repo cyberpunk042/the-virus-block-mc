@@ -143,6 +143,9 @@ public abstract class WorldRendererFieldVisualMixin {
         int width = mainFb.textureWidth;
         int height = mainFb.textureHeight;
         
+        // Ensure HDR pipeline targets are ready (handles resize, format changes)
+        net.cyberpunk042.client.visual.render.PostFxPipeline.getInstance().ensureTargetsReady(width, height);
+        
         // Get fields to render
         var fieldsToRender = FieldVisualRegistry.getFieldsToRender(cameraVec);
         
@@ -175,8 +178,8 @@ public abstract class WorldRendererFieldVisualMixin {
             try {
                 // Each field has its own processor with its own passes
                 // PASS_TO_FIELD maps each pass to its owning field
+                // Note: HDR format injection is handled by FrameGraphBuilderHdrMixin
                 processor.render(frameGraphBuilder, width, height, framebufferSet);
-                
             } catch (Exception e) {
                 Logging.RENDER.topic("field_visual")
                     .kv("fieldId", field.getId().toString().substring(0, 8))

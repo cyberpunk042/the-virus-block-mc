@@ -1,0 +1,38 @@
+{
+    "vertex": "the-virus-block:post/hdr/passthrough",
+    "fragment": "the-virus-block:post/hdr/composite",
+    "samplers": [
+        {
+            "name": "SceneSampler"
+        },
+        {
+            "name": "GlowSampler"
+        }
+    ],
+    "uniforms": [
+        {
+            "name": "GlowIntensity",
+            "type": "float",
+            "count": 1,
+            "values": [
+                1.0
+            ]
+        },
+        {
+            "name": "TonemapExposure",
+            "type": "float",
+            "count": 1,
+            "values": [
+                1.5
+            ]
+        },
+        {
+            "name": "TonemapMode",
+            "type": "int",
+            "count": 1,
+            "values": [
+                0
+            ]
+        }
+    ]
+}
