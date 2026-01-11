@@ -324,16 +324,14 @@ public class FieldVisualSubPanel extends BoundPanel {
                 rebuildContent(); 
             }));
         
-        // Blur quality slider (only shown when HDR is enabled)
+        // Glow Spread slider (only shown when HDR is enabled)
         if (hdrEnabled) {
-            float blurQuality = renderConfig.getBlurQuality();
-            // Display as 25-100%, apply as 0.25-1.0
+            float glowSpread = renderConfig.getBlurRadius();
             widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
-                "Blur", 25f, 100f, blurQuality * 100f, "%.0f%%", 
-                "Lower = faster, Higher = smoother",
+                "Glow Spread", 0.1f, 20.0f, glowSpread, "%.1f", 
+                "Controls HDR blur spread (0.1 = tight, 20 = wide)",
                 v -> {
-                    renderConfig.setBlurQuality(v / 100f);
-                    net.cyberpunk042.client.visual.render.PostFxPipeline.getInstance().invalidateTargets();
+                    renderConfig.setBlurRadius(v);
                 }));
         }
         content.advanceBy(22);
