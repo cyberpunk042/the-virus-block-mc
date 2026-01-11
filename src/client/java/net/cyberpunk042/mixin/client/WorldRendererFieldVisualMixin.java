@@ -122,7 +122,7 @@ public abstract class WorldRendererFieldVisualMixin {
         // Each orb source (preview, spawn, charge) manages its own position
         var state = net.cyberpunk042.client.gui.state.FieldEditStateHolder.get();
         if (state != null) {
-            state.fieldVisualAdapter().tickPreviewPosition();
+            state.fieldVisualAdapter().tickPreviewPosition(tickDelta);
         }
         
         // Tick throw animation if active

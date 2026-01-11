@@ -130,6 +130,19 @@ public class FieldVisualInstance {
     }
     
     /**
+     * Sets position directly without interpolation tracking.
+     * Use this when the position is ALREADY render-time interpolated
+     * to prevent double interpolation.
+     * 
+     * @param pos The already-interpolated position
+     */
+    public void setRenderPosition(Vec3d pos) {
+        this.previousWorldCenter = pos;
+        this.worldCenter = pos;
+        this.dirty = true;
+    }
+    
+    /**
      * Updates the field radius.
      */
     public void updateRadius(float newRadius) {

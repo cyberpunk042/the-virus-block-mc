@@ -126,64 +126,6 @@ public final class FieldVisualPostEffect {
         followFieldId = id;
     }
     
-    /**
-     * Called each frame from the render mixin to update position if following.
-     * Gets player position directly and applies anchor offset + orb position offset.
-     */
-    public static void tickFollowPosition(float camX, float camY, float camZ,
-                                          float fwdX, float fwdY, float fwdZ) {
-        if (!enabled || !followMode || followFieldId == null) {
-            return;
-        }
-        
-        // Get client player for actual position
-        var client = net.minecraft.client.MinecraftClient.getInstance();
-        if (client == null || client.player == null) return;
-        
-        // Get the field to determine its anchor offset
-        FieldVisualInstance field = FieldVisualRegistry.get(followFieldId);
-        if (field == null) return;
-        
-        // SKIP spawn animation orbs - they are managed by OrbSpawnManager
-        if (field.isSpawnAnimationOrb()) {
-            return;
-        }
-        
-        // Use bounding box center - same as ClientFieldManager for consistency
-        Vec3d playerCenter = client.player.getBoundingBox().getCenter();
-        
-        // Apply anchor offset from the primitive
-        Vec3d anchorOffset = field.getAnchorOffset();
-        Vec3d finalPos = playerCenter.add(anchorOffset);
-        
-        // Apply orb position offset if adapter is set and no linked primitive
-        if (throwAdapter != null && field.getAnchorOffset().equals(Vec3d.ZERO)) {
-            String orbPos = (String) throwAdapter.get("orbStartPosition");
-            if (orbPos != null && !orbPos.equals("center")) {
-                // Calculate right vector from forward
-                Vec3d forward = new Vec3d(fwdX, fwdY, fwdZ).normalize();
-                Vec3d worldUp = new Vec3d(0, 1, 0);
-                Vec3d right = forward.crossProduct(worldUp).normalize();
-                if (right.lengthSquared() < 0.01) {
-                    right = new Vec3d(1, 0, 0); // Fallback when looking straight up/down
-                }
-                
-                float dist = 2.0f;
-                Vec3d orbOffset = switch (orbPos) {
-                    case "front" -> forward.multiply(dist);
-                    case "behind" -> forward.multiply(-dist);
-                    case "left" -> right.multiply(-dist);
-                    case "right" -> right.multiply(dist);
-                    case "above" -> new Vec3d(0, dist, 0);
-                    default -> Vec3d.ZERO;
-                };
-                finalPos = finalPos.add(orbOffset);
-            }
-        }
-        
-        FieldVisualRegistry.updatePosition(followFieldId, finalPos);
-    }
-    
     // ═══════════════════════════════════════════════════════════════════════════
     // THROW ANIMATION (hooks into adapter animation)
     // ═══════════════════════════════════════════════════════════════════════════

@@ -861,9 +861,11 @@ public class FieldVisualAdapter extends AbstractAdapter {
     
     /**
      * Updates preview orb position each frame when followMode is enabled.
-     * Called from render mixin - replaces the global tickFollowPosition system.
+     * Called from render mixin with tickDelta for smooth interpolation.
+     * 
+     * @param tickDelta Partial tick progress (0.0 to 1.0) for render-time interpolation
      */
-    public void tickPreviewPosition() {
+    public void tickPreviewPosition(float tickDelta) {
         if (!enabled || !followMode || previewFieldId == null) {
             return;
         }
@@ -874,8 +876,22 @@ public class FieldVisualAdapter extends AbstractAdapter {
         FieldVisualInstance field = FieldVisualRegistry.get(previewFieldId);
         if (field == null) return;
         
-        // Use bounding box center
-        Vec3d playerCenter = client.player.getBoundingBox().getCenter();
+        // Use render-time interpolation for smooth X/Z movement
+        Vec3d playerRenderPos = client.player.getLerpedPos(tickDelta);
+        
+        // Ground-state Y-clamping: When on ground OR just landed, use stable Y
+        // The velocity check catches the landing transition where isOnGround() may lag
+        double stableY;
+        double yVelocity = client.player.getVelocity().y;
+        boolean useGroundY = client.player.isOnGround() || 
+                            (Math.abs(yVelocity) < 0.1 && yVelocity <= 0);  // Near-zero/negative Y velocity = landed or standing
+        
+        if (useGroundY) {
+            stableY = client.player.getY() + client.player.getHeight() / 2.0;
+        } else {
+            stableY = playerRenderPos.y + client.player.getHeight() / 2.0;
+        }
+        Vec3d playerCenter = new Vec3d(playerRenderPos.x, stableY, playerRenderPos.z);
         
         // Apply anchor offset from the primitive
         Vec3d anchorOffset = field.getAnchorOffset();
@@ -914,7 +930,9 @@ public class FieldVisualAdapter extends AbstractAdapter {
             }
         }
         
-        FieldVisualRegistry.updatePosition(previewFieldId, finalPos);
+        // Use setRenderPosition since finalPos is already render-time interpolated
+        // This prevents double interpolation in getRenderPosition()
+        FieldVisualRegistry.setRenderPosition(previewFieldId, finalPos);
     }
     
     // ═══════════════════════════════════════════════════════════════════════════

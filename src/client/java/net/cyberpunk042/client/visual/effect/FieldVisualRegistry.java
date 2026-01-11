@@ -158,6 +158,21 @@ public final class FieldVisualRegistry {
     }
     
     /**
+     * Sets a field's position directly (already render-time interpolated).
+     * Use this to prevent double interpolation.
+     * 
+     * @param id Field ID
+     * @param position Already-interpolated position
+     */
+    public static void setRenderPosition(UUID id, Vec3d position) {
+        FieldVisualInstance instance = activeFields.get(id);
+        if (instance != null) {
+            instance.setRenderPosition(position);
+            renderListDirty = true;
+        }
+    }
+    
+    /**
      * Updates a field's radius.
      * 
      * @param id Field ID

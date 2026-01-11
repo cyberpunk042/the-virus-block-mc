@@ -38,7 +38,7 @@ void main() {
         FlamesMult,
         CoronaWidth,
         CoronaPower,
-        CoronaMultiplier * 0.02,
+        CoronaMultiplier * 0.015,
         RadialSpeed1,
         RadialSpeed2,
         AxialSpeed,
