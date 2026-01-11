@@ -114,12 +114,6 @@ def create_full_chain(version: str, base_json: dict) -> dict:
                 {"name": "DirectionY", "type": "float", "value": 0.0},
                 {"name": "BlurPad1", "type": "float", "value": 0.0},
                 {"name": "BlurPad2", "type": "float", "value": 0.0}
-            ],
-            "HdrConfig": [
-                {"name": "BlurRadius", "type": "float", "value": 1.0},
-                {"name": "GlowIntensity", "type": "float", "value": 1.0},
-                {"name": "HdrPad1", "type": "float", "value": 0.0},
-                {"name": "HdrPad2", "type": "float", "value": 0.0}
             ]
         }
     }
@@ -138,12 +132,6 @@ def create_full_chain(version: str, base_json: dict) -> dict:
                 {"name": "DirectionY", "type": "float", "value": 1.0},
                 {"name": "BlurPad1", "type": "float", "value": 0.0},
                 {"name": "BlurPad2", "type": "float", "value": 0.0}
-            ],
-            "HdrConfig": [
-                {"name": "BlurRadius", "type": "float", "value": 1.0},
-                {"name": "GlowIntensity", "type": "float", "value": 1.0},
-                {"name": "HdrPad1", "type": "float", "value": 0.0},
-                {"name": "HdrPad2", "type": "float", "value": 0.0}
             ]
         }
     }
@@ -160,35 +148,11 @@ def create_full_chain(version: str, base_json: dict) -> dict:
         ],
         "output": "minecraft:main",
         "uniforms": {
-            "FieldVisualConfig": [
-                {"name": "CenterX", "type": "float", "value": 0.0},
-                {"name": "CenterY", "type": "float", "value": 64.0},
-                {"name": "CenterZ", "type": "float", "value": 0.0},
-                {"name": "Radius", "type": "float", "value": 3.0},
-                {"name": "PrimaryR", "type": "float", "value": 1.0},
-                {"name": "PrimaryG", "type": "float", "value": 0.5},
-                {"name": "PrimaryB", "type": "float", "value": 0.0},
-                {"name": "PrimaryA", "type": "float", "value": 1.0},
-                {"name": "SecondaryR", "type": "float", "value": 1.0},
-                {"name": "SecondaryG", "type": "float", "value": 0.8},
-                {"name": "SecondaryB", "type": "float", "value": 0.0},
-                {"name": "SecondaryA", "type": "float", "value": 1.0},
-                {"name": "TertiaryR", "type": "float", "value": 1.0},
-                {"name": "TertiaryG", "type": "float", "value": 1.0},
-                {"name": "TertiaryB", "type": "float", "value": 1.0},
-                {"name": "TertiaryA", "type": "float", "value": 0.0},
-                {"name": "HighlightR", "type": "float", "value": 1.0},
-                {"name": "HighlightG", "type": "float", "value": 1.0},
-                {"name": "HighlightB", "type": "float", "value": 1.0},
-                {"name": "HighlightA", "type": "float", "value": 0.0},
-                {"name": "RayColorR", "type": "float", "value": 1.0},
-                {"name": "RayColorG", "type": "float", "value": 0.6},
-                {"name": "RayColorB", "type": "float", "value": 0.0},
-                {"name": "RayColorA", "type": "float", "value": 1.0},
-                {"name": "Phase", "type": "float", "value": 0.0},
-                {"name": "AnimSpeed", "type": "float", "value": 1.0},
-                {"name": "Intensity", "type": "float", "value": 1.0},
-                {"name": "EffectType", "type": "float", "value": 0.0}
+            "GlowParams": [
+                {"name": "GlowIntensity", "type": "float", "value": 0.3},
+                {"name": "Pad1", "type": "float", "value": 0.0},
+                {"name": "Pad2", "type": "float", "value": 0.0},
+                {"name": "Pad3", "type": "float", "value": 0.0}
             ]
         }
     }

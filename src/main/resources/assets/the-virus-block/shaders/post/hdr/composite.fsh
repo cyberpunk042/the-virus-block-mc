@@ -89,6 +89,10 @@ void main() {
     // This gives a soft additive effect controlled by the extraction pass
     vec3 final = scene + glowMapped * glowAlpha;
     
+    // DEBUG: Add slight red tint to verify this pass is executing
+    // TODO: Remove after debugging
+    final = mix(final, vec3(1.0, 0.0, 0.0), 0.1);
+    
     // Final clamp to [0,1] for display
     fragColor = vec4(clamp(final, 0.0, 1.0), 1.0);
 }

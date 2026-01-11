@@ -19,7 +19,6 @@ import net.cyberpunk042.client.visual.shader.ShockwavePostEffect;
 import net.cyberpunk042.client.visual.shader.MagicCirclePostEffect;
 import net.cyberpunk042.client.visual.shader.VirusBlockPostEffect;
 import net.cyberpunk042.client.visual.shader.VirusBlockUBO;
-import net.cyberpunk042.client.visual.ubo.HdrConfigUBO;
 import net.cyberpunk042.log.Logging;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.PostEffectPass;
@@ -108,11 +107,6 @@ public class PostEffectPassMixin {
         if (net.cyberpunk042.client.visual.shader.VirusBlockUniformBinder.isEnabled() 
             && id != null && id.contains("virus_block")) {
             updateVirusBlockUniforms();
-        }
-        
-        // Handle HDR blur passes (inject if HdrConfig UBO is defined)
-        if (uniformBuffers.containsKey(HdrConfigUBO.UBO_NAME)) {
-            updateHdrConfigUniforms();
         }
     }
     
@@ -416,58 +410,6 @@ public class PostEffectPassMixin {
             Logging.RENDER.topic("posteffect_inject")
                 .kv("error", e.getMessage())
                 .warn("Failed to update VirusBlockParams");
-        }
-    }
-    
-    // ═══════════════════════════════════════════════════════════════════════════
-    // HDR CONFIG UNIFORM UPDATE (For gaussian_blur passes)
-    // ═══════════════════════════════════════════════════════════════════════════
-    
-    private static int hdrConfigInjectCount = 0;
-    
-    /**
-     * Updates HdrConfig UBO with current BlurRadius from RenderConfig.
-     * 
-     * <p>Called for each gaussian_blur pass (horizontal and vertical).
-     * Provides dynamic blur spread control from the UI slider.</p>
-     */
-    private void updateHdrConfigUniforms() {
-        hdrConfigInjectCount++;
-        
-        // HdrConfig presence already verified by caller
-        
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            // Create UBO from current config
-            HdrConfigUBO ubo = HdrConfigUBO.fromConfig();
-            
-            // Write to buffer using ReflectiveUBOWriter
-            Std140Builder builder = Std140Builder.onStack(stack, HdrConfigUBO.BUFFER_SIZE + 16);
-            ReflectiveUBOWriter.write(builder, ubo);
-            
-            // Close old buffer to prevent GPU memory leak
-            closeOldBuffer(HdrConfigUBO.UBO_NAME);
-            
-            // Create new buffer
-            GpuBuffer newBuffer = RenderSystem.getDevice().createBuffer(
-                () -> "HdrConfig Dynamic",
-                16,  // Buffer usage flag
-                builder.get()
-            );
-            
-            // Put into uniformBuffers map (unconditional put pattern)
-            uniformBuffers.put(HdrConfigUBO.UBO_NAME, newBuffer);
-            
-            // Debug logging (occasional)
-            if (hdrConfigInjectCount % 120 == 1) {
-                Logging.RENDER.topic("posteffect_inject")
-                    .kv("blurRadius", String.format("%.2f", ubo.hdrParams().blurRadius()))
-                    .info("Updated HdrConfig UBO");
-            }
-            
-        } catch (Exception e) {
-            Logging.RENDER.topic("posteffect_inject")
-                .kv("error", e.getMessage())
-                .warn("Failed to update HdrConfig");
         }
     }
 }

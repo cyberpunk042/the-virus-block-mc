@@ -41,9 +41,6 @@ public class RenderConfig {
     /** Number of blur iterations: 1 = 2 passes (H+V), 2 = 4 passes, etc. */
     private int blurIterations = 2;
     
-    /** Blur radius: controls glow spread. Higher = wider blur */
-    private float blurRadius = 1.0f;
-    
     // =========================================================================
     // CONSTRUCTOR & SINGLETON
     // =========================================================================
@@ -88,15 +85,6 @@ public class RenderConfig {
      */
     public int getBlurIterations() {
         return blurIterations;
-    }
-    
-    /**
-     * Get the blur radius (glow spread).
-     * 
-     * @return 0.001 to 20.0, where 1.0 is default
-     */
-    public float getBlurRadius() {
-        return blurRadius;
     }
     
     // =========================================================================
@@ -145,17 +133,6 @@ public class RenderConfig {
         this.blurIterations = Math.max(1, Math.min(8, iterations));
     }
     
-    /**
-     * Set the blur radius (glow spread).
-     * 
-     * <p>Higher values = wider blur = more glow spread.
-     * 
-     * @param radius 0.001 to 20.0
-     */
-    public void setBlurRadius(float radius) {
-        this.blurRadius = Math.max(0.001f, Math.min(20.0f, radius));
-    }
-    
     // =========================================================================
     // PERSISTENCE
     // =========================================================================
@@ -179,9 +156,6 @@ public class RenderConfig {
         if (json.has("blur_iterations")) {
             setBlurIterations(json.get("blur_iterations").getAsInt());
         }
-        if (json.has("blur_radius")) {
-            setBlurRadius(json.get("blur_radius").getAsFloat());
-        }
         
         Logging.RENDER.topic("render_config")
             .kv("hdr", hdrEnabled)
@@ -203,7 +177,6 @@ public class RenderConfig {
         json.addProperty("hdr_enabled", hdrEnabled);
         json.addProperty("blur_quality", blurQuality);
         json.addProperty("blur_iterations", blurIterations);
-        json.addProperty("blur_radius", blurRadius);
     }
     
     /**
@@ -213,7 +186,6 @@ public class RenderConfig {
         hdrEnabled = true;
         blurQuality = 1.0f;
         blurIterations = 2;
-        blurRadius = 1.0f;
         
         Logging.RENDER.topic("render_config")
             .debug("Reset to defaults");
