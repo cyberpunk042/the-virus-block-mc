@@ -1136,6 +1136,7 @@ public class FieldVisualAdapter extends AbstractAdapter {
         corona = CoronaParams.DEFAULT;
         geometry = GeometryParams.DEFAULT;
         geometry2 = GeometryParams2.DEFAULT;
+        geoAnim = GeoAnimParams.DEFAULT;
         transform = TransformParams.DEFAULT;
         lighting = LightingParams.DEFAULT;
         timing = TimingParams.DEFAULT;
@@ -1143,6 +1144,18 @@ public class FieldVisualAdapter extends AbstractAdapter {
         distortion = DistortionParams.NONE;
         blend = BlendParams.DEFAULT;
         reserved = ReservedParams.DEFAULT.withVersion(savedVersion);  // Preserve version
+        
+        // V2 detail params
+        v2Corona = V2CoronaDetail.DEFAULT;
+        v2Core = V2CoreDetail.DEFAULT;
+        v2Edge = V2EdgeDetail.DEFAULT;
+        v2Lines = V2LinesDetail.DEFAULT;
+        v2Alpha = V2AlphaDetail.DEFAULT;
+        
+        // Pulsar flames params
+        flames = FlamesParams.DEFAULT;
+        
+        // V8 specific params
         v8Plasma = V8PlasmaParams.DEFAULT;
         v8Ring = V8RingParams.DEFAULT;
         v8Corona = V8CoronaParams.DEFAULT;
@@ -1304,6 +1317,17 @@ public class FieldVisualAdapter extends AbstractAdapter {
      */
     public void loadFromJson(com.google.gson.JsonObject json, boolean skipVersion) {
         if (json == null) return;
+
+        
+        // Track keys from general section
+        if (json.has("general")) {
+            var general = json.getAsJsonObject("general");
+        }
+
+        // Track nested colors section too
+        if (json.has("colors")) {
+            var colors = json.getAsJsonObject("colors");
+        }
         
         if (json.has("enabled")) {
             enabled = json.get("enabled").getAsBoolean();

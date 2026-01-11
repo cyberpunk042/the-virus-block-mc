@@ -941,6 +941,8 @@ public final class FragmentRegistry {
         
         // Use the adapter's loadFromJson which handles ALL params correctly
         // including noiseResHigh, flames, corona, lighting, etc.
+        // NOTE: We do NOT apply schema defaults here. Presets use Java defaults
+        // for any params they don't define. Schema defaults are for UI display only.
         state.fieldVisualAdapter().loadFromJson(json, skipVersion);
         
         // Sync to shader effect

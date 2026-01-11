@@ -55,9 +55,21 @@ public class FieldVisualSubPanel extends BoundPanel {
         // HEADER - Preset, Enable, Source, Version
         // ═══════════════════════════════════════════════════════════════════════════
         
-        // Get current effect type for filtering presets
+        // Get current effect type and version for schema lookup
         EffectType presetFilterType = (EffectType) state.get("fieldVisual.effectType");
         if (presetFilterType == null) presetFilterType = EffectType.ENERGY_ORB;
+        Integer schemaVersion = (Integer) state.get("fieldVisual.version");
+        if (schemaVersion == null) schemaVersion = 1;
+        
+        // Get schema early so header controls can use schema values (enables General group override)
+        EffectSchema headerSchema = EffectSchemaRegistry.get(presetFilterType, schemaVersion);
+        if (headerSchema == null) {
+            List<Integer> available = EffectSchemaRegistry.versionsFor(presetFilterType);
+            if (!available.isEmpty()) {
+                schemaVersion = available.get(0);
+                headerSchema = EffectSchemaRegistry.get(presetFilterType, schemaVersion);
+            }
+        }
         
         // List only presets matching the current effect type
         List<String> fragments = net.cyberpunk042.client.gui.util.FragmentRegistry.listFieldVisualFragments(presetFilterType);
@@ -178,12 +190,21 @@ public class FieldVisualSubPanel extends BoundPanel {
         content.advanceBy(22);
         
         // ─── Row 2: Intensity + Speed + Version ───
+        // Use schema values if available (enables General group override)
         y = content.getCurrentY();
-        Float intensity = getFloat("fieldVisual.intensity", 1.2f);
-        Float speed = getFloat("fieldVisual.animationSpeed", 1.0f);
-        widgets.add(GuiWidgets.slider(x, y, thirdW, "Intensity", 0f, 5f, intensity, "%.2f", null,
+        var intensitySpec = headerSchema != null ? headerSchema.getParameter("fieldVisual.intensity") : null;
+        var speedSpec = headerSchema != null ? headerSchema.getParameter("fieldVisual.animationSpeed") : null;
+        float intMin = intensitySpec != null ? intensitySpec.min() : 0f;
+        float intMax = intensitySpec != null ? intensitySpec.max() : 5f;
+        float intDef = intensitySpec != null ? intensitySpec.defaultValue() : 1.0f;
+        float spdMin = speedSpec != null ? speedSpec.min() : 0.01f;
+        float spdMax = speedSpec != null ? speedSpec.max() : 10f;
+        float spdDef = speedSpec != null ? speedSpec.defaultValue() : 1.0f;
+        Float intensity = getFloat("fieldVisual.intensity", intDef);
+        Float speed = getFloat("fieldVisual.animationSpeed", spdDef);
+        widgets.add(GuiWidgets.slider(x, y, thirdW, "Intensity", intMin, intMax, intensity, "%.2f", null,
             v -> { state.set("fieldVisual.intensity", v); syncToEffect(); }));
-        widgets.add(GuiWidgets.slider(x2, y, thirdW, "Speed", 0.01f, 10f, speed, "%.2f", null,
+        widgets.add(GuiWidgets.slider(x2, y, thirdW, "Speed", spdMin, spdMax, speed, "%.2f", null,
             v -> { state.set("fieldVisual.animationSpeed", v); syncToEffect(); }));
         
         // Version button (V1/V2/V3/V4)
@@ -246,8 +267,13 @@ public class FieldVisualSubPanel extends BoundPanel {
             }));
         
         if (!hasSourcePrimitive) {
-            Float radius = getFloat("fieldVisual.previewRadius", 3f);
-            widgets.add(GuiWidgets.slider(x3, y, thirdW, "Radius", 0.01f, 50f, radius, "%.2f", null,
+            // Use schema values if available (enables General group override)
+            var radiusSpec = headerSchema != null ? headerSchema.getParameter("fieldVisual.previewRadius") : null;
+            float radMin = radiusSpec != null ? radiusSpec.min() : 0.01f;
+            float radMax = radiusSpec != null ? radiusSpec.max() : 50f;
+            float radDef = radiusSpec != null ? radiusSpec.defaultValue() : 3f;
+            Float radius = getFloat("fieldVisual.previewRadius", radDef);
+            widgets.add(GuiWidgets.slider(x3, y, thirdW, "Radius", radMin, radMax, radius, "%.2f", null,
                 v -> { state.set("fieldVisual.previewRadius", v); syncToEffect(); }));
         }
         content.advanceBy(22);
@@ -297,7 +323,8 @@ public class FieldVisualSubPanel extends BoundPanel {
         }
         
         for (String groupName : effectSchema.groupNames()) {
-            if ("General".equals(groupName)) continue; // Already in header
+            // Skip General - handled in header section using getParameter() for override support
+            if ("General".equals(groupName)) continue;
             
             List<ParameterSpec> params = effectSchema.getGroup(groupName);
             if (params.isEmpty()) continue;
