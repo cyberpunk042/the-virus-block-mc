@@ -31,7 +31,7 @@ void main() {
         CoreSize,
         Intensity,
         RaySharpness, max(1.0, FadeScale), max(0.1, InsideFalloffPower),
-        RayPower, CoronaPower, CoronaMultiplier * 0.02, CoreFalloff,
+        RayPower, CoronaPower * 0.5, CoronaMultiplier * 0.02, CoreFalloff,
         CoronaWidth + 1.0, EdgeSharpness * 10.0 + 1.0, RingPower,
         SpeedHigh, SpeedLow, SpeedRay, SpeedRing,
         FadePower * 0.01,
