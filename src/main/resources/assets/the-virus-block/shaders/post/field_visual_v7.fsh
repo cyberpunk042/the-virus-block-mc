@@ -31,7 +31,8 @@ void main() {
         SpeedHigh, SpeedLow, SpeedRay, SpeedRing,
         FadePower * 0.01,
         abs(NoiseSeed) < 0.001 ? 1.0 : NoiseSeed,
-        max(0.1, EruptionContrast)  // Controls ray discreteness
+        max(0.1, EruptionContrast),  // Controls ray discreteness
+        false  // Don't skip procedural rays (god rays only in HDR pipeline)
     );
     
     vec4 fieldEffect = vec4(pulsar.color, pulsar.alpha);

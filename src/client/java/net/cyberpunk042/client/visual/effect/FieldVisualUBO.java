@@ -104,7 +104,14 @@ public record FieldVisualUBO(
     @Vec4 V8Ring1Vec4 v8Ring1,                   // Slot 46: frequency, speed, sharpness, centerValue
     @Vec4 V8Ring2Vec4 v8Ring2,                   // Slot 47: modPower, intensity, coreType, reserved
     @Vec4 V8CoronaVec4 v8Corona,                 // Slot 48: extent, fadeStart, fadePower, intensity
-    @Vec4 V8ElectricVec4 v8Electric              // Slot 49: flash, fillIntensity, fillDarken, reserved
+    @Vec4 V8ElectricVec4 v8Electric,             // Slot 49: flash, fillIntensity, fillDarken, reserved
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // GOD RAYS (Slots 50-51)
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    @Vec4 GodRayParams godRays,                  // Slot 50: enabled, decay, exposure, samples
+    @Vec4 GodRayMaskParams godRayMask            // Slot 51: threshold, skyEnabled, softness, reserved
 ) {
     
     /** Buffer size in bytes, calculated from annotations */
@@ -193,7 +200,11 @@ public record FieldVisualUBO(
             config.v8Ring() != null ? V8Ring1Vec4.from(config.v8Ring()) : V8Ring1Vec4.DEFAULT,
             config.v8Ring() != null ? V8Ring2Vec4.from(config.v8Ring()) : V8Ring2Vec4.DEFAULT,
             config.v8Corona() != null ? V8CoronaVec4.from(config.v8Corona()) : V8CoronaVec4.DEFAULT,
-            config.v8Electric() != null ? V8ElectricVec4.from(config.v8Electric()) : V8ElectricVec4.DEFAULT
+            config.v8Electric() != null ? V8ElectricVec4.from(config.v8Electric()) : V8ElectricVec4.DEFAULT,
+            
+            // God Rays (slots 50-51) - pulled from render config at runtime
+            GodRayParams.fromRenderConfig(),
+            GodRayMaskParams.fromRenderConfig()
         );
     }
     
@@ -290,7 +301,11 @@ public record FieldVisualUBO(
             config.v8Ring() != null ? V8Ring1Vec4.from(config.v8Ring()) : V8Ring1Vec4.DEFAULT,
             config.v8Ring() != null ? V8Ring2Vec4.from(config.v8Ring()) : V8Ring2Vec4.DEFAULT,
             config.v8Corona() != null ? V8CoronaVec4.from(config.v8Corona()) : V8CoronaVec4.DEFAULT,
-            config.v8Electric() != null ? V8ElectricVec4.from(config.v8Electric()) : V8ElectricVec4.DEFAULT
+            config.v8Electric() != null ? V8ElectricVec4.from(config.v8Electric()) : V8ElectricVec4.DEFAULT,
+            
+            // God Rays (slots 50-51) - pulled from render config at runtime
+            GodRayParams.fromRenderConfig(),
+            GodRayMaskParams.fromRenderConfig()
         );
     }
 }

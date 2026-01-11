@@ -333,6 +333,23 @@ layout(std140) uniform FieldVisualConfig {
     float V8ElectricFillIntensity; // Fill visibility: 0=minimal fill, 1=rich fill
     float V8ElectricFillDarken;    // Fill color: 0=white, 0.5=match lines, 1=black (default 0.60)
     float V8ElectricLineWidth;     // Line thickness: 0=thick, 1=thin (default 0.5)
+    
+    // ═══════════════════════════════════════════════════════════════════════
+    // GOD RAY PARAMS (Slot 50)
+    // Screen-space volumetric light scattering
+    // ═══════════════════════════════════════════════════════════════════════
+    
+    // vec4 50: God Ray controls
+    float GodRayEnabled;      // 0.0 = procedural rays, 1.0 = screen-space god rays
+    float GodRayDecay;        // Range control: 0.94-0.99 (higher = longer rays)
+    float GodRayExposure;     // Strength control: 0.005-0.1 (higher = brighter)
+    float GodRaySamples;      // Sample count (default 96)
+    
+    // vec4 51: God Ray mask controls
+    float GodRayThreshold;    // Brightness threshold: 0.0-1.0 (lower = more rays)
+    float GodRaySkyEnabled;   // Sky rays toggle: 0.0 = off, 1.0 = on
+    float GodRaySoftness;     // Transition softness (default 0.3)
+    float GodRayMaskReserved; // Reserved
 };
 
 // ═══════════════════════════════════════════════════════════════════════════

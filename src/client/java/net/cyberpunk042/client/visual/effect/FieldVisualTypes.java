@@ -987,4 +987,104 @@ public final class FieldVisualTypes {
         public V8ElectricParams withFillDarken(float v) { return new V8ElectricParams(flash, fillIntensity, v, lineWidth); }
         public V8ElectricParams withLineWidth(float v) { return new V8ElectricParams(flash, fillIntensity, fillDarken, v); }
     }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // UBO SLOT 50: GOD RAYS
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    /**
+     * God Ray parameters for screen-space volumetric light shafts.
+     * When enabled, replaces procedural animatedRayCorona with GPU Gems 3 radial blur.
+     * 
+     * <p>Tuning philosophy (from integration guide):
+     * <ul>
+     *   <li>decay controls RANGE (0.94 short → 0.99 long)</li>
+     *   <li>exposure controls STRENGTH (0.005 subtle → 0.1 strong)</li>
+     *   <li>NEVER use exposure to fix range, NEVER use decay to fix blowout</li>
+     * </ul>
+     */
+    public record GodRayParams(
+        float enabled,    // 0.0 = procedural rays, 1.0 = screen-space god rays
+        float decay,      // Range control: 0.94-0.99 (default 0.97)
+        float exposure,   // Strength control: 0.005-0.1 (default 0.02)
+        float samples     // Quality: sample count (default 96, fixed)
+    ) implements Vec4Serializable {
+        /** Default: disabled, balanced tuning, 96 samples */
+        public static final GodRayParams DEFAULT = new GodRayParams(0f, 0.97f, 0.02f, 96f);
+        
+        @Override public float slot0() { return enabled; }
+        @Override public float slot1() { return decay; }
+        @Override public float slot2() { return exposure; }
+        @Override public float slot3() { return samples; }
+        
+        /** Check if god rays are enabled (replaces procedural rays) */
+        public boolean isEnabled() { return enabled > 0.5f; }
+        
+        public GodRayParams withEnabled(float v) { return new GodRayParams(v, decay, exposure, samples); }
+        public GodRayParams withEnabled(boolean v) { return new GodRayParams(v ? 1f : 0f, decay, exposure, samples); }
+        public GodRayParams withDecay(float v) { return new GodRayParams(enabled, v, exposure, samples); }
+        public GodRayParams withExposure(float v) { return new GodRayParams(enabled, decay, v, samples); }
+        public GodRayParams withSamples(float v) { return new GodRayParams(enabled, decay, exposure, v); }
+        
+        /**
+         * Create from RenderConfig global settings.
+         */
+        public static GodRayParams fromRenderConfig() {
+            var config = net.cyberpunk042.client.gui.config.RenderConfig.get();
+            return new GodRayParams(
+                config.isGodRaysEnabled() ? 1f : 0f,
+                config.getGodRaysDecay(),
+                config.getGodRaysExposure(),
+                96f  // Fixed sample count
+            );
+        }
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // UBO SLOT 51: GOD RAYS MASK PARAMS
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    /**
+     * God Ray mask parameters for controlling what creates light shafts.
+     * 
+     * <p>These control the brightness-based mask generation:
+     * <ul>
+     *   <li>threshold: minimum brightness to create rays (0.0-1.0, lower = more rays)</li>
+     *   <li>skyEnabled: whether sky also contributes to rays (1.0 = atmospheric effect)</li>
+     * </ul>
+     */
+    public record GodRayMaskParams(
+        float threshold,    // Brightness threshold: 0.0-1.0 (default 0.5)
+        float skyEnabled,   // Sky rays toggle: 0.0 = off, 1.0 = on  
+        float softness,     // Transition softness (default 0.3)
+        float reserved      // Reserved for future use
+    ) implements Vec4Serializable {
+        /** Default: moderate threshold, sky off, soft transitions */
+        public static final GodRayMaskParams DEFAULT = new GodRayMaskParams(0.5f, 0f, 0.3f, 0f);
+        
+        @Override public float slot0() { return threshold; }
+        @Override public float slot1() { return skyEnabled; }
+        @Override public float slot2() { return softness; }
+        @Override public float slot3() { return reserved; }
+        
+        public boolean isSkyEnabled() { return skyEnabled > 0.5f; }
+        
+        public GodRayMaskParams withThreshold(float v) { return new GodRayMaskParams(v, skyEnabled, softness, reserved); }
+        public GodRayMaskParams withSkyEnabled(float v) { return new GodRayMaskParams(threshold, v, softness, reserved); }
+        public GodRayMaskParams withSkyEnabled(boolean v) { return new GodRayMaskParams(threshold, v ? 1f : 0f, softness, reserved); }
+        public GodRayMaskParams withSoftness(float v) { return new GodRayMaskParams(threshold, skyEnabled, v, reserved); }
+        
+        /**
+         * Create from RenderConfig global settings.
+         */
+        public static GodRayMaskParams fromRenderConfig() {
+            var config = net.cyberpunk042.client.gui.config.RenderConfig.get();
+            return new GodRayMaskParams(
+                config.getGodRaysThreshold(),
+                config.isGodRaysSkyEnabled() ? 1f : 0f,
+                0.3f,  // Fixed softness for now
+                0f
+            );
+        }
+    }
 }

@@ -144,7 +144,10 @@ PulsarV7Result renderPulsarV7(
     float seed,               // _Seed: pattern variation (-10 to 10, default 0)
     
     // ─── Eruption Contrast (NEW) ───
-    float eruptionContrast    // Controls ray discreteness (2.0=default, higher=discrete eruptions)
+    float eruptionContrast,   // Controls ray discreteness (2.0=default, higher=discrete eruptions)
+    
+    // ─── God Rays Integration ───
+    bool skipProceduralRays   // When true, skip procedural rays (god ray pipeline provides them)
 ) {
     PulsarV7Result result;
     result.didHit = false;
@@ -335,7 +338,8 @@ PulsarV7Result renderPulsarV7(
     
     // Unity: if (sqDist > sqRadius) col.xyz += lerp(_Ray, _RayLight, s3*s3*s3) * s3
     // Rays use same effectVisibility as body/ring for smooth occlusion
-    if (sqDist > sqRadius) {
+    // SKIP if god rays are handling rays externally
+    if (!skipProceduralRays && sqDist > sqRadius) {
         vec3 rayContrib = mix(rayColor, rayLightColor, s3 * s3 * s3) * s3;
         col.rgb += rayContrib * effectVisibility * intensity;  // Apply intensity to rays
     }

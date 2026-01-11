@@ -53,40 +53,49 @@ def create_simple_chain(version: str, base_json: dict) -> dict:
     return hdr_json
 
 
-def create_full_chain(version: str, base_json: dict) -> dict:
+def create_godrays_chain(version: str, base_json: dict) -> dict:
     """
-    Full chain: Effect + blur + glow composite.
+    God Rays chain: HDR Effect + god ray passes.
     
-    Pass 1: Effect → swap (HDR, no internal clamping)
-    Pass 2: Blit swap → main (show effect)
-    Pass 3: Blur H swap → blur_h
-    Pass 4: Blur V blur_h → blur_v
-    Pass 5: Glow add blur_v → main
+    Pass 1: Effect → swap (HDR, procedural rays skipped when god rays enabled)
+    Pass 2: Blit swap → main
+    Pass 3: God Rays Mask → god_mask (depth-based occlusion)
+    Pass 4: God Rays Accum → god_accum (radial blur toward light)
+    Pass 5: God Rays Blur H → god_blur_h
+    Pass 6: God Rays Blur V → god_blur_v
+    Pass 7: God Rays Composite → main (blend god rays with scene)
     
-    HDR benefits:
-    - All passes use RGBA16F
-    - Blur operates on HDR values (smoother falloff)
-    - Glow preserves bright highlights
+    NOTE: When GodRayEnabled=0, the god ray passes early-out with passthrough.
+    HDR glow is achieved naturally through unclamped values - no separate glow pass needed.
     """
-    # Start with base structure
+    # Extract FieldVisualConfig uniforms from base pass
+    base_pass = base_json["passes"][0].copy()
+    field_visual_uniforms = base_pass.get("uniforms", {})
+    
+    # Build the pipeline
     hdr_json = {
-        "_comment": f"HDR Full Chain - {version.upper()} with blur and glow",
+        "_comment": f"HDR God Rays Chain - {version.upper()} with volumetric light shafts",
         "targets": {
             "swap": {},
-            "blur_h": {},
-            "blur_v": {}
+            "god_mask": {},
+            "god_accum": {},
+            "god_blur_h": {},
+            "god_blur_v": {}
         },
         "passes": []
     }
     
-    # Copy first pass from base and update shader
-    base_pass = base_json["passes"][0].copy()
-    base_pass["_comment"] = "Pass 1: HDR Effect → swap"
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Pass 1: Effect → swap
+    # ═══════════════════════════════════════════════════════════════════════════
+    base_pass["_comment"] = "Pass 1: HDR Effect → swap (procedural rays skipped when god rays enabled)"
     base_pass["fragment_shader"] = f"the-virus-block:post/hdr/field_visual_{version}_hdr"
-    base_pass["output"] = "swap"  # Output to intermediate buffer, not main
+    base_pass["output"] = "swap"
     hdr_json["passes"].append(base_pass)
     
-    # Pass 2: Blit swap → main
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Pass 2: Blit → main
+    # ═══════════════════════════════════════════════════════════════════════════
     blit_pass = {
         "_comment": "Pass 2: Blit effect to main",
         "vertex_shader": "minecraft:post/blit",
@@ -101,13 +110,50 @@ def create_full_chain(version: str, base_json: dict) -> dict:
     }
     hdr_json["passes"].append(blit_pass)
     
-    # Pass 3: Horizontal blur
-    blur_h_pass = {
-        "_comment": "Pass 3: Horizontal Blur",
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Pass 3: God Rays Mask (depth → occlusion)
+    # ═══════════════════════════════════════════════════════════════════════════
+    god_mask_pass = {
+        "_comment": "Pass 3: God Rays Mask - brightness + depth to occlusion",
+        "vertex_shader": "minecraft:post/blit",
+        "fragment_shader": "the-virus-block:post/hdr/god_rays_mask",
+        "inputs": [
+            {"sampler_name": "Scene", "target": "minecraft:main"},
+            {
+                "sampler_name": "Depth",
+                "target": "minecraft:main",
+                "use_depth_buffer": True
+            }
+        ],
+        "output": "god_mask",
+        "uniforms": field_visual_uniforms  # Needs FieldVisualConfig for threshold + sky toggle
+    }
+    hdr_json["passes"].append(god_mask_pass)
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Pass 4: God Rays Accumulate (radial blur toward light)
+    # ═══════════════════════════════════════════════════════════════════════════
+    god_accum_pass = {
+        "_comment": "Pass 4: God Rays Accumulate - radial blur toward light source",
+        "vertex_shader": "minecraft:post/blit",
+        "fragment_shader": "the-virus-block:post/hdr/god_rays_accum",
+        "inputs": [
+            {"sampler_name": "Occlusion", "target": "god_mask"}
+        ],
+        "output": "god_accum",
+        "uniforms": field_visual_uniforms  # Needs FieldVisualConfig for position + god ray params
+    }
+    hdr_json["passes"].append(god_accum_pass)
+    
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Pass 5-6: God Rays Blur (soften the rays)
+    # ═══════════════════════════════════════════════════════════════════════════
+    god_blur_h_pass = {
+        "_comment": "Pass 5: God Rays Blur H",
         "vertex_shader": "minecraft:post/blit",
         "fragment_shader": "the-virus-block:post/hdr/gaussian_blur",
-        "inputs": [{"sampler_name": "In", "target": "swap"}],
-        "output": "blur_h",
+        "inputs": [{"sampler_name": "In", "target": "god_accum"}],
+        "output": "god_blur_h",
         "uniforms": {
             "BlurParams": [
                 {"name": "DirectionX", "type": "float", "value": 1.0},
@@ -117,15 +163,14 @@ def create_full_chain(version: str, base_json: dict) -> dict:
             ]
         }
     }
-    hdr_json["passes"].append(blur_h_pass)
+    hdr_json["passes"].append(god_blur_h_pass)
     
-    # Pass 4: Vertical blur
-    blur_v_pass = {
-        "_comment": "Pass 4: Vertical Blur",
+    god_blur_v_pass = {
+        "_comment": "Pass 6: God Rays Blur V",
         "vertex_shader": "minecraft:post/blit",
         "fragment_shader": "the-virus-block:post/hdr/gaussian_blur",
-        "inputs": [{"sampler_name": "In", "target": "blur_h"}],
-        "output": "blur_v",
+        "inputs": [{"sampler_name": "In", "target": "god_blur_h"}],
+        "output": "god_blur_v",
         "uniforms": {
             "BlurParams": [
                 {"name": "DirectionX", "type": "float", "value": 0.0},
@@ -135,28 +180,23 @@ def create_full_chain(version: str, base_json: dict) -> dict:
             ]
         }
     }
-    hdr_json["passes"].append(blur_v_pass)
+    hdr_json["passes"].append(god_blur_v_pass)
     
-    # Pass 5: Glow composite
-    glow_pass = {
-        "_comment": "Pass 5: Add glow to scene",
+    # ═══════════════════════════════════════════════════════════════════════════
+    # Pass 7: God Rays Composite (blend with scene)
+    # ═══════════════════════════════════════════════════════════════════════════
+    god_composite_pass = {
+        "_comment": "Pass 7: God Rays Composite - blend god rays with scene",
         "vertex_shader": "minecraft:post/blit",
-        "fragment_shader": "the-virus-block:post/hdr/glow_add",
+        "fragment_shader": "the-virus-block:post/hdr/god_rays_composite",
         "inputs": [
             {"sampler_name": "Scene", "target": "minecraft:main"},
-            {"sampler_name": "Glow", "target": "blur_v"}
+            {"sampler_name": "GodRays", "target": "god_blur_v"}
         ],
         "output": "minecraft:main",
-        "uniforms": {
-            "GlowParams": [
-                {"name": "GlowIntensity", "type": "float", "value": 0.3},
-                {"name": "Pad1", "type": "float", "value": 0.0},
-                {"name": "Pad2", "type": "float", "value": 0.0},
-                {"name": "Pad3", "type": "float", "value": 0.0}
-            ]
-        }
+        "uniforms": field_visual_uniforms  # Needs FieldVisualConfig for ray color + god ray enabled check
     }
-    hdr_json["passes"].append(glow_pass)
+    hdr_json["passes"].append(god_composite_pass)
     
     return hdr_json
 
@@ -167,8 +207,8 @@ def generate_pipeline(version: str, chain_type: str) -> Path:
     
     if chain_type == "simple":
         hdr_json = create_simple_chain(version, base_json)
-    elif chain_type == "full":
-        hdr_json = create_full_chain(version, base_json)
+    elif chain_type == "godrays":
+        hdr_json = create_godrays_chain(version, base_json)
     else:
         raise ValueError(f"Unknown chain type: {chain_type}")
     
@@ -183,8 +223,8 @@ def generate_pipeline(version: str, chain_type: str) -> Path:
 def main():
     parser = argparse.ArgumentParser(description="Generate HDR post-effect pipelines")
     parser.add_argument("versions", help="Comma-separated list of versions (e.g., v5,v6,v7,v8)")
-    parser.add_argument("--chain", choices=["simple", "full"], default="simple",
-                        help="Chain type: simple (effect only) or full (effect + blur + glow)")
+    parser.add_argument("--chain", choices=["simple", "godrays"], default="simple",
+                        help="Chain type: simple (HDR effect only), godrays (HDR + volumetric light shafts)")
     parser.add_argument("--dry-run", action="store_true",
                         help="Print what would be generated without writing files")
     

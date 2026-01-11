@@ -337,6 +337,57 @@ public class FieldVisualSubPanel extends BoundPanel {
                 }));
         }
         content.advanceBy(22);
+        
+        // ─── Row 6: God Rays Toggle (only when HDR enabled) ───
+        if (hdrEnabled) {
+            y = content.getCurrentY();
+            boolean godRaysEnabled = renderConfig.isGodRaysEnabled();
+            widgets.add(GuiWidgets.toggle(x, y, halfW,
+                godRaysEnabled ? "§aGod Rays" : "§7God Rays", godRaysEnabled, 
+                "Volumetric light shafts emanating from orb",
+                v -> { 
+                    renderConfig.setGodRaysEnabled(v);
+                    // Clear caches to reload shaders with god ray passes
+                    net.cyberpunk042.client.visual.effect.FieldVisualPostEffect.clearProcessorCache();
+                    rebuildContent(); 
+                }));
+            
+            // God Rays parameters (only when enabled)
+            if (godRaysEnabled) {
+                // Decay slider (controls RANGE)
+                float decay = renderConfig.getGodRaysDecay();
+                widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
+                    "Reach", 0.94f, 0.99f, decay, "%.3f", 
+                    "Higher = longer rays (range control)",
+                    v -> renderConfig.setGodRaysDecay(v)));
+                content.advanceBy(22);
+                
+                // Exposure slider (controls STRENGTH)
+                y = content.getCurrentY();
+                float exposure = renderConfig.getGodRaysExposure();
+                widgets.add(GuiWidgets.slider(x, y, halfW, 
+                    "Strength", 0.005f, 0.1f, exposure, "%.3f", 
+                    "Higher = brighter rays (strength control)",
+                    v -> renderConfig.setGodRaysExposure(v)));
+                
+                // Threshold slider (controls what creates rays)
+                float threshold = renderConfig.getGodRaysThreshold();
+                widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
+                    "Threshold", 0f, 1f, threshold, "%.2f", 
+                    "Lower = more rays from dimmer areas",
+                    v -> renderConfig.setGodRaysThreshold(v)));
+                content.advanceBy(22);
+                
+                // Sky rays toggle
+                y = content.getCurrentY();
+                boolean skyEnabled = renderConfig.isGodRaysSkyEnabled();
+                widgets.add(GuiWidgets.toggle(x, y, halfW, 
+                    "Sky Rays", skyEnabled, 
+                    "Enable atmospheric rays from sky",
+                    v -> renderConfig.setGodRaysSkyEnabled(v)));
+            }
+            content.advanceBy(22);
+        }
         content.gap();
         
         // ═══════════════════════════════════════════════════════════════════════════
