@@ -29,14 +29,6 @@ layout(std140) uniform CompositeParams {
     float TonemapModeVal;     // 0=Exposure, 1=ACES, 2=Reinhard (as float)
 };
 
-// HDR config from mixin - for BlurRadius compensation
-layout(std140) uniform HdrConfig {
-    float BlurRadius;     // Blur spread multiplier (from UI slider)
-    float GlowIntensityHdr;  // Reserved
-    float HdrPad1;
-    float HdrPad2;
-};
-
 // ═══════════════════════════════════════════════════════════════════════════
 // TONEMAPPING FUNCTIONS
 // ═══════════════════════════════════════════════════════════════════════════
@@ -72,9 +64,8 @@ void main() {
     vec3 glow = glowSample.rgb;
     float glowAlpha = glowSample.a;
     
-    // Apply glow scaling
-    // 0.05 base * intensity from slider (via HdrConfig.GlowIntensityHdr)
-    glow *= 0.025 * GlowIntensityHdr;
+    // Apply intensity scaling to glow
+    glow *= GlowIntensity;
     
     // ╔═══════════════════════════════════════════════════════════════════════╗
     // ║ TONEMAP THE GLOW (scene is already LDR)                               ║
@@ -94,11 +85,13 @@ void main() {
         glowMapped = toneMapExposure(glow, TonemapExposure);
     }
     
-    // Blend glow onto scene using SCREEN blend
-    // Screen: 1 - (1-scene) * (1-glow) = scene + glow - scene*glow
-    // This brightens without doubling (unlike additive)
-    vec3 glowContribution = glowMapped * glowAlpha;
-    vec3 final = 1.0 - (1.0 - scene) * (1.0 - glowContribution);
+    // Blend glow onto scene using glow's alpha
+    // This gives a soft additive effect controlled by the extraction pass
+    vec3 final = scene + glowMapped * glowAlpha;
+    
+    // DEBUG: Add slight red tint to verify this pass is executing
+    // TODO: Remove after debugging
+    final = mix(final, vec3(1.0, 0.0, 0.0), 0.1);
     
     // Final clamp to [0,1] for display
     fragColor = vec4(clamp(final, 0.0, 1.0), 1.0);

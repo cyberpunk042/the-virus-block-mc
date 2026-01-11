@@ -1,14 +1,11 @@
 {
-    "_comment": "HDR Full Chain - V5 with blur and glow",
     "targets": {
-        "swap": {},
-        "blur_h": {},
-        "blur_v": {}
+        "swap": {}
     },
     "passes": [
         {
             "vertex_shader": "minecraft:post/sobel",
-            "fragment_shader": "the-virus-block:post/hdr/field_visual_v5_hdr",
+            "fragment_shader": "the-virus-block:post/field_visual_v7",
             "inputs": [
                 {
                     "sampler_name": "In",
@@ -1018,11 +1015,9 @@
                     }
                 ]
             },
-            "output": "swap",
-            "_comment": "Pass 1: HDR Effect \u2192 swap"
+            "output": "swap"
         },
         {
-            "_comment": "Pass 2: Blit effect to main",
             "vertex_shader": "minecraft:post/blit",
             "fragment_shader": "minecraft:post/blit",
             "inputs": [
@@ -1031,7 +1026,6 @@
                     "target": "swap"
                 }
             ],
-            "output": "minecraft:main",
             "uniforms": {
                 "BlitConfig": [
                     {
@@ -1045,283 +1039,8 @@
                         ]
                     }
                 ]
-            }
-        },
-        {
-            "_comment": "Pass 3: Horizontal Blur",
-            "vertex_shader": "minecraft:post/blit",
-            "fragment_shader": "the-virus-block:post/hdr/gaussian_blur",
-            "inputs": [
-                {
-                    "sampler_name": "In",
-                    "target": "swap"
-                }
-            ],
-            "output": "blur_h",
-            "uniforms": {
-                "BlurParams": [
-                    {
-                        "name": "DirectionX",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "DirectionY",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "BlurPad1",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "BlurPad2",
-                        "type": "float",
-                        "value": 0.0
-                    }
-                ],
-                "HdrConfig": [
-                    {
-                        "name": "BlurRadius",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "GlowIntensity",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "HdrPad1",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "HdrPad2",
-                        "type": "float",
-                        "value": 0.0
-                    }
-                ]
-            }
-        },
-        {
-            "_comment": "Pass 4: Vertical Blur",
-            "vertex_shader": "minecraft:post/blit",
-            "fragment_shader": "the-virus-block:post/hdr/gaussian_blur",
-            "inputs": [
-                {
-                    "sampler_name": "In",
-                    "target": "blur_h"
-                }
-            ],
-            "output": "blur_v",
-            "uniforms": {
-                "BlurParams": [
-                    {
-                        "name": "DirectionX",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "DirectionY",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "BlurPad1",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "BlurPad2",
-                        "type": "float",
-                        "value": 0.0
-                    }
-                ],
-                "HdrConfig": [
-                    {
-                        "name": "BlurRadius",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "GlowIntensity",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "HdrPad1",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "HdrPad2",
-                        "type": "float",
-                        "value": 0.0
-                    }
-                ]
-            }
-        },
-        {
-            "_comment": "Pass 5: Add glow to scene",
-            "vertex_shader": "minecraft:post/blit",
-            "fragment_shader": "the-virus-block:post/hdr/glow_add",
-            "inputs": [
-                {
-                    "sampler_name": "Scene",
-                    "target": "minecraft:main"
-                },
-                {
-                    "sampler_name": "Glow",
-                    "target": "blur_v"
-                }
-            ],
-            "output": "minecraft:main",
-            "uniforms": {
-                "FieldVisualConfig": [
-                    {
-                        "name": "CenterX",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "CenterY",
-                        "type": "float",
-                        "value": 64.0
-                    },
-                    {
-                        "name": "CenterZ",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "Radius",
-                        "type": "float",
-                        "value": 3.0
-                    },
-                    {
-                        "name": "PrimaryR",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "PrimaryG",
-                        "type": "float",
-                        "value": 0.5
-                    },
-                    {
-                        "name": "PrimaryB",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "PrimaryA",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "SecondaryR",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "SecondaryG",
-                        "type": "float",
-                        "value": 0.8
-                    },
-                    {
-                        "name": "SecondaryB",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "SecondaryA",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "TertiaryR",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "TertiaryG",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "TertiaryB",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "TertiaryA",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "HighlightR",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "HighlightG",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "HighlightB",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "HighlightA",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "RayColorR",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "RayColorG",
-                        "type": "float",
-                        "value": 0.6
-                    },
-                    {
-                        "name": "RayColorB",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "RayColorA",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "Phase",
-                        "type": "float",
-                        "value": 0.0
-                    },
-                    {
-                        "name": "AnimSpeed",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "Intensity",
-                        "type": "float",
-                        "value": 1.0
-                    },
-                    {
-                        "name": "EffectType",
-                        "type": "float",
-                        "value": 0.0
-                    }
-                ]
-            }
+            },
+            "output": "minecraft:main"
         }
     ]
 }

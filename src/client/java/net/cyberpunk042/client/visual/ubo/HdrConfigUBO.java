@@ -59,18 +59,17 @@ public record HdrConfigUBO(
     /**
      * Create UBO from current RenderConfig values.
      * 
-     * <p>Called by PostEffectPassMixin every frame for gaussian_blur and composite passes.</p>
+     * <p>Called by PostEffectPassMixin every frame for gaussian_blur passes.</p>
      * 
-     * @return HdrConfigUBO with current BlurRadius and intensity from active field
+     * @return HdrConfigUBO with current BlurRadius from UI slider
      */
     public static HdrConfigUBO fromConfig() {
         float blurRadius = RenderConfig.get().getBlurRadius();
-        float intensity = HdrState.getIntensity();
         
         return new HdrConfigUBO(
             new HdrParamsVec4(
                 blurRadius,   // BlurRadius from slider
-                intensity,    // Intensity from active field
+                1.0f,         // GlowIntensity (reserved)
                 0.0f,         // Padding
                 0.0f          // Padding
             )

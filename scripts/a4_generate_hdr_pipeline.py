@@ -86,9 +86,24 @@ def create_full_chain(version: str, base_json: dict) -> dict:
     base_pass["output"] = "swap"  # Output to intermediate buffer, not main
     hdr_json["passes"].append(base_pass)
     
-    # Pass 2: Horizontal blur (reads effect from swap)
+    # Pass 2: Blit swap → main
+    blit_pass = {
+        "_comment": "Pass 2: Blit effect to main",
+        "vertex_shader": "minecraft:post/blit",
+        "fragment_shader": "minecraft:post/blit",
+        "inputs": [{"sampler_name": "In", "target": "swap"}],
+        "output": "minecraft:main",
+        "uniforms": {
+            "BlitConfig": [
+                {"name": "ColorModulate", "type": "vec4", "value": [1.0, 1.0, 1.0, 1.0]}
+            ]
+        }
+    }
+    hdr_json["passes"].append(blit_pass)
+    
+    # Pass 3: Horizontal blur
     blur_h_pass = {
-        "_comment": "Pass 2: Horizontal Blur",
+        "_comment": "Pass 3: Horizontal Blur",
         "vertex_shader": "minecraft:post/blit",
         "fragment_shader": "the-virus-block:post/hdr/gaussian_blur",
         "inputs": [{"sampler_name": "In", "target": "swap"}],
@@ -110,9 +125,9 @@ def create_full_chain(version: str, base_json: dict) -> dict:
     }
     hdr_json["passes"].append(blur_h_pass)
     
-    # Pass 3: Vertical blur
+    # Pass 4: Vertical blur
     blur_v_pass = {
-        "_comment": "Pass 3: Vertical Blur",
+        "_comment": "Pass 4: Vertical Blur",
         "vertex_shader": "minecraft:post/blit",
         "fragment_shader": "the-virus-block:post/hdr/gaussian_blur",
         "inputs": [{"sampler_name": "In", "target": "blur_h"}],
@@ -134,32 +149,50 @@ def create_full_chain(version: str, base_json: dict) -> dict:
     }
     hdr_json["passes"].append(blur_v_pass)
     
-    # Pass 4: Composite (combine scene + blurred glow)
-    composite_pass = {
-        "_comment": "Pass 4: Composite glow onto scene",
+    # Pass 5: Glow composite
+    glow_pass = {
+        "_comment": "Pass 5: Add glow to scene",
         "vertex_shader": "minecraft:post/blit",
-        "fragment_shader": "the-virus-block:post/hdr/composite",
+        "fragment_shader": "the-virus-block:post/hdr/glow_add",
         "inputs": [
             {"sampler_name": "Scene", "target": "minecraft:main"},
             {"sampler_name": "Glow", "target": "blur_v"}
         ],
         "output": "minecraft:main",
         "uniforms": {
-            "CompositeParams": [
-                {"name": "GlowIntensity", "type": "float", "value": 1.0},
-                {"name": "TonemapExposure", "type": "float", "value": 1.5},
-                {"name": "TonemapModePad1", "type": "float", "value": 0.0},
-                {"name": "TonemapModeVal", "type": "float", "value": 0.0}
-            ],
-            "HdrConfig": [
-                {"name": "BlurRadius", "type": "float", "value": 1.0},
-                {"name": "GlowIntensityHdr", "type": "float", "value": 1.0},
-                {"name": "HdrPad1", "type": "float", "value": 0.0},
-                {"name": "HdrPad2", "type": "float", "value": 0.0}
+            "FieldVisualConfig": [
+                {"name": "CenterX", "type": "float", "value": 0.0},
+                {"name": "CenterY", "type": "float", "value": 64.0},
+                {"name": "CenterZ", "type": "float", "value": 0.0},
+                {"name": "Radius", "type": "float", "value": 3.0},
+                {"name": "PrimaryR", "type": "float", "value": 1.0},
+                {"name": "PrimaryG", "type": "float", "value": 0.5},
+                {"name": "PrimaryB", "type": "float", "value": 0.0},
+                {"name": "PrimaryA", "type": "float", "value": 1.0},
+                {"name": "SecondaryR", "type": "float", "value": 1.0},
+                {"name": "SecondaryG", "type": "float", "value": 0.8},
+                {"name": "SecondaryB", "type": "float", "value": 0.0},
+                {"name": "SecondaryA", "type": "float", "value": 1.0},
+                {"name": "TertiaryR", "type": "float", "value": 1.0},
+                {"name": "TertiaryG", "type": "float", "value": 1.0},
+                {"name": "TertiaryB", "type": "float", "value": 1.0},
+                {"name": "TertiaryA", "type": "float", "value": 0.0},
+                {"name": "HighlightR", "type": "float", "value": 1.0},
+                {"name": "HighlightG", "type": "float", "value": 1.0},
+                {"name": "HighlightB", "type": "float", "value": 1.0},
+                {"name": "HighlightA", "type": "float", "value": 0.0},
+                {"name": "RayColorR", "type": "float", "value": 1.0},
+                {"name": "RayColorG", "type": "float", "value": 0.6},
+                {"name": "RayColorB", "type": "float", "value": 0.0},
+                {"name": "RayColorA", "type": "float", "value": 1.0},
+                {"name": "Phase", "type": "float", "value": 0.0},
+                {"name": "AnimSpeed", "type": "float", "value": 1.0},
+                {"name": "Intensity", "type": "float", "value": 1.0},
+                {"name": "EffectType", "type": "float", "value": 0.0}
             ]
         }
     }
-    hdr_json["passes"].append(composite_pass)
+    hdr_json["passes"].append(glow_pass)
     
     return hdr_json
 
