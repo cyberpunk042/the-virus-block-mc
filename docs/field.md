@@ -8,6 +8,13 @@
 
 ```mermaid
 classDiagram
+    class FieldManager {
+        +get(...) FieldManager
+        +remove(...) void
+        +onSpawn(...) void
+        +onRemove(...) void
+        +onUpdate(...) void
+    }
     class BeamConfig {
         <<record>>
         +custom(...) BeamConfig
@@ -15,14 +22,6 @@ classDiagram
         +isActive() boolean
         +hasPulse() boolean
         +fromJson(...) BeamConfig
-    }
-    class FieldDefinition {
-        <<record>>
-        +fromJson(...) FieldDefinition
-        +empty(...) FieldDefinition
-        +of(...) FieldDefinition
-        +of(...) FieldDefinition
-        +hasBindings() boolean
     }
     class FieldLayer {
         <<record>>
@@ -32,12 +31,16 @@ classDiagram
         +fromJson(...) FieldLayer
         +builder(...) Builder
     }
-    class FieldManager {
-        +get(...) FieldManager
-        +remove(...) void
-        +onSpawn(...) void
-        +onRemove(...) void
-        +onUpdate(...) void
+    class FieldType {
+        <<enumeration>>
+    }
+    class FieldDefinition {
+        <<record>>
+        +fromJson(...) FieldDefinition
+        +empty(...) FieldDefinition
+        +of(...) FieldDefinition
+        +of(...) FieldDefinition
+        +hasBindings() boolean
     }
     class FieldRegistry {
         +initialize(...) void
@@ -45,9 +48,6 @@ classDiagram
         +get(...) FieldDefinition
         +get(...) FieldDefinition
         +clear() void
-    }
-    class FieldType {
-        <<enumeration>>
     }
     class Modifiers {
         <<record>>
@@ -57,18 +57,18 @@ classDiagram
         +withStrength(...) Modifiers
         +visual(...) Modifiers
     }
+    class ReferenceResolver {
+        +resolve(...) JsonObject
+        +resolveWithOverrides(...) JsonObject
+        +resolveWithOverrides(...) JsonObject
+        +clearCache() void
+    }
     class FieldLoader {
         +load(...) void
         +reload() void
         +loadAll() void
         +loadDefinition(...) FieldDefinition
         +getDefinition(...) FieldDefinition
-    }
-    class ReferenceResolver {
-        +resolve(...) JsonObject
-        +resolveWithOverrides(...) JsonObject
-        +resolveWithOverrides(...) JsonObject
-        +clearCache() void
     }
     class EffectProcessor {
         +process(...) void
@@ -111,14 +111,6 @@ classDiagram
         +getActiveTriggers() List
         +getActiveTriggers(...) List
     }
-    class FieldInstance {
-        <<abstract>>
-        +id() long
-        +definitionId() Identifier
-        +type() FieldType
-        +position() Vec3d
-        +scale() float
-    }
     class FollowConfig {
         <<record>>
         +withLead(...) FollowConfig
@@ -126,6 +118,14 @@ classDiagram
         +leading(...) FollowConfig
         +isActive() boolean
         +isTrailing() boolean
+    }
+    class FieldInstance {
+        <<abstract>>
+        +id() long
+        +definitionId() Identifier
+        +type() FieldType
+        +position() Vec3d
+        +scale() float
     }
     class LifecycleState {
         <<enumeration>>

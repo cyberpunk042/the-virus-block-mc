@@ -2,7 +2,7 @@
 
 > Client-server packets and commands.
 
-**31 classes**
+**33 classes**
 
 ## Key Classes
 
@@ -11,11 +11,47 @@
 
 ```mermaid
 classDiagram
-    class DifficultySyncPayload {
+    class VirusBlockTelemetryPayload {
         <<record>>
-        +difficulty: VirusDifficulty
+        +closestDistance: float
+        +totalCount: int
+        +nearbyPositions: List
+        +MAX_POSITIONS: int
+        +getId() Id
+        +empty() VirusBlockTelemetryPayload
+    }
+    class ShieldFieldSpawnPayload {
+        <<record>>
+        +id: long
+        +x: double
+        +y: double
+        +z: double
+        +getId() Id
+    }
+    class HelmetHudPayload {
+        <<record>>
+        +yawToNearest: float
+        +signalStrength: float
+        +totalCount: int
+        +hasTarget: boolean
+        +getId() Id
+        +empty() HelmetHudPayload
+        +computeSignalStrength(...) float
+    }
+    class SkyTintPayload {
+        <<record>>
+        +skyCorrupted: boolean
+        +fluidsCorrupted: boolean
         +ID: Id
         +CODEC: PacketCodec
+        +getId() Id
+    }
+    class GrowthRingFieldPayload {
+        <<record>>
+        +worldKey: RegistryKey
+        +origin: BlockPos
+        +rings: List
+        +ID: Id
         +getId() Id
     }
     class FieldDefinitionSyncPayload {
@@ -35,23 +71,51 @@ classDiagram
         +sendRemove(...) void
         +sendUpdate(...) void
     }
-    class FieldRemovePayload {
+    class SingularitySchedulePayload {
         <<record>>
-        +id: long
-        +PACKET_ID: Identifier
+        +rings: List
         +ID: Id
         +CODEC: PacketCodec
-        +read(...) FieldRemovePayload
+        +rings() List
         +getId() Id
     }
-    class FieldSpawnPayload {
+    class VoidTearSpawnPayload {
         <<record>>
         +id: long
-        +definitionId: String
         +x: double
         +y: double
+        +z: double
         +getId() Id
-        +definitionIdentifier() Identifier
+    }
+    class SingularityVisualStartPayload {
+        <<record>>
+        +pos: BlockPos
+        +ID: Id
+        +CODEC: PacketCodec
+        +getId() Id
+    }
+    class ShieldFieldRemovePayload {
+        <<record>>
+        +id: long
+        +ID: Id
+        +CODEC: PacketCodec
+        +getId() Id
+    }
+    class GrowthBeamPayload {
+        <<record>>
+        +worldKey: RegistryKey
+        +origin: BlockPos
+        +targetEntityId: int
+        +targetX: double
+        +targetPosition() Vec3d
+        +getId() Id
+    }
+    class DifficultySyncPayload {
+        <<record>>
+        +difficulty: VirusDifficulty
+        +ID: Id
+        +CODEC: PacketCodec
+        +getId() Id
     }
     class FieldUpdatePayload {
         <<record>>
@@ -65,77 +129,6 @@ classDiagram
         +withShuffle(...) FieldUpdatePayload
         +full(...) FieldUpdatePayload
     }
-    class GrowthBeamPayload {
-        <<record>>
-        +worldKey: RegistryKey
-        +origin: BlockPos
-        +targetEntityId: int
-        +targetX: double
-        +targetPosition() Vec3d
-        +getId() Id
-    }
-    class GrowthRingFieldPayload {
-        <<record>>
-        +worldKey: RegistryKey
-        +origin: BlockPos
-        +rings: List
-        +ID: Id
-        +getId() Id
-    }
-    class HorizonTintPayload {
-        <<record>>
-        +enabled: boolean
-        +intensity: float
-        +argb: int
-        +ID: Id
-        +getId() Id
-    }
-    class PurificationTotemSelectPayload {
-        <<record>>
-        +syncId: int
-        +option: PurificationOption
-        +ID: Id
-        +CODEC: PacketCodec
-        +getId() Id
-    }
-    class ShieldFieldRemovePayload {
-        <<record>>
-        +id: long
-        +ID: Id
-        +CODEC: PacketCodec
-        +getId() Id
-    }
-    class ShieldFieldSpawnPayload {
-        <<record>>
-        +id: long
-        +x: double
-        +y: double
-        +z: double
-        +getId() Id
-    }
-    class SingularityBorderPayload {
-        <<record>>
-        +active: boolean
-        +centerX: double
-        +centerZ: double
-        +initialDiameter: double
-        +getId() Id
-    }
-    class SingularitySchedulePayload {
-        <<record>>
-        +rings: List
-        +ID: Id
-        +CODEC: PacketCodec
-        +rings() List
-        +getId() Id
-    }
-    class SingularityVisualStartPayload {
-        <<record>>
-        +pos: BlockPos
-        +ID: Id
-        +CODEC: PacketCodec
-        +getId() Id
-    }
     class SingularityVisualStopPayload {
         <<record>>
         +pos: BlockPos
@@ -143,10 +136,19 @@ classDiagram
         +CODEC: PacketCodec
         +getId() Id
     }
-    class SkyTintPayload {
+    class FieldRemovePayload {
         <<record>>
-        +skyCorrupted: boolean
-        +fluidsCorrupted: boolean
+        +id: long
+        +PACKET_ID: Identifier
+        +ID: Id
+        +CODEC: PacketCodec
+        +read(...) FieldRemovePayload
+        +getId() Id
+    }
+    class PurificationTotemSelectPayload {
+        <<record>>
+        +syncId: int
+        +option: PurificationOption
         +ID: Id
         +CODEC: PacketCodec
         +getId() Id
@@ -159,6 +161,31 @@ classDiagram
         +CODEC: PacketCodec
         +getId() Id
     }
+    class FieldSpawnPayload {
+        <<record>>
+        +id: long
+        +definitionId: String
+        +x: double
+        +y: double
+        +getId() Id
+        +definitionIdentifier() Identifier
+    }
+    class HorizonTintPayload {
+        <<record>>
+        +enabled: boolean
+        +intensity: float
+        +argb: int
+        +ID: Id
+        +getId() Id
+    }
+    class SingularityBorderPayload {
+        <<record>>
+        +active: boolean
+        +centerX: double
+        +centerZ: double
+        +initialDiameter: double
+        +getId() Id
+    }
     class VoidTearBurstPayload {
         <<record>>
         +id: long
@@ -167,22 +194,17 @@ classDiagram
         +z: double
         +getId() Id
     }
-    class VoidTearSpawnPayload {
-        <<record>>
-        +id: long
-        +x: double
-        +y: double
-        +z: double
-        +getId() Id
+    class VirusDebugCommands {
+        +register() void
     }
-    class FieldSubcommands {
+    class VirusStatsCommand {
         +register(...) void
     }
-    class GrowthBlockCommands {
-        +register() void
+    class InfectionSubcommands {
+        +build() LiteralArgumentBuilder
     }
-    class GrowthCollisionCommand {
-        +register() void
+    class VirusCommand {
+        +register(...) void
     }
     class GrowthCommandHandlers {
         +NO_GROWTH_STACK: SimpleCommandExceptionType
@@ -195,6 +217,12 @@ classDiagram
         +applyAuto(...) int
         +applyMutationToBlock(...) int
     }
+    class SingularitySubcommands {
+        +build() LiteralArgumentBuilder
+    }
+    class GrowthBlockCommands {
+        +register() void
+    }
     class GrowthProfileDescriber {
         +reportDefinition(...) void
         +describeGlow(...) String
@@ -202,23 +230,14 @@ classDiagram
         +describeOpacity(...) String
         +describeSpin(...) String
     }
-    class InfectionSubcommands {
-        +build() LiteralArgumentBuilder
-    }
-    class SingularitySubcommands {
-        +build() LiteralArgumentBuilder
-    }
-    class VirusCommand {
-        +register(...) void
-    }
-    class VirusDebugCommands {
+    class GrowthCollisionCommand {
         +register() void
     }
     class VirusDifficultyCommand {
         +register(...) void
         +openMenuFor(...) boolean
     }
-    class VirusStatsCommand {
+    class FieldSubcommands {
         +register(...) void
     }
     class CustomPayload {
@@ -232,6 +251,7 @@ classDiagram
     CustomPayload <|.. FieldUpdatePayload
     CustomPayload <|.. GrowthBeamPayload
     CustomPayload <|.. GrowthRingFieldPayload
+    CustomPayload <|.. HelmetHudPayload
     CustomPayload <|.. HorizonTintPayload
     CustomPayload <|.. PurificationTotemSelectPayload
     CustomPayload <|.. ShieldFieldRemovePayload
@@ -241,6 +261,7 @@ classDiagram
     CustomPayload <|.. SingularityVisualStartPayload
     CustomPayload <|.. SingularityVisualStopPayload
     CustomPayload <|.. SkyTintPayload
+    CustomPayload <|.. VirusBlockTelemetryPayload
     CustomPayload <|.. VirusDifficultySelectPayload
     CustomPayload <|.. VoidTearBurstPayload
     CustomPayload <|.. VoidTearSpawnPayload
@@ -293,6 +314,10 @@ classDiagram
     GrowthRingFieldPayload --> PacketCodec : CODEC
     GrowthRingFieldPayload --> RegistryKey : worldKey
     GrowthRingFieldPayload --> RingEntry : rings
+    HelmetHudPayload --> Id : ID
+    HelmetHudPayload --> Id : returns
+    HelmetHudPayload --> PacketCodec : CODEC
+    HelmetHudPayload --> RegistryByteBufbuf : uses
     HorizonTintPayload --> Id : ID
     HorizonTintPayload --> Id : returns
     HorizonTintPayload --> PacketByteBufbuf : uses
@@ -337,6 +362,9 @@ classDiagram
     SkyTintPayload --> Id : returns
     SkyTintPayload --> PacketByteBufbuf : uses
     SkyTintPayload --> PacketCodec : CODEC
+    VirusBlockTelemetryPayload --> Id : ID
+    VirusBlockTelemetryPayload --> Id : returns
+    VirusBlockTelemetryPayload --> PacketCodec : CODEC
     VirusCommand --> CommandDispatcher : uses
     VirusCommand --> LiteralArgumentBuilder : returns
     VirusCommand --> ServerCommandSource : returns

@@ -1,6 +1,6 @@
 # 🏗️ System Architecture
 
-> Auto-generated from 978 classes across 141 packages.
+> Auto-generated from 1022 classes across 147 packages.
 
 ## Complete System Overview
 
@@ -98,35 +98,35 @@ graph TB
 
 | Package | Classes | Key Types |
 |---------|---------|------------|
-| `net.cyberpunk042.block.core` | 5 | BacteriaBlock, CuredInfectiousCubeBlock, InfectedBlock, ... |
-| `net.cyberpunk042.block.corrupted` | 14 | CorruptedCryingObsidianBlock, CorruptedDiamondBlock, CorruptedDirtBlock, ... |
-| `net.cyberpunk042.block.entity` | 10 | GrowthCollisionTracker, GrowthEventPublisher, GrowthExplosionHandler, ... |
+| `net.cyberpunk042.block.core` | 5 | CuredInfectiousCubeBlock, InfectiousCubeBlock, BacteriaBlock, ... |
+| `net.cyberpunk042.block.corrupted` | 14 | CorruptedWoodBlock, CorruptedCryingObsidianBlock, CorruptedSandBlock, ... |
+| `net.cyberpunk042.block.entity` | 10 | ProgressiveGrowthBlockEntity, SingularityBlockEntity, MatrixCubeBlockEntity, ... |
 | `net.cyberpunk042.block.growth` | 1 | ProgressiveGrowthBlock |
 | `net.cyberpunk042.block.matrix` | 1 | MatrixCubeBlock |
 | `net.cyberpunk042.block.singularity` | 1 | SingularityBlock |
 | `net.cyberpunk042.block.virus` | 2 | VirusBlock, VirusBlockProtection |
-| `net.cyberpunk042.client.render.blockentity` | 7 | FieldMeshRenderer, GlowQuadEmitter, GlowTextureResolver, ... |
+| `net.cyberpunk042.client.render.blockentity` | 7 | FieldMeshRenderer, ProgressiveGrowthBlockEntityRenderer, MeshFrameAnimator, ... |
 
 ### Field
 
 | Package | Classes | Key Types |
 |---------|---------|------------|
-| `net.cyberpunk042.client.field` | 2 | JoinWarmupManager, WarmupOverlay |
-| `net.cyberpunk042.client.field.render` | 19 | AbstractPrimitiveRenderer, BeamRenderer, CapsuleRenderer, ... |
-| `net.cyberpunk042.client.field.render.effect` | 6 | RenderEffectChain, RenderEffectContext, RenderMotionEffect, ... |
-| `net.cyberpunk042.client.field.render.emit` | 8 | EmitCageStrategy, EmitContext, EmitLineStrategy, ... |
+| `net.cyberpunk042.client.field` | 2 | WarmupOverlay, JoinWarmupManager |
+| `net.cyberpunk042.client.field.render` | 19 | PolyhedronRenderer, RaysRenderer, ConeRenderer, ... |
+| `net.cyberpunk042.client.field.render.effect` | 6 | RenderWiggleEffect, RenderTwistEffect, RenderEffectChain, ... |
+| `net.cyberpunk042.client.field.render.emit` | 8 | RayCageGenerator, EmitLineStrategy, EmitStrategy, ... |
 | `net.cyberpunk042.client.render.field` | 1 | GrowthRingFieldRenderer |
-| `net.cyberpunk042.command.field` | 7 | FieldCommand, FieldEditSubcommand, FieldTestCommand, ... |
-| `net.cyberpunk042.field` | 9 | BeamConfig, ClientFieldState, FieldDefinition, ... |
-| `net.cyberpunk042.field.category` | 3 | PresetCategory, ProfileCategory, ProfileSource |
-| `net.cyberpunk042.field.effect` | 5 | ActiveEffect, EffectConfig, EffectProcessor, ... |
+| `net.cyberpunk042.command.field` | 7 | FieldEditSubcommand, FieldTestCommand, FieldTypeProviders, ... |
+| `net.cyberpunk042.field` | 9 | FieldManager, ClientFieldState, BeamConfig, ... |
+| `net.cyberpunk042.field.category` | 3 | ProfileSource, PresetCategory, ProfileCategory |
+| `net.cyberpunk042.field.effect` | 5 | EffectConfig, ActiveEffect, EffectType, ... |
 | `net.cyberpunk042.field.force` | 1 | ForceFieldConfig |
 | `net.cyberpunk042.field.force.core` | 1 | ForceContext |
-| `net.cyberpunk042.field.force.field` | 2 | ForceField, RadialForceField |
-| `net.cyberpunk042.field.influence` | 15 | ActiveTrigger, BindingConfig, BindingResolver, ... |
-| `net.cyberpunk042.field.instance` | 7 | AnchoredFieldInstance, FieldEffect, FieldInstance, ... |
-| `net.cyberpunk042.field.loader` | 6 | DefaultsProvider, FieldLoader, JsonParseUtils, ... |
-| `net.cyberpunk042.field.primitive` | 4 | LinkResolver, LinkResolverTest, Primitive, ... |
+| `net.cyberpunk042.field.force.field` | 2 | RadialForceField, ForceField |
+| `net.cyberpunk042.field.influence` | 15 | ActiveTrigger, TriggerEventDispatcher, FieldEvent, ... |
+| `net.cyberpunk042.field.instance` | 7 | FollowConfig, AnchoredFieldInstance, FieldInstance, ... |
+| `net.cyberpunk042.field.loader` | 6 | ValidationHelper, ReferenceResolver, JsonParseUtils, ... |
+| `net.cyberpunk042.field.primitive` | 4 | PrimitiveLink, Primitive, LinkResolver, ... |
 | `net.cyberpunk042.field.profile` | 1 | Profile |
 | `net.cyberpunk042.field.registry` | 1 | ProfileRegistry |
 
@@ -135,86 +135,88 @@ graph TB
 | Package | Classes | Key Types |
 |---------|---------|------------|
 | `net.cyberpunk042.client.gui.annotation` | 2 | ShowWhen, ShowWhenConditions |
-| `net.cyberpunk042.client.gui.builder` | 4 | Bound, BoundPanel, ContentBuilder, ... |
-| `net.cyberpunk042.client.gui.component` | 7 | ContentArea, ContentProviderFactory, HeaderBar, ... |
-| `net.cyberpunk042.client.gui.config` | 1 | GuiConfig |
-| `net.cyberpunk042.client.gui.layout` | 10 | Bounds, FullscreenLayout, GuiMode, ... |
-| `net.cyberpunk042.client.gui.panel` | 8 | AbstractPanel, ActionPanel, AdvancedPanel, ... |
-| `net.cyberpunk042.client.gui.panel.layout` | 3 | DualColumnLayout, ProfilesPanelLayout, SingleColumnLayout |
+| `net.cyberpunk042.client.gui.builder` | 4 | Bound, Vec3Binding, BoundPanel, ... |
+| `net.cyberpunk042.client.gui.component` | 7 | SelectorBar, TabBar, ScreenComponent, ... |
+| `net.cyberpunk042.client.gui.config` | 2 | RenderConfig, GuiConfig |
+| `net.cyberpunk042.client.gui.layout` | 10 | LayoutFactory, Bounds, LayoutManager, ... |
+| `net.cyberpunk042.client.gui.panel` | 8 | PrimitivePanel, QuickPanel, AbstractPanel, ... |
+| `net.cyberpunk042.client.gui.panel.layout` | 3 | SingleColumnLayout, ProfilesPanelLayout, DualColumnLayout |
 | `net.cyberpunk042.client.gui.panel.service` | 1 | ProfileActionService |
-| `net.cyberpunk042.client.gui.panel.sub` | 18 | AppearanceSubPanel, ArrangeSubPanel, BeamSubPanel, ... |
-| `net.cyberpunk042.client.gui.preview` | 6 | FieldPreviewRenderer, FramebufferFboAccess, PreviewConfig, ... |
+| `net.cyberpunk042.client.gui.panel.sub` | 18 | TriggerSubPanel, BindingsSubPanel, ForceSubPanel, ... |
+| `net.cyberpunk042.client.gui.preview` | 6 | PreviewFboRenderer, PreviewConfig, FramebufferFboAccess, ... |
 | `net.cyberpunk042.client.gui.render` | 1 | TestFieldRenderer |
-| `net.cyberpunk042.client.gui.schema` | 4 | EffectSchema, EffectSchemaRegistry, ParameterSpec, ... |
+| `net.cyberpunk042.client.gui.schema` | 4 | SchemaContentBuilder, EffectSchemaRegistry, ParameterSpec, ... |
 | `net.cyberpunk042.client.gui.screen` | 3 | FieldCustomizerScreen, LogViewerScreen, TabType |
 | `net.cyberpunk042.client.gui.shape` | 4 | RayCompatibilityHint, ShapeControlBuilder, ShapePerformanceHint, ... |
-| `net.cyberpunk042.client.gui.state` | 15 | AppearanceState, ChangeType, DefinitionBuilder, ... |
-| `net.cyberpunk042.client.gui.state.adapter` | 20 | AbstractAdapter, AnimationAdapter, AppearanceAdapter, ... |
-| `net.cyberpunk042.client.gui.state.manager` | 7 | AbstractManager, BindingsManager, LayerManager, ... |
-| `net.cyberpunk042.client.gui.util` | 11 | FragmentRegistry, GuiAnimations, GuiConfigPersistence, ... |
+| `net.cyberpunk042.client.gui.state` | 15 | RendererCapabilities, RequiresFeature, AppearanceState, ... |
+| `net.cyberpunk042.client.gui.state.adapter` | 20 | StateCategory, AbstractAdapter, ShockwaveConfig, ... |
+| `net.cyberpunk042.client.gui.state.manager` | 7 | StateManager, LayerManager, ProfileManager, ... |
+| `net.cyberpunk042.client.gui.util` | 11 | GuiConfigPersistence, GuiLayout, GuiKeyboardNav, ... |
 | `net.cyberpunk042.client.gui.visibility` | 1 | WidgetVisibilityResolver |
-| `net.cyberpunk042.client.gui.widget` | 19 | BidirectionalCyclingButton, BottomActionBar, ColorButton, ... |
-| `net.cyberpunk042.network.gui` | 16 | DebugFieldC2SPayload, DebugFieldS2CPayload, DebugFieldTracker, ... |
+| `net.cyberpunk042.client.gui.widget` | 18 | ColorButton, PanelWrapper, LabeledSlider, ... |
+| `net.cyberpunk042.network.gui` | 16 | ProfileLoadC2SPayload, ProfileSaveC2SPayload, ShockwaveTriggerS2CPayload, ... |
 
 ### Infection
 
 | Package | Classes | Key Types |
 |---------|---------|------------|
 | `net.cyberpunk042.block.virus` | 2 | VirusBlock, VirusBlockProtection |
-| `net.cyberpunk042.infection` | 18 | BoobytrapHelper, CollapseOperations, CorruptionProfiler, ... |
-| `net.cyberpunk042.infection.api` | 16 | BasicSingularityContext, BasicVirusWorldContext, EffectBus, ... |
-| `net.cyberpunk042.infection.collapse` | 2 | BufferedCollapseBroadcastManager, NoopCollapseBroadcastManager |
+| `net.cyberpunk042.infection` | 18 | SingularityState, TierFeatureGroup, VirusEventType, ... |
+| `net.cyberpunk042.infection.api` | 16 | BasicSingularityContext, VirusSchedulerMetrics, NoopEffectBus, ... |
+| `net.cyberpunk042.infection.collapse` | 2 | NoopCollapseBroadcastManager, BufferedCollapseBroadcastManager |
 | `net.cyberpunk042.infection.command` | 1 | CommandFacade |
-| `net.cyberpunk042.infection.controller.phase` | 7 | CollapsePhaseHandler, CorePhaseHandler, DissipationPhaseHandler, ... |
-| `net.cyberpunk042.infection.events` | 12 | CollapseChunkVeilEvent, CollapseRingActivatedEvent, CoreChargeTickEvent, ... |
+| `net.cyberpunk042.infection.controller.phase` | 7 | ResetPhaseHandler, DormantPhaseHandler, CollapsePhaseHandler, ... |
+| `net.cyberpunk042.infection.events` | 12 | RingPulseEvent, CollapseChunkVeilEvent, GrowthForceEvent, ... |
 | `net.cyberpunk042.infection.mutation` | 1 | BlockMutationHelper |
-| `net.cyberpunk042.infection.orchestrator` | 8 | DefaultWorldOrchestrator, IWorldCallbacks, OrchestratorDependencies, ... |
-| `net.cyberpunk042.infection.profile` | 9 | CollapseBroadcastMode, CollapseFillMode, CollapseFillProfile, ... |
-| `net.cyberpunk042.infection.scenario` | 10 | AbstractDimensionInfectionScenario, ConfiguredScenarioEffectSet, EffectPaletteConfig, ... |
-| `net.cyberpunk042.infection.service` | 47 | AlertingService, AmbientPressureService, ChunkPreparationService, ... |
-| `net.cyberpunk042.infection.singularity` | 6 | BulkFillHelper, CollapseErosionSettings, SingularityChunkContext, ... |
-| `net.cyberpunk042.infection.state` | 6 | CollapseModule, CombatModule, InfectionState, ... |
+| `net.cyberpunk042.infection.orchestrator` | 8 | IWorldCallbacks, PhaseManager, WorldOrchestrator, ... |
+| `net.cyberpunk042.infection.profile` | 9 | CollapseFillProfile, DimensionProfileRegistry, CollapseFillShape, ... |
+| `net.cyberpunk042.infection.scenario` | 10 | GuardianBeamManager, EffectPaletteConfig, ScenarioEffectBehavior, ... |
+| `net.cyberpunk042.infection.service` | 48 | CollapseSnapshotService, InfectionLifecycleService, ConfigService, ... |
+| `net.cyberpunk042.infection.singularity` | 6 | BulkFillHelper, SingularityDiagnostics, SingularityExecutionSettings, ... |
+| `net.cyberpunk042.infection.state` | 6 | InfectionState, SingularityModule, TierModule, ... |
 
 ### Network
 
 | Package | Classes | Key Types |
 |---------|---------|------------|
-| `net.cyberpunk042.client.command` | 5 | FieldBindingCommands, FieldEditCommands, FieldFragmentCommands, ... |
-| `net.cyberpunk042.client.command.util` | 4 | CommandScanner, FieldEditKnob, FieldPath, ... |
+| `net.cyberpunk042.client.command` | 5 | FieldFragmentCommands, LogViewerCommand, FieldProfileCommands, ... |
+| `net.cyberpunk042.client.command.util` | 4 | FieldPath, CommandScanner, FieldEditKnob, ... |
 | `net.cyberpunk042.client.network` | 2 | GuiClientHandlers, GuiPacketSender |
-| `net.cyberpunk042.command` | 11 | FieldSubcommands, GrowthBlockCommands, GrowthCollisionCommand, ... |
-| `net.cyberpunk042.command.field` | 7 | FieldCommand, FieldEditSubcommand, FieldTestCommand, ... |
-| `net.cyberpunk042.command.util` | 16 | CommandFeedback, CommandFormatters, CommandKnob, ... |
+| `net.cyberpunk042.command` | 11 | VirusDebugCommands, VirusStatsCommand, InfectionSubcommands, ... |
+| `net.cyberpunk042.command.field` | 7 | FieldEditSubcommand, FieldTestCommand, FieldTypeProviders, ... |
+| `net.cyberpunk042.command.util` | 16 | EnumSuggester, CommandTargetResolver, ProfileDescriber, ... |
 | `net.cyberpunk042.infection.command` | 1 | CommandFacade |
-| `net.cyberpunk042.network` | 20 | DifficultySyncPayload, FieldDefinitionSyncPayload, FieldNetworking, ... |
-| `net.cyberpunk042.network.gui` | 16 | DebugFieldC2SPayload, DebugFieldS2CPayload, DebugFieldTracker, ... |
+| `net.cyberpunk042.network` | 22 | VirusBlockTelemetryPayload, ShieldFieldSpawnPayload, HelmetHudPayload, ... |
+| `net.cyberpunk042.network.gui` | 16 | ProfileLoadC2SPayload, ProfileSaveC2SPayload, ShockwaveTriggerS2CPayload, ... |
+| `net.cyberpunk042.network.shader` | 2 | ShaderTimeSyncS2CPayload, ShaderTimeSyncService |
 
 ### Rendering
 
 | Package | Classes | Key Types |
 |---------|---------|------------|
-| `net.cyberpunk042.client.field.render` | 19 | AbstractPrimitiveRenderer, BeamRenderer, CapsuleRenderer, ... |
-| `net.cyberpunk042.client.field.render.effect` | 6 | RenderEffectChain, RenderEffectContext, RenderMotionEffect, ... |
-| `net.cyberpunk042.client.field.render.emit` | 8 | EmitCageStrategy, EmitContext, EmitLineStrategy, ... |
+| `net.cyberpunk042.client.field.render` | 19 | PolyhedronRenderer, RaysRenderer, ConeRenderer, ... |
+| `net.cyberpunk042.client.field.render.effect` | 6 | RenderWiggleEffect, RenderTwistEffect, RenderEffectChain, ... |
+| `net.cyberpunk042.client.field.render.emit` | 8 | RayCageGenerator, EmitLineStrategy, EmitStrategy, ... |
 | `net.cyberpunk042.client.gui.render` | 1 | TestFieldRenderer |
-| `net.cyberpunk042.client.render` | 8 | CorruptedFireTextures, SingularityBorderClientState, SingularityFieldController, ... |
+| `net.cyberpunk042.client.render` | 8 | CorruptedFireTextures, SingularityFieldController, VirusFluidRenderers, ... |
 | `net.cyberpunk042.client.render.beam` | 1 | GrowthBeamRenderer |
-| `net.cyberpunk042.client.render.blockentity` | 7 | FieldMeshRenderer, GlowQuadEmitter, GlowTextureResolver, ... |
+| `net.cyberpunk042.client.render.blockentity` | 7 | FieldMeshRenderer, ProgressiveGrowthBlockEntityRenderer, MeshFrameAnimator, ... |
 | `net.cyberpunk042.client.render.entity` | 1 | CorruptedWormRenderer |
 | `net.cyberpunk042.client.render.feature` | 1 | CompositeElytraFeatureRenderer |
 | `net.cyberpunk042.client.render.field` | 1 | GrowthRingFieldRenderer |
 | `net.cyberpunk042.client.render.item` | 1 | ProgressiveGrowthItemRenderer |
 | `net.cyberpunk042.client.render.util` | 1 | BeaconBeamRenderer |
-| `net.cyberpunk042.client.visual.mesh` | 20 | CapsuleTessellator, ConeTessellator, CylinderTessellator, ... |
-| `net.cyberpunk042.client.visual.mesh.ray` | 9 | Ray3DGeometryUtils, RayContext, RayContextBuilder, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.arrangement` | 5 | ArrangementFactory, ArrangementStrategy, ParallelArrangement, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.distribution` | 6 | DistributionFactory, DistributionResult, DistributionStrategy, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.flow` | 7 | AnimationState, FlowContext, FlowFlickerStage, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.geometry` | 24 | ArcLineShape, ComposedPath, CorkscrewLineShape, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.geometry3d` | 5 | GeoDeformationFactory, GeoDeformationStrategy, GeoNoDeformation, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.layer` | 7 | LayerModeFactory, LayerModeStrategy, LayerOffset, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.tessellation` | 3 | RadiativeInteractionFactory, TessEdgeModeFactory, TessEdgeResult |
-| `net.cyberpunk042.client.visual.render` | 4 | FieldRenderLayers, GlowRenderer, RenderLayerFactory, ... |
+| `net.cyberpunk042.client.visual.mesh` | 20 | TorusTessellator, RaysTessellator, TravelEffectComputer, ... |
+| `net.cyberpunk042.client.visual.mesh.ray` | 9 | RaySphericalTessellator, RayPositioner, RayTypeTessellatorRegistry, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.arrangement` | 5 | ArrangementStrategy, ParallelArrangement, ArrangementFactory, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.distribution` | 6 | DistributionResult, StochasticDistribution, DistributionFactory, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.flow` | 7 | FlowPhaseStage, FlowFlickerStage, FlowContext, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.geometry` | 24 | CurvatureStrategy, ZigzagLineShape, SCurveLineShape, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.geometry3d` | 5 | GeoPolarSurfaceGenerator, GeoNoDeformation, GeoDeformationStrategy, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.layer` | 7 | LayerModeFactory, LayerModeStrategy, VerticalLayerMode, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.tessellation` | 3 | TessEdgeModeFactory, TessEdgeResult, RadiativeInteractionFactory |
+| `net.cyberpunk042.client.visual.render` | 5 | RenderLayerFactory, PostFxPipeline, FieldRenderLayers, ... |
+| `net.cyberpunk042.client.visual.render.target` | 2 | HdrTargetFactory, TextureFormat |
 
 ### Visual
 
@@ -224,37 +226,39 @@ graph TB
 | `net.cyberpunk042.client.visual.animation` | 2 | AnimationApplier, WaveDeformer |
 | `net.cyberpunk042.client.visual.blend` | 1 | BlendEquationManager |
 | `net.cyberpunk042.client.visual.camera` | 1 | CameraUtils |
-| `net.cyberpunk042.client.visual.effect` | 11 | BlendEquation, ColorBlendMode, EffectType, ... |
+| `net.cyberpunk042.client.visual.effect` | 13 | FieldVisualRegistry, FieldVisualConfig, BlendEquation, ... |
 | `net.cyberpunk042.client.visual.effect.uniform` | 1 | FieldVisualUniformBinder |
-| `net.cyberpunk042.client.visual.mesh` | 20 | CapsuleTessellator, ConeTessellator, CylinderTessellator, ... |
-| `net.cyberpunk042.client.visual.mesh.ray` | 9 | Ray3DGeometryUtils, RayContext, RayContextBuilder, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.arrangement` | 5 | ArrangementFactory, ArrangementStrategy, ParallelArrangement, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.distribution` | 6 | DistributionFactory, DistributionResult, DistributionStrategy, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.flow` | 7 | AnimationState, FlowContext, FlowFlickerStage, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.geometry` | 24 | ArcLineShape, ComposedPath, CorkscrewLineShape, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.geometry3d` | 5 | GeoDeformationFactory, GeoDeformationStrategy, GeoNoDeformation, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.layer` | 7 | LayerModeFactory, LayerModeStrategy, LayerOffset, ... |
-| `net.cyberpunk042.client.visual.mesh.ray.tessellation` | 3 | RadiativeInteractionFactory, TessEdgeModeFactory, TessEdgeResult |
-| `net.cyberpunk042.client.visual.render` | 4 | FieldRenderLayers, GlowRenderer, RenderLayerFactory, ... |
-| `net.cyberpunk042.client.visual.shader` | 16 | CustomUniformBinder, DepthTestShader, DirectDepthRenderer, ... |
-| `net.cyberpunk042.client.visual.shader.shockwave` | 7 | ShockwaveController, ShockwaveRenderer, ShockwaveTestPresets, ... |
-| `net.cyberpunk042.client.visual.shader.util` | 2 | ShaderPreprocessor, ShaderWarmupService |
+| `net.cyberpunk042.client.visual.mesh` | 20 | TorusTessellator, RaysTessellator, TravelEffectComputer, ... |
+| `net.cyberpunk042.client.visual.mesh.ray` | 9 | RaySphericalTessellator, RayPositioner, RayTypeTessellatorRegistry, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.arrangement` | 5 | ArrangementStrategy, ParallelArrangement, ArrangementFactory, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.distribution` | 6 | DistributionResult, StochasticDistribution, DistributionFactory, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.flow` | 7 | FlowPhaseStage, FlowFlickerStage, FlowContext, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.geometry` | 24 | CurvatureStrategy, ZigzagLineShape, SCurveLineShape, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.geometry3d` | 5 | GeoPolarSurfaceGenerator, GeoNoDeformation, GeoDeformationStrategy, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.layer` | 7 | LayerModeFactory, LayerModeStrategy, VerticalLayerMode, ... |
+| `net.cyberpunk042.client.visual.mesh.ray.tessellation` | 3 | TessEdgeModeFactory, TessEdgeResult, RadiativeInteractionFactory |
+| `net.cyberpunk042.client.visual.render` | 5 | RenderLayerFactory, PostFxPipeline, FieldRenderLayers, ... |
+| `net.cyberpunk042.client.visual.render.target` | 2 | HdrTargetFactory, TextureFormat |
+| `net.cyberpunk042.client.visual.shader` | 21 | ShockwaveTestPipelineArchive, DepthTestShader, VirusBlockUniformBinder, ... |
+| `net.cyberpunk042.client.visual.shader.shockwave` | 7 | ShockwaveTestPresets, ShockwaveController, ShockwaveVec4Types, ... |
+| `net.cyberpunk042.client.visual.shader.util` | 3 | ShaderPreprocessor, ShaderWarmupService, ShaderLoaderCacheHelper |
 | `net.cyberpunk042.client.visual.transform` | 3 | FacingResolver, BillboardResolver, TransformApplier |
-| `net.cyberpunk042.client.visual.ubo` | 3 | GLSLValidator, ReflectiveUBOWriter, Vec4Serializable |
-| `net.cyberpunk042.client.visual.ubo.annotation` | 4 | Floats, Mat4, UBOStruct, ... |
-| `net.cyberpunk042.visual.animation` | 30 | AlphaPulseConfig, Animation, Axis, ... |
-| `net.cyberpunk042.visual.appearance` | 10 | Alpha, AlphaRange, Appearance, ... |
-| `net.cyberpunk042.visual.color` | 4 | ColorMath, ColorResolver, ColorTheme, ... |
-| `net.cyberpunk042.visual.effect` | 2 | CoronaEffect, HorizonEffect |
-| `net.cyberpunk042.visual.energy` | 6 | EnergyFlicker, EnergyInteractionType, EnergyTravel, ... |
-| `net.cyberpunk042.visual.fill` | 11 | CageOptions, CageOptionsAdapter, ConeCageOptions, ... |
+| `net.cyberpunk042.client.visual.ubo` | 6 | BaseUBOBinder, ReflectiveUBOWriter, UBORegistry, ... |
+| `net.cyberpunk042.client.visual.ubo.annotation` | 5 | Vec4Array, Floats, UBOStruct, ... |
+| `net.cyberpunk042.client.visual.ubo.base` | 5 | MaterialUBO, ObjectUBO, LightUBO, ... |
+| `net.cyberpunk042.visual.animation` | 30 | EaseFunction, ColorCycleConfig, WiggleMode, ... |
+| `net.cyberpunk042.visual.appearance` | 10 | GradientDirection, ColorContext, AlphaRange, ... |
+| `net.cyberpunk042.visual.color` | 4 | ColorTheme, ColorThemeRegistry, ColorMath, ... |
+| `net.cyberpunk042.visual.effect` | 2 | HorizonEffect, CoronaEffect |
+| `net.cyberpunk042.visual.energy` | 6 | EnergyFlicker, EnergyInteractionType, package-info, ... |
+| `net.cyberpunk042.visual.fill` | 11 | FillConfig, CageOptions, FillMode, ... |
 | `net.cyberpunk042.visual.layer` | 1 | BlendMode |
-| `net.cyberpunk042.visual.pattern` | 15 | ArrangementConfig, CellType, DynamicEdgePattern, ... |
-| `net.cyberpunk042.visual.shape` | 38 | AtomDistribution, CapsuleShape, CloudStyle, ... |
-| `net.cyberpunk042.visual.transform` | 13 | Anchor, AnchorResolver, AnimatedTransform, ... |
+| `net.cyberpunk042.visual.pattern` | 15 | DynamicSegmentPattern, DynamicSectorPattern, DynamicTrianglePattern, ... |
+| `net.cyberpunk042.visual.shape` | 38 | JetPrecession, FieldDeformationMode, CylinderShape, ... |
+| `net.cyberpunk042.visual.transform` | 13 | AnchorResolver, TransformStack, AnimatedTransform, ... |
 | `net.cyberpunk042.visual.util` | 2 | FieldColor, FieldMath |
 | `net.cyberpunk042.visual.validation` | 2 | Range, ValueRange |
-| `net.cyberpunk042.visual.visibility` | 3 | MaskType, VisibilityMask, VisibilityMaskApplier |
+| `net.cyberpunk042.visual.visibility` | 3 | MaskType, VisibilityMaskApplier, VisibilityMask |
 
 ## Data Flow
 

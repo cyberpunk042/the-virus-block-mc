@@ -2,7 +2,7 @@
 
 > Complete graphical user interface architecture.
 
-**109 classes** across 10 packages.
+**108 classes** across 10 packages.
 
 ## Architecture
 
@@ -30,6 +30,32 @@ classDiagram
         +rebuildForCurrentShape() void
         +tick() void
     }
+    class LabeledSlider {
+        +getValue() float
+        +setValue(...) void
+        +builder(...) Builder
+    }
+    class PresetConfirmDialog {
+        +show(...) void
+        +hide() void
+        +isVisible() boolean
+        +render(...) void
+        +mouseClicked(...) boolean
+    }
+    class ExpandableSection {
+        +toggle() void
+        +setOnToggle(...) void
+        +isExpanded() boolean
+        +setContentHeight(...) void
+        +getTotalHeight() int
+    }
+    class ModalDialog {
+        +size(...) ModalDialog
+        +content(...) ModalDialog
+        +addAction(...) ModalDialog
+        +addAction(...) ModalDialog
+        +onClose(...) ModalDialog
+    }
     class ConfirmDialog {
         +unsavedChanges(...) ConfirmDialog
         +delete(...) ConfirmDialog
@@ -43,32 +69,6 @@ classDiagram
         +setSelectedIndex(...) void
         +onClick(...) void
         +renderWidget(...) void
-    }
-    class ExpandableSection {
-        +toggle() void
-        +setOnToggle(...) void
-        +isExpanded() boolean
-        +setContentHeight(...) void
-        +getTotalHeight() int
-    }
-    class LabeledSlider {
-        +getValue() float
-        +setValue(...) void
-        +builder(...) Builder
-    }
-    class ModalDialog {
-        +size(...) ModalDialog
-        +content(...) ModalDialog
-        +addAction(...) ModalDialog
-        +addAction(...) ModalDialog
-        +onClose(...) ModalDialog
-    }
-    class PresetConfirmDialog {
-        +show(...) void
-        +hide() void
-        +isVisible() boolean
-        +render(...) void
-        +mouseClicked(...) boolean
     }
     class FieldEditState {
         +layers() LayerManager
@@ -84,19 +84,22 @@ classDiagram
         +paths() Set
         +reset() void
     }
-    class AnimationAdapter {
+    class TransformAdapter {
         +category() String
         +loadFrom(...) void
         +saveTo(...) void
-        +spin() SpinConfig
-        +setSpin(...) void
+        +transform() Transform
+        +setTransform(...) void
     }
-    class AppearanceAdapter {
+    class PrimitiveAdapter {
+        <<interface>>
+    }
+    class ShockwaveAdapter {
         +category() String
-        +loadFrom(...) void
-        +saveTo(...) void
-        +appearance() AppearanceState
-        +setAppearance(...) void
+        +get(...) Object
+        +set(...) void
+        +syncToPostEffect() void
+        +config() ShockwaveConfig
     }
     class ArrangementAdapter {
         +category() String
@@ -112,14 +115,28 @@ classDiagram
         +isEnabled() boolean
         +sourceRef() String
     }
-    class FillAdapter {
+    class VisibilityAdapter {
+        +category() String
+        +loadFrom(...) void
+        +saveTo(...) void
+        +mask() VisibilityMask
+        +setMask(...) void
+    }
+    class LinkAdapter {
         +category() String
         +loadFrom(...) void
         +saveTo(...) void
         +get(...) Object
         +set(...) void
     }
-    class LinkAdapter {
+    class TriggerAdapter {
+        +category() String
+        +loadFrom(...) void
+        +saveTo(...) void
+        +get(...) Object
+        +set(...) void
+    }
+    class FillAdapter {
         +category() String
         +loadFrom(...) void
         +saveTo(...) void
@@ -133,8 +150,19 @@ classDiagram
         +syncToPostEffect() void
         +config() MagicCircleConfig
     }
-    class PrimitiveAdapter {
-        <<interface>>
+    class AppearanceAdapter {
+        +category() String
+        +loadFrom(...) void
+        +saveTo(...) void
+        +appearance() AppearanceState
+        +setAppearance(...) void
+    }
+    class AnimationAdapter {
+        +category() String
+        +loadFrom(...) void
+        +saveTo(...) void
+        +spin() SpinConfig
+        +setSpin(...) void
     }
     class ShapeAdapter {
         +category() String
@@ -142,34 +170,6 @@ classDiagram
         +saveTo(...) void
         +currentShape() Shape
         +shapeType() String
-    }
-    class ShockwaveAdapter {
-        +category() String
-        +get(...) Object
-        +set(...) void
-        +syncToPostEffect() void
-        +config() ShockwaveConfig
-    }
-    class TransformAdapter {
-        +category() String
-        +loadFrom(...) void
-        +saveTo(...) void
-        +transform() Transform
-        +setTransform(...) void
-    }
-    class TriggerAdapter {
-        +category() String
-        +loadFrom(...) void
-        +saveTo(...) void
-        +get(...) Object
-        +set(...) void
-    }
-    class VisibilityAdapter {
-        +category() String
-        +loadFrom(...) void
-        +saveTo(...) void
-        +mask() VisibilityMask
-        +setMask(...) void
     }
     class Bounds {
         <<record>>
@@ -179,11 +179,11 @@ classDiagram
         +centerY() int
         +isEmpty() boolean
     }
-    class GuiMode {
-        <<enumeration>>
-    }
     class LayoutManager {
         <<interface>>
+    }
+    class GuiMode {
+        <<enumeration>>
     }
     class StatusBar {
         +setBounds(...) void
@@ -202,12 +202,12 @@ classDiagram
     class TabType {
         <<enumeration>>
     }
-    class ButtonWidget
     class SliderWidget
+    class ButtonWidget
     class Screen
+    class Builder
     class Screenparent
     class T
-    class Builder
     class Objectvalue
     class Primitivesource
     class Objectv
@@ -344,7 +344,7 @@ classDiagram
 | Module | Classes | Description |
 |--------|---------|-------------|
 | [Panels](./gui/panels.md) | 26 | client.gui.panel, client.gui.panel.sub |
-| [Widgets](./gui/widgets.md) | 30 | client.gui.widget, client.gui.util |
+| [Widgets](./gui/widgets.md) | 29 | client.gui.widget, client.gui.util |
 | [State & Adapters](./gui/state.md) | 53 | client.gui.state, client.gui.state.adapter, client.gui.layout, client.gui.screen, client.gui.preview, client.gui |
 
 ---

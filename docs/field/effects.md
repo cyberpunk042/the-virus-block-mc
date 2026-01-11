@@ -8,13 +8,6 @@
 
 ```mermaid
 classDiagram
-    class ActiveEffect {
-        +getConfig() EffectConfig
-        +getType() EffectType
-        +getStrength() float
-        +getRadius() float
-        +isOnCooldown() boolean
-    }
     class EffectConfig {
         <<record>>
         +type: EffectType
@@ -27,15 +20,22 @@ classDiagram
         +shield() EffectConfig
         +slow(...) EffectConfig
     }
+    class ActiveEffect {
+        +getConfig() EffectConfig
+        +getType() EffectType
+        +getStrength() float
+        +getRadius() float
+        +isOnCooldown() boolean
+    }
+    class EffectType {
+        <<enumeration>>
+    }
     class EffectProcessor {
         +process(...) void
         +applyPush(...) void
         +applyPull(...) void
         +applyDamage(...) void
         +applyHeal(...) void
-    }
-    class EffectType {
-        <<enumeration>>
     }
     class FieldEffects {
         +register(...) void
@@ -51,42 +51,15 @@ classDiagram
         +getScaledValue() float
         +config() TriggerConfig
     }
-    class BindingConfig {
-        <<record>>
-        +property: String
-        +source: String
-        +inputMin: float
-        +inputMax: float
-        +of(...) BindingConfig
-        +fromJson(...) BindingConfig
-        +builder() Builder
-        +toBuilder() Builder
-        +toJson() JsonObject
+    class TriggerEventDispatcher {
+        +register(...) void
+        +unregister(...) void
+        +addGlobalListener(...) void
+        +dispatch(...) void
+        +dispatch(...) void
     }
-    class BindingResolver {
-        +evaluate(...) float
-        +evaluateAll(...) Map
-        +getOrDefault(...) float
-    }
-    class BindingSource {
-        <<interface>>
-    }
-    class BindingSources {
-        +PLAYER_HEALTH: BindingSource
-        +PLAYER_HEALTH_PERCENT: BindingSource
-        +PLAYER_ARMOR: BindingSource
-        +PLAYER_FOOD: BindingSource
-        +get(...) Optional
-        +getOrWarn(...) BindingSource
-        +exists(...) boolean
-        +getAvailableIds()
-    }
-    class CombatTracker {
-        +isInCombat(...) boolean
-        +getDamageTakenDecayed(...) float
-        +onDamageTaken(...) void
-        +onDamageDealt(...) void
-        +tick(...) void
+    class FieldEvent {
+        <<enumeration>>
     }
     class DecayConfig {
         <<record>>
@@ -100,8 +73,23 @@ classDiagram
         +apply(...) float
         +fromJson(...) DecayConfig
     }
-    class FieldEvent {
-        <<enumeration>>
+    class BindingSources {
+        +PLAYER_HEALTH: BindingSource
+        +PLAYER_HEALTH_PERCENT: BindingSource
+        +PLAYER_ARMOR: BindingSource
+        +PLAYER_FOOD: BindingSource
+        +get(...) Optional
+        +getOrWarn(...) BindingSource
+        +exists(...) boolean
+        +getAvailableIds()
+    }
+    class BindingSource {
+        <<interface>>
+    }
+    class BindingResolver {
+        +evaluate(...) float
+        +evaluateAll(...) Map
+        +getOrDefault(...) float
     }
     class InterpolationCurve {
         <<enumeration>>
@@ -118,6 +106,21 @@ classDiagram
         +hasScaleOut() boolean
         +hasSpawnAnimation() boolean
     }
+    class TriggerEffect {
+        <<enumeration>>
+    }
+    class BindingConfig {
+        <<record>>
+        +property: String
+        +source: String
+        +inputMin: float
+        +inputMax: float
+        +of(...) BindingConfig
+        +fromJson(...) BindingConfig
+        +builder() Builder
+        +toBuilder() Builder
+        +toJson() JsonObject
+    }
     class TriggerConfig {
         <<record>>
         +event: FieldEvent
@@ -129,16 +132,6 @@ classDiagram
         +toBuilder() Builder
         +toJson() JsonObject
     }
-    class TriggerEffect {
-        <<enumeration>>
-    }
-    class TriggerEventDispatcher {
-        +register(...) void
-        +unregister(...) void
-        +addGlobalListener(...) void
-        +dispatch(...) void
-        +dispatch(...) void
-    }
     class TriggerProcessor {
         +fireEvent(...) void
         +tick() void
@@ -146,38 +139,12 @@ classDiagram
         +getActiveTriggers() List
         +getActiveTriggers(...) List
     }
-    class AnchoredFieldInstance {
-        +anchorPos() BlockPos
-        +getBlockEntity() BlockEntity
-        +setBlockEntity(...) void
-        +isAnchorValid() boolean
-        +onRemoved() void
-    }
-    class FieldEffect {
-        <<record>>
-        +type: EffectType
-        +strength: float
-        +radius: float
-        +cooldown: int
-        +push(...) FieldEffect
-        +pull(...) FieldEffect
-        +damage(...) FieldEffect
-        +shield() FieldEffect
-        +slow(...) FieldEffect
-    }
-    class FieldInstance {
-        <<abstract>>
-        +id() long
-        +definitionId() Identifier
-        +type() FieldType
-        +position() Vec3d
-        +scale() float
-    }
-    class FieldLifecycle {
-        +onSpawn(...) void
-        +onTick(...) void
-        +onDespawn(...) void
-        +get() FieldLifecycle
+    class CombatTracker {
+        +isInCombat(...) boolean
+        +getDamageTakenDecayed(...) float
+        +onDamageTaken(...) void
+        +onDamageDealt(...) void
+        +tick(...) void
     }
     class FollowConfig {
         <<record>>
@@ -191,8 +158,20 @@ classDiagram
         +isActive() boolean
         +isTrailing() boolean
     }
-    class LifecycleState {
-        <<enumeration>>
+    class AnchoredFieldInstance {
+        +anchorPos() BlockPos
+        +getBlockEntity() BlockEntity
+        +setBlockEntity(...) void
+        +isAnchorValid() boolean
+        +onRemoved() void
+    }
+    class FieldInstance {
+        <<abstract>>
+        +id() long
+        +definitionId() Identifier
+        +type() FieldType
+        +position() Vec3d
+        +scale() float
     }
     class PersonalFieldInstance {
         +getFollowConfig() FollowConfig
@@ -201,12 +180,33 @@ classDiagram
         +setResponsiveness(...) void
         +updateFromPlayer(...) void
     }
+    class FieldLifecycle {
+        +onSpawn(...) void
+        +onTick(...) void
+        +onDespawn(...) void
+        +get() FieldLifecycle
+    }
+    class LifecycleState {
+        <<enumeration>>
+    }
+    class FieldEffect {
+        <<record>>
+        +type: EffectType
+        +strength: float
+        +radius: float
+        +cooldown: int
+        +push(...) FieldEffect
+        +pull(...) FieldEffect
+        +damage(...) FieldEffect
+        +shield() FieldEffect
+        +slow(...) FieldEffect
+    }
     class Objectvalue
     class T
-    class Builder
     class POSITIVEfloatrate
     class ALPHAfloatmin
     class Objectdata
+    class Builder
     ActiveEffect --> EffectConfig : config
     ActiveEffect --> EffectConfig : returns
     ActiveEffect --> EffectType : returns

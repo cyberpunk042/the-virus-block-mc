@@ -8,6 +8,19 @@
 
 ```mermaid
 classDiagram
+    class PrimitivePanel {
+        +setOnPrimitiveChanged(...) void
+        +init(...) void
+        +refreshForLayerChange() void
+        +tick() void
+        +render(...) void
+    }
+    class QuickPanel {
+        +init(...) void
+        +tick() void
+        +render(...) void
+        +getWidgets() List
+    }
     class AbstractPanel {
         <<abstract>>
         +isFeatureSupported() boolean
@@ -15,13 +28,6 @@ classDiagram
         +setBounds(...) void
         +setBoundsQuiet(...) void
         +getBounds() Bounds
-    }
-    class ActionPanel {
-        +init(...) void
-        +tick() void
-        +render(...) void
-        +getWidgets() List
-        +getHeight() int
     }
     class AdvancedPanel {
         +init(...) void
@@ -37,19 +43,19 @@ classDiagram
         +mouseScrolled(...) boolean
         +getTestFieldButton() ButtonWidget
     }
+    class ActionPanel {
+        +init(...) void
+        +tick() void
+        +render(...) void
+        +getWidgets() List
+        +getHeight() int
+    }
     class LayerPanel {
         +init(...) void
         +setOnLayerChanged(...) void
         +tick() void
         +render(...) void
         +getWidgets() List
-    }
-    class PrimitivePanel {
-        +setOnPrimitiveChanged(...) void
-        +init(...) void
-        +refreshForLayerChange() void
-        +tick() void
-        +render(...) void
     }
     class ProfilesPanel {
         +setDualBounds(...) void
@@ -58,29 +64,12 @@ classDiagram
         +tick() void
         +render(...) void
     }
-    class QuickPanel {
+    class TriggerSubPanel {
         +init(...) void
         +tick() void
         +render(...) void
+        +getHeight() int
         +getWidgets() List
-    }
-    class AppearanceSubPanel {
-        +tick() void
-        +render(...) void
-        +getHeight() int
-    }
-    class ArrangeSubPanel {
-        +getHeight() int
-        +init(...) void
-        +tick() void
-        +render(...) void
-        +getWidgets() List
-    }
-    class BeamSubPanel {
-        +onStateChanged(...) void
-        +render(...) void
-        +tick() void
-        +getHeight() int
     }
     class BindingsSubPanel {
         +init(...) void
@@ -89,10 +78,12 @@ classDiagram
         +mouseClicked(...) boolean
         +getHeight() int
     }
-    class FieldVisualSubPanel {
+    class ForceSubPanel {
+        +setOnConfigureRequest(...) void
+        +init(...) void
+        +getSelectedConfig() ForceFieldConfig
+        +setCustomConfig(...) void
         +tick() void
-        +render(...) void
-        +dispose() void
     }
     class FillSubPanel {
         +tick() void
@@ -101,37 +92,13 @@ classDiagram
         +getHeight() int
         +getWidgets() List
     }
-    class ForceSubPanel {
-        +setOnConfigureRequest(...) void
-        +init(...) void
-        +getSelectedConfig() ForceFieldConfig
-        +setCustomConfig(...) void
-        +tick() void
-    }
-    class LifecycleSubPanel {
-        +tick() void
-        +render(...) void
-        +getHeight() int
-    }
-    class LinkingSubPanel {
-        +tick() void
-        +render(...) void
-        +getHeight() int
-        +getWidgets() List
-    }
     class MagicCircleSubPanel {
         +tick() void
         +render(...) void
         +getHeight() int
     }
-    class ModifiersSubPanel {
-        +setWarningCallback(...) void
-        +tick() void
-        +render(...) void
-        +onShapeChanged() void
-        +getContentHeight() int
-    }
-    class PredictionSubPanel {
+    class BeamSubPanel {
+        +onStateChanged(...) void
         +render(...) void
         +tick() void
         +getHeight() int
@@ -142,6 +109,13 @@ classDiagram
         +init(...) void
         +rebuildForCurrentShape() void
         +tick() void
+    }
+    class ArrangeSubPanel {
+        +getHeight() int
+        +init(...) void
+        +tick() void
+        +render(...) void
+        +getWidgets() List
     }
     class ShockwaveSubPanel {
         +tick() void
@@ -154,14 +128,12 @@ classDiagram
         +tick() void
         +getHeight() int
     }
-    class TransformSubPanel {
-        +tick() void
+    class PredictionSubPanel {
         +render(...) void
+        +tick() void
         +getHeight() int
-        +getWidgets() List
     }
-    class TriggerSubPanel {
-        +init(...) void
+    class TransformSubPanel {
         +tick() void
         +render(...) void
         +getHeight() int
@@ -171,6 +143,34 @@ classDiagram
         +tick() void
         +render(...) void
         +getHeight() int
+    }
+    class ModifiersSubPanel {
+        +setWarningCallback(...) void
+        +tick() void
+        +render(...) void
+        +onShapeChanged() void
+        +getContentHeight() int
+    }
+    class AppearanceSubPanel {
+        +tick() void
+        +render(...) void
+        +getHeight() int
+    }
+    class LifecycleSubPanel {
+        +tick() void
+        +render(...) void
+        +getHeight() int
+    }
+    class FieldVisualSubPanel {
+        +tick() void
+        +render(...) void
+        +dispose() void
+    }
+    class LinkingSubPanel {
+        +tick() void
+        +render(...) void
+        +getHeight() int
+        +getWidgets() List
     }
     class BoundPanel
     class Screen

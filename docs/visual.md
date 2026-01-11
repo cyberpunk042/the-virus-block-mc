@@ -7,8 +7,8 @@
 ## Key Classes
 
 - **`Shape`** (interface)
-- **`QuadPattern`** (enum)
 - **`TrianglePattern`** (enum)
+- **`QuadPattern`** (enum)
 - **`ColorTheme`** (class)
 - **`FillConfig`** (record)
 - **`FillMode`** (enum)
@@ -17,32 +17,20 @@
 
 ```mermaid
 classDiagram
-    class AtomDistribution {
+    class JetPrecession {
+        <<record>>
+        +enabled: boolean
+        +tiltAngle: float
+        +speed: float
+        +phase: float
+        +defaults() JetPrecession
+        +of(...) JetPrecession
+        +withPhase(...) JetPrecession
+        +isActive() boolean
+        +getCurrentAngle(...) float
+    }
+    class FieldDeformationMode {
         <<enumeration>>
-    }
-    class CapsuleShape {
-        <<record>>
-        +radius: float
-        +height: float
-        +segments: int
-        +rings: int
-        +of(...) CapsuleShape
-        +getType() String
-        +getBounds() Vector3f
-        +primaryCellType() CellType
-        +getParts() Map
-    }
-    class ConeShape {
-        <<record>>
-        +bottomRadius: float
-        +topRadius: float
-        +height: float
-        +segments: int
-        +of(...) ConeShape
-        +frustum(...) ConeShape
-        +getType() String
-        +getBounds() Vector3f
-        +primaryCellType() CellType
     }
     class CylinderShape {
         <<record>>
@@ -56,23 +44,136 @@ classDiagram
         +tapered(...) CylinderShape
         +tube(...) CylinderShape
     }
+    class RayOrientation {
+        <<enumeration>>
+    }
+    class SphereShape {
+        <<record>>
+        +radius: float
+        +latSteps: int
+        +lonSteps: int
+        +latStart: float
+        +of(...) SphereShape
+        +defaults() SphereShape
+        +ofRadius(...) SphereShape
+        +hemisphereTop(...) SphereShape
+        +hemisphereBottom(...) SphereShape
+    }
+    class SphereDeformation {
+        <<enumeration>>
+    }
+    class RayLineShape {
+        <<enumeration>>
+    }
+    class PrismShape {
+        <<record>>
+        +sides: int
+        +radius: float
+        +height: float
+        +topRadius: float
+        +of(...) PrismShape
+        +tapered(...) PrismShape
+        +getType() String
+        +getBounds() Vector3f
+        +primaryCellType() CellType
+    }
     class EdgeTransitionMode {
         <<enumeration>>
     }
-    class FieldDeformationMode {
+    class RingShape {
+        <<record>>
+        +innerRadius: float
+        +outerRadius: float
+        +segments: int
+        +heightSegments: int
+        +at(...) RingShape
+        +effectiveOrientation() OrientationAxis
+        +getType() String
+        +getBounds() Vector3f
+        +primaryCellType() CellType
+    }
+    class RayLayerMode {
         <<enumeration>>
     }
-    class JetPrecession {
+    class PolyhedronShape {
         <<record>>
-        +enabled: boolean
-        +tiltAngle: float
-        +speed: float
-        +phase: float
-        +defaults() JetPrecession
-        +of(...) JetPrecession
-        +withPhase(...) JetPrecession
-        +isActive() boolean
-        +getCurrentAngle(...) float
+        +polyType: PolyType
+        +radius: float
+        +subdivisions: int
+        +DEFAULT: PolyhedronShape
+        +cube(...) PolyhedronShape
+        +octahedron(...) PolyhedronShape
+        +dodecahedron(...) PolyhedronShape
+        +tetrahedron(...) PolyhedronShape
+        +icosahedron(...) PolyhedronShape
+    }
+    class ConeShape {
+        <<record>>
+        +bottomRadius: float
+        +topRadius: float
+        +height: float
+        +segments: int
+        +of(...) ConeShape
+        +frustum(...) ConeShape
+        +getType() String
+        +getBounds() Vector3f
+        +primaryCellType() CellType
+    }
+    class RayType {
+        <<enumeration>>
+    }
+    class AtomDistribution {
+        <<enumeration>>
+    }
+    class SimplexNoise {
+        +noise3D(...) float
+        +noise3D(...) float
+        +fBm(...) float
+        +fBm(...) float
+        +ridgedMultifractal(...) float
+    }
+    class RayCurvature {
+        <<enumeration>>
+    }
+    class OrientationAxis {
+        <<enumeration>>
+    }
+    class MoleculeShape {
+        <<record>>
+        +atomCount: int
+        +atomRadius: float
+        +atomDistance: float
+        +neckRadius: float
+        +of(...) MoleculeShape
+        +of(...) MoleculeShape
+        +getType() String
+        +getBounds() Vector3f
+        +primaryCellType() CellType
+    }
+    class RayFlowStage {
+        <<enumeration>>
+    }
+    class Shape {
+        <<interface>>
+    }
+    class ShapeMath {
+        +sphere(...) float
+        +droplet(...) float
+        +egg(...) float
+        +bullet(...) float
+        +cone(...) float
+    }
+    class PolyType {
+        <<enumeration>>
+    }
+    class TransitionStyle {
+        <<enumeration>>
+    }
+    class ShapeStage {
+        <<interface>>
+    }
+    class SphereAlgorithm {
+        <<enumeration>>
     }
     class JetShape {
         <<record>>
@@ -98,68 +199,17 @@ classDiagram
         +primaryCellType() CellType
         +getParts() Map
     }
-    class MoleculeShape {
+    class TorusShape {
         <<record>>
-        +atomCount: int
-        +atomRadius: float
-        +atomDistance: float
-        +neckRadius: float
-        +of(...) MoleculeShape
-        +of(...) MoleculeShape
+        +majorRadius: float
+        +minorRadius: float
+        +majorSegments: int
+        +minorSegments: int
+        +of(...) TorusShape
         +getType() String
         +getBounds() Vector3f
         +primaryCellType() CellType
-    }
-    class OrientationAxis {
-        <<enumeration>>
-    }
-    class PolyhedronShape {
-        <<record>>
-        +polyType: PolyType
-        +radius: float
-        +subdivisions: int
-        +DEFAULT: PolyhedronShape
-        +cube(...) PolyhedronShape
-        +octahedron(...) PolyhedronShape
-        +dodecahedron(...) PolyhedronShape
-        +tetrahedron(...) PolyhedronShape
-        +icosahedron(...) PolyhedronShape
-    }
-    class PolyType {
-        <<enumeration>>
-    }
-    class PrismShape {
-        <<record>>
-        +sides: int
-        +radius: float
-        +height: float
-        +topRadius: float
-        +of(...) PrismShape
-        +tapered(...) PrismShape
-        +getType() String
-        +getBounds() Vector3f
-        +primaryCellType() CellType
-    }
-    class RayArrangement {
-        <<enumeration>>
-    }
-    class RayCurvature {
-        <<enumeration>>
-    }
-    class RayDistribution {
-        <<enumeration>>
-    }
-    class RayFlowStage {
-        <<enumeration>>
-    }
-    class RayLayerMode {
-        <<enumeration>>
-    }
-    class RayLineShape {
-        <<enumeration>>
-    }
-    class RayOrientation {
-        <<enumeration>>
+        +getParts() Map
     }
     class RaysShape {
         <<record>>
@@ -173,40 +223,20 @@ classDiagram
         +converging(...) RaysShape
         +getType() String
     }
-    class RayType {
-        <<enumeration>>
-    }
-    class RingShape {
+    class CapsuleShape {
         <<record>>
-        +innerRadius: float
-        +outerRadius: float
+        +radius: float
+        +height: float
         +segments: int
-        +heightSegments: int
-        +at(...) RingShape
-        +effectiveOrientation() OrientationAxis
+        +rings: int
+        +of(...) CapsuleShape
         +getType() String
         +getBounds() Vector3f
         +primaryCellType() CellType
+        +getParts() Map
     }
-    class Shape {
-        <<interface>>
-    }
-    class ShapeMath {
-        +sphere(...) float
-        +droplet(...) float
-        +egg(...) float
-        +bullet(...) float
-        +cone(...) float
-    }
-    class ShapeRegistry {
-        +register(...) void
-        +registerSimple(...) void
-        +create(...) Shape
-        +create(...) Shape
-        +create(...) Shape
-    }
-    class ShapeStage {
-        <<interface>>
+    class RayDistribution {
+        <<enumeration>>
     }
     class ShapeState {
         <<record>>
@@ -220,19 +250,12 @@ classDiagram
         +withEdgeIntensity(...) ShapeState
         +isVisible() boolean
     }
-    class SimplexNoise {
-        +noise3D(...) float
-        +noise3D(...) float
-        +fBm(...) float
-        +fBm(...) float
-        +ridgedMultifractal(...) float
-    }
     class Builder
     class RADIUSfloatradius
     class POSITIVE_NONZEROfloatheight
-    class STEPSintsubdivisions
     class SIDESintsides
     class UNBOUNDEDfloaty
+    class STEPSintsubdivisions
     class S
     CapsuleShape --> Builder : returns
     CapsuleShape --> CellType : returns
@@ -284,16 +307,21 @@ classDiagram
     Shape <|.. PrismShape
     Shape <|.. RaysShape
     Shape <|.. RingShape
+    Shape <|.. SphereShape
+    Shape <|.. TorusShape
     ShapeMath --> CloudStylestyle : uses
-    ShapeRegistry --> Shape : returns
-    ShapeRegistry --> Shape : uses
-    ShapeRegistry --> ShapeFactory : FACTORIES
-    ShapeRegistry --> ShapeFactoryfactory : uses
     ShapeStage <|.. RayFlowStage
     ShapeState --> EdgeTransitionMode : edgeMode
     ShapeState --> S : returns
     ShapeState --> S : stage
     ShapeState --> SnewStage : uses
+    SphereShape --> CloudStyle : cloudStyle
+    SphereShape --> RADIUSfloatradius : uses
+    SphereShape --> SphereAlgorithm : algorithm
+    SphereShape --> SphereDeformation : deformation
+    TorusShape --> Builder : returns
+    TorusShape --> CellType : returns
+    TorusShape --> Vector3f : returns
 ```
 
 ---

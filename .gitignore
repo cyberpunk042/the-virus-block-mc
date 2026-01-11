@@ -46,3 +46,5 @@ agent-tools/
 _archive_2025_12_17/
 
 .agent/lookup
+
+__pycache__

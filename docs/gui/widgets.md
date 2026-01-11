@@ -2,26 +2,12 @@
 
 > Packages: client.gui.widget, client.gui.util
 
-**30 classes**
+**29 classes**
 
 ## Class Diagram
 
 ```mermaid
 classDiagram
-    class BidirectionalCyclingButton {
-        +mouseClicked(...) boolean
-        +getValue() T
-        +setValue(...) void
-        +builder() Builder
-        +forEnum(...) BidirectionalCyclingButton
-    }
-    class BottomActionBar {
-        +init(...) void
-        +updateButtonStates() void
-        +getCurrentPreset() String
-        +getSelectedCategory() PresetCategory
-        +resetPreset() void
-    }
     class ColorButton {
         +THEME_PRIMARY: int
         +THEME_SECONDARY: int
@@ -33,82 +19,17 @@ classDiagram
         +setHexColor(...) void
         +getColor() int
     }
-    class ColorPaletteGrid {
-        +THEME_COLORS: int
-        +THEME_NAMES: String
-        +getHeight() int
-        +render(...) void
-        +handleClick(...) boolean
-        +isFocused() boolean
-        +setFocused(...) void
-    }
-    class CompactSelector {
-        +onSelect(...) CompactSelector
-        +onAdd(...) CompactSelector
-        +onItemClick(...) CompactSelector
-        +selectIndex(...) CompactSelector
-        +setBounds(...) void
-    }
-    class ConfirmDialog {
-        +unsavedChanges(...) ConfirmDialog
-        +delete(...) ConfirmDialog
-        +show(...) void
-        +getLegacyInstance() ConfirmDialog
-        +isLegacyVisible() boolean
-    }
-    class DropdownWidget {
-        +getSelected() T
-        +setSelected(...) void
-        +setSelectedIndex(...) void
-        +onClick(...) void
-        +renderWidget(...) void
-    }
-    class ExpandableSection {
-        +toggle() void
-        +setOnToggle(...) void
-        +isExpanded() boolean
-        +setContentHeight(...) void
-        +getTotalHeight() int
-    }
-    class GridPane {
-        +setBounds(...) void
-        +getCell(...) Bounds
-        +getSpan(...) Bounds
-        +topLeft() Bounds
-        +topRight() Bounds
-    }
-    class LabeledSlider {
-        +getValue() float
-        +setValue(...) void
-        +builder(...) Builder
-    }
-    class LoadingIndicator {
-        +show() void
-        +hide() void
-        +isVisible() boolean
-        +render(...) void
-        +centered(...) LoadingIndicator
-    }
-    class ModalDialog {
-        +size(...) ModalDialog
-        +content(...) ModalDialog
-        +addAction(...) ModalDialog
-        +addAction(...) ModalDialog
-        +onClose(...) ModalDialog
-    }
-    class ModalFactory {
-        +createLayerModal(...) ModalDialog
-        +createPrimitiveModal(...) ModalDialog
-        +createRenameModal(...) ModalDialog
-        +createColorInputModal(...) ModalDialog
-        +focusTextField(...) void
-    }
     class PanelWrapper {
         +setBounds(...) void
         +getWidgets() List
         +tick() void
         +render(...) void
         +mouseScrolled(...) boolean
+    }
+    class LabeledSlider {
+        +getValue() float
+        +setValue(...) void
+        +builder(...) Builder
     }
     class PresetConfirmDialog {
         +show(...) void
@@ -117,17 +38,38 @@ classDiagram
         +render(...) void
         +mouseClicked(...) boolean
     }
+    class ExpandableSection {
+        +toggle() void
+        +setOnToggle(...) void
+        +isExpanded() boolean
+        +setContentHeight(...) void
+        +getTotalHeight() int
+    }
+    class CompactSelector {
+        +onSelect(...) CompactSelector
+        +onAdd(...) CompactSelector
+        +onItemClick(...) CompactSelector
+        +selectIndex(...) CompactSelector
+        +setBounds(...) void
+    }
     class ScaledTextWidget {
         +setTextColor(...) ScaledTextWidget
         +alignLeft() ScaledTextWidget
         +mouseClicked(...) boolean
     }
-    class SubTabPane {
-        +addTab(...) SubTabPane
-        +addTab(...) SubTabPane
-        +addTab(...) SubTabPane
-        +onTabChange(...) SubTabPane
-        +setActiveTab(...) SubTabPane
+    class ModalFactory {
+        +createLayerModal(...) ModalDialog
+        +createPrimitiveModal(...) ModalDialog
+        +createRenameModal(...) ModalDialog
+        +createColorInputModal(...) ModalDialog
+        +focusTextField(...) void
+    }
+    class LoadingIndicator {
+        +show() void
+        +hide() void
+        +isVisible() boolean
+        +render(...) void
+        +centered(...) LoadingIndicator
     }
     class ToastNotification {
         +info(...) void
@@ -143,19 +85,56 @@ classDiagram
         +getFieldX() TextFieldWidget
         +getFieldY() TextFieldWidget
     }
-    class FragmentRegistry {
-        +reload() void
-        +ensureLoaded() void
-        +listShapeFragments(...) List
-        +applyShapeFragment(...) void
-        +listFillFragments() List
+    class ModalDialog {
+        +size(...) ModalDialog
+        +content(...) ModalDialog
+        +addAction(...) ModalDialog
+        +addAction(...) ModalDialog
+        +onClose(...) ModalDialog
     }
-    class GuiAnimations {
-        +easeInOut(...) float
-        +bounce(...) float
-        +elastic(...) float
-        +transition(...) float
-        +transitionColor(...) int
+    class GridPane {
+        +setBounds(...) void
+        +getCell(...) Bounds
+        +getSpan(...) Bounds
+        +topLeft() Bounds
+        +topRight() Bounds
+    }
+    class ColorPaletteGrid {
+        +THEME_COLORS: int
+        +THEME_NAMES: String
+        +getHeight() int
+        +render(...) void
+        +handleClick(...) boolean
+        +isFocused() boolean
+        +setFocused(...) void
+    }
+    class ConfirmDialog {
+        +unsavedChanges(...) ConfirmDialog
+        +delete(...) ConfirmDialog
+        +show(...) void
+        +getLegacyInstance() ConfirmDialog
+        +isLegacyVisible() boolean
+    }
+    class BottomActionBar {
+        +init(...) void
+        +updateButtonStates() void
+        +getCurrentPreset() String
+        +getSelectedCategory() PresetCategory
+        +resetPreset() void
+    }
+    class SubTabPane {
+        +addTab(...) SubTabPane
+        +addTab(...) SubTabPane
+        +addTab(...) SubTabPane
+        +onTabChange(...) SubTabPane
+        +setActiveTab(...) SubTabPane
+    }
+    class DropdownWidget {
+        +getSelected() T
+        +setSelected(...) void
+        +setSelectedIndex(...) void
+        +onClick(...) void
+        +renderWidget(...) void
     }
     class GuiConfigPersistence {
         +loadSavedMode() GuiMode
@@ -163,6 +142,20 @@ classDiagram
         +loadSavedTab() TabType
         +saveTab(...) void
         +loadSavedSubtab(...) int
+    }
+    class GuiLayout {
+        +reset() void
+        +reset(...) void
+        +getX() int
+        +getY() int
+        +getCurrentY() int
+    }
+    class GuiKeyboardNav {
+        +findNext(...) ClickableWidget
+        +findAtGrid(...) ClickableWidget
+        +navigateDirection(...) ClickableWidget
+        +isNavKey(...) boolean
+        +directionFromKey(...)
     }
     class GuiConstants {
         +REFERENCE_HEIGHT: int
@@ -174,27 +167,6 @@ classDiagram
         +widgetHeight() int
         +padding() int
         +sectionGap() int
-    }
-    class GuiKeyboardNav {
-        +findNext(...) ClickableWidget
-        +findAtGrid(...) ClickableWidget
-        +navigateDirection(...) ClickableWidget
-        +isNavKey(...) boolean
-        +directionFromKey(...)
-    }
-    class GuiLayout {
-        +reset() void
-        +reset(...) void
-        +getX() int
-        +getY() int
-        +getCurrentY() int
-    }
-    class GuiWidgets {
-        +visibleWhen(...) W
-        +button(...) ButtonWidget
-        +button(...) ButtonWidget
-        +toggle(...) CyclingButtonWidget
-        +compactToggle(...) CyclingButtonWidget
     }
     class PresetRegistry {
         +loadAll() void
@@ -210,6 +182,27 @@ classDiagram
         +get(...) Bounds
         +span(...) Bounds
     }
+    class GuiAnimations {
+        +easeInOut(...) float
+        +bounce(...) float
+        +elastic(...) float
+        +transition(...) float
+        +transitionColor(...) int
+    }
+    class FragmentRegistry {
+        +reload() void
+        +ensureLoaded() void
+        +listShapeFragments(...) List
+        +applyShapeFragment(...) void
+        +listFillFragments() List
+    }
+    class GuiWidgets {
+        +visibleWhen(...) W
+        +button(...) ButtonWidget
+        +button(...) ButtonWidget
+        +toggle(...) CyclingButtonWidget
+        +compactToggle(...) CyclingButtonWidget
+    }
     class WidgetCollector {
         +collectAll() List
         +collectVisible() List
@@ -224,31 +217,26 @@ classDiagram
         +clearAll() void
     }
     class ButtonWidget
+    class SliderWidget
+    class ClickableWidget
     class Drawable {
         <<interface>>
     }
     class Element {
         <<interface>>
     }
-    class SliderWidget
-    class ClickableWidget
-    class T
     class Bounds
-    class Screenparent
     class Boundsbounds
     class Builder
+    class T
+    class Screenparent
     class Logger
     class W
     class Wwidget
-    BidirectionalCyclingButton --> T : formatter
-    BidirectionalCyclingButton --> T : onChange
-    BidirectionalCyclingButton --> T : values
-    BidirectionalCyclingButton --> Tvalue : uses
     BottomActionBar --> CyclingButtonWidget : presetCategoryDropdown
     BottomActionBar --> CyclingButtonWidget : presetDropdown
     BottomActionBar --> FieldEditState : state
     BottomActionBar --> PresetCategory : selectedCategory
-    ButtonWidget <|-- BidirectionalCyclingButton
     ButtonWidget <|-- ColorButton
     ButtonWidget <|-- DropdownWidget
     ClickableWidget <|-- ScaledTextWidget

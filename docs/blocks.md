@@ -6,106 +6,60 @@
 
 ## Key Classes
 
-- **`GrowthForceHandler`** (class)
 - **`ProgressiveGrowthBlockEntity`** (class) → `BlockEntity`
+- **`GrowthForceHandler`** (class)
 - **`ProgressiveGrowthBlock`** (class) → `BlockWithEntity`
 
 ## Class Diagram
 
 ```mermaid
 classDiagram
+    class CorruptedWoodBlock {
+        +onSteppedOn(...) void
+    }
     class CorruptedCryingObsidianBlock {
         +CODEC: MapCodec
     }
-    class CorruptedDiamondBlock {
-        +CODEC: MapCodec
-        +onStacksDropped(...) void
-    }
-    class CorruptedDirtBlock {
-        +randomTick(...) void
-    }
+    class CorruptedSandBlock
     class CorruptedGlassBlock {
         +STAGE: EnumProperty
         +CODEC: MapCodec
         +onBreak(...) BlockState
         +randomTick(...) void
     }
-    class CorruptedGoldBlock {
-        +CODEC: MapCodec
-        +onStacksDropped(...) void
-    }
-    class CorruptedIceBlock {
-        +onSteppedOn(...) void
-        +randomDisplayTick(...) void
-    }
     class CorruptedIronBlock {
         +randomTick(...) void
         +onStacksDropped(...) void
     }
-    class CorruptedSandBlock
+    class CorruptedTntBlock {
+        +onBreak(...) BlockState
+        +onDestroyedByExplosion(...) void
+    }
+    class CorruptedDiamondBlock {
+        +CODEC: MapCodec
+        +onStacksDropped(...) void
+    }
     class CorruptedSnowBlock
+    class CorruptionStage {
+        <<enumeration>>
+    }
+    class CorruptedGoldBlock {
+        +CODEC: MapCodec
+        +onStacksDropped(...) void
+    }
     class CorruptedSnowCarpetBlock
+    class CorruptedDirtBlock {
+        +randomTick(...) void
+    }
     class CorruptedStoneBlock {
         +STAGE: EnumProperty
         +CODEC: MapCodec
         +getColor(...) int
         +randomTick(...) void
     }
-    class CorruptedTntBlock {
-        +onBreak(...) BlockState
-        +onDestroyedByExplosion(...) void
-    }
-    class CorruptedWoodBlock {
+    class CorruptedIceBlock {
         +onSteppedOn(...) void
-    }
-    class CorruptionStage {
-        <<enumeration>>
-    }
-    class GrowthCollisionTracker {
-        +hasAny() boolean
-        +hasAnyInWorld(...) boolean
-        +register(...) void
-        +unregister(...) void
-        +active(...) Collection
-    }
-    class GrowthEventPublisher {
-        +postForceEvent(...) void
-        +postBeamEvent(...) void
-        +postFuseEvent(...) void
-        +sendBeamPayload(...) void
-    }
-    class GrowthExplosionHandler {
-        +startBurstSequence(...) void
-        +tickPendingBursts(...) boolean
-        +executeBurstExplosion(...) void
-        +finalizeBurst(...) boolean
-        +applyExplosionDamage(...) void
-    }
-    class GrowthForceHandler {
-        +isForceActive(...) boolean
-        +applyForce(...) void
-        +tryApplyForceDamage(...) void
-        +computeImpulse(...) double
-        +buildRingBands(...) List
-    }
-    class GrowthParticleEmitter {
-        +emitAmbientParticles(...) void
-        +spawnConfiguredParticles(...) void
-        +computeParticleOffset(...) Vec3d
-        +randomPointInSphere(...) Vec3d
-        +randomDirection(...) Vec3d
-    }
-    class GrowthShapeBuilder {
-        +build(...) ShapeResult
-        +buildVanillaShellCollisionShape(...) CollisionResult
-        +debugCollisionShape(...) void
-    }
-    class MatrixCubeBlockEntity {
-        +tick(...) void
-        +markSettled() void
-        +getActiveCount(...) int
-        +destroyAll(...) void
-        +register(...) void
+        +randomDisplayTick(...) void
     }
     class ProgressiveGrowthBlockEntity {
         +serverTick(...) void
@@ -124,8 +78,54 @@ classDiagram
         +getStage() SingularityVisualStage
         +notifyStop(...) void
     }
+    class MatrixCubeBlockEntity {
+        +tick(...) void
+        +markSettled() void
+        +getActiveCount(...) int
+        +destroyAll(...) void
+        +register(...) void
+    }
+    class GrowthParticleEmitter {
+        +emitAmbientParticles(...) void
+        +spawnConfiguredParticles(...) void
+        +computeParticleOffset(...) Vec3d
+        +randomPointInSphere(...) Vec3d
+        +randomDirection(...) Vec3d
+    }
+    class GrowthShapeBuilder {
+        +build(...) ShapeResult
+        +buildVanillaShellCollisionShape(...) CollisionResult
+        +debugCollisionShape(...) void
+    }
+    class GrowthExplosionHandler {
+        +startBurstSequence(...) void
+        +tickPendingBursts(...) boolean
+        +executeBurstExplosion(...) void
+        +finalizeBurst(...) boolean
+        +applyExplosionDamage(...) void
+    }
+    class GrowthEventPublisher {
+        +postForceEvent(...) void
+        +postBeamEvent(...) void
+        +postFuseEvent(...) void
+        +sendBeamPayload(...) void
+    }
     class VirusBlockEntity {
         +tick(...) void
+    }
+    class GrowthForceHandler {
+        +isForceActive(...) boolean
+        +applyForce(...) void
+        +tryApplyForceDamage(...) void
+        +computeImpulse(...) double
+        +buildRingBands(...) List
+    }
+    class GrowthCollisionTracker {
+        +hasAny() boolean
+        +hasAnyInWorld(...) boolean
+        +register(...) void
+        +unregister(...) void
+        +active(...) Collection
     }
     class ProgressiveGrowthBlock {
         +LIGHT_LEVEL: IntProperty
@@ -136,17 +136,15 @@ classDiagram
         +onPlaced(...) void
         +getOutlineShape(...) VoxelShape
     }
-    class GrowthBlockDefinition {
-        <<record>>
-        +id: Identifier
-        +growthEnabled: boolean
-        +rateTicks: int
-        +rateScale: double
-        +defaults() GrowthBlockDefinition
-        +sanitizedRate() int
-        +clampedRateScale() double
-        +clampedStartScale() double
-        +clampedTargetScale() double
+    class GrowthRegistryDefaults {
+        +MAGMA_ANIMATION: 
+        +LAVA_STILL_ANIMATION: 
+        +LAVA_FLOW_ANIMATION: 
+        +ensureDefaults(...) void
+        +withGlow(...) GrowthBlockDefinition
+        +withProfiles(...) GrowthBlockDefinition
+        +withGrowth(...) GrowthBlockDefinition
+        +withVariant(...) GrowthBlockDefinition
     }
     class GrowthProfile {
         <<record>>
@@ -174,19 +172,27 @@ classDiagram
         +particleProfile(...) GrowthParticleProfile
         +forceProfile(...) GrowthForceProfile
     }
-    class GrowthRegistryDefaults {
-        +MAGMA_ANIMATION: 
-        +LAVA_STILL_ANIMATION: 
-        +LAVA_FLOW_ANIMATION: 
-        +ensureDefaults(...) void
-        +withGlow(...) GrowthBlockDefinition
-        +withProfiles(...) GrowthBlockDefinition
-        +withGrowth(...) GrowthBlockDefinition
-        +withVariant(...) GrowthBlockDefinition
+    class GrowthBlockDefinition {
+        <<record>>
+        +id: Identifier
+        +growthEnabled: boolean
+        +rateTicks: int
+        +rateScale: double
+        +defaults() GrowthBlockDefinition
+        +sanitizedRate() int
+        +clampedRateScale() double
+        +clampedStartScale() double
+        +clampedTargetScale() double
     }
     class CorruptedTntEntity {
         +getBlockState() BlockState
         +spawn(...) CorruptedTntEntity
+        +tick() void
+    }
+    class VirusFuseEntity {
+        +setOwnerPos(...) void
+        +getOwnerPos() BlockPos
+        +getBlockState() BlockState
         +tick() void
     }
     class CorruptedWormEntity {
@@ -197,21 +203,15 @@ classDiagram
         +remove(...) void
         +markRegistered() void
     }
-    class VirusFuseEntity {
-        +setOwnerPos(...) void
-        +getOwnerPos() BlockPos
-        +getBlockState() BlockState
-        +tick() void
-    }
     class Block
     class TransparentBlock
-    class TranslucentBlock
-    class CarpetBlock
-    class FallingBlock
     class TntBlock
     class StringIdentifiable {
         <<interface>>
     }
+    class CarpetBlock
+    class FallingBlock
+    class TranslucentBlock
     class BlockEntity
     class BlockWithEntity
     class TntEntity

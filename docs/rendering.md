@@ -2,7 +2,7 @@
 
 > Mesh building, tessellators, and renderers.
 
-**47 classes**
+**48 classes**
 
 ## Key Classes
 
@@ -10,8 +10,8 @@
 - **`PrismTessellator`** (class)
 - **`SphereTessellator`** (class)
 - **`AbstractPrimitiveRenderer`** (class)
-- **`FieldRenderer`** (class)
 - **`LayerRenderer`** (class)
+- **`FieldRenderer`** (class)
 
 ## Class Diagram
 
@@ -31,18 +31,48 @@ classDiagram
         +setEnabled(...) void
         +setVisible(...) void
     }
-    class CapsuleTessellator {
+    class TorusTessellator {
         +tessellate(...) Mesh
         +tessellate(...) Mesh
         +tessellate(...) Mesh
     }
-    class ConeTessellator {
+    class RaysTessellator {
         +tessellate(...) Mesh
         +tessellate(...) Mesh
         +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+    }
+    class TravelEffectComputer {
+        +computeT(...) float
+        +computeT(...) float
+        +computeTForSphere(...) float
+        +computeAlpha(...) float
+        +computeSphereAlpha(...) float
+    }
+    class RingTessellator {
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+    }
+    class MoleculeTessellator {
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+    }
+    class PolyhedronTessellator {
+        +builder() Builder
+        +fromShape(...) PolyhedronTessellator
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +defaultDetail() int
     }
     class CylinderTessellator {
         +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+    }
+    class CapsuleTessellator {
         +tessellate(...) Mesh
         +tessellate(...) Mesh
         +tessellate(...) Mesh
@@ -57,8 +87,7 @@ classDiagram
         +discPoint(...) Vertex
         +discCenter(...) Vertex
     }
-    class JetTessellator {
-        +tessellate(...) Mesh
+    class ConeTessellator {
         +tessellate(...) Mesh
         +tessellate(...) Mesh
         +tessellate(...) Mesh
@@ -69,12 +98,14 @@ classDiagram
         +tessellate(...) Mesh
         +tessellate(...) Mesh
     }
-    class Mesh {
-        +empty() Mesh
-        +vertices() List
-        +indices()
-        +primitiveType() PrimitiveType
-        +vertexCount() int
+    class JetTessellator {
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+    }
+    class Tessellator {
+        <<interface>>
     }
     class MeshBuilder {
         +triangles() MeshBuilder
@@ -82,69 +113,6 @@ classDiagram
         +lines() MeshBuilder
         +addVertex(...) int
         +vertex(...) int
-    }
-    class MoleculeTessellator {
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-    }
-    class PolyhedronTessellator {
-        +builder() Builder
-        +fromShape(...) PolyhedronTessellator
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-        +defaultDetail() int
-    }
-    class PrimitiveType {
-        <<enumeration>>
-    }
-    class PrismTessellator {
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-    }
-    class RaysTessellator {
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-    }
-    class RingTessellator {
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-    }
-    class SphereTessellator {
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-        +requiresDirectRendering(...) boolean
-    }
-    class Tessellator {
-        <<interface>>
-    }
-    class TorusTessellator {
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-        +tessellate(...) Mesh
-    }
-    class TravelEffectComputer {
-        +computeT(...) float
-        +computeT(...) float
-        +computeTForSphere(...) float
-        +computeAlpha(...) float
-        +computeSphereAlpha(...) float
-    }
-    class VectorMath {
-        +PI: float
-        +TWO_PI: float
-        +HALF_PI: float
-        +generatePolarSurface(...) void
-        +generatePolarSurface(...) void
-        +generateSphere(...) void
-        +generateDroplet(...) void
-        +generateLatLonGrid(...) void
     }
     class Vertex {
         <<record>>
@@ -157,6 +125,51 @@ classDiagram
         +posUV(...) Vertex
         +spherical(...) Vertex
         +spherical(...) Vertex
+    }
+    class PrismTessellator {
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+    }
+    class PrimitiveType {
+        <<enumeration>>
+    }
+    class Mesh {
+        +empty() Mesh
+        +vertices() List
+        +indices()
+        +primitiveType() PrimitiveType
+        +vertexCount() int
+    }
+    class VectorMath {
+        +PI: float
+        +TWO_PI: float
+        +HALF_PI: float
+        +generatePolarSurface(...) void
+        +generatePolarSurface(...) void
+        +generateSphere(...) void
+        +generateDroplet(...) void
+        +generateLatLonGrid(...) void
+    }
+    class SphereTessellator {
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +tessellate(...) Mesh
+        +requiresDirectRendering(...) boolean
+    }
+    class RenderLayerFactory {
+        +solid() RenderLayer
+        +translucent() RenderLayer
+        +lines() RenderLayer
+        +glow() RenderLayer
+    }
+    class PostFxPipeline {
+        +getInstance() PostFxPipeline
+        +getGlowExtractTarget() HdrTarget
+        +getBlurPingTarget() HdrTarget
+        +getBlurPongTarget() HdrTarget
+        +getGlowFramebuffer() Framebuffer
     }
     class FieldRenderLayers {
         +solidTranslucent() RenderLayer
@@ -174,12 +187,6 @@ classDiagram
         +renderHalo(...) void
         +renderSimpleHalo(...) void
     }
-    class RenderLayerFactory {
-        +solid() RenderLayer
-        +translucent() RenderLayer
-        +lines() RenderLayer
-        +glow() RenderLayer
-    }
     class VertexEmitter {
         +color(...) VertexEmitter
         +color(...) VertexEmitter
@@ -187,38 +194,43 @@ classDiagram
         +alpha(...) VertexEmitter
         +light(...) VertexEmitter
     }
-    class AbstractPrimitiveRenderer {
-        <<abstract>>
-        +render(...) void
-    }
-    class BeamRenderer {
-        +render(...) void
-    }
-    class CapsuleRenderer {
+    class PolyhedronRenderer {
         +shapeType() String
+    }
+    class RaysRenderer {
+        +shapeType() String
+        +render(...) void
     }
     class ConeRenderer {
-        +shapeType() String
-    }
-    class CylinderRenderer {
-        +shapeType() String
-    }
-    class FieldRenderer {
-        +render(...) void
-        +renderWithFollow(...) void
-        +renderWithPrediction(...) void
-        +renderInstance(...) void
-        +renderWithBindings(...) void
-    }
-    class JetRenderer {
         +shapeType() String
     }
     class KamehamehaRenderer {
         +shapeType() String
     }
-    class LayerRenderer {
+    class RenderOverrides {
+        <<record>>
+        +vertexPattern: VertexPattern
+        +colorOverride: Integer
+        +alphaMultiplier: float
+        +scaleMultiplier: float
+        +withPattern(...) RenderOverrides
+        +withAlpha(...) RenderOverrides
+        +hasOverrides() boolean
+        +builder() Builder
+    }
+    class CapsuleRenderer {
+        +shapeType() String
+    }
+    class AbstractPrimitiveRenderer {
+        <<abstract>>
         +render(...) void
-        +render(...) void
+    }
+    class PrimitiveRenderers {
+        +registerAlias(...) void
+        +register(...) void
+        +get(...) PrimitiveRenderer
+        +get(...) PrimitiveRenderer
+        +get(...) PrimitiveRenderer
     }
     class RenderPhase
     class PrimitiveRenderer {
@@ -236,13 +248,9 @@ classDiagram
     AbstractPrimitiveRenderer --> VertexConsumerconsumer : uses
     AbstractPrimitiveRenderer <|-- CapsuleRenderer
     AbstractPrimitiveRenderer <|-- ConeRenderer
-    AbstractPrimitiveRenderer <|-- CylinderRenderer
-    AbstractPrimitiveRenderer <|-- JetRenderer
     AbstractPrimitiveRenderer <|-- KamehamehaRenderer
-    BeamRenderer --> BeamConfigbeam : uses
-    BeamRenderer --> ColorResolverresolver : uses
-    BeamRenderer --> MatrixStackmatrices : uses
-    BeamRenderer --> VertexConsumerProviderconsumers : uses
+    AbstractPrimitiveRenderer <|-- PolyhedronRenderer
+    AbstractPrimitiveRenderer <|-- RaysRenderer
     CapsuleRenderer --> MatrixStackmatrices : uses
     CapsuleRenderer --> Mesh : returns
     CapsuleRenderer --> Primitiveprimitive : uses
@@ -263,10 +271,6 @@ classDiagram
     ConeTessellator --> Mesh : returns
     ConeTessellator --> VertexPatternpattern : uses
     ConeTessellator --> VisibilityMaskvisibility : uses
-    CylinderRenderer --> MatrixStackmatrices : uses
-    CylinderRenderer --> Mesh : returns
-    CylinderRenderer --> Primitiveprimitive : uses
-    CylinderRenderer --> WaveConfigwave : uses
     CylinderTessellator --> CylinderShapeshape : uses
     CylinderTessellator --> Mesh : returns
     CylinderTessellator --> VertexPatterncapPattern : uses
@@ -275,10 +279,6 @@ classDiagram
     FieldRenderLayers --> RenderLayer : SOLID_TRANSLUCENT_CULL
     FieldRenderLayers --> RenderLayer : SOLID_TRANSLUCENT_NO_CULL
     FieldRenderLayers --> RenderLayer : SOLID_TRANSLUCENT_NO_DEPTH
-    FieldRenderer --> FollowConfigfollow : uses
-    FieldRenderer --> MatrixStackmatrices : uses
-    FieldRenderer --> PlayerEntityplayer : uses
-    FieldRenderer --> VertexConsumerProviderconsumers : uses
     GeometryMath --> Vector3f : returns
     GeometryMath --> Vertex : returns
     GeometryMath --> Vertexv0 : uses
@@ -287,10 +287,6 @@ classDiagram
     GlowRenderer --> Meshmesh : uses
     GlowRenderer --> VertexConsumerProviderconsumers : uses
     GlowRenderer --> VertexConsumerconsumer : uses
-    JetRenderer --> MatrixStackmatrices : uses
-    JetRenderer --> Mesh : returns
-    JetRenderer --> Primitiveprimitive : uses
-    JetRenderer --> WaveConfigwave : uses
     JetTessellator --> JetShapeshape : uses
     JetTessellator --> Mesh : returns
     JetTessellator --> VertexPatterncapPattern : uses
@@ -303,10 +299,6 @@ classDiagram
     KamehamehaTessellator --> Mesh : returns
     KamehamehaTessellator --> VertexPatternpattern : uses
     KamehamehaTessellator --> VisibilityMaskvisibility : uses
-    LayerRenderer --> MatrixStackmatrices : uses
-    LayerRenderer --> ThreadLocal : positionCache
-    LayerRenderer --> Vector3f : returns
-    LayerRenderer --> Vector3fposition : uses
     Mesh --> PrimitiveType : primitiveType
     Mesh --> PrimitiveType : returns
     Mesh --> Vertex : returns
@@ -321,20 +313,39 @@ classDiagram
     MoleculeTessellator --> VisibilityMaskvisibility : uses
     PersonalFieldTracker --> FieldDefinition : returns
     PersonalFieldTracker --> PlayerEntityplayer : uses
+    PolyhedronRenderer --> MatrixStackmatrices : uses
+    PolyhedronRenderer --> Mesh : returns
+    PolyhedronRenderer --> Primitiveprimitive : uses
+    PolyhedronRenderer --> WaveConfigwave : uses
     PolyhedronTessellator --> Builder : returns
     PolyhedronTessellator --> PolyType : polyType
     PolyhedronTessellator --> VertexPattern : pattern
     PolyhedronTessellator --> WaveConfig : wave
+    PostFxPipeline --> HdrTarget : blurPingTarget
+    PostFxPipeline --> HdrTarget : blurPongTarget
+    PostFxPipeline --> HdrTarget : glowExtractTarget
+    PostFxPipeline --> HdrTarget : returns
     PrimitiveRenderer <|.. AbstractPrimitiveRenderer
+    PrimitiveRenderers --> PrimitiveRenderer : RENDERERS
+    PrimitiveRenderers --> PrimitiveRenderer : returns
+    PrimitiveRenderers --> PrimitiveRendererrenderer : uses
+    PrimitiveRenderers --> Primitiveprimitive : uses
     PrismTessellator --> Mesh : returns
     PrismTessellator --> PrismShapeshape : uses
     PrismTessellator --> VertexPatterncapPattern : uses
     PrismTessellator --> VertexPatternsidesPattern : uses
+    RaysRenderer --> MatrixStackmatrices : uses
+    RaysRenderer --> Mesh : returns
+    RaysRenderer --> Primitiveprimitive : uses
+    RaysRenderer --> WaveConfigwave : uses
     RaysTessellator --> Mesh : returns
     RaysTessellator --> RaysShapeshape : uses
     RaysTessellator --> VertexPatternpattern : uses
     RaysTessellator --> WaveConfigwave : uses
     RenderLayerFactory --> RenderLayer : returns
+    RenderOverrides --> Builder : returns
+    RenderOverrides --> VertexPattern : vertexPattern
+    RenderOverrides --> VertexPatternpattern : uses
     RenderPhase <|-- FieldRenderLayers
     RingTessellator --> Mesh : returns
     RingTessellator --> RingShapeshape : uses

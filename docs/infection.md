@@ -2,7 +2,7 @@
 
 > Virus spreading and scenario management.
 
-**83 classes**
+**84 classes**
 
 ## Key Classes
 
@@ -18,38 +18,12 @@ classDiagram
         +debugList(...) void
         +placeTrap(...) BlockPos
     }
-    class CollapseOperations {
-        +createBorderSyncData(...)
-        +hasCollapseWorkRemaining() boolean
-        +transitionSingularityState(...) void
-        +tryCompleteCollapse(...) boolean
-        +computeInitialCollapseRadius(...) int
-    }
-    class CorruptionProfiler {
-        +logChunkRewrite(...) void
-        +logBoobytrapPlacement(...) void
-        +logBoobytrapSpread(...) void
-        +logBoobytrapTrigger(...) void
-        +logMatrixCubeSkip(...) void
-    }
-    class GlobalTerrainCorruption {
-        +init() void
-        +trigger(...) void
-        +cleanse(...) void
-        +getTrackedChunkCount(...) int
-    }
     class InfectionOperations {
         +ensureDebugInfection(...) void
         +applyDifficultyRules(...) void
         +broadcast(...) void
         +getSingularitySnapshot() Optional
         +applySingularitySnapshot(...) void
-    }
-    class TierCookbook {
-        +isEnabled(...) boolean
-        +anyEnabled(...) boolean
-        +activeFeatures(...) EnumSet
-        +defaultPlan() EnumMap
     }
     class VirusDamageClassifier {
         +KEY_BED: String
@@ -60,21 +34,41 @@ classDiagram
         +classifyExplosion(...) String
         +getDisplayName(...) String
     }
-    class VirusInventoryAnnouncements {
-        +init() void
-        +tick(...) void
-    }
     class VirusItemAlerts {
         +init() void
         +broadcastBurn(...) void
         +broadcastPickup(...) void
     }
+    class VirusInventoryAnnouncements {
+        +init() void
+        +tick(...) void
+    }
+    class GlobalTerrainCorruption {
+        +init() void
+        +trigger(...) void
+        +cleanse(...) void
+        +getTrackedChunkCount(...) int
+    }
+    class CorruptionProfiler {
+        +logChunkRewrite(...) void
+        +logBoobytrapPlacement(...) void
+        +logBoobytrapSpread(...) void
+        +logBoobytrapTrigger(...) void
+        +logMatrixCubeSkip(...) void
+    }
+    class VirusWorldPersistence {
+        +CODEC: Codec
+    }
     class VirusTierBossBar {
         +init() void
         +update(...) void
     }
-    class VirusWorldPersistence {
-        +CODEC: Codec
+    class CollapseOperations {
+        +createBorderSyncData(...)
+        +hasCollapseWorkRemaining() boolean
+        +transitionSingularityState(...) void
+        +tryCompleteCollapse(...) boolean
+        +computeInitialCollapseRadius(...) int
     }
     class VirusWorldState {
         +ID: String
@@ -85,47 +79,11 @@ classDiagram
         +singularityState()
         +collapseModule() CollapseModule
     }
-    class AlertingService {
-        +dispatch(...) void
-    }
-    class AmbientPressureService {
-        +tick(...) void
-        +applyDifficultyRules(...) void
-    }
-    class ChunkPreparationService {
-        +state() State
-        +tickChunkPreload() void
-        +tickPreGeneration() void
-        +rebuildPreGenQueue(...) void
-        +logChunkLoadException(...) void
-    }
-    class CollapseConfigurationService {
-        +applyDimensionProfile(...) void
-        +configuredCollapseMaxRadius() int
-        +configuredBarrierStartRadius() double
-        +configuredBarrierEndRadius() double
-        +configuredBorderDurationTicks() long
-    }
-    class CollapseExecutionService {
-        +getOperationsThisTick() int
-        +resetOperationsThisTick() void
-        +spawnChunkVeil(...) void
-        +chunkDistanceFromCenter(...) double
-        +getCurrentCollapseRadius() double
-    }
-    class CollapseProcessor {
-        +state() State
-        +start(...) void
-        +start(...) void
-        +stop() void
-        +isActive() boolean
-    }
-    class CollapseQueueService {
-        +chunkQueue() Deque
-        +chunkQueueSnapshot() List
-        +resetQueue() Deque
-        +resetQueueSnapshot() List
-        +clearResetProcessed() void
+    class TierCookbook {
+        +isEnabled(...) boolean
+        +anyEnabled(...) boolean
+        +activeFeatures(...) EnumSet
+        +defaultPlan() EnumMap
     }
     class CollapseSnapshotService {
         +buildSingularitySnapshot() Optional
@@ -133,12 +91,12 @@ classDiagram
         +applySingularitySnapshot(...) void
         +applySingularityBorderSnapshot(...) void
     }
-    class CollapseWatchdogService {
-        +controller() SingularityWatchdogController
-        +resetCollapseStallTicks() void
-        +collapseStallTicks() int
-        +diagnosticsSampleInterval() int
-        +presentationService() SingularityPresentationService
+    class InfectionLifecycleService {
+        +captureBoobytrapDefaults() void
+        +disableBoobytraps() void
+        +restoreBoobytrapRules() void
+        +beginCleansing() void
+        +ensureDebugInfection(...) void
     }
     class ConfigService {
         +root() Path
@@ -147,59 +105,101 @@ classDiagram
         +writeJson(...) void
         +exists(...) boolean
     }
+    class VirusBlockTelemetryService {
+        +tick() void
+    }
+    class SingularityFusingService {
+        +beginFusing(...) void
+        +handleSingularityInactive() void
+        +emitFuseEffects() void
+        +maintainFuseEntities() void
+        +clearFuseEntities() void
+    }
+    class SingularityBarrierService {
+        +state() State
+        +tick(...) void
+        +deactivate() void
+        +reset() void
+        +resetTimers() void
+    }
+    class InfectionServices {
+        +initialize(...) void
+        +reload() void
+        +get() InfectionServiceContainer
+        +container() InfectionServiceContainer
+    }
+    class CollapseQueueService {
+        +chunkQueue() Deque
+        +chunkQueueSnapshot() List
+        +resetQueue() Deque
+        +resetQueueSnapshot() List
+        +clearResetProcessed() void
+    }
+    class SourceControlService {
+        +maybeTeleportSources() boolean
+        +spawnCoreGuardians() void
+        +forceContainmentReset() void
+        +endInfection() void
+    }
+    class AlertingService {
+        +dispatch(...) void
+    }
+    class CollapseProcessor {
+        +state() State
+        +start(...) void
+        +start(...) void
+        +stop() void
+        +isActive() boolean
+    }
+    class VirusSchedulerService {
+        +scheduler() VirusScheduler
+        +install(...) void
+        +tick() void
+        +snapshot() List
+        +loadSnapshot(...) void
+    }
+    class ShellRebuildService {
+        +shellsCollapsed(...) boolean
+        +setShellsCollapsed(...) void
+        +shellRebuildPending(...) boolean
+        +setShellRebuildPending(...) void
+        +clearCooldowns(...) void
+    }
+    class TierProgressionService {
+        +advanceTier() void
+        +forceAdvanceTier() boolean
+        +applyContainmentCharge(...) void
+        +reduceMaxHealth(...) boolean
+        +bleedHealth(...) boolean
+    }
+    class InfectionExposureService {
+        +tickContact() void
+        +tickInventory() void
+    }
+    class CollapseWatchdogService {
+        +controller() SingularityWatchdogController
+        +resetCollapseStallTicks() void
+        +collapseStallTicks() int
+        +diagnosticsSampleInterval() int
+        +presentationService() SingularityPresentationService
+    }
     class EffectBusTelemetry {
         +onRegister(...) void
         +onUnregister(...) void
     }
-    class EffectService {
-        +registerSet(...) void
-        +unregisterSet(...) void
-        +clearSets() void
-        +close() void
-    }
-    class GuardianFxService {
-        +pushPlayers(...) GuardianResult
-        +notifyShieldStatus(...) void
-        +notifyShieldFailure(...) void
-    }
-    class GuardianSpawnService {
-        +spawnCoreGuardians(...) void
-        +tick() void
-    }
-    class HelmetTelemetryService {
-        +tick() void
-    }
-    class HorizonDarkeningController
-    class InfectionDisturbanceService {
-        +disturbByPlayer() void
-        +handleExplosionImpact(...) void
-    }
     class PersistentState
     class Codec
-    class State
-    class Deque
     class T
     class Objectvalue
-    AmbientPressureService --> EntityType : uses
-    AmbientPressureService --> InfectionTiertier : uses
-    AmbientPressureService --> Randomrandom : uses
-    AmbientPressureService --> VirusWorldState : host
+    class State
+    class Deque
+    class Statestate
+    class Callbackscallbacks
+    class Blockblock
     BoobytrapHelper --> BlockStatestate : uses
     BoobytrapHelper --> ServerPlayerEntityplayer : uses
     BoobytrapHelper --> TrapSelection : returns
     BoobytrapHelper --> Typetype : uses
-    ChunkPreparationService --> ChunkPoscenter : uses
-    ChunkPreparationService --> State : returns
-    ChunkPreparationService --> State : state
-    ChunkPreparationService --> VirusWorldState : host
-    CollapseConfigurationService --> CollapseFillMode : fillModeConfig
-    CollapseConfigurationService --> CollapseFillProfile : fillProfileConfig
-    CollapseConfigurationService --> CollapseFillShape : fillShapeConfig
-    CollapseConfigurationService --> WaterDrainMode : waterDrainModeConfig
-    CollapseExecutionService --> ChunkPoschunk : uses
-    CollapseExecutionService --> CollapseErosionSettingserosion : uses
-    CollapseExecutionService --> CollapseFillShapeshape : uses
-    CollapseExecutionService --> VirusWorldState : host
     CollapseOperations --> CollapseBroadcastManagerbroadcastManager : uses
     CollapseOperations --> SingularityPhaseService : singularityPhaseService
     CollapseOperations --> SingularityStatenext : uses
@@ -228,32 +228,44 @@ classDiagram
     CorruptionProfiler --> NullableStringdetail : uses
     CorruptionProfiler --> VirusEventTypetype : uses
     EffectBusTelemetry --> VirusWorldState : state
-    EffectService --> EffectBusbus : uses
-    EffectService --> ScenarioEffectSet : activeSets
-    EffectService --> ScenarioEffectSetset : uses
     GlobalTerrainCorruption --> BlockStatestate : uses
     GlobalTerrainCorruption --> ChunkWorkTracker : TRACKERS
     GlobalTerrainCorruption --> ChunkWorkTracker : returns
     GlobalTerrainCorruption --> ChunkWorkTrackertracker : uses
-    GuardianFxService --> GuardianResult : returns
-    GuardianFxService --> NullableEffectBuseffectBus : uses
-    GuardianFxService --> ServerPlayerEntity : uses
-    HelmetTelemetryService --> ServerPlayerEntityplayer : uses
-    HelmetTelemetryService --> VirusWorldState : host
-    HorizonDarkeningController --> RegistryKey : worlds
-    HorizonDarkeningController --> SingularityHudServicehud : uses
-    HorizonDarkeningController --> SingularityState : uses
-    HorizonDarkeningController --> VirusWorldStatestate : uses
-    InfectionDisturbanceService --> VirusWorldState : host
+    InfectionExposureService --> VirusWorldState : host
+    InfectionLifecycleService --> VirusWorldState : host
     InfectionOperations --> AmbientPressureService : ambientPressureService
     InfectionOperations --> CollapseSnapshotService : snapshotService
     InfectionOperations --> InfectionLifecycleService : infectionLifecycleService
     InfectionOperations --> VirusWorldState : state
+    InfectionServices --> InfectionServiceContainer : INSTANCE
+    InfectionServices --> InfectionServiceContainer : returns
     PersistentState <|-- VirusWorldState
+    ShellRebuildService --> Blockblock : uses
+    ShellRebuildService --> Callbackscallbacks : uses
+    ShellRebuildService --> InfectionTiertier : uses
+    ShellRebuildService --> Statestate : uses
+    SingularityBarrierService --> InfectionTiertier : uses
+    SingularityBarrierService --> State : returns
+    SingularityBarrierService --> State : state
+    SingularityBarrierService --> VirusWorldState : host
+    SingularityFusingService --> BlockStatestate : uses
+    SingularityFusingService --> DustColorTransitionParticleEffect : SINGULARITY_FUSE_GLOW
+    SingularityFusingService --> SingularityContextctx : uses
+    SingularityFusingService --> VirusWorldState : host
+    SourceControlService --> ShellRebuildService : shellService
+    SourceControlService --> VirusSourceService : sourceService
+    SourceControlService --> VirusWorldState : host
     TierCookbook --> EnumSet : returns
     TierCookbook --> InfectionTiertier : uses
     TierCookbook --> TierFeatureGroupgroup : uses
     TierCookbook --> TierFeaturefeature : uses
+    TierProgressionService --> ShellRebuildService : shellService
+    TierProgressionService --> SingularityLifecycleService : lifecycle
+    TierProgressionService --> TierModule : tiers
+    TierProgressionService --> VirusWorldState : host
+    VirusBlockTelemetryService --> ServerPlayerEntityplayer : uses
+    VirusBlockTelemetryService --> VirusWorldState : host
     VirusDamageClassifier --> NullableDamageSourcesource : uses
     VirusDamageClassifier --> NullableEntityattacker : uses
     VirusDamageClassifier --> NullableEntitysource : uses
@@ -261,6 +273,10 @@ classDiagram
     VirusInventoryAnnouncements --> MinecraftServerserver : uses
     VirusItemAlerts --> ServerPlayerEntitydropper : uses
     VirusItemAlerts --> ServerPlayerEntityplayer : uses
+    VirusSchedulerService --> NullableVirusSchedulerscheduler : uses
+    VirusSchedulerService --> SimpleVirusScheduler : fallback
+    VirusSchedulerService --> VirusScheduler : active
+    VirusSchedulerService --> VirusScheduler : returns
     VirusTierBossBar --> BossBarsbars : uses
     VirusTierBossBar --> Object2ByteMap : SKY_TINT
     VirusTierBossBar --> RegistryKey : BARS

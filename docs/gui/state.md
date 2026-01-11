@@ -8,6 +8,13 @@
 
 ```mermaid
 classDiagram
+    class RendererCapabilities {
+        +isSupported(...) boolean
+        +areAllSupported() boolean
+        +isAnySupported() boolean
+        +getSupportedFeatures() Set
+        +getUnsupportedFeatures() Set
+    }
     class AppearanceState {
         <<record>>
         +color: int
@@ -18,9 +25,6 @@ classDiagram
         +builder() Builder
         +toBuilder() Builder
     }
-    class DefinitionBuilder {
-        +fromState(...) FieldDefinition
-    }
     class EditorState {
         +getSelectedLayerIndex() int
         +selectLayer(...) void
@@ -28,15 +32,15 @@ classDiagram
         +selectPrimitive(...) void
         +reset() void
     }
-    class FieldEditState {
-        +livePreviewEnabled: boolean
-        +autoSaveEnabled: boolean
-        +debugUnlocked: boolean
-        +layers() LayerManager
-        +profiles() ProfileManager
-        +bindings() BindingsManager
-        +triggers() TriggerManager
-        +serialization() SerializationManager
+    class DefinitionBuilder {
+        +fromState(...) FieldDefinition
+    }
+    class UndoManager {
+        +push(...) void
+        +undo(...) FieldDefinition
+        +redo(...) FieldDefinition
+        +canUndo() boolean
+        +canRedo() boolean
     }
     class FieldEditStateHolder {
         +getOrCreate() FieldEditState
@@ -56,12 +60,15 @@ classDiagram
         +clear() void
         +trace(...) void
     }
-    class RendererCapabilities {
-        +isSupported(...) boolean
-        +areAllSupported() boolean
-        +isAnySupported() boolean
-        +getSupportedFeatures() Set
-        +getUnsupportedFeatures() Set
+    class FieldEditState {
+        +livePreviewEnabled: boolean
+        +autoSaveEnabled: boolean
+        +debugUnlocked: boolean
+        +layers() LayerManager
+        +profiles() ProfileManager
+        +bindings() BindingsManager
+        +triggers() TriggerManager
+        +serialization() SerializationManager
     }
     class StateAccessor {
         +get(...) T
@@ -70,13 +77,6 @@ classDiagram
         +get(...) Object
         +getInt(...) int
     }
-    class UndoManager {
-        +push(...) void
-        +undo(...) FieldDefinition
-        +redo(...) FieldDefinition
-        +canUndo() boolean
-        +canRedo() boolean
-    }
     class AbstractAdapter {
         <<abstract>>
         +get(...) Object
@@ -84,19 +84,41 @@ classDiagram
         +paths() Set
         +reset() void
     }
-    class AnimationAdapter {
-        +category() String
-        +loadFrom(...) void
-        +saveTo(...) void
-        +spin() SpinConfig
-        +setSpin(...) void
+    class ShockwaveConfig {
+        <<record>>
+        +shapeType: ShapeType
+        +mainRadius: float
+        +orbitalRadius: float
+        +orbitDistance: float
+        +toBuilder() Builder
     }
-    class AppearanceAdapter {
+    class MagicCircleConfig {
+        <<record>>
+        +effectRadius: float
+        +heightTolerance: float
+        +intensity: float
+        +glowExponent: float
+        +getLayerEnable(...) boolean
+        +getLayerIntensity(...) float
+        +getLayerSpeed(...) float
+        +toBuilder() Builder
+    }
+    class TransformAdapter {
         +category() String
         +loadFrom(...) void
         +saveTo(...) void
-        +appearance() AppearanceState
-        +setAppearance(...) void
+        +transform() Transform
+        +setTransform(...) void
+    }
+    class PrimitiveAdapter {
+        <<interface>>
+    }
+    class ShockwaveAdapter {
+        +category() String
+        +get(...) Object
+        +set(...) void
+        +syncToPostEffect() void
+        +config() ShockwaveConfig
     }
     class ArrangementAdapter {
         +category() String
@@ -105,12 +127,26 @@ classDiagram
         +get(...) Object
         +set(...) void
     }
+    class PrimitiveBuilder {
+        +id(...) PrimitiveBuilder
+        +type(...) PrimitiveBuilder
+        +shape(...) PrimitiveBuilder
+        +transform(...) PrimitiveBuilder
+        +fill(...) PrimitiveBuilder
+    }
     class FieldVisualAdapter {
         +category() String
         +get(...) Object
         +set(...) void
         +isEnabled() boolean
         +sourceRef() String
+    }
+    class VisibilityAdapter {
+        +category() String
+        +loadFrom(...) void
+        +saveTo(...) void
+        +mask() VisibilityMask
+        +setMask(...) void
     }
     class FieldVisualSerializer {
         +loadColors(...) ColorParams
@@ -119,14 +155,21 @@ classDiagram
         +loadCoreEdge(...) CoreEdgeParams
         +loadFalloff(...) FalloffParams
     }
-    class FillAdapter {
+    class LinkAdapter {
         +category() String
         +loadFrom(...) void
         +saveTo(...) void
         +get(...) Object
         +set(...) void
     }
-    class LinkAdapter {
+    class TriggerAdapter {
+        +category() String
+        +loadFrom(...) void
+        +saveTo(...) void
+        +get(...) Object
+        +set(...) void
+    }
+    class FillAdapter {
         +category() String
         +loadFrom(...) void
         +saveTo(...) void
@@ -140,26 +183,19 @@ classDiagram
         +syncToPostEffect() void
         +config() MagicCircleConfig
     }
-    class MagicCircleConfig {
-        <<record>>
-        +effectRadius: float
-        +heightTolerance: float
-        +intensity: float
-        +glowExponent: float
-        +getLayerEnable(...) boolean
-        +getLayerIntensity(...) float
-        +getLayerSpeed(...) float
-        +toBuilder() Builder
+    class AppearanceAdapter {
+        +category() String
+        +loadFrom(...) void
+        +saveTo(...) void
+        +appearance() AppearanceState
+        +setAppearance(...) void
     }
-    class PrimitiveAdapter {
-        <<interface>>
-    }
-    class PrimitiveBuilder {
-        +id(...) PrimitiveBuilder
-        +type(...) PrimitiveBuilder
-        +shape(...) PrimitiveBuilder
-        +transform(...) PrimitiveBuilder
-        +fill(...) PrimitiveBuilder
+    class AnimationAdapter {
+        +category() String
+        +loadFrom(...) void
+        +saveTo(...) void
+        +spin() SpinConfig
+        +setSpin(...) void
     }
     class ShapeAdapter {
         +category() String
@@ -168,51 +204,15 @@ classDiagram
         +currentShape() Shape
         +shapeType() String
     }
-    class ShockwaveAdapter {
-        +category() String
-        +get(...) Object
-        +set(...) void
-        +syncToPostEffect() void
-        +config() ShockwaveConfig
-    }
-    class ShockwaveConfig {
-        <<record>>
-        +shapeType: ShapeType
-        +mainRadius: float
-        +orbitalRadius: float
-        +orbitDistance: float
-        +toBuilder() Builder
-    }
-    class TransformAdapter {
-        +category() String
-        +loadFrom(...) void
-        +saveTo(...) void
-        +transform() Transform
-        +setTransform(...) void
-    }
-    class TriggerAdapter {
-        +category() String
-        +loadFrom(...) void
-        +saveTo(...) void
-        +get(...) Object
-        +set(...) void
-    }
-    class VisibilityAdapter {
-        +category() String
-        +loadFrom(...) void
-        +saveTo(...) void
-        +mask() VisibilityMask
-        +setMask(...) void
-    }
-    class Objectvalue
     class Feature
+    class Deque
+    class Objectvalue
     class T
     class Objectstate
-    class Deque
-    class Primitivesource
-    class Builderbuilder
-    class Objectv
     class Builder
+    class Primitivesource
+    class Objectv
+    class Builderbuilder
     class Shape
     AbstractAdapter --> Objectvalue : uses
     AbstractAdapter --> T : returns

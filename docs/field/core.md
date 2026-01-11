@@ -8,6 +8,20 @@
 
 ```mermaid
 classDiagram
+    class FieldManager {
+        +get(...) FieldManager
+        +remove(...) void
+        +onSpawn(...) void
+        +onRemove(...) void
+        +onUpdate(...) void
+    }
+    class ClientFieldState {
+        +atPosition(...) ClientFieldState
+        +atBlock(...) ClientFieldState
+        +forPlayer(...) ClientFieldState
+        +id() long
+        +definitionId() Identifier
+    }
     class BeamConfig {
         <<record>>
         +enabled: boolean
@@ -20,24 +34,12 @@ classDiagram
         +hasPulse() boolean
         +fromJson(...) BeamConfig
     }
-    class ClientFieldState {
-        +atPosition(...) ClientFieldState
-        +atBlock(...) ClientFieldState
-        +forPlayer(...) ClientFieldState
-        +id() long
-        +definitionId() Identifier
-    }
-    class FieldDefinition {
-        <<record>>
-        +id: String
-        +type: FieldType
-        +baseRadius: float
-        +themeId: String
-        +fromJson(...) FieldDefinition
-        +empty(...) FieldDefinition
-        +of(...) FieldDefinition
-        +of(...) FieldDefinition
-        +hasBindings() boolean
+    class FieldProfileStore {
+        +save(...) boolean
+        +load(...) Optional
+        +loadAndRegister(...) boolean
+        +list() List
+        +delete(...) boolean
     }
     class FieldLayer {
         <<record>>
@@ -51,19 +53,20 @@ classDiagram
         +fromJson(...) FieldLayer
         +builder(...) Builder
     }
-    class FieldManager {
-        +get(...) FieldManager
-        +remove(...) void
-        +onSpawn(...) void
-        +onRemove(...) void
-        +onUpdate(...) void
+    class FieldType {
+        <<enumeration>>
     }
-    class FieldProfileStore {
-        +save(...) boolean
-        +load(...) Optional
-        +loadAndRegister(...) boolean
-        +list() List
-        +delete(...) boolean
+    class FieldDefinition {
+        <<record>>
+        +id: String
+        +type: FieldType
+        +baseRadius: float
+        +themeId: String
+        +fromJson(...) FieldDefinition
+        +empty(...) FieldDefinition
+        +of(...) FieldDefinition
+        +of(...) FieldDefinition
+        +hasBindings() boolean
     }
     class FieldRegistry {
         +initialize(...) void
@@ -71,9 +74,6 @@ classDiagram
         +get(...) FieldDefinition
         +get(...) FieldDefinition
         +clear() void
-    }
-    class FieldType {
-        <<enumeration>>
     }
     class Modifiers {
         <<record>>
@@ -87,19 +87,18 @@ classDiagram
         +withStrength(...) Modifiers
         +visual(...) Modifiers
     }
-    class DefaultsProvider {
-        +getDefaults(...) JsonObject
-        +applyDefaults(...) JsonObject
-        +getDefaultShape(...) Shape
-        +getDefaultTransform() Transform
-        +getDefaultFill() FillConfig
+    class ValidationHelper {
+        +validateDefinition(...) List
+        +validateLayer(...) List
+        +validatePrimitive(...) List
+        +logWarnings(...) void
+        +validateAndLog(...) boolean
     }
-    class FieldLoader {
-        +load(...) void
-        +reload() void
-        +loadAll() void
-        +loadDefinition(...) FieldDefinition
-        +getDefinition(...) FieldDefinition
+    class ReferenceResolver {
+        +resolve(...) JsonObject
+        +resolveWithOverrides(...) JsonObject
+        +resolveWithOverrides(...) JsonObject
+        +clearCache() void
     }
     class JsonParseUtils {
         +parseOptional(...) T
@@ -108,11 +107,12 @@ classDiagram
         +parseMap(...) Map
         +getFloat(...) float
     }
-    class ReferenceResolver {
-        +resolve(...) JsonObject
-        +resolveWithOverrides(...) JsonObject
-        +resolveWithOverrides(...) JsonObject
-        +clearCache() void
+    class FieldLoader {
+        +load(...) void
+        +reload() void
+        +loadAll() void
+        +loadDefinition(...) FieldDefinition
+        +getDefinition(...) FieldDefinition
     }
     class SimplePrimitive {
         <<record>>
@@ -126,20 +126,20 @@ classDiagram
         +withAppearance(...) SimplePrimitive
         +withAnimation(...) SimplePrimitive
     }
-    class ValidationHelper {
-        +validateDefinition(...) List
-        +validateLayer(...) List
-        +validatePrimitive(...) List
-        +logWarnings(...) void
-        +validateAndLog(...) boolean
+    class DefaultsProvider {
+        +getDefaults(...) JsonObject
+        +applyDefaults(...) JsonObject
+        +getDefaultShape(...) Shape
+        +getDefaultTransform() Transform
+        +getDefaultFill() FillConfig
     }
     class Primitive {
         <<interface>>
     }
     class Builder
     class Animation
-    class Shape
     class T
+    class Shape
     BeamConfig --> Builder : returns
     BeamConfig --> PulseConfig : pulse
     ClientFieldState --> FieldType : returns
