@@ -224,6 +224,9 @@ public class PostEffectPassMixin {
             
             FieldVisualConfig config = currentField.getConfig();
             
+            // Store intensity for HDR blur/composite passes
+            net.cyberpunk042.client.visual.ubo.HdrState.setIntensity(config.anim().intensity());
+            
             // Apply spawn animation opacity to alphaScale
             float spawnOpacity = currentField.getSpawnOpacity();
             if (spawnOpacity < 1.0f) {
