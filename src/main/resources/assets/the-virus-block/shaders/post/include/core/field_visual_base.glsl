@@ -335,7 +335,7 @@ layout(std140) uniform FieldVisualConfig {
     float V8ElectricLineWidth;     // Line thickness: 0=thick, 1=thin (default 0.5)
     
     // ═══════════════════════════════════════════════════════════════════════
-    // GOD RAY PARAMS (Slot 50)
+    // GOD RAY PARAMS (Slots 50-54)
     // Screen-space volumetric light scattering
     // ═══════════════════════════════════════════════════════════════════════
     
@@ -350,6 +350,24 @@ layout(std140) uniform FieldVisualConfig {
     float GodRaySkyEnabled;   // Sky rays toggle: 0.0 = off, 1.0 = on
     float GodRaySoftness;     // Transition softness (default 0.3)
     float GodRayMaskReserved; // Reserved
+    
+    // vec4 52: God Ray style controls
+    float GodRayEnergyMode;      // 0=radiation (outward), 1=absorption (inward), 2=pulse
+    float GodRayColorMode;       // 0=solid, 1=gradient, 2=temperature
+    float GodRayDistributionMode;// 0=uniform, 1=weighted, 2=noise
+    float GodRayArrangementMode; // 0=point, 1=ring, 2=sector
+    
+    // vec4 53: God Ray secondary color (for gradient mode)
+    float GodRayColor2R;      // Red component (0-1, can exceed for HDR)
+    float GodRayColor2G;      // Green component
+    float GodRayColor2B;      // Blue component
+    float GodRayGradientPower;// Blend curve power (1=linear, 2=quadratic)
+    
+    // vec4 54: God Ray noise controls (for distribution mode 2)
+    float GodRayNoiseScale;   // Angular noise frequency (default 8.0)
+    float GodRayNoiseSpeed;   // Animation speed (default 0.5)
+    float GodRayNoiseIntensity;// Modulation strength 0-1 (default 0.5)
+    float GodRayAngularBias;  // Directional bias (-1=vert, 0=none, 1=horiz)
 };
 
 // ═══════════════════════════════════════════════════════════════════════════

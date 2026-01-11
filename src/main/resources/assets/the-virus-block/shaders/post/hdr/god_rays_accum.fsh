@@ -89,18 +89,48 @@ void main() {
     float decay = GodRayDecay;
     float exposure = GodRayExposure;
     
-    // Accumulate god rays
-    float illumination = accumulateGodRays(
+    // Get style parameters from UBO (Slots 52-54)
+    float energyMode = GodRayEnergyMode;
+    float distributionMode = GodRayDistributionMode;
+    float arrangementMode = GodRayArrangementMode;
+    float noiseScale = GodRayNoiseScale;
+    float noiseSpeed = GodRayNoiseSpeed;
+    float noiseIntensity = GodRayNoiseIntensity;
+    float angularBias = GodRayAngularBias;
+    
+    // Calculate screen radius for ring arrangement mode
+    // Project orb radius to screen space (approximate)
+    float screenRadius = 0.0;
+    if (arrangementMode > 0.5 && zDist > 0.0) {
+        float tanHalfFov = tan(fov * 0.5);
+        screenRadius = (Radius / zDist) / (tanHalfFov * 2.0);
+    }
+    
+    // Get time from animation phase
+    float time = Phase;
+    
+    // Accumulate god rays with full style support
+    float illumination = accumulateGodRaysStyled(
         texCoord,
         lightUV,
         OcclusionSampler,
         samples,
         GOD_RAYS_DEFAULT_MAX_LENGTH,
         decay,
-        exposure
+        exposure,
+        screenRadius,
+        energyMode,
+        distributionMode,
+        arrangementMode,
+        noiseScale,
+        noiseSpeed,
+        noiseIntensity,
+        angularBias,
+        time
     );
     
     // Output monochrome illumination (HDR-safe, may exceed 1.0)
     // Color tinting happens at composite stage
     fragColor = vec4(illumination, illumination, illumination, 1.0);
 }
+

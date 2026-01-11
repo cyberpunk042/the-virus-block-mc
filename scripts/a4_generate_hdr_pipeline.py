@@ -72,6 +72,46 @@ def create_godrays_chain(version: str, base_json: dict) -> dict:
     base_pass = base_json["passes"][0].copy()
     field_visual_uniforms = base_pass.get("uniforms", {})
     
+    # ═══════════════════════════════════════════════════════════════════════════
+    # INJECT GOD RAY UNIFORMS (Slots 50-54)
+    # These are dynamically updated by PostEffectPassMixin but must be declared
+    # in the JSON for Minecraft to create the uniform block with correct size.
+    # ═══════════════════════════════════════════════════════════════════════════
+    god_ray_uniforms = [
+        # Slot 50: God Ray params
+        {"name": "GodRayEnabled", "type": "float", "value": 0.0},
+        {"name": "GodRayDecay", "type": "float", "value": 0.97},
+        {"name": "GodRayExposure", "type": "float", "value": 0.02},
+        {"name": "GodRaySamples", "type": "float", "value": 96.0},
+        # Slot 51: God Ray mask params
+        {"name": "GodRayThreshold", "type": "float", "value": 0.5},
+        {"name": "GodRaySkyEnabled", "type": "float", "value": 0.0},
+        {"name": "GodRaySoftness", "type": "float", "value": 0.3},
+        {"name": "GodRayMaskReserved", "type": "float", "value": 0.0},
+        # Slot 52: God Ray style params
+        {"name": "GodRayEnergyMode", "type": "float", "value": 0.0},
+        {"name": "GodRayColorMode", "type": "float", "value": 0.0},
+        {"name": "GodRayDistributionMode", "type": "float", "value": 0.0},
+        {"name": "GodRayArrangementMode", "type": "float", "value": 0.0},
+        # Slot 53: God Ray color 2 (for gradient mode)
+        {"name": "GodRayColor2R", "type": "float", "value": 1.0},
+        {"name": "GodRayColor2G", "type": "float", "value": 0.9},
+        {"name": "GodRayColor2B", "type": "float", "value": 0.7},
+        {"name": "GodRayGradientPower", "type": "float", "value": 1.0},
+        # Slot 54: God Ray noise params
+        {"name": "GodRayNoiseScale", "type": "float", "value": 8.0},
+        {"name": "GodRayNoiseSpeed", "type": "float", "value": 0.5},
+        {"name": "GodRayNoiseIntensity", "type": "float", "value": 0.5},
+        {"name": "GodRayAngularBias", "type": "float", "value": 0.0},
+    ]
+    
+    # Append god ray uniforms to FieldVisualConfig if not already present
+    if "FieldVisualConfig" in field_visual_uniforms:
+        existing_names = {u["name"] for u in field_visual_uniforms["FieldVisualConfig"]}
+        for u in god_ray_uniforms:
+            if u["name"] not in existing_names:
+                field_visual_uniforms["FieldVisualConfig"].append(u)
+    
     # Build the pipeline
     hdr_json = {
         "_comment": f"HDR God Rays Chain - {version.upper()} with volumetric light shafts",

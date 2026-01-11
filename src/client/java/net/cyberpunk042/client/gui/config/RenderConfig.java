@@ -61,6 +61,46 @@ public class RenderConfig {
     private boolean godRaysSkyEnabled = false;
     
     // =========================================================================
+    // GOD RAYS STYLE SETTINGS (Slots 52-54)
+    // =========================================================================
+    
+    /** Energy mode: 0=radiation (outward), 1=absorption (inward), 2=pulse */
+    private int godRaysEnergyMode = 0;
+    
+    /** Color mode: 0=solid, 1=gradient, 2=temperature */
+    private int godRaysColorMode = 0;
+    
+    /** Distribution mode: 0=uniform, 1=weighted, 2=noise */
+    private int godRaysDistributionMode = 0;
+    
+    /** Arrangement mode: 0=point, 1=ring, 2=sector */
+    private int godRaysArrangementMode = 0;
+    
+    /** Secondary color R for gradient mode (0-1 range) */
+    private float godRaysColor2R = 1.0f;
+    
+    /** Secondary color G for gradient mode */
+    private float godRaysColor2G = 0.9f;
+    
+    /** Secondary color B for gradient mode */
+    private float godRaysColor2B = 0.7f;
+    
+    /** Gradient blend power (1=linear, 2=quadratic) */
+    private float godRaysGradientPower = 1.0f;
+    
+    /** Noise scale for distribution mode 2 */
+    private float godRaysNoiseScale = 8.0f;
+    
+    /** Noise animation speed */
+    private float godRaysNoiseSpeed = 0.5f;
+    
+    /** Noise modulation intensity (0-1) */
+    private float godRaysNoiseIntensity = 0.5f;
+    
+    /** Angular bias for weighted mode (-1=vertical, 0=none, 1=horizontal) */
+    private float godRaysAngularBias = 0.0f;
+    
+    // =========================================================================
     // CONSTRUCTOR & SINGLETON
     // =========================================================================
     
@@ -157,6 +197,46 @@ public class RenderConfig {
     public boolean isGodRaysSkyEnabled() {
         return godRaysSkyEnabled;
     }
+    
+    // =========================================================================
+    // GOD RAYS STYLE GETTERS
+    // =========================================================================
+    
+    /** Get energy mode: 0=radiation, 1=absorption, 2=pulse */
+    public int getGodRaysEnergyMode() { return godRaysEnergyMode; }
+    
+    /** Get color mode: 0=solid, 1=gradient, 2=temperature */
+    public int getGodRaysColorMode() { return godRaysColorMode; }
+    
+    /** Get distribution mode: 0=uniform, 1=weighted, 2=noise */
+    public int getGodRaysDistributionMode() { return godRaysDistributionMode; }
+    
+    /** Get arrangement mode: 0=point, 1=ring, 2=sector */
+    public int getGodRaysArrangementMode() { return godRaysArrangementMode; }
+    
+    /** Get secondary color R for gradient mode */
+    public float getGodRaysColor2R() { return godRaysColor2R; }
+    
+    /** Get secondary color G for gradient mode */
+    public float getGodRaysColor2G() { return godRaysColor2G; }
+    
+    /** Get secondary color B for gradient mode */
+    public float getGodRaysColor2B() { return godRaysColor2B; }
+    
+    /** Get gradient blend power */
+    public float getGodRaysGradientPower() { return godRaysGradientPower; }
+    
+    /** Get noise scale */
+    public float getGodRaysNoiseScale() { return godRaysNoiseScale; }
+    
+    /** Get noise speed */
+    public float getGodRaysNoiseSpeed() { return godRaysNoiseSpeed; }
+    
+    /** Get noise intensity */
+    public float getGodRaysNoiseIntensity() { return godRaysNoiseIntensity; }
+    
+    /** Get angular bias */
+    public float getGodRaysAngularBias() { return godRaysAngularBias; }
     
     // =========================================================================
     // HDR SETTERS
@@ -272,6 +352,62 @@ public class RenderConfig {
     }
     
     // =========================================================================
+    // GOD RAYS STYLE SETTERS
+    // =========================================================================
+    
+    /** Set energy mode: 0=radiation, 1=absorption, 2=pulse */
+    public void setGodRaysEnergyMode(int mode) {
+        this.godRaysEnergyMode = Math.max(0, Math.min(2, mode));
+    }
+    
+    /** Set color mode: 0=solid, 1=gradient, 2=temperature */
+    public void setGodRaysColorMode(int mode) {
+        this.godRaysColorMode = Math.max(0, Math.min(2, mode));
+    }
+    
+    /** Set distribution mode: 0=uniform, 1=weighted, 2=noise */
+    public void setGodRaysDistributionMode(int mode) {
+        this.godRaysDistributionMode = Math.max(0, Math.min(2, mode));
+    }
+    
+    /** Set arrangement mode: 0=point, 1=ring, 2=sector */
+    public void setGodRaysArrangementMode(int mode) {
+        this.godRaysArrangementMode = Math.max(0, Math.min(2, mode));
+    }
+    
+    /** Set secondary color for gradient mode */
+    public void setGodRaysColor2(float r, float g, float b) {
+        this.godRaysColor2R = r;
+        this.godRaysColor2G = g;
+        this.godRaysColor2B = b;
+    }
+    
+    /** Set gradient blend power */
+    public void setGodRaysGradientPower(float power) {
+        this.godRaysGradientPower = Math.max(0.1f, Math.min(5f, power));
+    }
+    
+    /** Set noise scale */
+    public void setGodRaysNoiseScale(float scale) {
+        this.godRaysNoiseScale = Math.max(1f, Math.min(20f, scale));
+    }
+    
+    /** Set noise speed */
+    public void setGodRaysNoiseSpeed(float speed) {
+        this.godRaysNoiseSpeed = Math.max(0f, Math.min(5f, speed));
+    }
+    
+    /** Set noise intensity (0-1) */
+    public void setGodRaysNoiseIntensity(float intensity) {
+        this.godRaysNoiseIntensity = Math.max(0f, Math.min(1f, intensity));
+    }
+    
+    /** Set angular bias (-1 to 1) */
+    public void setGodRaysAngularBias(float bias) {
+        this.godRaysAngularBias = Math.max(-1f, Math.min(1f, bias));
+    }
+    
+    // =========================================================================
     // PERSISTENCE
     // =========================================================================
     
@@ -310,6 +446,44 @@ public class RenderConfig {
             godRaysSkyEnabled = json.get("god_rays_sky_enabled").getAsBoolean();
         }
         
+        // Style settings (slots 52-54)
+        if (json.has("god_rays_energy_mode")) {
+            setGodRaysEnergyMode(json.get("god_rays_energy_mode").getAsInt());
+        }
+        if (json.has("god_rays_color_mode")) {
+            setGodRaysColorMode(json.get("god_rays_color_mode").getAsInt());
+        }
+        if (json.has("god_rays_distribution_mode")) {
+            setGodRaysDistributionMode(json.get("god_rays_distribution_mode").getAsInt());
+        }
+        if (json.has("god_rays_arrangement_mode")) {
+            setGodRaysArrangementMode(json.get("god_rays_arrangement_mode").getAsInt());
+        }
+        if (json.has("god_rays_color2_r")) {
+            godRaysColor2R = json.get("god_rays_color2_r").getAsFloat();
+        }
+        if (json.has("god_rays_color2_g")) {
+            godRaysColor2G = json.get("god_rays_color2_g").getAsFloat();
+        }
+        if (json.has("god_rays_color2_b")) {
+            godRaysColor2B = json.get("god_rays_color2_b").getAsFloat();
+        }
+        if (json.has("god_rays_gradient_power")) {
+            setGodRaysGradientPower(json.get("god_rays_gradient_power").getAsFloat());
+        }
+        if (json.has("god_rays_noise_scale")) {
+            setGodRaysNoiseScale(json.get("god_rays_noise_scale").getAsFloat());
+        }
+        if (json.has("god_rays_noise_speed")) {
+            setGodRaysNoiseSpeed(json.get("god_rays_noise_speed").getAsFloat());
+        }
+        if (json.has("god_rays_noise_intensity")) {
+            setGodRaysNoiseIntensity(json.get("god_rays_noise_intensity").getAsFloat());
+        }
+        if (json.has("god_rays_angular_bias")) {
+            setGodRaysAngularBias(json.get("god_rays_angular_bias").getAsFloat());
+        }
+        
         Logging.RENDER.topic("render_config")
             .kv("hdr", hdrEnabled)
             .kv("blurQuality", blurQuality)
@@ -319,6 +493,7 @@ public class RenderConfig {
             .kv("godRaysExposure", godRaysExposure)
             .kv("godRaysThreshold", godRaysThreshold)
             .kv("godRaysSky", godRaysSkyEnabled)
+            .kv("godRaysEnergyMode", godRaysEnergyMode)
             .debug("Loaded render config from JSON");
     }
     
@@ -340,6 +515,20 @@ public class RenderConfig {
         json.addProperty("god_rays_exposure", godRaysExposure);
         json.addProperty("god_rays_threshold", godRaysThreshold);
         json.addProperty("god_rays_sky_enabled", godRaysSkyEnabled);
+        
+        // Style settings (slots 52-54)
+        json.addProperty("god_rays_energy_mode", godRaysEnergyMode);
+        json.addProperty("god_rays_color_mode", godRaysColorMode);
+        json.addProperty("god_rays_distribution_mode", godRaysDistributionMode);
+        json.addProperty("god_rays_arrangement_mode", godRaysArrangementMode);
+        json.addProperty("god_rays_color2_r", godRaysColor2R);
+        json.addProperty("god_rays_color2_g", godRaysColor2G);
+        json.addProperty("god_rays_color2_b", godRaysColor2B);
+        json.addProperty("god_rays_gradient_power", godRaysGradientPower);
+        json.addProperty("god_rays_noise_scale", godRaysNoiseScale);
+        json.addProperty("god_rays_noise_speed", godRaysNoiseSpeed);
+        json.addProperty("god_rays_noise_intensity", godRaysNoiseIntensity);
+        json.addProperty("god_rays_angular_bias", godRaysAngularBias);
     }
     
     /**
@@ -355,7 +544,22 @@ public class RenderConfig {
         godRaysThreshold = 0.5f;
         godRaysSkyEnabled = false;
         
+        // Style settings defaults (slots 52-54)
+        godRaysEnergyMode = 0;      // Radiation
+        godRaysColorMode = 0;       // Solid
+        godRaysDistributionMode = 0; // Uniform
+        godRaysArrangementMode = 0;  // Point
+        godRaysColor2R = 1.0f;
+        godRaysColor2G = 0.9f;
+        godRaysColor2B = 0.7f;
+        godRaysGradientPower = 1.0f;
+        godRaysNoiseScale = 8.0f;
+        godRaysNoiseSpeed = 0.5f;
+        godRaysNoiseIntensity = 0.5f;
+        godRaysAngularBias = 0.0f;
+        
         Logging.RENDER.topic("render_config")
             .debug("Reset to defaults");
     }
 }
+

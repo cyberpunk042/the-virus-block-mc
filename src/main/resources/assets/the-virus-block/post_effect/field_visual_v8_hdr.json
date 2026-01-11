@@ -863,6 +863,106 @@
                         "name": "DebugReserved2",
                         "type": "float",
                         "value": 0.0
+                    },
+                    {
+                        "name": "GodRayEnabled",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayDecay",
+                        "type": "float",
+                        "value": 0.97
+                    },
+                    {
+                        "name": "GodRayExposure",
+                        "type": "float",
+                        "value": 0.02
+                    },
+                    {
+                        "name": "GodRaySamples",
+                        "type": "float",
+                        "value": 96.0
+                    },
+                    {
+                        "name": "GodRayThreshold",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRaySkyEnabled",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRaySoftness",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayMaskReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayEnergyMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayColorMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayDistributionMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayArrangementMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayColor2R",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayColor2G",
+                        "type": "float",
+                        "value": 0.9
+                    },
+                    {
+                        "name": "GodRayColor2B",
+                        "type": "float",
+                        "value": 0.7
+                    },
+                    {
+                        "name": "GodRayGradientPower",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayNoiseScale",
+                        "type": "float",
+                        "value": 8.0
+                    },
+                    {
+                        "name": "GodRayNoiseSpeed",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRayNoiseIntensity",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRayAngularBias",
+                        "type": "float",
+                        "value": 0.0
                     }
                 ],
                 "FrameDataUBO": [
@@ -1906,6 +2006,106 @@
                         "name": "DebugReserved2",
                         "type": "float",
                         "value": 0.0
+                    },
+                    {
+                        "name": "GodRayEnabled",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayDecay",
+                        "type": "float",
+                        "value": 0.97
+                    },
+                    {
+                        "name": "GodRayExposure",
+                        "type": "float",
+                        "value": 0.02
+                    },
+                    {
+                        "name": "GodRaySamples",
+                        "type": "float",
+                        "value": 96.0
+                    },
+                    {
+                        "name": "GodRayThreshold",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRaySkyEnabled",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRaySoftness",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayMaskReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayEnergyMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayColorMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayDistributionMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayArrangementMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayColor2R",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayColor2G",
+                        "type": "float",
+                        "value": 0.9
+                    },
+                    {
+                        "name": "GodRayColor2B",
+                        "type": "float",
+                        "value": 0.7
+                    },
+                    {
+                        "name": "GodRayGradientPower",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayNoiseScale",
+                        "type": "float",
+                        "value": 8.0
+                    },
+                    {
+                        "name": "GodRayNoiseSpeed",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRayNoiseIntensity",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRayAngularBias",
+                        "type": "float",
+                        "value": 0.0
                     }
                 ],
                 "FrameDataUBO": [
@@ -2914,6 +3114,106 @@
                     },
                     {
                         "name": "DebugReserved2",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayEnabled",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayDecay",
+                        "type": "float",
+                        "value": 0.97
+                    },
+                    {
+                        "name": "GodRayExposure",
+                        "type": "float",
+                        "value": 0.02
+                    },
+                    {
+                        "name": "GodRaySamples",
+                        "type": "float",
+                        "value": 96.0
+                    },
+                    {
+                        "name": "GodRayThreshold",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRaySkyEnabled",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRaySoftness",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayMaskReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayEnergyMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayColorMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayDistributionMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayArrangementMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayColor2R",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayColor2G",
+                        "type": "float",
+                        "value": 0.9
+                    },
+                    {
+                        "name": "GodRayColor2B",
+                        "type": "float",
+                        "value": 0.7
+                    },
+                    {
+                        "name": "GodRayGradientPower",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayNoiseScale",
+                        "type": "float",
+                        "value": 8.0
+                    },
+                    {
+                        "name": "GodRayNoiseSpeed",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRayNoiseIntensity",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRayAngularBias",
                         "type": "float",
                         "value": 0.0
                     }
@@ -4000,6 +4300,106 @@
                     },
                     {
                         "name": "DebugReserved2",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayEnabled",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayDecay",
+                        "type": "float",
+                        "value": 0.97
+                    },
+                    {
+                        "name": "GodRayExposure",
+                        "type": "float",
+                        "value": 0.02
+                    },
+                    {
+                        "name": "GodRaySamples",
+                        "type": "float",
+                        "value": 96.0
+                    },
+                    {
+                        "name": "GodRayThreshold",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRaySkyEnabled",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRaySoftness",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayMaskReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayEnergyMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayColorMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayDistributionMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayArrangementMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayColor2R",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayColor2G",
+                        "type": "float",
+                        "value": 0.9
+                    },
+                    {
+                        "name": "GodRayColor2B",
+                        "type": "float",
+                        "value": 0.7
+                    },
+                    {
+                        "name": "GodRayGradientPower",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayNoiseScale",
+                        "type": "float",
+                        "value": 8.0
+                    },
+                    {
+                        "name": "GodRayNoiseSpeed",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRayNoiseIntensity",
+                        "type": "float",
+                        "value": 0.5
+                    },
+                    {
+                        "name": "GodRayAngularBias",
                         "type": "float",
                         "value": 0.0
                     }

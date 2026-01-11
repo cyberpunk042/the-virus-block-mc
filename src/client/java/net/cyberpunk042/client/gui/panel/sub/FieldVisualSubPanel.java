@@ -385,6 +385,80 @@ public class FieldVisualSubPanel extends BoundPanel {
                     "Sky Rays", skyEnabled, 
                     "Enable atmospheric rays from sky",
                     v -> renderConfig.setGodRaysSkyEnabled(v)));
+                
+                // Energy mode: Radiation/Absorption/Pulse
+                int energyMode = renderConfig.getGodRaysEnergyMode();
+                List<String> energyModes = List.of("Radiation", "Absorption", "Pulse");
+                widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
+                    m -> Text.literal(m))
+                    .values(energyModes).initially(energyModes.get(energyMode))
+                    .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                        m.equals("Radiation") ? "Rays flow outward from orb" :
+                        m.equals("Absorption") ? "Rays flow inward toward orb" :
+                        "Rays alternate direction")))
+                    .build(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 20, Text.literal("Energy"), (btn, mode) -> {
+                        renderConfig.setGodRaysEnergyMode(energyModes.indexOf(mode));
+                    }));
+                content.advanceBy(22);
+                
+                // Color mode and Distribution mode
+                y = content.getCurrentY();
+                int colorMode = renderConfig.getGodRaysColorMode();
+                List<String> colorModes = List.of("Solid", "Gradient", "Temperature");
+                widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
+                    m -> Text.literal(m))
+                    .values(colorModes).initially(colorModes.get(colorMode))
+                    .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                        m.equals("Solid") ? "Single color tint" :
+                        m.equals("Gradient") ? "Color shifts center to edge" :
+                        "Warm core, cool edges")))
+                    .build(x, y, halfW, 20, Text.literal("Color"), (btn, mode) -> {
+                        renderConfig.setGodRaysColorMode(colorModes.indexOf(mode));
+                        rebuildContent();  // Show/hide gradient power slider
+                    }));
+                
+                int distMode = renderConfig.getGodRaysDistributionMode();
+                List<String> distModes = List.of("Uniform", "Weighted", "Noise");
+                widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
+                    m -> Text.literal(m))
+                    .values(distModes).initially(distModes.get(distMode))
+                    .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                        m.equals("Uniform") ? "Equal in all directions" :
+                        m.equals("Weighted") ? "Bias toward vertical/horizontal" :
+                        "Organic noise variation")))
+                    .build(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 20, Text.literal("Dist"), (btn, mode) -> {
+                        renderConfig.setGodRaysDistributionMode(distModes.indexOf(mode));
+                        rebuildContent();  // Show/hide noise sliders
+                    }));
+                content.advanceBy(22);
+                
+                // Noise controls (only when distribution mode is Noise)
+                if (distMode == 2) {
+                    y = content.getCurrentY();
+                    float noiseScale = renderConfig.getGodRaysNoiseScale();
+                    widgets.add(GuiWidgets.slider(x, y, halfW, 
+                        "Noise Scale", 1f, 20f, noiseScale, "%.1f", 
+                        "Angular noise frequency",
+                        v -> renderConfig.setGodRaysNoiseScale(v)));
+                    
+                    float noiseIntensity = renderConfig.getGodRaysNoiseIntensity();
+                    widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
+                        "Intensity", 0f, 1f, noiseIntensity, "%.2f", 
+                        "Noise modulation strength",
+                        v -> renderConfig.setGodRaysNoiseIntensity(v)));
+                    content.advanceBy(22);
+                }
+                
+                // Gradient power (only when color mode is Gradient)
+                if (colorMode == 1) {
+                    y = content.getCurrentY();
+                    float gradPower = renderConfig.getGodRaysGradientPower();
+                    widgets.add(GuiWidgets.slider(x, y, halfW, 
+                        "Grad Power", 0.1f, 5f, gradPower, "%.2f", 
+                        "Gradient blend curve (1=linear)",
+                        v -> renderConfig.setGodRaysGradientPower(v)));
+                    content.advanceBy(22);
+                }
             }
             content.advanceBy(22);
         }

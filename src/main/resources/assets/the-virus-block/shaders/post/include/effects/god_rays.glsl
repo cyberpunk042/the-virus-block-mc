@@ -152,4 +152,84 @@ float accumulateGodRaysFromUBO(
     );
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// STYLED ACCUMULATOR (Uses god_rays_style.glsl functions)
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Include style library for advanced features
+#include "god_rays_style.glsl"
+
+/**
+ * Styled god rays accumulator with full feature support.
+ */
+float accumulateGodRaysStyled(
+    vec2 pixelUV,
+    vec2 lightUV,
+    sampler2D occlusionTex,
+    int N,
+    float L,
+    float decayFactor,
+    float exposure,
+    float screenRadius,
+    float energyMode,
+    float distributionMode,
+    float arrangementMode,
+    float noiseScale,
+    float noiseSpeed,
+    float noiseIntensity,
+    float angularBias,
+    float time
+) {
+    // Apply arrangement mode (point source, ring, etc)
+    vec2 effectiveLightUV = getArrangedLightUV(lightUV, pixelUV, screenRadius, arrangementMode);
+    
+    // Get ray direction based on energy mode
+    vec2 rayDir = getGodRayDirection(pixelUV, effectiveLightUV, energyMode, time);
+    
+    // Calculate march parameters
+    vec2 toLight = effectiveLightUV - pixelUV;
+    float dist = length(toLight);
+    
+    // At light center: full illumination
+    if (dist < 0.001) {
+        return exposure * float(N);
+    }
+    
+    // March length: min of distance to light and max length L
+    float marchLength = min(dist, L);
+    vec2 step = rayDir * (marchLength / float(N));
+    
+    // Apply angular weight for distribution
+    float angularWeight = getAngularWeight(pixelUV, effectiveLightUV, distributionMode, angularBias);
+    
+    // Apply noise modulation if distribution mode is 2 (noise)
+    float noiseWeight = 1.0;
+    if (distributionMode > 1.5) {
+        noiseWeight = getNoiseModulation(pixelUV, effectiveLightUV, time, noiseScale, noiseSpeed, noiseIntensity);
+    }
+    
+    float illumination = 0.0;
+    float decay = 1.0;
+    vec2 uv = pixelUV;
+    
+    for (int i = 0; i < N; i++) {
+        uv += step;
+        
+        // Exit if stepped outside viewport
+        if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
+            break;
+        }
+        
+        // Sample occlusion
+        float occlusion = texture(occlusionTex, uv).r;
+        illumination += occlusion * decay;
+        
+        // Exponential falloff
+        decay *= decayFactor;
+    }
+    
+    // Apply all modulation weights
+    return illumination * exposure * angularWeight * noiseWeight;
+}
+
 #endif // GOD_RAYS_GLSL

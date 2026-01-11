@@ -1087,4 +1087,147 @@ public final class FieldVisualTypes {
             );
         }
     }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // UBO SLOT 52: GOD RAY STYLE PARAMS
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    /**
+     * God Ray style parameters for advanced control over ray appearance.
+     * 
+     * <p>Controls the overall character of the god rays:
+     * <ul>
+     *   <li>energyMode: 0=radiation (outward), 1=absorption (inward), 2=pulse</li>
+     *   <li>colorMode: 0=solid, 1=gradient, 2=temperature</li>
+     *   <li>distributionMode: 0=uniform, 1=weighted, 2=noise</li>
+     *   <li>arrangementMode: 0=point, 1=ring, 2=sector</li>
+     * </ul>
+     */
+    public record GodRayStyleParams(
+        float energyMode,       // 0=radiation, 1=absorption, 2=pulse
+        float colorMode,        // 0=solid, 1=gradient, 2=temperature
+        float distributionMode, // 0=uniform, 1=weighted, 2=noise
+        float arrangementMode   // 0=point, 1=ring, 2=sector
+    ) implements Vec4Serializable {
+        /** Default: radiation, solid color, uniform distribution, point source */
+        public static final GodRayStyleParams DEFAULT = new GodRayStyleParams(0f, 0f, 0f, 0f);
+        
+        @Override public float slot0() { return energyMode; }
+        @Override public float slot1() { return colorMode; }
+        @Override public float slot2() { return distributionMode; }
+        @Override public float slot3() { return arrangementMode; }
+        
+        public boolean isAbsorption() { return energyMode > 0.5f && energyMode < 1.5f; }
+        public boolean isPulse() { return energyMode > 1.5f; }
+        
+        public GodRayStyleParams withEnergyMode(float v) { return new GodRayStyleParams(v, colorMode, distributionMode, arrangementMode); }
+        public GodRayStyleParams withColorMode(float v) { return new GodRayStyleParams(energyMode, v, distributionMode, arrangementMode); }
+        public GodRayStyleParams withDistributionMode(float v) { return new GodRayStyleParams(energyMode, colorMode, v, arrangementMode); }
+        public GodRayStyleParams withArrangementMode(float v) { return new GodRayStyleParams(energyMode, colorMode, distributionMode, v); }
+        
+        /**
+         * Create from RenderConfig global settings.
+         */
+        public static GodRayStyleParams fromRenderConfig() {
+            var config = net.cyberpunk042.client.gui.config.RenderConfig.get();
+            return new GodRayStyleParams(
+                (float) config.getGodRaysEnergyMode(),
+                (float) config.getGodRaysColorMode(),
+                (float) config.getGodRaysDistributionMode(),
+                (float) config.getGodRaysArrangementMode()
+            );
+        }
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // UBO SLOT 53: GOD RAY COLOR 2 (Secondary color for gradients)
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    /**
+     * Secondary god ray color for gradient mode.
+     * 
+     * <p>When colorMode=1 (gradient), rays blend from RayColor (center)
+     * to this color (edges) based on gradientPower.
+     */
+    public record GodRayColor2(
+        float r,              // Red component (0-1, can exceed for HDR)
+        float g,              // Green component
+        float b,              // Blue component
+        float gradientPower   // Blend curve power (1=linear, 2=quadratic, etc)
+    ) implements Vec4Serializable {
+        /** Default: warm white edge color, linear gradient */
+        public static final GodRayColor2 DEFAULT = new GodRayColor2(1.0f, 0.9f, 0.7f, 1.0f);
+        
+        @Override public float slot0() { return r; }
+        @Override public float slot1() { return g; }
+        @Override public float slot2() { return b; }
+        @Override public float slot3() { return gradientPower; }
+        
+        public GodRayColor2 withR(float v) { return new GodRayColor2(v, g, b, gradientPower); }
+        public GodRayColor2 withG(float v) { return new GodRayColor2(r, v, b, gradientPower); }
+        public GodRayColor2 withB(float v) { return new GodRayColor2(r, g, v, gradientPower); }
+        public GodRayColor2 withGradientPower(float v) { return new GodRayColor2(r, g, b, v); }
+        public GodRayColor2 withRGB(float r, float g, float b) { return new GodRayColor2(r, g, b, gradientPower); }
+        
+        /**
+         * Create from RenderConfig global settings.
+         */
+        public static GodRayColor2 fromRenderConfig() {
+            var config = net.cyberpunk042.client.gui.config.RenderConfig.get();
+            return new GodRayColor2(
+                config.getGodRaysColor2R(),
+                config.getGodRaysColor2G(),
+                config.getGodRaysColor2B(),
+                config.getGodRaysGradientPower()
+            );
+        }
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // UBO SLOT 54: GOD RAY NOISE PARAMS
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    /**
+     * Noise parameters for organic god ray distribution.
+     * 
+     * <p>When distributionMode=2 (noise), these control the variation:
+     * <ul>
+     *   <li>scale: Angular noise frequency (higher = more variation)</li>
+     *   <li>speed: Animation speed for noise evolution</li>
+     *   <li>intensity: How much noise affects ray intensity (0-1)</li>
+     *   <li>angularBias: Bias toward vertical (negative) or horizontal (positive)</li>
+     * </ul>
+     */
+    public record GodRayNoiseParams(
+        float scale,        // Noise frequency (default 8.0)
+        float speed,        // Animation speed (default 0.5)
+        float intensity,    // Modulation strength (default 0.5, range 0-1)
+        float angularBias   // Directional bias (-1=vertical, 0=none, 1=horizontal)
+    ) implements Vec4Serializable {
+        /** Default: medium noise, slow animation, 50% intensity, no bias */
+        public static final GodRayNoiseParams DEFAULT = new GodRayNoiseParams(8.0f, 0.5f, 0.5f, 0f);
+        
+        @Override public float slot0() { return scale; }
+        @Override public float slot1() { return speed; }
+        @Override public float slot2() { return intensity; }
+        @Override public float slot3() { return angularBias; }
+        
+        public GodRayNoiseParams withScale(float v) { return new GodRayNoiseParams(v, speed, intensity, angularBias); }
+        public GodRayNoiseParams withSpeed(float v) { return new GodRayNoiseParams(scale, v, intensity, angularBias); }
+        public GodRayNoiseParams withIntensity(float v) { return new GodRayNoiseParams(scale, speed, v, angularBias); }
+        public GodRayNoiseParams withAngularBias(float v) { return new GodRayNoiseParams(scale, speed, intensity, v); }
+        
+        /**
+         * Create from RenderConfig global settings.
+         */
+        public static GodRayNoiseParams fromRenderConfig() {
+            var config = net.cyberpunk042.client.gui.config.RenderConfig.get();
+            return new GodRayNoiseParams(
+                config.getGodRaysNoiseScale(),
+                config.getGodRaysNoiseSpeed(),
+                config.getGodRaysNoiseIntensity(),
+                config.getGodRaysAngularBias()
+            );
+        }
+    }
 }

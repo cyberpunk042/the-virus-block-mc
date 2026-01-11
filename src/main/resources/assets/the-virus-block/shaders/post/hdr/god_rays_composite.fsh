@@ -28,6 +28,9 @@ uniform sampler2D GodRaysSampler;   // From JSON input "GodRays"
 // Also provides: texCoord, fragColor
 #include "../include/core/field_visual_base.glsl"
 
+// Include style library for color function
+#include "../include/effects/god_rays_style.glsl"
+
 void main() {
     vec4 sceneColor = texture(SceneSampler, texCoord);
     float godRayIntensity = texture(GodRaysSampler, texCoord).r;
@@ -38,14 +41,35 @@ void main() {
         return;
     }
     
-    // Get ray color from UBO for tinting (RGB from ray color slot)
-    vec3 rayTint = vec3(RayColorR, RayColorG, RayColorB);
+    // Get colors from UBO
+    vec3 rayColor1 = vec3(RayColorR, RayColorG, RayColorB);
+    vec3 rayColor2 = vec3(GodRayColor2R, GodRayColor2G, GodRayColor2B);
     
-    // Blend toward white for high intensity (like real light)
-    vec3 godRayColor = mix(rayTint, vec3(1.0), godRayIntensity * 0.5);
+    // Get style parameters
+    float colorMode = GodRayColorMode;
+    float gradientPower = GodRayGradientPower;
+    
+    // Calculate screen distance from light center for gradient effects
+    // Note: We don't have lightUV here, so we use distance from screen center as approximation
+    // For more accurate gradients, lightUV would need to be passed via a uniform
+    float screenDist = length(texCoord - vec2(0.5, 0.5));
+    
+    // Get styled color based on mode
+    vec3 godRayColor = getGodRayColor(
+        godRayIntensity,
+        screenDist,
+        rayColor1,
+        rayColor2,
+        colorMode,
+        gradientPower
+    );
+    
+    // Blend toward white for very high intensity (like real light)
+    godRayColor = mix(godRayColor, vec3(godRayIntensity), godRayIntensity * 0.3);
     
     // Additive blend - god rays ADD light to the scene
-    vec3 finalColor = sceneColor.rgb + godRayColor * godRayIntensity;
+    vec3 finalColor = sceneColor.rgb + godRayColor;
     
     fragColor = vec4(finalColor, sceneColor.a);
 }
+
