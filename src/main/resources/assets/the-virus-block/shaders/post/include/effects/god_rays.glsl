@@ -200,7 +200,7 @@ float accumulateGodRaysStyled(
     vec2 step = rayDir * (marchLength / float(N));
     
     // Apply angular weight for distribution
-    float angularWeight = getAngularWeight(pixelUV, effectiveLightUV, distributionMode, angularBias);
+    float angularWeight = getAngularWeight(pixelUV, effectiveLightUV, distributionMode, angularBias, time);
     
     // Apply noise modulation if distribution mode is 2 (noise)
     float noiseWeight = 1.0;
@@ -228,8 +228,9 @@ float accumulateGodRaysStyled(
         decay *= decayFactor;
     }
     
-    // Apply all modulation weights
-    return illumination * exposure * angularWeight * noiseWeight;
+    // Apply all modulation weights + intensity breathing
+    float breathing = getIntensityBreathing(time, 1.0, 0.5); // Subtle 50% intensity breathing
+    return illumination * exposure * angularWeight * noiseWeight * breathing;
 }
 
 #endif // GOD_RAYS_GLSL

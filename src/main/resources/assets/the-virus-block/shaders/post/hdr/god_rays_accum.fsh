@@ -106,8 +106,8 @@ void main() {
         screenRadius = (Radius / zDist) / (tanHalfFov * 2.0);
     }
     
-    // Get time from animation phase
-    float time = Phase;
+    // Get animated time from FrameDataUBO (accumulated seconds since game start)
+    float time = FrameTimeUBO.x * AnimSpeed;
     
     // Accumulate god rays with full style support
     float illumination = accumulateGodRaysStyled(

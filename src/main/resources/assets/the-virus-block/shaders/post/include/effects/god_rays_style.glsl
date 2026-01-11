@@ -59,25 +59,43 @@ vec2 getGodRayDirection(vec2 pixelUV, vec2 lightUV, float energyMode, float time
  * @param angularBias Bias direction (-1=vertical, 0=none, 1=horizontal)
  * @return Weight multiplier [0-1]
  */
-float getAngularWeight(vec2 pixelUV, vec2 lightUV, float distributionMode, float angularBias) {
+float getAngularWeight(vec2 pixelUV, vec2 lightUV, float distributionMode, float angularBias, float time) {
     if (distributionMode < 0.5) {
-        // Mode 0: Uniform - no angular variation
-        return 1.0;
+        // Mode 0: Uniform - subtle breathing animation
+        float breath = sin(time * 1.5) * 0.1 + 1.0; // 0.9 to 1.1
+        return breath;
     }
     
     vec2 dir = normalize(pixelUV - lightUV);
     float angle = atan(dir.y, dir.x); // Range: -PI to PI
     
     if (distributionMode < 1.5) {
-        // Mode 1: Weighted - bias toward vertical or horizontal
+        // Mode 1: Weighted - bias rotates over time for sweeping effect
+        float rotatingBias = angularBias + sin(time * 0.5) * 0.5;
         float vertWeight = abs(dir.y);      // 1 when vertical, 0 when horizontal
         float horizWeight = abs(dir.x);     // 1 when horizontal, 0 when vertical
-        float weight = mix(vertWeight, horizWeight, angularBias * 0.5 + 0.5);
-        return 0.3 + weight * 0.7; // Range: 0.3 to 1.0
+        float weight = mix(vertWeight, horizWeight, rotatingBias * 0.5 + 0.5);
+        // Add pulsing to the weight
+        float pulse = sin(time * 2.0 + angle) * 0.15 + 1.0;
+        return (0.3 + weight * 0.7) * pulse; // Range varies with pulse
     }
     
     // Mode 2: Noise - handled separately in getNoiseModulation
     return 1.0;
+}
+
+/**
+ * Get intensity breathing modulation.
+ * Adds life to all modes with subtle pulsing.
+ *
+ * @param time Animation time
+ * @param speed Breathing speed multiplier
+ * @param intensity Breathing depth (0=none, 1=full)
+ * @return Multiplier typically in range 0.8 to 1.2
+ */
+float getIntensityBreathing(float time, float speed, float intensity) {
+    float breath = sin(time * speed) * 0.5 + 0.5; // 0 to 1
+    return 1.0 - intensity * 0.2 + breath * intensity * 0.4; // Range: (1-0.2*i) to (1+0.2*i)
 }
 
 /**
