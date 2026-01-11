@@ -65,6 +65,12 @@
 #define FIELD_VISUAL_COMPOSITE(fieldEffect) if (fieldEffect.a < 0.001) { fragColor = sceneColor; return; } vec3 finalColor = compositeFieldEffect(sceneColor.rgb, fieldEffect); fragColor = vec4(finalColor, 1.0)
 
 // ═══════════════════════════════════════════════════════════════════════════
+// HDR COMPOSITE MACRO - Preserves values > 1.0 for HDR pipelines
+// ═══════════════════════════════════════════════════════════════════════════
+
+#define FIELD_VISUAL_COMPOSITE_HDR(fieldEffect) if (fieldEffect.a < 0.001) { fragColor = sceneColor; return; } vec3 finalColor = compositeFieldEffectHDR(sceneColor.rgb, fieldEffect); fragColor = vec4(finalColor, 1.0)
+
+// ═══════════════════════════════════════════════════════════════════════════
 // COMBINED MACRO - Full setup + effect type check + occlusion
 // ═══════════════════════════════════════════════════════════════════════════
 

@@ -52,6 +52,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 #include "../core/noise_4d.glsl"
+#include "../core/hdr_utils.glsl"
 
 // Backwards compatibility aliases - V7 uses v7_ prefix internally
 #define v7_noise4q noise4q
@@ -343,7 +344,8 @@ PulsarV7Result renderPulsarV7(
     // FINAL CLAMP
     // ═══════════════════════════════════════════════════════════════════════
     
-    col = clamp(col, 0.0, 1.0);
+    // HDR-aware clamp: LDR clamps to [0,1], HDR allows > 1.0
+    col = hdrClamp(col);
     
     // ═══════════════════════════════════════════════════════════════════════
     // FADE THRESHOLD (for Replace blend mode)

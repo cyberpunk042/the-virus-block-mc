@@ -14,6 +14,7 @@
 #define EFFECTS_MAGIC_CIRCLE_GLSL
 
 #include "../core/constants.glsl"
+#include "../core/hdr_utils.glsl"
 
 // ═══════════════════════════════════════════════════════════════════════════
 // PHASE 3A: LAYER GEOMETRY PARAMETER STRUCTS
@@ -182,7 +183,7 @@ float mcCircle(float pre, vec2 p, float r1, float r2, float power) {
     }
     
     float res = power / max(d, 0.0001);
-    return clamp(pre + res, 0.0, 1.0);
+    return hdrAccumulate(pre, res);
 }
 
 /**
@@ -211,7 +212,7 @@ float mcRectangle(float pre, vec2 p, vec2 half1, vec2 half2, float power) {
     
     float d = min(min(dx1, dx2), min(dy1, dy2));
     float res = power / max(d, 0.0001);
-    return clamp(pre + res, 0.0, 1.0);
+    return hdrAccumulate(pre, res);
 }
 
 /**
@@ -242,7 +243,7 @@ float mcRadiation(float pre, vec2 p, float r1, float r2, int count, float power)
     }
     
     float res = power / max(d, 0.0001);
-    return clamp(pre + res, 0.0, 1.0);
+    return hdrAccumulate(pre, res);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

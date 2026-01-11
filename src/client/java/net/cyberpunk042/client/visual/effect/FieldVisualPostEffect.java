@@ -240,15 +240,8 @@ public final class FieldVisualPostEffect {
         // Check cache by field ID
         PostEffectProcessor cached = PROCESSOR_CACHE.get(fieldId);
         if (cached != null) {
-            Logging.RENDER.topic("HDR_LOAD")
-                .kv("fieldId", fieldIdShort)
-                .info("[PROCESSOR_CACHE_HIT] Returning cached processor");
             return cached;
         }
-        
-        Logging.RENDER.topic("HDR_LOAD")
-            .kv("fieldId", fieldIdShort)
-            .info("[PROCESSOR_CACHE_MISS] No cached processor, will load new");
         
         // Determine shader to load
         ShaderKey key = ShaderKey.fromConfig(config);
@@ -276,18 +269,12 @@ public final class FieldVisualPostEffect {
         
         ShaderLoader shaderLoader = client.getShaderLoader();
         if (shaderLoader == null) {
-            Logging.RENDER.topic(LOG_TOPIC)
-                .warn("ShaderLoader not available");
             return null;
         }
         
         try {
             PostEffectProcessor processor;
             processor = shaderLoader.loadPostEffect(shaderId, REQUIRED_TARGETS);
-            
-            Logging.RENDER.topic("HDR_LOAD")
-                .kv("processorHash", Integer.toHexString(System.identityHashCode(processor)))
-                .info("[PROCESSOR_LOADED] New processor created");
             
             // Cache by field ID
             PROCESSOR_CACHE.put(fieldId, processor);
@@ -301,15 +288,7 @@ public final class FieldVisualPostEffect {
                 passHashes.append(Integer.toHexString(System.identityHashCode(pass))).append(",");
             }
             
-            Logging.RENDER.topic(LOG_TOPIC)
-                .kv("fieldId", fieldId.toString().substring(0, 8))
-                .kv("shader", shaderId.toString())
-                .kv("processorHash", Integer.toHexString(System.identityHashCode(processor)))
-                .kv("passHashes", passHashes.toString())
-                .info("Created processor for field");
-            
             return processor;
-            
         } catch (Exception e) {
             Logging.RENDER.topic(LOG_TOPIC)
                 .kv("fieldId", fieldId.toString().substring(0, 8))
@@ -398,11 +377,6 @@ public final class FieldVisualPostEffect {
         PROCESSOR_CACHE.clear();
         PROCESSOR_TO_FIELD.clear();
         lastShaderKey = null;
-        
-        Logging.RENDER.topic("HDR_LOAD")
-            .kv("processorsCleared", processorCount)
-            .kv("fieldMapsCleared", fieldMapCount)
-            .info("[PROCESSOR_CACHE_CLEARED] Our processor cache cleared");
     }
     
     // ═══════════════════════════════════════════════════════════════════════════

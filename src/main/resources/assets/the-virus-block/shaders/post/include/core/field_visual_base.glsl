@@ -459,3 +459,40 @@ vec3 compositeFieldEffect(vec3 sceneColor, vec4 fieldEffect) {
     
     return finalColor;
 }
+
+/**
+ * HDR version of compositeFieldEffect.
+ * Does NOT apply tonemapping - values > 1.0 pass through.
+ * Use with HDR framebuffers (RGBA16F) for proper HDR rendering.
+ * 
+ * @param sceneColor Original scene color (RGB)
+ * @param fieldEffect Effect color and alpha (RGBA)
+ * @return Final composited color (unbounded, can exceed 1.0)
+ */
+vec3 compositeFieldEffectHDR(vec3 sceneColor, vec4 fieldEffect) {
+    if (fieldEffect.a < 0.001) {
+        return sceneColor;
+    }
+    
+    vec3 effectColor = fieldEffect.rgb;
+    float effectAlpha = fieldEffect.a;
+    vec3 finalColor;
+    
+    // ColorBlendMode determines compositing method
+    float blendModeVal = ColorBlendMode;
+    
+    if (blendModeVal > 4.5) {
+        // SUBTRACT mode (5): Dark/shadow effects
+        vec3 subtractAmount = effectColor * effectAlpha;
+        finalColor = max(vec3(0.0), sceneColor - subtractAmount);
+    } else if (blendModeVal > 1.5) {
+        // REPLACE/MIX/DIRECT (2,3,4): MIX compositing
+        finalColor = mix(sceneColor, effectColor, effectAlpha);
+    } else {
+        // MULTIPLY/ADDITIVE (0,1): Additive glow compositing - NO TONEMAPPING
+        // HDR: Raw additive blend, values > 1.0 flow through
+        finalColor = sceneColor + effectColor * effectAlpha;
+    }
+    
+    return finalColor;
+}

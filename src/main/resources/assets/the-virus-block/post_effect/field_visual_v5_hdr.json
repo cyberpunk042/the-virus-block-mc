@@ -1,5 +1,5 @@
 {
-    "_comment": "HDR Full Chain - V7 with blur and glow",
+    "_comment": "HDR Full Chain - V5 with blur and glow",
     "targets": {
         "swap": {},
         "blur_h": {},
@@ -8,7 +8,7 @@
     "passes": [
         {
             "vertex_shader": "minecraft:post/sobel",
-            "fragment_shader": "the-virus-block:post/hdr/field_visual_v7_hdr",
+            "fragment_shader": "the-virus-block:post/hdr/field_visual_v5_hdr",
             "inputs": [
                 {
                     "sampler_name": "In",

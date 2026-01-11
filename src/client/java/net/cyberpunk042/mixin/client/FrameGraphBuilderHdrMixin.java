@@ -41,14 +41,6 @@ public class FrameGraphBuilderHdrMixin {
             theVirusBlock$hdrRunCount++;
             HdrTargetFactory.prepareFormat(TextureFormat.RGBA16F);
             theVirusBlock$formatWasSet = true;
-            
-            // Only log occasionally to avoid spam
-            if (theVirusBlock$hdrRunCount <= 5 || theVirusBlock$hdrRunCount % 100 == 0) {
-                Logging.RENDER.topic(TAG)
-                    .kv("runNum", theVirusBlock$runCount)
-                    .kv("hdrRunNum", theVirusBlock$hdrRunCount)
-                    .info("[HDR_RUN_START] Format set to RGBA16F");
-            }
         }
     }
     

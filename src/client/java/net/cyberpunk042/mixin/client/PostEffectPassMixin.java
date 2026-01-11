@@ -93,15 +93,6 @@ public class PostEffectPassMixin {
             updateShockwaveUniforms();
         }
         
-        // DEBUG: Log all passes to see what's happening
-        if (id != null && (id.contains("field") || id.contains("the-virus") || id.contains("magic_circle") || id.contains("virus_block"))) {
-            Logging.RENDER.topic("posteffect_debug")
-                .kv("passId", id)
-                .kv("fieldVisualEnabled", FieldVisualPostEffect.isEnabled())
-                .kv("magicCircleEnabled", MagicCirclePostEffect.isEnabled())
-                .info("Post effect pass intercepted");
-        }
-        
         // Handle Field Visual pass
         if (FieldVisualPostEffect.isEnabled() && id != null && id.contains("field_visual")) {
             updateFieldVisualUniforms();
@@ -136,15 +127,6 @@ public class PostEffectPassMixin {
     // ═══════════════════════════════════════════════════════════════════════════
     
     private void updateShockwaveUniforms() {
-        injectCount++;
-        
-        if (injectCount % 60 == 1) {
-            Logging.RENDER.topic("posteffect_inject")
-                .kv("id", id)
-                .kv("hasConfig", uniformBuffers.containsKey("ShockwaveConfig"))
-                .debug("Intercepting shockwave pass");
-        }
-        
         if (!uniformBuffers.containsKey("ShockwaveConfig")) {
             return;
         }
@@ -201,11 +183,6 @@ public class PostEffectPassMixin {
         fieldVisualInjectCount++;
         
         if (!uniformBuffers.containsKey("FieldVisualConfig")) {
-            if (fieldVisualInjectCount % 60 == 1) {
-                Logging.RENDER.topic("posteffect_inject")
-                    .kv("availableBuffers", uniformBuffers.keySet().toString())
-                    .warn("FieldVisualConfig UBO not found in pass");
-            }
             return;
         }
         
@@ -301,16 +278,7 @@ public class PostEffectPassMixin {
                 builder.get()
             );
             
-            uniformBuffers.put("FieldVisualConfig", newBuffer);
-            
-            if (fieldVisualInjectCount % 60 == 1) {
-                Logging.RENDER.topic("posteffect_inject")
-                    .kv("pos", String.format("%.1f,%.1f,%.1f", fieldPos.x, fieldPos.y, fieldPos.z))
-                    .kv("radius", String.format("%.1f/%.1f", currentField.getEffectiveRadius(), currentField.getRadius()))
-                    .kv("time", String.format("%.1f", globalTime))
-                    .info("Updated FieldVisualConfig UBO via writer");
-            }
-            
+            uniformBuffers.put("FieldVisualConfig", newBuffer);            
         } catch (Exception e) {
             Logging.RENDER.topic("posteffect_inject")
                 .kv("error", e.getMessage())
@@ -323,14 +291,7 @@ public class PostEffectPassMixin {
     // ═══════════════════════════════════════════════════════════════════════════
     
     private void updateMagicCircleUniforms() {
-        magicCircleInjectCount++;
-        
         if (!uniformBuffers.containsKey("MagicCircleConfig")) {
-            if (magicCircleInjectCount % 60 == 1) {
-                Logging.RENDER.topic("posteffect_inject")
-                    .kv("availableBuffers", uniformBuffers.keySet().toString())
-                    .warn("MagicCircleConfig UBO not found in pass");
-            }
             return;
         }
         
@@ -358,18 +319,7 @@ public class PostEffectPassMixin {
                 builder.get()
             );
             
-            uniformBuffers.put("MagicCircleConfig", newBuffer);
-            
-            if (magicCircleInjectCount % 300 == 1) {
-                Logging.RENDER.topic("posteffect_inject")
-                    .kv("center", String.format("%.1f,%.1f,%.1f", 
-                        MagicCirclePostEffect.getConfig().centerX(),
-                        MagicCirclePostEffect.getConfig().centerY(),
-                        MagicCirclePostEffect.getConfig().centerZ()))
-                    .kv("radius", String.format("%.1f", MagicCirclePostEffect.getConfig().effectRadius()))
-                    .info("Updated MagicCircleConfig UBO");
-            }
-            
+            uniformBuffers.put("MagicCircleConfig", newBuffer);            
         } catch (Exception e) {
             Logging.RENDER.topic("posteffect_inject")
                 .kv("error", e.getMessage())
@@ -455,15 +405,7 @@ public class PostEffectPassMixin {
                 builder.get()
             );
             
-            uniformBuffers.put("VirusBlockParams", newBuffer);
-            
-            if (virusBlockInjectCount % 300 == 1) {
-                Logging.RENDER.topic("posteffect_inject")
-                    .kv("blocks", blockCount)
-                    .kv("closest", String.format("%.1f", closestDist))
-                    .info("Updated VirusBlockParams via ReflectiveUBOWriter");
-            }
-            
+            uniformBuffers.put("VirusBlockParams", newBuffer);            
         } catch (Exception e) {
             Logging.RENDER.topic("posteffect_inject")
                 .kv("error", e.getMessage())
