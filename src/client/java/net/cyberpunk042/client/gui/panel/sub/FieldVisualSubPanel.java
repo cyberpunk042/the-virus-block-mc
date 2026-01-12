@@ -459,6 +459,85 @@ public class FieldVisualSubPanel extends BoundPanel {
                         v -> renderConfig.setGodRaysGradientPower(v)));
                     content.advanceBy(22);
                 }
+                
+                // Curvature mode
+                y = content.getCurrentY();
+                float curvatureMode = renderConfig.getGodRaysCurvatureMode();
+                List<String> curvModes = List.of("Radial", "Vortex", "Spiral", "Tangential", "Pinwheel");
+                int curvIdx = Math.max(0, Math.min((int)curvatureMode, curvModes.size() - 1));
+                widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
+                    m -> Text.literal(m))
+                    .values(curvModes).initially(curvModes.get(curvIdx))
+                    .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                        m.equals("Radial") ? "Straight rays from center" :
+                        m.equals("Vortex") ? "Spinning whirlpool pattern" :
+                        m.equals("Spiral") ? "Galaxy spiral arm pattern" :
+                        m.equals("Tangential") ? "Perpendicular to radial" :
+                        "Windmill blade pattern")))
+                    .build(x, y, halfW, 20, Text.literal("Curvature"), (btn, mode) -> {
+                        renderConfig.setGodRaysCurvatureMode(curvModes.indexOf(mode));
+                    }));
+                
+                // Curvature strength slider
+                float curvStrength = renderConfig.getGodRaysCurvatureStrength();
+                widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
+                    "Strength", 0f, 2f, curvStrength, "%.2f", 
+                    "How much to curve the rays",
+                    v -> renderConfig.setGodRaysCurvatureStrength(v)));
+                content.advanceBy(22);
+                
+                // Flicker mode
+                y = content.getCurrentY();
+                float flickerMode = renderConfig.getGodRaysFlickerMode();
+                List<String> flickModes = List.of("None", "Scintillation", "Strobe", "Fade Pulse", "Heartbeat", "Lightning");
+                int flickIdx = Math.max(0, Math.min((int)flickerMode, flickModes.size() - 1));
+                widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
+                    m -> Text.literal(m))
+                    .values(flickModes).initially(flickModes.get(flickIdx))
+                    .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                        m.equals("None") ? "No flicker" :
+                        m.equals("Scintillation") ? "Star twinkling" :
+                        m.equals("Strobe") ? "Rhythmic on/off" :
+                        m.equals("Fade Pulse") ? "Smooth breathing" :
+                        m.equals("Heartbeat") ? "Double-pulse rhythm" :
+                        "Flash then fade")))
+                    .build(x, y, halfW, 20, Text.literal("Flicker"), (btn, mode) -> {
+                        renderConfig.setGodRaysFlickerMode(flickModes.indexOf(mode));
+                    }));
+                
+                // Flicker intensity slider
+                float flickIntensity = renderConfig.getGodRaysFlickerIntensity();
+                widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
+                    "Intensity", 0f, 1f, flickIntensity, "%.2f", 
+                    "How strong the flicker effect is",
+                    v -> renderConfig.setGodRaysFlickerIntensity(v)));
+                content.advanceBy(22);
+                
+                // Travel mode
+                y = content.getCurrentY();
+                float travelMode = renderConfig.getGodRaysTravelMode();
+                List<String> travModes = List.of("None", "Scroll", "Chase", "Pulse Wave", "Comet");
+                int travIdx = Math.max(0, Math.min((int)travelMode, travModes.size() - 1));
+                widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
+                    m -> Text.literal(m))
+                    .values(travModes).initially(travModes.get(travIdx))
+                    .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                        m.equals("None") ? "No travel animation" :
+                        m.equals("Scroll") ? "Gradient scrolls outward" :
+                        m.equals("Chase") ? "Dots travel along rays" :
+                        m.equals("Pulse Wave") ? "Brightness pulses travel" :
+                        "Bright head, fading tail")))
+                    .build(x, y, halfW, 20, Text.literal("Travel"), (btn, mode) -> {
+                        renderConfig.setGodRaysTravelMode(travModes.indexOf(mode));
+                    }));
+                
+                // Travel speed slider
+                float travSpeed = renderConfig.getGodRaysTravelSpeed();
+                widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
+                    "Speed", 0f, 5f, travSpeed, "%.1f", 
+                    "How fast energy travels along rays",
+                    v -> renderConfig.setGodRaysTravelSpeed(v)));
+                content.advanceBy(22);
             }
             content.advanceBy(22);
         }

@@ -963,6 +963,66 @@
                         "name": "GodRayAngularBias",
                         "type": "float",
                         "value": 0.0
+                    },
+                    {
+                        "name": "GodRayCurvatureMode",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayCurvatureStrength",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayCurvatureSpeed",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayCurvatureReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayFlickerMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayFlickerIntensity",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayFlickerFrequency",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "GodRayWaveDistribution",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayTravelMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayTravelSpeed",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayTravelCount",
+                        "type": "float",
+                        "value": 3.0
+                    },
+                    {
+                        "name": "GodRayTravelWidth",
+                        "type": "float",
+                        "value": 0.2
                     }
                 ],
                 "FrameDataUBO": [
@@ -2106,6 +2166,66 @@
                         "name": "GodRayAngularBias",
                         "type": "float",
                         "value": 0.0
+                    },
+                    {
+                        "name": "GodRayCurvatureMode",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayCurvatureStrength",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayCurvatureSpeed",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayCurvatureReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayFlickerMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayFlickerIntensity",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayFlickerFrequency",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "GodRayWaveDistribution",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayTravelMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayTravelSpeed",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayTravelCount",
+                        "type": "float",
+                        "value": 3.0
+                    },
+                    {
+                        "name": "GodRayTravelWidth",
+                        "type": "float",
+                        "value": 0.2
                     }
                 ],
                 "FrameDataUBO": [
@@ -3216,6 +3336,66 @@
                         "name": "GodRayAngularBias",
                         "type": "float",
                         "value": 0.0
+                    },
+                    {
+                        "name": "GodRayCurvatureMode",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayCurvatureStrength",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayCurvatureSpeed",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayCurvatureReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayFlickerMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayFlickerIntensity",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayFlickerFrequency",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "GodRayWaveDistribution",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayTravelMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayTravelSpeed",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayTravelCount",
+                        "type": "float",
+                        "value": 3.0
+                    },
+                    {
+                        "name": "GodRayTravelWidth",
+                        "type": "float",
+                        "value": 0.2
                     }
                 ],
                 "FrameDataUBO": [
@@ -4402,6 +4582,66 @@
                         "name": "GodRayAngularBias",
                         "type": "float",
                         "value": 0.0
+                    },
+                    {
+                        "name": "GodRayCurvatureMode",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayCurvatureStrength",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayCurvatureSpeed",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayCurvatureReserved",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayFlickerMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayFlickerIntensity",
+                        "type": "float",
+                        "value": 0.3
+                    },
+                    {
+                        "name": "GodRayFlickerFrequency",
+                        "type": "float",
+                        "value": 2.0
+                    },
+                    {
+                        "name": "GodRayWaveDistribution",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayTravelMode",
+                        "type": "float",
+                        "value": 0.0
+                    },
+                    {
+                        "name": "GodRayTravelSpeed",
+                        "type": "float",
+                        "value": 1.0
+                    },
+                    {
+                        "name": "GodRayTravelCount",
+                        "type": "float",
+                        "value": 3.0
+                    },
+                    {
+                        "name": "GodRayTravelWidth",
+                        "type": "float",
+                        "value": 0.2
                     }
                 ],
                 "FrameDataUBO": [

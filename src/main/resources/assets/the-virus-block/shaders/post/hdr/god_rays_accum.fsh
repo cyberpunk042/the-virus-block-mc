@@ -105,6 +105,9 @@ void main() {
         float tanHalfFov = tan(fov * 0.5);
         screenRadius = (Radius / zDist) / (tanHalfFov * 2.0);
     }
+    // Get curvature params from UBO (Slot 55)
+    float curvatureMode = GodRayCurvatureMode;
+    float curvatureStrength = GodRayCurvatureStrength;
     
     // Get animated time from FrameDataUBO (accumulated seconds since game start)
     float time = FrameTimeUBO.x * AnimSpeed;
@@ -126,6 +129,8 @@ void main() {
         noiseSpeed,
         noiseIntensity,
         angularBias,
+        curvatureMode,
+        curvatureStrength,
         time
     );
     

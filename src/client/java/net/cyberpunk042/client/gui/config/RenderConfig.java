@@ -100,6 +100,27 @@ public class RenderConfig {
     /** Angular bias for weighted mode (-1=vertical, 0=none, 1=horizontal) */
     private float godRaysAngularBias = 0.0f;
     
+    /** Curvature mode: 0=radial, 1=vortex, 2=spiral, 3=tangential, 4=pinwheel */
+    private float godRaysCurvatureMode = 0.0f;
+    
+    /** Curvature strength (0-2 typical) */
+    private float godRaysCurvatureStrength = 0.3f;
+    
+    /** Flicker mode: 0=none, 1=scintillation, 2=strobe, 3=fadePulse, 4=heartbeat, 5=lightning */
+    private float godRaysFlickerMode = 0.0f;
+    
+    /** Flicker intensity (0-1) */
+    private float godRaysFlickerIntensity = 0.3f;
+    
+    /** Flicker frequency */
+    private float godRaysFlickerFrequency = 2.0f;
+    
+    /** Travel mode: 0=none, 1=scroll, 2=chase, 3=pulseWave, 4=comet */
+    private float godRaysTravelMode = 0.0f;
+    
+    /** Travel speed */
+    private float godRaysTravelSpeed = 1.0f;
+    
     // =========================================================================
     // CONSTRUCTOR & SINGLETON
     // =========================================================================
@@ -237,6 +258,27 @@ public class RenderConfig {
     
     /** Get angular bias */
     public float getGodRaysAngularBias() { return godRaysAngularBias; }
+    
+    /** Get curvature mode: 0=radial, 1=vortex, 2=spiral, 3=tangential, 4=pinwheel */
+    public float getGodRaysCurvatureMode() { return godRaysCurvatureMode; }
+    
+    /** Get curvature strength */
+    public float getGodRaysCurvatureStrength() { return godRaysCurvatureStrength; }
+    
+    /** Get flicker mode: 0=none, 1=scintillation, 2=strobe, 3=fadePulse, 4=heartbeat, 5=lightning */
+    public float getGodRaysFlickerMode() { return godRaysFlickerMode; }
+    
+    /** Get flicker intensity */
+    public float getGodRaysFlickerIntensity() { return godRaysFlickerIntensity; }
+    
+    /** Get flicker frequency */
+    public float getGodRaysFlickerFrequency() { return godRaysFlickerFrequency; }
+    
+    /** Get travel mode: 0=none, 1=scroll, 2=chase, 3=pulseWave, 4=comet */
+    public float getGodRaysTravelMode() { return godRaysTravelMode; }
+    
+    /** Get travel speed */
+    public float getGodRaysTravelSpeed() { return godRaysTravelSpeed; }
     
     // =========================================================================
     // HDR SETTERS
@@ -407,6 +449,41 @@ public class RenderConfig {
         this.godRaysAngularBias = Math.max(-1f, Math.min(1f, bias));
     }
     
+    /** Set curvature mode: 0=radial, 1=vortex, 2=spiral, 3=tangential, 4=pinwheel */
+    public void setGodRaysCurvatureMode(float mode) {
+        this.godRaysCurvatureMode = Math.max(0f, Math.min(4f, mode));
+    }
+    
+    /** Set curvature strength (0-2) */
+    public void setGodRaysCurvatureStrength(float strength) {
+        this.godRaysCurvatureStrength = Math.max(0f, Math.min(2f, strength));
+    }
+    
+    /** Set flicker mode (0-5) */
+    public void setGodRaysFlickerMode(float mode) {
+        this.godRaysFlickerMode = Math.max(0f, Math.min(5f, mode));
+    }
+    
+    /** Set flicker intensity (0-1) */
+    public void setGodRaysFlickerIntensity(float intensity) {
+        this.godRaysFlickerIntensity = Math.max(0f, Math.min(1f, intensity));
+    }
+    
+    /** Set flicker frequency (0-20) */
+    public void setGodRaysFlickerFrequency(float frequency) {
+        this.godRaysFlickerFrequency = Math.max(0.1f, Math.min(20f, frequency));
+    }
+    
+    /** Set travel mode (0-4) */
+    public void setGodRaysTravelMode(float mode) {
+        this.godRaysTravelMode = Math.max(0f, Math.min(4f, mode));
+    }
+    
+    /** Set travel speed (0-5) */
+    public void setGodRaysTravelSpeed(float speed) {
+        this.godRaysTravelSpeed = Math.max(0f, Math.min(5f, speed));
+    }
+    
     // =========================================================================
     // PERSISTENCE
     // =========================================================================
@@ -483,6 +560,27 @@ public class RenderConfig {
         if (json.has("god_rays_angular_bias")) {
             setGodRaysAngularBias(json.get("god_rays_angular_bias").getAsFloat());
         }
+        if (json.has("god_rays_curvature_mode")) {
+            setGodRaysCurvatureMode(json.get("god_rays_curvature_mode").getAsFloat());
+        }
+        if (json.has("god_rays_curvature_strength")) {
+            setGodRaysCurvatureStrength(json.get("god_rays_curvature_strength").getAsFloat());
+        }
+        if (json.has("god_rays_flicker_mode")) {
+            setGodRaysFlickerMode(json.get("god_rays_flicker_mode").getAsFloat());
+        }
+        if (json.has("god_rays_flicker_intensity")) {
+            setGodRaysFlickerIntensity(json.get("god_rays_flicker_intensity").getAsFloat());
+        }
+        if (json.has("god_rays_flicker_frequency")) {
+            setGodRaysFlickerFrequency(json.get("god_rays_flicker_frequency").getAsFloat());
+        }
+        if (json.has("god_rays_travel_mode")) {
+            setGodRaysTravelMode(json.get("god_rays_travel_mode").getAsFloat());
+        }
+        if (json.has("god_rays_travel_speed")) {
+            setGodRaysTravelSpeed(json.get("god_rays_travel_speed").getAsFloat());
+        }
         
         Logging.RENDER.topic("render_config")
             .kv("hdr", hdrEnabled)
@@ -529,6 +627,13 @@ public class RenderConfig {
         json.addProperty("god_rays_noise_speed", godRaysNoiseSpeed);
         json.addProperty("god_rays_noise_intensity", godRaysNoiseIntensity);
         json.addProperty("god_rays_angular_bias", godRaysAngularBias);
+        json.addProperty("god_rays_curvature_mode", godRaysCurvatureMode);
+        json.addProperty("god_rays_curvature_strength", godRaysCurvatureStrength);
+        json.addProperty("god_rays_flicker_mode", godRaysFlickerMode);
+        json.addProperty("god_rays_flicker_intensity", godRaysFlickerIntensity);
+        json.addProperty("god_rays_flicker_frequency", godRaysFlickerFrequency);
+        json.addProperty("god_rays_travel_mode", godRaysTravelMode);
+        json.addProperty("god_rays_travel_speed", godRaysTravelSpeed);
     }
     
     /**

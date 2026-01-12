@@ -107,14 +107,17 @@ public record FieldVisualUBO(
     @Vec4 V8ElectricVec4 v8Electric,             // Slot 49: flash, fillIntensity, fillDarken, reserved
     
     // ═══════════════════════════════════════════════════════════════════════════
-    // GOD RAYS (Slots 50-54)
+    // GOD RAYS (Slots 50-57)
     // ═══════════════════════════════════════════════════════════════════════════
     
     @Vec4 GodRayParams godRays,                  // Slot 50: enabled, decay, exposure, samples
     @Vec4 GodRayMaskParams godRayMask,           // Slot 51: threshold, skyEnabled, softness, reserved
     @Vec4 GodRayStyleParams godRayStyle,         // Slot 52: energyMode, colorMode, distributionMode, arrangementMode
     @Vec4 GodRayColor2 godRayColor2,             // Slot 53: r, g, b, gradientPower
-    @Vec4 GodRayNoiseParams godRayNoise          // Slot 54: scale, speed, intensity, angularBias
+    @Vec4 GodRayNoiseParams godRayNoise,         // Slot 54: scale, speed, intensity, angularBias
+    @Vec4 GodRayCurvatureParams godRayCurvature, // Slot 55: mode, strength, speed, reserved
+    @Vec4 GodRayFlickerParams godRayFlicker,     // Slot 56: mode, intensity, frequency, waveDistribution
+    @Vec4 GodRayTravelParams godRayTravel        // Slot 57: mode, speed, count, width
 ) {
     
     /** Buffer size in bytes, calculated from annotations */
@@ -205,12 +208,15 @@ public record FieldVisualUBO(
             config.v8Corona() != null ? V8CoronaVec4.from(config.v8Corona()) : V8CoronaVec4.DEFAULT,
             config.v8Electric() != null ? V8ElectricVec4.from(config.v8Electric()) : V8ElectricVec4.DEFAULT,
             
-            // God Rays (slots 50-54) - pulled from render config at runtime
+            // God Rays (slots 50-57) - pulled from render config at runtime
             GodRayParams.fromRenderConfig(),
             GodRayMaskParams.fromRenderConfig(),
             GodRayStyleParams.fromRenderConfig(),
             GodRayColor2.fromRenderConfig(),
-            GodRayNoiseParams.fromRenderConfig()
+            GodRayNoiseParams.fromRenderConfig(),
+            GodRayCurvatureParams.fromRenderConfig(),
+            GodRayFlickerParams.fromRenderConfig(),
+            GodRayTravelParams.fromRenderConfig()
         );
     }
     
@@ -309,12 +315,15 @@ public record FieldVisualUBO(
             config.v8Corona() != null ? V8CoronaVec4.from(config.v8Corona()) : V8CoronaVec4.DEFAULT,
             config.v8Electric() != null ? V8ElectricVec4.from(config.v8Electric()) : V8ElectricVec4.DEFAULT,
             
-            // God Rays (slots 50-54) - pulled from render config at runtime
+            // God Rays (slots 50-57) - pulled from render config at runtime
             GodRayParams.fromRenderConfig(),
             GodRayMaskParams.fromRenderConfig(),
             GodRayStyleParams.fromRenderConfig(),
             GodRayColor2.fromRenderConfig(),
-            GodRayNoiseParams.fromRenderConfig()
+            GodRayNoiseParams.fromRenderConfig(),
+            GodRayCurvatureParams.fromRenderConfig(),
+            GodRayFlickerParams.fromRenderConfig(),
+            GodRayTravelParams.fromRenderConfig()
         );
     }
 }

@@ -103,6 +103,21 @@ def create_godrays_chain(version: str, base_json: dict) -> dict:
         {"name": "GodRayNoiseSpeed", "type": "float", "value": 0.5},
         {"name": "GodRayNoiseIntensity", "type": "float", "value": 0.5},
         {"name": "GodRayAngularBias", "type": "float", "value": 0.0},
+        # Slot 55: God Ray curvature (vortex/spiral/pinwheel)
+        {"name": "GodRayCurvatureMode", "type": "float", "value": 1.0},  # 1 = vortex
+        {"name": "GodRayCurvatureStrength", "type": "float", "value": 0.3},
+        {"name": "GodRayCurvatureSpeed", "type": "float", "value": 1.0},
+        {"name": "GodRayCurvatureReserved", "type": "float", "value": 0.0},
+        # Slot 56: God Ray flicker (animation modes)
+        {"name": "GodRayFlickerMode", "type": "float", "value": 0.0},
+        {"name": "GodRayFlickerIntensity", "type": "float", "value": 0.3},
+        {"name": "GodRayFlickerFrequency", "type": "float", "value": 2.0},
+        {"name": "GodRayWaveDistribution", "type": "float", "value": 0.0},
+        # Slot 57: God Ray travel (chase/scroll effects)
+        {"name": "GodRayTravelMode", "type": "float", "value": 0.0},
+        {"name": "GodRayTravelSpeed", "type": "float", "value": 1.0},
+        {"name": "GodRayTravelCount", "type": "float", "value": 3.0},
+        {"name": "GodRayTravelWidth", "type": "float", "value": 0.2},
     ]
     
     # Append god ray uniforms to FieldVisualConfig if not already present

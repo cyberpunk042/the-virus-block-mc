@@ -178,13 +178,15 @@ float accumulateGodRaysStyled(
     float noiseSpeed,
     float noiseIntensity,
     float angularBias,
+    float curvatureMode,
+    float curvatureStrength,
     float time
 ) {
     // Apply arrangement mode (point source, ring, etc)
     vec2 effectiveLightUV = getArrangedLightUV(lightUV, pixelUV, screenRadius, arrangementMode);
     
-    // Get ray direction based on energy mode
-    vec2 rayDir = getGodRayDirection(pixelUV, effectiveLightUV, energyMode, time);
+    // Get ray direction based on energy mode + curvature
+    vec2 rayDir = getGodRayDirection(pixelUV, effectiveLightUV, energyMode, curvatureMode, curvatureStrength, time);
     
     // Calculate march parameters
     vec2 toLight = effectiveLightUV - pixelUV;

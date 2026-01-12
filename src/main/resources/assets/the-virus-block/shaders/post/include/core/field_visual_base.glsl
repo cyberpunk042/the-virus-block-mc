@@ -368,6 +368,24 @@ layout(std140) uniform FieldVisualConfig {
     float GodRayNoiseSpeed;   // Animation speed (default 0.5)
     float GodRayNoiseIntensity;// Modulation strength 0-1 (default 0.5)
     float GodRayAngularBias;  // Directional bias (-1=vert, 0=none, 1=horiz)
+    
+    // vec4 55: God Ray curvature (vortex/spiral/pinwheel effects)
+    float GodRayCurvatureMode;     // 0=radial, 1=vortex, 2=spiral, 3=tangential, 4=pinwheel
+    float GodRayCurvatureStrength; // Curvature amount (0-2 typical)
+    float GodRayCurvatureSpeed;    // Rotation speed multiplier
+    float GodRayCurvatureReserved; // Future use
+    
+    // vec4 56: God Ray flicker (animation modes)
+    float GodRayFlickerMode;       // 0=none, 1=scintillation, 2=strobe, 3=fadePulse, 4=heartbeat, 5=lightning
+    float GodRayFlickerIntensity;  // Flicker strength (0-1)
+    float GodRayFlickerFrequency;  // Animation frequency
+    float GodRayWaveDistribution;  // 0=continuous, 1=sequential, 2=random, 3=goldenRatio
+    
+    // vec4 57: God Ray travel (chase/scroll effects)
+    float GodRayTravelMode;        // 0=none, 1=scroll, 2=chase, 3=pulseWave, 4=comet
+    float GodRayTravelSpeed;       // Travel speed
+    float GodRayTravelCount;       // Number of particles (chase mode)
+    float GodRayTravelWidth;       // Particle width (0-1)
 };
 
 // ═══════════════════════════════════════════════════════════════════════════

@@ -5,12 +5,42 @@ Based on the existing field visual raylines system (`visual/energy/`, `visual/an
 
 ---
 
--- we forgot field curvature -> investigate for for phase 0
-energyMode=0 (Radiation)	 -> We should find a way to animate
-energyMode=1 (Absorption)  -> We should find a way to animate
-mode should be compatible with curvature time and energyMode and distributionMode an as much mode combo as possible
+## Phase 0: Curvature & Energy Mode Animation
 
-## Phase 1: Quick Wins (After Animation Fix)
+### Curvature Modes
+Modify the ray **direction** to create curved/spiral patterns:
+
+| Mode | Effect | Implementation |
+|------|--------|----------------|
+| RADIAL | Straight outward (default) | `dir = normalize(lightUV - pixelUV)` |
+| VORTEX | Whirlpool/accretion disk | Rotate dir by angle proportional to distance |
+| SPIRAL_ARM | Galaxy arm pattern | Logarithmic spiral: `rotate(dir, log(dist) * twist)` |
+| TANGENTIAL | Perpendicular to radial | `dir = vec2(-dir.y, dir.x)` (90° rotate) |
+| PINWHEEL | Windmill blades | `rotate(dir, angle * pinwheelFactor + time)` |
+
+**Animation:** Add time to curvature rotation → spinning vortex/pinwheel!
+
+### Energy Mode Animation Ideas
+Make Radiation (0) and Absorption (1) more dynamic:
+
+| Mode | Current | Animated Version |
+|------|---------|------------------|
+| Radiation | Static outward | **Pulsing march length** - rays grow/shrink over time |
+| Absorption | Static inward | **Retreating rays** - march start distance oscillates |
+| Pulse | Already animated | Keep as-is |
+
+**Implementation:**
+```glsl
+// Animated march length for Radiation mode
+if (energyMode < 0.5) {
+    float breathe = sin(time * 2.0) * 0.3 + 1.0; // 0.7 to 1.3
+    marchLength *= breathe;
+}
+```
+
+---
+
+## Phase 1: Quick Wins
 
 ### 1. Flicker Modes
 Add alpha/intensity modulation over time:
@@ -57,6 +87,19 @@ Moving particles along rays:
 
 ---
 
+## Mode Compatibility Matrix
+
+All modes should combine freely:
+
+| curvatureMode | + energyMode | + distributionMode | + flickerMode |
+|---------------|--------------|--------------------|--------------| 
+| RADIAL | ✓ All | ✓ All | ✓ All |
+| VORTEX | ✓ All | ✓ All | ✓ All |
+| PINWHEEL | ✓ Radiation best | ✓ Sequential best | ✓ All |
+| SPIRAL_ARM | ✓ All | ✓ Golden best | ✓ All |
+
+---
+
 ## Not Porting (3D Geometry Specific)
 - RayType (DROPLET, CONE, KAMEHAMEHA, etc.) - Physical geometry
 - RayLineShape (CORKSCREW, SPRING, ZIGZAG) - 3D bending
@@ -76,12 +119,16 @@ Current slots 52-54 used for:
 Needed additions:
 - Slot 55: flickerMode, flickerIntensity, flickerFrequency, waveDistribution
 - Slot 56: travelMode, travelSpeed, chaseCount, chaseWidth
+- **Slot 57: curvatureMode, curvatureStrength, curvatureSpeed, reserved**
 
 ---
 
 ## Priority Order
-1. ✅ Fix animation time (CURRENT)
-2. Add flickerMode (5 modes)
-3. Add waveDistribution (4 modes)
-4. Add travelMode (4 modes)
-5. Add heatMap color
+1. ✅ Fix animation time (DONE)
+2. ✅ Add intensity breathing (DONE)
+3. 🔲 Add curvatureMode (Phase 0)
+4. 🔲 Animate energyMode 0/1 (Phase 0)
+5. 🔲 Add flickerMode (Phase 1)
+6. 🔲 Add waveDistribution (Phase 1)
+7. 🔲 Add travelMode (Phase 2)
+8. 🔲 Add heatMap color (Phase 2)

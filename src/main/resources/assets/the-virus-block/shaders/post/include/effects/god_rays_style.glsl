@@ -17,33 +17,87 @@
 #define GOD_RAYS_STYLE_GLSL
 
 // ═══════════════════════════════════════════════════════════════════════════
-// ENERGY DIRECTION
+// CURVATURE UTILITY
+// Uses rotateVec2() from math_utils.glsl (included via field_visual_base)
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ENERGY DIRECTION + CURVATURE
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * Get the ray march direction based on energy mode.
+ * Apply curvature to ray direction.
+ *
+ * @param dir Normalized base direction (toward or away from light)
+ * @param pixelUV Current pixel UV
+ * @param lightUV Light source UV
+ * @param curvatureMode 0=radial, 1=vortex, 2=spiral, 3=tangential, 4=pinwheel
+ * @param curvatureStrength How much to curve (0-1 typical)
+ * @param time For spinning animation
+ * @return Curved direction (normalized)
+ */
+vec2 applyCurvature(vec2 dir, vec2 pixelUV, vec2 lightUV, float curvatureMode, float curvatureStrength, float time) {
+    if (curvatureMode < 0.5) {
+        // Mode 0: Radial - no curvature
+        return dir;
+    }
+    
+    vec2 toLight = lightUV - pixelUV;
+    float dist = length(toLight);
+    float angle = atan(toLight.y, toLight.x);
+    
+    float curveAngle = 0.0;
+    
+    if (curvatureMode < 1.5) {
+        // Mode 1: VORTEX - whirlpool/accretion disk
+        // Rotate more at greater distances, spin over time
+        curveAngle = dist * curvatureStrength * 6.28 + time * 0.5;
+    } else if (curvatureMode < 2.5) {
+        // Mode 2: SPIRAL_ARM - galaxy arm pattern
+        // Logarithmic spiral: angle increases with log of distance
+        curveAngle = log(max(dist, 0.01) + 1.0) * curvatureStrength * 4.0 + time * 0.3;
+    } else if (curvatureMode < 3.5) {
+        // Mode 3: TANGENTIAL - perpendicular to radial
+        // 90° rotation + subtle time oscillation
+        curveAngle = 1.5708 * curvatureStrength + sin(time * 1.5) * 0.2;
+    } else {
+        // Mode 4: PINWHEEL - windmill blades
+        // Rotate based on angular position + spinning
+        curveAngle = angle * curvatureStrength * 0.5 + time * 1.0;
+    }
+    
+    return normalize(rotateVec2(dir, curveAngle));
+}
+
+/**
+ * Get the ray march direction based on energy mode and curvature.
  *
  * @param pixelUV Current pixel UV coordinate
  * @param lightUV Light source UV coordinate
  * @param energyMode 0=radiation (outward), 1=absorption (inward), 2=pulse
- * @param time For pulse mode animation
+ * @param curvatureMode 0=radial, 1=vortex, 2=spiral, 3=tangential, 4=pinwheel
+ * @param curvatureStrength How much to curve (0-2 typical)
+ * @param time For animation
  * @return Normalized direction vector for ray marching
  */
-vec2 getGodRayDirection(vec2 pixelUV, vec2 lightUV, float energyMode, float time) {
+vec2 getGodRayDirection(vec2 pixelUV, vec2 lightUV, float energyMode, float curvatureMode, float curvatureStrength, float time) {
     vec2 toLight = lightUV - pixelUV;
+    vec2 baseDir;
     
     if (energyMode < 0.5) {
         // Mode 0: Radiation - march from pixel TOWARD light (standard)
-        return normalize(toLight);
+        baseDir = normalize(toLight);
     } else if (energyMode < 1.5) {
         // Mode 1: Absorption - march from light TOWARD pixel (reverse)
-        return normalize(-toLight);
+        baseDir = normalize(-toLight);
     } else {
         // Mode 2: Pulse - alternate direction based on time
         float pulse = sin(time * 2.0) * 0.5 + 0.5;
-        vec2 dir = (pulse > 0.5) ? toLight : -toLight;
-        return normalize(dir);
+        baseDir = normalize((pulse > 0.5) ? toLight : -toLight);
     }
+    
+    // Apply curvature to the base direction
+    return applyCurvature(baseDir, pixelUV, lightUV, curvatureMode, curvatureStrength, time);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

@@ -1230,4 +1230,155 @@ public final class FieldVisualTypes {
             );
         }
     }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // GOD RAY CURVATURE PARAMS (Slot 55)
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    /**
+     * Curvature parameters for god rays.
+     * <ul>
+     *   <li>mode: 0=radial, 1=vortex, 2=spiral, 3=tangential, 4=pinwheel</li>
+     *   <li>strength: How much to curve (0-2 typical)</li>
+     *   <li>speed: Rotation animation speed</li>
+     *   <li>reserved: For future use</li>
+     * </ul>
+     */
+    public record GodRayCurvatureParams(
+        float mode,       // 0=radial, 1=vortex, 2=spiral, 3=tangential, 4=pinwheel
+        float strength,   // Curvature amount (0-2 typical)
+        float speed,      // Rotation speed multiplier
+        float reserved    // Future use
+    ) implements Vec4Serializable {
+        /** Default: radial (no curvature) */
+        public static final GodRayCurvatureParams DEFAULT = new GodRayCurvatureParams(0f, 0.3f, 1f, 0f);
+        /** Vortex preset */
+        public static final GodRayCurvatureParams VORTEX = new GodRayCurvatureParams(1f, 0.5f, 1f, 0f);
+        /** Spiral preset */
+        public static final GodRayCurvatureParams SPIRAL = new GodRayCurvatureParams(2f, 0.4f, 0.5f, 0f);
+        /** Pinwheel preset */
+        public static final GodRayCurvatureParams PINWHEEL = new GodRayCurvatureParams(4f, 0.6f, 1.5f, 0f);
+        
+        @Override public float slot0() { return mode; }
+        @Override public float slot1() { return strength; }
+        @Override public float slot2() { return speed; }
+        @Override public float slot3() { return reserved; }
+        
+        public GodRayCurvatureParams withMode(float v) { return new GodRayCurvatureParams(v, strength, speed, reserved); }
+        public GodRayCurvatureParams withStrength(float v) { return new GodRayCurvatureParams(mode, v, speed, reserved); }
+        public GodRayCurvatureParams withSpeed(float v) { return new GodRayCurvatureParams(mode, strength, v, reserved); }
+        
+        /**
+         * Create from RenderConfig global settings.
+         */
+        public static GodRayCurvatureParams fromRenderConfig() {
+            var config = net.cyberpunk042.client.gui.config.RenderConfig.get();
+            return new GodRayCurvatureParams(
+                config.getGodRaysCurvatureMode(),
+                config.getGodRaysCurvatureStrength(),
+                1f, // speed not yet in RenderConfig
+                0f  // reserved
+            );
+        }
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // GOD RAY FLICKER PARAMS (Slot 56)
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    /**
+     * Flicker/animation parameters for god rays.
+     * <ul>
+     *   <li>mode: 0=none, 1=scintillation, 2=strobe, 3=fadePulse, 4=heartbeat, 5=lightning</li>
+     *   <li>intensity: How strong the flicker effect is (0-1)</li>
+     *   <li>frequency: Speed of flicker animation</li>
+     *   <li>waveDistribution: 0=continuous, 1=sequential, 2=random, 3=goldenRatio</li>
+     * </ul>
+     */
+    public record GodRayFlickerParams(
+        float mode,            // 0=none, 1=scintillation, 2=strobe, 3=fadePulse, 4=heartbeat, 5=lightning
+        float intensity,       // Flicker strength (0-1)
+        float frequency,       // Animation frequency
+        float waveDistribution // 0=continuous, 1=sequential, 2=random, 3=goldenRatio
+    ) implements Vec4Serializable {
+        /** Default: no flicker */
+        public static final GodRayFlickerParams DEFAULT = new GodRayFlickerParams(0f, 0.3f, 2f, 0f);
+        /** Scintillation preset */
+        public static final GodRayFlickerParams SCINTILLATION = new GodRayFlickerParams(1f, 0.5f, 8f, 2f);
+        /** Heartbeat preset */
+        public static final GodRayFlickerParams HEARTBEAT = new GodRayFlickerParams(4f, 0.6f, 1f, 0f);
+        
+        @Override public float slot0() { return mode; }
+        @Override public float slot1() { return intensity; }
+        @Override public float slot2() { return frequency; }
+        @Override public float slot3() { return waveDistribution; }
+        
+        public GodRayFlickerParams withMode(float v) { return new GodRayFlickerParams(v, intensity, frequency, waveDistribution); }
+        public GodRayFlickerParams withIntensity(float v) { return new GodRayFlickerParams(mode, v, frequency, waveDistribution); }
+        public GodRayFlickerParams withFrequency(float v) { return new GodRayFlickerParams(mode, intensity, v, waveDistribution); }
+        public GodRayFlickerParams withWaveDistribution(float v) { return new GodRayFlickerParams(mode, intensity, frequency, v); }
+        
+        /**
+         * Create from RenderConfig global settings.
+         */
+        public static GodRayFlickerParams fromRenderConfig() {
+            var config = net.cyberpunk042.client.gui.config.RenderConfig.get();
+            return new GodRayFlickerParams(
+                config.getGodRaysFlickerMode(),
+                config.getGodRaysFlickerIntensity(),
+                config.getGodRaysFlickerFrequency(),
+                0f  // waveDistribution not yet in RenderConfig
+            );
+        }
+    }
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // GOD RAY TRAVEL PARAMS (Slot 57)
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    /**
+     * Travel/chase animation parameters for god rays.
+     * <ul>
+     *   <li>mode: 0=none, 1=scroll, 2=chase, 3=pulseWave, 4=comet</li>
+     *   <li>speed: Travel animation speed</li>
+     *   <li>count: Number of chase particles (for chase mode)</li>
+     *   <li>width: Width of chase particles (0-1)</li>
+     * </ul>
+     */
+    public record GodRayTravelParams(
+        float mode,    // 0=none, 1=scroll, 2=chase, 3=pulseWave, 4=comet
+        float speed,   // Travel speed
+        float count,   // Number of particles (chase mode)
+        float width    // Particle width (0-1)
+    ) implements Vec4Serializable {
+        /** Default: no travel animation */
+        public static final GodRayTravelParams DEFAULT = new GodRayTravelParams(0f, 1f, 3f, 0.2f);
+        /** Scroll preset */
+        public static final GodRayTravelParams SCROLL = new GodRayTravelParams(1f, 1.5f, 1f, 0.3f);
+        /** Chase preset */
+        public static final GodRayTravelParams CHASE = new GodRayTravelParams(2f, 2f, 3f, 0.15f);
+        
+        @Override public float slot0() { return mode; }
+        @Override public float slot1() { return speed; }
+        @Override public float slot2() { return count; }
+        @Override public float slot3() { return width; }
+        
+        public GodRayTravelParams withMode(float v) { return new GodRayTravelParams(v, speed, count, width); }
+        public GodRayTravelParams withSpeed(float v) { return new GodRayTravelParams(mode, v, count, width); }
+        public GodRayTravelParams withCount(float v) { return new GodRayTravelParams(mode, speed, v, width); }
+        public GodRayTravelParams withWidth(float v) { return new GodRayTravelParams(mode, speed, count, v); }
+        
+        /**
+         * Create from RenderConfig global settings.
+         */
+        public static GodRayTravelParams fromRenderConfig() {
+            var config = net.cyberpunk042.client.gui.config.RenderConfig.get();
+            return new GodRayTravelParams(
+                config.getGodRaysTravelMode(),
+                config.getGodRaysTravelSpeed(),
+                3f,  // count not yet in RenderConfig
+                0.2f // width not yet in RenderConfig
+            );
+        }
+    }
 }
