@@ -11,6 +11,12 @@ import net.cyberpunk042.client.gui.util.GuiWidgets;
 import net.cyberpunk042.client.visual.effect.ColorBlendMode;
 import net.cyberpunk042.client.visual.effect.EffectType;
 import net.cyberpunk042.client.visual.effect.FieldVisualPostEffect;
+import net.cyberpunk042.visual.energy.RadiativeInteraction;
+import net.cyberpunk042.visual.energy.EnergyFlicker;
+import net.cyberpunk042.visual.energy.EnergyTravel;
+import net.cyberpunk042.visual.shape.RayArrangement;
+import net.cyberpunk042.visual.shape.RayCurvature;
+import net.cyberpunk042.visual.shape.RayDistribution;
 import net.cyberpunk042.log.Logging;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -386,16 +392,28 @@ public class FieldVisualSubPanel extends BoundPanel {
                     "Enable atmospheric rays from sky",
                     v -> renderConfig.setGodRaysSkyEnabled(v)));
                 
-                // Energy mode: Radiation/Absorption/Pulse
+                // Energy mode from RadiativeInteraction enum
                 int energyMode = renderConfig.getGodRaysEnergyMode();
-                List<String> energyModes = List.of("Radiation", "Absorption", "Pulse");
+                RadiativeInteraction[] energyValues = RadiativeInteraction.values();
+                List<String> energyModes = java.util.Arrays.stream(energyValues)
+                    .map(RadiativeInteraction::displayName).toList();
+                String currentEnergy = energyMode < energyValues.length ? 
+                    energyValues[energyMode].displayName() : energyModes.get(0);
                 widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
                     m -> Text.literal(m))
-                    .values(energyModes).initially(energyModes.get(energyMode))
-                    .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
-                        m.equals("Radiation") ? "Rays flow outward from orb" :
-                        m.equals("Absorption") ? "Rays flow inward toward orb" :
-                        "Rays alternate direction")))
+                    .values(energyModes).initially(currentEnergy)
+                    .tooltip(m -> {
+                        RadiativeInteraction ri = RadiativeInteraction.fromString(m);
+                        return net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                            switch (ri) {
+                                case NONE -> "Full rays visible";
+                                case EMISSION -> "Rays flow outward from orb";
+                                case ABSORPTION -> "Rays flow inward toward orb";
+                                case OSCILLATION -> "Rays pulse in and out";
+                                case RESONANCE -> "Rays grow then decay";
+                                default -> ri.displayName();
+                            }));
+                    })
                     .build(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 20, Text.literal("Energy"), (btn, mode) -> {
                         renderConfig.setGodRaysEnergyMode(energyModes.indexOf(mode));
                     }));
@@ -418,17 +436,47 @@ public class FieldVisualSubPanel extends BoundPanel {
                     }));
                 
                 int distMode = renderConfig.getGodRaysDistributionMode();
-                List<String> distModes = List.of("Uniform", "Weighted", "Noise");
+                List<String> distModes = List.of("Uniform", "Weighted", "Noise", "Random", "Stochastic");
+                int distIdx = Math.max(0, Math.min(distMode, distModes.size() - 1));
                 widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
                     m -> Text.literal(m))
-                    .values(distModes).initially(distModes.get(distMode))
+                    .values(distModes).initially(distModes.get(distIdx))
                     .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
                         m.equals("Uniform") ? "Equal in all directions" :
                         m.equals("Weighted") ? "Bias toward vertical/horizontal" :
-                        "Organic noise variation")))
+                        m.equals("Noise") ? "Organic noise variation" :
+                        m.equals("Random") ? "Randomized ray start/length" :
+                        "Heavily randomized with variable density")))
                     .build(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 20, Text.literal("Dist"), (btn, mode) -> {
                         renderConfig.setGodRaysDistributionMode(distModes.indexOf(mode));
                         rebuildContent();  // Show/hide noise sliders
+                    }));
+                content.advanceBy(22);
+                
+                // Arrangement mode from RayArrangement enum
+                y = content.getCurrentY();
+                int arrangementMode = renderConfig.getGodRaysArrangementMode();
+                RayArrangement[] arrValues = RayArrangement.values();
+                List<String> arrModes = java.util.Arrays.stream(arrValues)
+                    .map(Enum::name).map(s -> s.substring(0, 1) + s.substring(1).toLowerCase().replace("_", " ")).toList();
+                int arrIdx = Math.max(0, Math.min(arrangementMode, arrModes.size() - 1));
+                widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
+                    m -> Text.literal(m))
+                    .values(arrModes).initially(arrModes.get(arrIdx))
+                    .tooltip(m -> {
+                        int idx = arrModes.indexOf(m);
+                        RayArrangement ra = idx >= 0 && idx < arrValues.length ? arrValues[idx] : RayArrangement.RADIAL;
+                        return net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                            switch (ra) {
+                                case RADIAL -> "2D star pattern on XZ plane";
+                                case SPHERICAL -> "3D distribution like hedgehog spines";
+                                case PARALLEL -> "All rays same direction";
+                                case CONVERGING -> "All rays toward center";
+                                case DIVERGING -> "All rays away from center";
+                            }));
+                    })
+                    .build(x, y, halfW * 2 + GuiConstants.COMPACT_GAP, 20, Text.literal("Arrangement"), (btn, mode) -> {
+                        renderConfig.setGodRaysArrangementMode(arrModes.indexOf(mode));
                     }));
                 content.advanceBy(22);
                 
@@ -460,20 +508,56 @@ public class FieldVisualSubPanel extends BoundPanel {
                     content.advanceBy(22);
                 }
                 
-                // Curvature mode
+                // Secondary color (Color2) - only for Gradient mode (not Temperature)
+                if (colorMode == 1) {
+                    y = content.getCurrentY();
+                    float c2r = renderConfig.getGodRaysColor2R();
+                    float c2g = renderConfig.getGodRaysColor2G();
+                    float c2b = renderConfig.getGodRaysColor2B();
+                    
+                    // Color2 R slider
+                    widgets.add(GuiWidgets.slider(x, y, halfW / 3 - 2, 
+                        "R", 0f, 2f, c2r, "%.2f", 
+                        "Secondary color red",
+                        v -> renderConfig.setGodRaysColor2(v, renderConfig.getGodRaysColor2G(), renderConfig.getGodRaysColor2B())));
+                    
+                    // Color2 G slider
+                    widgets.add(GuiWidgets.slider(x + halfW / 3, y, halfW / 3 - 2, 
+                        "G", 0f, 2f, c2g, "%.2f", 
+                        "Secondary color green",
+                        v -> renderConfig.setGodRaysColor2(renderConfig.getGodRaysColor2R(), v, renderConfig.getGodRaysColor2B())));
+                    
+                    // Color2 B slider
+                    widgets.add(GuiWidgets.slider(x + 2 * halfW / 3, y, halfW / 3 - 2, 
+                        "B", 0f, 2f, c2b, "%.2f", 
+                        "Secondary color blue",
+                        v -> renderConfig.setGodRaysColor2(renderConfig.getGodRaysColor2R(), renderConfig.getGodRaysColor2G(), v)));
+                    content.advanceBy(22);
+                }
+                
+                // Curvature mode from RayCurvature enum
                 y = content.getCurrentY();
                 float curvatureMode = renderConfig.getGodRaysCurvatureMode();
-                List<String> curvModes = List.of("Radial", "Vortex", "Spiral", "Tangential", "Pinwheel");
+                RayCurvature[] curvValues = RayCurvature.values();
+                List<String> curvModes = java.util.Arrays.stream(curvValues)
+                    .map(RayCurvature::displayName).toList();
                 int curvIdx = Math.max(0, Math.min((int)curvatureMode, curvModes.size() - 1));
                 widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
                     m -> Text.literal(m))
                     .values(curvModes).initially(curvModes.get(curvIdx))
-                    .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
-                        m.equals("Radial") ? "Straight rays from center" :
-                        m.equals("Vortex") ? "Spinning whirlpool pattern" :
-                        m.equals("Spiral") ? "Galaxy spiral arm pattern" :
-                        m.equals("Tangential") ? "Perpendicular to radial" :
-                        "Windmill blade pattern")))
+                    .tooltip(m -> {
+                        RayCurvature rc = RayCurvature.fromString(m);
+                        return net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                            switch (rc) {
+                                case NONE -> "Straight rays from center";
+                                case VORTEX -> "Spinning whirlpool pattern";
+                                case SPIRAL_ARM -> "Galaxy spiral arm pattern";
+                                case TANGENTIAL -> "Perpendicular to radial";
+                                case PINWHEEL -> "Windmill blade pattern";
+                                case LOGARITHMIC -> "Nautilus shell spiral";
+                                case ORBITAL -> "Circular orbital paths";
+                            }));
+                    })
                     .build(x, y, halfW, 20, Text.literal("Curvature"), (btn, mode) -> {
                         renderConfig.setGodRaysCurvatureMode(curvModes.indexOf(mode));
                     }));
@@ -486,21 +570,29 @@ public class FieldVisualSubPanel extends BoundPanel {
                     v -> renderConfig.setGodRaysCurvatureStrength(v)));
                 content.advanceBy(22);
                 
-                // Flicker mode
+                // Flicker mode from EnergyFlicker enum
                 y = content.getCurrentY();
                 float flickerMode = renderConfig.getGodRaysFlickerMode();
-                List<String> flickModes = List.of("None", "Scintillation", "Strobe", "Fade Pulse", "Heartbeat", "Lightning");
+                EnergyFlicker[] flickValues = EnergyFlicker.values();
+                List<String> flickModes = java.util.Arrays.stream(flickValues)
+                    .map(EnergyFlicker::displayName).toList();
                 int flickIdx = Math.max(0, Math.min((int)flickerMode, flickModes.size() - 1));
                 widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
                     m -> Text.literal(m))
                     .values(flickModes).initially(flickModes.get(flickIdx))
-                    .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
-                        m.equals("None") ? "No flicker" :
-                        m.equals("Scintillation") ? "Star twinkling" :
-                        m.equals("Strobe") ? "Rhythmic on/off" :
-                        m.equals("Fade Pulse") ? "Smooth breathing" :
-                        m.equals("Heartbeat") ? "Double-pulse rhythm" :
-                        "Flash then fade")))
+                    .tooltip(m -> {
+                        EnergyFlicker ef = EnergyFlicker.fromString(m);
+                        return net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                            switch (ef) {
+                                case NONE -> "No flicker";
+                                case SCINTILLATION -> "Star twinkling";
+                                case STROBE -> "Rhythmic on/off";
+                                case FADE_PULSE -> "Smooth breathing";
+                                case FLICKER -> "Candlelight unstable";
+                                case LIGHTNING -> "Flash then fade";
+                                case HEARTBEAT -> "Double-pulse rhythm";
+                            }));
+                    })
                     .build(x, y, halfW, 20, Text.literal("Flicker"), (btn, mode) -> {
                         renderConfig.setGodRaysFlickerMode(flickModes.indexOf(mode));
                     }));
@@ -513,20 +605,35 @@ public class FieldVisualSubPanel extends BoundPanel {
                     v -> renderConfig.setGodRaysFlickerIntensity(v)));
                 content.advanceBy(22);
                 
-                // Travel mode
+                // Travel mode from EnergyTravel enum (using base modes only)
                 y = content.getCurrentY();
                 float travelMode = renderConfig.getGodRaysTravelMode();
-                List<String> travModes = List.of("None", "Scroll", "Chase", "Pulse Wave", "Comet");
+                // Use only the first 6 base modes (NONE through PULSE_WAVE)
+                List<String> travModes = List.of(
+                    EnergyTravel.NONE.displayName(),
+                    EnergyTravel.CHASE.displayName(),
+                    EnergyTravel.SCROLL.displayName(),
+                    EnergyTravel.COMET.displayName(),
+                    EnergyTravel.SPARK.displayName(),
+                    EnergyTravel.PULSE_WAVE.displayName()
+                );
                 int travIdx = Math.max(0, Math.min((int)travelMode, travModes.size() - 1));
                 widgets.add(net.minecraft.client.gui.widget.CyclingButtonWidget.<String>builder(
                     m -> Text.literal(m))
                     .values(travModes).initially(travModes.get(travIdx))
-                    .tooltip(m -> net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
-                        m.equals("None") ? "No travel animation" :
-                        m.equals("Scroll") ? "Gradient scrolls outward" :
-                        m.equals("Chase") ? "Dots travel along rays" :
-                        m.equals("Pulse Wave") ? "Brightness pulses travel" :
-                        "Bright head, fading tail")))
+                    .tooltip(m -> {
+                        EnergyTravel et = EnergyTravel.fromString(m);
+                        return net.minecraft.client.gui.tooltip.Tooltip.of(Text.literal(
+                            switch (et) {
+                                case NONE -> "No travel animation";
+                                case CHASE -> "Dots travel along rays";
+                                case SCROLL -> "Gradient scrolls outward";
+                                case COMET -> "Bright head, fading tail";
+                                case SPARK -> "Random sparks shoot out";
+                                case PULSE_WAVE -> "Brightness pulses travel";
+                                default -> et.displayName();
+                            }));
+                    })
                     .build(x, y, halfW, 20, Text.literal("Travel"), (btn, mode) -> {
                         renderConfig.setGodRaysTravelMode(travModes.indexOf(mode));
                     }));

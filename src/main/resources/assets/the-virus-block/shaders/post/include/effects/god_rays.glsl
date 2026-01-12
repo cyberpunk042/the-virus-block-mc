@@ -180,6 +180,11 @@ float accumulateGodRaysStyled(
     float angularBias,
     float curvatureMode,
     float curvatureStrength,
+    float flickerMode,
+    float flickerIntensity,
+    float flickerFrequency,
+    float travelMode,
+    float travelSpeed,
     float time
 ) {
     // Apply arrangement mode (point source, ring, etc)
@@ -204,11 +209,20 @@ float accumulateGodRaysStyled(
     // Apply angular weight for distribution
     float angularWeight = getAngularWeight(pixelUV, effectiveLightUV, distributionMode, angularBias, time);
     
+    // Apply arrangement weight (RADIAL restricts to horizontal band)
+    float arrangementWeight = getArrangementWeight(pixelUV, effectiveLightUV, arrangementMode);
+    
     // Apply noise modulation if distribution mode is 2 (noise)
     float noiseWeight = 1.0;
     if (distributionMode > 1.5) {
         noiseWeight = getNoiseModulation(pixelUV, effectiveLightUV, time, noiseScale, noiseSpeed, noiseIntensity);
     }
+    
+    // Apply flicker modulation (affects whole ray)
+    float flickerMod = getFlickerModulation(pixelUV, effectiveLightUV, time, flickerMode, flickerIntensity, flickerFrequency);
+    
+    // Per-ray random for travel variation
+    float rayRand = fract(sin(dot(pixelUV, vec2(12.9898, 78.233))) * 43758.5453);
     
     float illumination = 0.0;
     float decay = 1.0;
@@ -222,9 +236,21 @@ float accumulateGodRaysStyled(
             break;
         }
         
+        // Normalized position along ray (0=at light, 1=at pixel)
+        // We invert because we march FROM pixel TOWARD light
+        float t = 1.0 - float(i) / float(N);
+        
         // Sample occlusion
         float occlusion = texture(occlusionTex, uv).r;
-        illumination += occlusion * decay;
+        
+        // Apply energy visibility (which part of ray is visible)
+        float energyVis = getEnergyVisibility(t, time, energyMode);
+        
+        // Apply travel modulation (moving particles along ray)
+        float travelMod = getTravelModulation(t, time, travelMode, travelSpeed, rayRand);
+        
+        // Combine all per-sample modulations
+        illumination += occlusion * decay * energyVis * travelMod;
         
         // Exponential falloff
         decay *= decayFactor;
@@ -232,7 +258,7 @@ float accumulateGodRaysStyled(
     
     // Apply all modulation weights + intensity breathing
     float breathing = getIntensityBreathing(time, 1.0, 0.5); // Subtle 50% intensity breathing
-    return illumination * exposure * angularWeight * noiseWeight * breathing;
+    return illumination * exposure * angularWeight * arrangementWeight * noiseWeight * flickerMod * breathing;
 }
 
 #endif // GOD_RAYS_GLSL

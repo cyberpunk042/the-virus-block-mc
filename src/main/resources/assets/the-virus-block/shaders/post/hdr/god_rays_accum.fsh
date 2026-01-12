@@ -109,6 +109,15 @@ void main() {
     float curvatureMode = GodRayCurvatureMode;
     float curvatureStrength = GodRayCurvatureStrength;
     
+    // Get flicker params from UBO (Slot 56)
+    float flickerMode = GodRayFlickerMode;
+    float flickerIntensity = GodRayFlickerIntensity;
+    float flickerFrequency = GodRayFlickerFrequency;
+    
+    // Get travel params from UBO (Slot 57)
+    float travelMode = GodRayTravelMode;
+    float travelSpeed = GodRayTravelSpeed;
+    
     // Get animated time from FrameDataUBO (accumulated seconds since game start)
     float time = FrameTimeUBO.x * AnimSpeed;
     
@@ -131,6 +140,11 @@ void main() {
         angularBias,
         curvatureMode,
         curvatureStrength,
+        flickerMode,
+        flickerIntensity,
+        flickerFrequency,
+        travelMode,
+        travelSpeed,
         time
     );
     

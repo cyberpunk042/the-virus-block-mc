@@ -397,9 +397,9 @@ public class RenderConfig {
     // GOD RAYS STYLE SETTERS
     // =========================================================================
     
-    /** Set energy mode: 0=radiation, 1=absorption, 2=pulse */
+    /** Set energy mode: 0=none, 1=emission, 2=absorption, 3=reflection, 4=transmission, 5=scattering, 6=oscillation, 7=resonance */
     public void setGodRaysEnergyMode(int mode) {
-        this.godRaysEnergyMode = Math.max(0, Math.min(2, mode));
+        this.godRaysEnergyMode = Math.max(0, Math.min(7, mode));
     }
     
     /** Set color mode: 0=solid, 1=gradient, 2=temperature */
@@ -407,14 +407,14 @@ public class RenderConfig {
         this.godRaysColorMode = Math.max(0, Math.min(2, mode));
     }
     
-    /** Set distribution mode: 0=uniform, 1=weighted, 2=noise */
+    /** Set distribution mode: 0=uniform, 1=weighted, 2=noise, 3=random, 4=stochastic */
     public void setGodRaysDistributionMode(int mode) {
-        this.godRaysDistributionMode = Math.max(0, Math.min(2, mode));
+        this.godRaysDistributionMode = Math.max(0, Math.min(4, mode));
     }
     
-    /** Set arrangement mode: 0=point, 1=ring, 2=sector */
+    /** Set arrangement mode: 0=radial, 1=spherical, 2=parallel, 3=converging, 4=diverging */
     public void setGodRaysArrangementMode(int mode) {
-        this.godRaysArrangementMode = Math.max(0, Math.min(2, mode));
+        this.godRaysArrangementMode = Math.max(0, Math.min(4, mode));
     }
     
     /** Set secondary color for gradient mode */
@@ -449,9 +449,9 @@ public class RenderConfig {
         this.godRaysAngularBias = Math.max(-1f, Math.min(1f, bias));
     }
     
-    /** Set curvature mode: 0=radial, 1=vortex, 2=spiral, 3=tangential, 4=pinwheel */
+    /** Set curvature mode: 0=none, 1=vortex, 2=spiral_arm, 3=tangential, 4=logarithmic, 5=pinwheel, 6=orbital */
     public void setGodRaysCurvatureMode(float mode) {
-        this.godRaysCurvatureMode = Math.max(0f, Math.min(4f, mode));
+        this.godRaysCurvatureMode = Math.max(0f, Math.min(6f, mode));
     }
     
     /** Set curvature strength (0-2) */
@@ -459,9 +459,9 @@ public class RenderConfig {
         this.godRaysCurvatureStrength = Math.max(0f, Math.min(2f, strength));
     }
     
-    /** Set flicker mode (0-5) */
+    /** Set flicker mode: 0=none, 1=scintillation, 2=strobe, 3=fade_pulse, 4=flicker, 5=lightning, 6=heartbeat */
     public void setGodRaysFlickerMode(float mode) {
-        this.godRaysFlickerMode = Math.max(0f, Math.min(5f, mode));
+        this.godRaysFlickerMode = Math.max(0f, Math.min(6f, mode));
     }
     
     /** Set flicker intensity (0-1) */
@@ -474,9 +474,9 @@ public class RenderConfig {
         this.godRaysFlickerFrequency = Math.max(0.1f, Math.min(20f, frequency));
     }
     
-    /** Set travel mode (0-4) */
+    /** Set travel mode: 0=none, 1=chase, 2=scroll, 3=comet, 4=spark, 5=pulse_wave */
     public void setGodRaysTravelMode(float mode) {
-        this.godRaysTravelMode = Math.max(0f, Math.min(4f, mode));
+        this.godRaysTravelMode = Math.max(0f, Math.min(5f, mode));
     }
     
     /** Set travel speed (0-5) */
