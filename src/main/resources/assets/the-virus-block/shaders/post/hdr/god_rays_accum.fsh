@@ -90,10 +90,12 @@ void main() {
     vec3 orbDirWorld = (orbDistance > 0.001) ? normalize(toOrb) : forward;
     float angleFactor = dot(orbDirWorld, forward);
     
-    // 2D direction toward orb (for back hemisphere parallel rays)
-    vec2 orbDir2D = vec2(xProj, yProj);
-    float orbDir2DLen = length(orbDir2D);
-    vec2 parallelDir = (orbDir2DLen > 0.001) ? normalize(orbDir2D) : vec2(0.0, 1.0);
+    // Angular position of orb in camera space (for smooth back hemisphere arc)
+    // Using atan gives continuous angle that traces smooth circle as orb moves around
+    float orbAngle = atan(yProj, xProj);  // -π to +π, continuous
+    
+    // Derive parallelDir from angle for function parameter (continuous, no flip)
+    vec2 parallelDir = vec2(cos(orbAngle), sin(orbAngle));
     
     // ═══════════════════════════════════════════════════════════════════════════
     // PARALLELISM FACTOR: Based purely on hemisphere, NOT distance
@@ -129,7 +131,7 @@ void main() {
     //
     // Instead of hard-switching at 90°, we BLEND between:
     //   - Front: perspective projection (convergent rays)
-    //   - Back: off-screen position (parallel rays)
+    //   - Back: off-screen position on circular arc (parallel rays)
     // Using parallelFactor for smooth transition
     // ═══════════════════════════════════════════════════════════════════════════
     
@@ -142,8 +144,12 @@ void main() {
     float ndcY = (yProj / safeZDist) / tanHalfFov;
     vec2 frontLightUV = vec2(ndcX * 0.5 + 0.5, ndcY * 0.5 + 0.5);
     
-    // Calculate BACK lightUV (pushed far off-screen for parallel rays)
-    vec2 backLightUV = vec2(0.5, 0.5) + parallelDir * 5.0;
+    // Calculate BACK lightUV (traces smooth circular arc as orb moves around)
+    // Using orbAngle ensures continuous movement, no discrete flips
+    vec2 backLightUV = vec2(
+        0.5 + cos(orbAngle) * 5.0,
+        0.5 + sin(orbAngle) * 5.0
+    );
     
     // Smooth blend based on parallelFactor (0 = front, 1 = back)
     vec2 lightUV = mix(frontLightUV, backLightUV, parallelFactor);
