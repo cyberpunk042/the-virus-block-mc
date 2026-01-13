@@ -100,16 +100,16 @@ void main() {
     // ═══════════════════════════════════════════════════════════════════════════
     //
     // angleFactor > 0 (front hemisphere):  parallelFactor = 0 (pure radial)
-    // angleFactor < 0 (back hemisphere):   parallelFactor = 1 (parallel)
-    // Smooth transition around 90° (angleFactor near 0)
+    // angleFactor = 0 (90° side):          parallelFactor = 0 (transition STARTS)
+    // angleFactor = -1 (180° behind):      parallelFactor = 1 (transition ENDS)
     //
-    // smoothstep creates the "curved" transition you asked for
+    // Wide 90° transition through the entire back hemisphere
     // ═══════════════════════════════════════════════════════════════════════════
     
-    float parallelFactor = smoothstep(0.2, -0.2, angleFactor);
-    // At angleFactor = 0.2 (~78°): parallelFactor = 0 (still radial)
-    // At angleFactor = 0.0 (90°):  parallelFactor = 0.5 (halfway)
-    // At angleFactor = -0.2 (~101°): parallelFactor = 1.0 (full parallel)
+    float parallelFactor = smoothstep(0.0, -1.0, angleFactor);
+    // At angleFactor = 0.0 (90°):   parallelFactor = 0 (transition starts)
+    // At angleFactor = -0.5 (120°): parallelFactor = 0.5 (halfway)
+    // At angleFactor = -1.0 (180°): parallelFactor = 1.0 (full parallel)
     
     // ═══════════════════════════════════════════════════════════════════════════
     // ANGLE-BASED INTENSITY (for behind-camera fade)
@@ -124,24 +124,29 @@ void main() {
     angleIntensity = pow(angleIntensity, 0.7);        // Smooth the curve
     
     // ═══════════════════════════════════════════════════════════════════════════
-    // LIGHT UV PROJECTION
+    // LIGHT UV PROJECTION (Smooth 360° Blending)
+    // ═══════════════════════════════════════════════════════════════════════════
+    //
+    // Instead of hard-switching at 90°, we BLEND between:
+    //   - Front: perspective projection (convergent rays)
+    //   - Back: off-screen position (parallel rays)
+    // Using parallelFactor for smooth transition
     // ═══════════════════════════════════════════════════════════════════════════
     
-    vec2 lightUV = vec2(0.5, 0.5);
     float tanHalfFov = tan(fov * 0.5);
     
-    if (zDist > 0.001) {
-        // FRONT HEMISPHERE: Standard perspective projection
-        // Light has a valid screen position, rays converge toward it
-        float ndcX = (xProj / zDist) / (tanHalfFov * aspect);
-        float ndcY = (yProj / zDist) / tanHalfFov;
-        lightUV = vec2(ndcX * 0.5 + 0.5, ndcY * 0.5 + 0.5);
-    } else {
-        // BACK HEMISPHERE: Push light far off-screen
-        // This creates parallel rays from the edge in the light's direction
-        // The 5.0 multiplier ensures rays are nearly parallel (convergence point is far away)
-        lightUV = vec2(0.5, 0.5) + parallelDir * 5.0;
-    }
+    // Calculate FRONT lightUV (perspective projection)
+    // Use abs(zDist) to avoid division by zero, we'll blend this out anyway
+    float safeZDist = max(abs(zDist), 0.01);
+    float ndcX = (xProj / safeZDist) / (tanHalfFov * aspect);
+    float ndcY = (yProj / safeZDist) / tanHalfFov;
+    vec2 frontLightUV = vec2(ndcX * 0.5 + 0.5, ndcY * 0.5 + 0.5);
+    
+    // Calculate BACK lightUV (pushed far off-screen for parallel rays)
+    vec2 backLightUV = vec2(0.5, 0.5) + parallelDir * 5.0;
+    
+    // Smooth blend based on parallelFactor (0 = front, 1 = back)
+    vec2 lightUV = mix(frontLightUV, backLightUV, parallelFactor);
     
     // Clamp lightUV to reasonable bounds to avoid numerical issues
     lightUV = clamp(lightUV, vec2(-3.0), vec2(4.0));
