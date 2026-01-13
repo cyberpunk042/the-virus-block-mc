@@ -254,8 +254,9 @@ float accumulateGodRaysStyled(
         // Per-sample noise grain (only for NOISE distribution mode)
         float sampleNoise = 1.0;
         if (distributionMode > 1.5 && distributionMode < 2.5) {
-            float grain = fract(sin(dot(uv * 1000.0, vec2(12.9898, 78.233)) + float(i)) * 43758.5453);
-            sampleNoise = 1.0 - noiseIntensity * 0.5 + grain * noiseIntensity;
+            // Smooth atmospheric noise along ray (not random speckle)
+            float grain = sin(t * 15.0 + sin(t * 7.3) * 2.0) * 0.5 + 0.5;
+            sampleNoise = 1.0 - noiseIntensity * 0.3 + grain * noiseIntensity * 0.6;
         }
         
         // Combine all per-sample modulations

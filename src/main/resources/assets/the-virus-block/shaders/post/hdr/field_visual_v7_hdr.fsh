@@ -37,7 +37,7 @@ void main() {
         FadePower * 0.01,
         abs(NoiseSeed) < 0.001 ? 1.0 : NoiseSeed,
         max(0.1, EruptionContrast),
-        GodRayEnabled > 0.5  // Skip procedural rays when god rays are enabled
+        false  // Allow both procedural rays and god rays together
     );
     
     vec4 fieldEffect = vec4(pulsar.color, pulsar.alpha);

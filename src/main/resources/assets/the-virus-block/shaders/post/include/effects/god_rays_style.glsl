@@ -77,18 +77,16 @@ float getEnergyVisibility(float t, float time, float energyMode) {
         return 0.3 + chaos * 0.7;
         
     } else if (energyMode < 6.5) {
-        // Mode 6: OSCILLATION - Rays pulse outward/inward
-        float breathPhase = sin(time * 1.5) * 0.5 + 0.5; // 0-1 sinusoidal
+        // Mode 6: OSCILLATION - Rays breathe in intensity, no moving edge
+        float breathPhase = sin(time * 1.5) * 0.5 + 0.5; // 0-1
         
-        // Cutoff point oscillates between 0.3 and 1.0
-        float minReach = 0.3;
-        float maxReach = 1.0;
-        float currentReach = minReach + breathPhase * (maxReach - minReach);
+        // Fixed smooth falloff from center to edge
+        float baseFalloff = 1.0 - smoothstep(0.0, 1.0, t);
         
-        // Proportional falloff (40% of reach = smooth gradient)
-        float falloffStart = currentReach * 0.4;
-        float visibility = 1.0 - smoothstep(falloffStart, currentReach, t);
-        return visibility * 0.9 + 0.1;
+        // Intensity oscillates
+        float intensity = 0.4 + breathPhase * 0.6; // 0.4 to 1.0
+        
+        return baseFalloff * intensity * 0.9 + 0.1;
         
     } else {
         // Mode 7: RESONANCE - Grows then decays asymmetrically (smoother)
