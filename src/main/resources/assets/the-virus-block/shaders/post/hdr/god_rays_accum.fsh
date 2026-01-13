@@ -146,9 +146,10 @@ void main() {
     
     // Calculate BACK lightUV (traces smooth circular arc as orb moves around)
     // Using orbAngle ensures continuous movement, no discrete flips
+    // Phase 2.1: Reduced from 5.0 to 3.0 for better float precision
     vec2 backLightUV = vec2(
-        0.5 + cos(orbAngle) * 5.0,
-        0.5 + sin(orbAngle) * 5.0
+        0.5 + cos(orbAngle) * 3.0,
+        0.5 + sin(orbAngle) * 3.0
     );
     
     // Smooth blend based on parallelFactor (0 = front, 1 = back)
@@ -160,7 +161,7 @@ void main() {
     vec2 center = vec2(0.5, 0.5);
     vec2 offset = lightUV - center;
     float mag = length(offset);
-    float maxMag = 5.0;
+    float maxMag = 3.0;  // Phase 2.1: Reduced from 5.0 for precision
     if (mag > maxMag) {
         offset = normalize(offset) * maxMag;
         lightUV = center + offset;
@@ -299,7 +300,19 @@ void main() {
     // Apply both angle-based and distance-based fades
     illumination *= angleIntensity * distanceIntensity;
     
-    // Output monochrome illumination (HDR-safe, may exceed 1.0)
+    // ═══════════════════════════════════════════════════════════════════════════
+    // PHASE 1 ROBUSTNESS: Defensive guards against corruption
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    // 1.2: HDR ceiling - prevent runaway accumulation
+    illumination = min(illumination, 100.0);
+    
+    // 1.1: NaN/Inf protection - fail to black instead of garbage
+    if (isnan(illumination) || isinf(illumination)) {
+        illumination = 0.0;
+    }
+    
+    // Output monochrome illumination (HDR-safe, capped at 100.0)
     // Color tinting happens at composite stage
     fragColor = vec4(illumination, illumination, illumination, 1.0);
 }

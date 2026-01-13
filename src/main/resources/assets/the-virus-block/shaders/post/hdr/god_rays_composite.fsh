@@ -35,6 +35,14 @@ void main() {
     vec4 sceneColor = texture(SceneSampler, texCoord);
     float godRayIntensity = texture(GodRaysSampler, texCoord).r;
     
+    // Phase 1: Clamp incoming intensity
+    godRayIntensity = clamp(godRayIntensity, 0.0, 100.0);
+    
+    // Phase 1: Check for NaN/Inf
+    if (isnan(godRayIntensity) || isinf(godRayIntensity)) {
+        godRayIntensity = 0.0;
+    }
+    
     // Early out if no god rays or disabled
     if (GodRayEnabled < 0.5 || godRayIntensity < 0.001) {
         fragColor = sceneColor;
@@ -69,6 +77,9 @@ void main() {
     
     // Additive blend - god rays ADD light to the scene
     vec3 finalColor = sceneColor.rgb + godRayColor;
+    
+    // Phase 1: Cap final output to prevent extreme HDR values
+    finalColor = min(finalColor, vec3(10.0));
     
     fragColor = vec4(finalColor, sceneColor.a);
 }

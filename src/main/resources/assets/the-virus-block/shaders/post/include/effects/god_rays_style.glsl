@@ -17,6 +17,22 @@
 #define GOD_RAYS_STYLE_GLSL
 
 // ═══════════════════════════════════════════════════════════════════════════
+// PHASE 1.3: SAFE NORMALIZATION HELPER
+// Prevents divide-by-zero when normalizing small vectors
+// Disclamer, might not be usefull, to evaluate.
+// ═══════════════════════════════════════════════════════════════════════════
+
+vec2 safeNormalize2D(vec2 v, vec2 fallback) {
+    float len = length(v);
+    return (len > 0.0001) ? v / len : fallback;
+}
+
+vec3 safeNormalize3D(vec3 v, vec3 fallback) {
+    float len = length(v);
+    return (len > 0.0001) ? v / len : fallback;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // ENERGY VISIBILITY
 // Controls which part of the ray is visible based on RadiativeInteraction mode
 // ═══════════════════════════════════════════════════════════════════════════
@@ -183,9 +199,12 @@ vec2 applyCurvature(vec2 dir, vec2 pixelUV, vec2 lightUV, float curvatureMode, f
 vec2 getGodRayDirection(vec2 pixelUV, vec2 lightUV, float energyMode, float curvatureMode, float curvatureStrength, float time) {
     vec2 toLight = lightUV - pixelUV;
     float dist = length(toLight);
-    vec2 outward = normalize(toLight);
+    
+    // Phase 1.3: Use safe normalization to prevent NaN from near-zero vectors
+    vec2 defaultDir = vec2(0.0, 1.0);  // Fallback direction
+    vec2 outward = safeNormalize2D(toLight, defaultDir);
     vec2 inward = -outward;
-    vec2 tangent = normalize(vec2(-toLight.y, toLight.x));
+    vec2 tangent = safeNormalize2D(vec2(-toLight.y, toLight.x), vec2(1.0, 0.0));
     vec2 baseDir;
     
     if (energyMode < 0.5) {

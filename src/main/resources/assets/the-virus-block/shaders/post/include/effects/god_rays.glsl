@@ -268,8 +268,9 @@ float accumulateGodRaysStyled(
         // We invert because we march FROM pixel TOWARD light
         float t = 1.0 - float(i) / float(N);
         
-        // Sample occlusion
-        float occlusion = texture(occlusionTex, uv).r;
+        // Sample occlusion (clamp UV as extra protection)
+        vec2 safeUV = clamp(uv, vec2(0.001), vec2(0.999));
+        float occlusion = texture(occlusionTex, safeUV).r;
         
         // Apply energy visibility (which part of ray is visible)
         float energyVis = getEnergyVisibility(t, time, energyMode);
@@ -288,13 +289,24 @@ float accumulateGodRaysStyled(
         // Combine all per-sample modulations
         illumination += occlusion * decay * energyVis * travelMod * sampleNoise;
         
+        // Phase 1: Per-sample guards - catch corruption as it happens
+        if (isnan(illumination) || isinf(illumination)) {
+            illumination = 0.0;
+            break;  // Exit loop on corruption
+        }
+        // Cap running total to prevent runaway
+        illumination = min(illumination, 50.0);
+        
         // Exponential falloff
         decay *= decayFactor;
     }
     
     // Apply all modulation weights + intensity breathing
     float breathing = getIntensityBreathing(time, 1.0, 0.5); // Subtle 50% intensity breathing
-    return illumination * exposure * angularWeight * arrangementWeight * noiseWeight * flickerMod * breathing;
+    float result = illumination * exposure * angularWeight * arrangementWeight * noiseWeight * flickerMod * breathing;
+    
+    // Phase 1.2: Ceiling to prevent overflow before returning
+    return min(result, 100.0);
 }
 
 #endif // GOD_RAYS_GLSL
