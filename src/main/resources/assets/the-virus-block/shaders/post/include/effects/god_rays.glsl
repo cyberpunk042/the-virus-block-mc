@@ -200,8 +200,12 @@ float accumulateGodRaysStyled(
     vec2 toLight = effectiveLightUV - pixelUV;
     float dist = length(toLight);
     
-    // At light center: full illumination
+    // At light center: check if inside orb first
     if (dist < 0.001) {
+        // If orb masking is enabled and we're at center, return nothing
+        if (orbRadiusX > 0.0 && orbRadiusY > 0.0) {
+            return 0.0;
+        }
         return exposure * float(N);
     }
     
