@@ -161,6 +161,10 @@ float accumulateGodRaysFromUBO(
 
 /**
  * Styled god rays accumulator with full feature support.
+ * 
+ * New in 360° version: parallelFactor and parallelDir enable distance-based
+ * ray parallelism. Close sources have diverging rays, far sources have 
+ * parallel rays (like sunlight). This naturally handles behind-camera.
  */
 float accumulateGodRaysStyled(
     vec2 pixelUV,
@@ -188,17 +192,40 @@ float accumulateGodRaysStyled(
     float travelSpeed,
     float travelCount,
     float travelWidth,
-    float time
+    float time,
+    // 360° parallelism parameters
+    float parallelFactor,  // 0 = full convergence (close), 1 = parallel rays (far)
+    vec2 parallelDir       // 2D direction toward orb (screen-space)
 ) {
     // Apply arrangement mode (point source, ring, etc)
     vec2 effectiveLightUV = getArrangedLightUV(lightUV, pixelUV, 0.0, arrangementMode);
     
-    // Get ray direction based on energy mode + curvature
-    vec2 rayDir = getGodRayDirection(pixelUV, effectiveLightUV, energyMode, curvatureMode, curvatureStrength, time);
+    // ═══════════════════════════════════════════════════════════════════════════
+    // DISTANCE-BASED RAY DIRECTION BLENDING
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 
+    // Blend between:
+    //   - Radial rays (converging toward lightUV) - close sources
+    //   - Parallel rays (all pointing in parallelDir) - far sources
+    //
+    // This is physically accurate: distant light sources produce parallel rays
+    // ═══════════════════════════════════════════════════════════════════════════
     
-    // Calculate march parameters
+    // Radial direction: toward the projected light position (current behavior)
     vec2 toLight = effectiveLightUV - pixelUV;
     float dist = length(toLight);
+    vec2 radialDir = (dist > 0.001) ? normalize(toLight) : parallelDir;
+    
+    // Blend radial and parallel based on distance factor
+    vec2 blendedDir = normalize(mix(radialDir, parallelDir, parallelFactor));
+    
+    // Get ray direction based on energy mode + curvature (uses blended direction)
+    // Note: For extreme parallelFactor, the energy mode direction modifiers become
+    // less important since rays are all pointing the same way anyway
+    vec2 rayDir = getGodRayDirection(pixelUV, effectiveLightUV, energyMode, curvatureMode, curvatureStrength, time);
+    
+    // Blend the styled ray direction with pure parallel direction
+    rayDir = normalize(mix(rayDir, blendedDir, parallelFactor * 0.5));
     
     // At light center: check if inside orb first
     if (dist < 0.001) {

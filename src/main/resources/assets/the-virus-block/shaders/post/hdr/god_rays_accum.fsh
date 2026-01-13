@@ -42,9 +42,13 @@ void main() {
     }
     
     // ═══════════════════════════════════════════════════════════════════════════
-    // VECTOR-BASIS PROJECTION (Section 5.5 - Production Standard)
-    // Projects orb position using camera basis vectors.
-    // This is immune to UBO slot displacement and coordinate origin conflicts.
+    // DISTANCE-BASED PARALLELISM PROJECTION (360° God Rays)
+    // Projects orb position with distance-aware ray parallelism.
+    // 
+    // Key insight: Light rays become more parallel as distance increases.
+    // Close source = diverging rays, Far source = parallel rays (like sunlight).
+    // This naturally handles behind-camera because parallel rays have no
+    // convergence point on screen.
     // ═══════════════════════════════════════════════════════════════════════════
     
     // Get orb position (camera-relative offset from FieldVisualConfig)
@@ -64,28 +68,63 @@ void main() {
     float xProj = dot(toOrb, right);
     float yProj = dot(toOrb, up);
     
-    // Default to center if orb is behind camera
-    vec2 lightUV = vec2(0.5, 0.5);
-    float lightVisible = 0.0;
+    // ═══════════════════════════════════════════════════════════════════════════
+    // PARALLELISM CALCULATION
+    // ═══════════════════════════════════════════════════════════════════════════
     
-    if (zDist > 0.0) {
-        // Convert to NDC using FOV (Perspective Divide)
-        float tanHalfFov = tan(fov * 0.5);
+    // World-space distance to orb (always positive)
+    float orbDistance = length(toOrb);
+    
+    // Parallelism factor: 0 = full convergence (close), 1 = parallel rays (far)
+    // Uses inverse-distance falloff: at PARALLEL_REFERENCE_DIST, factor = 0.5
+    // Tune this value based on your world scale (in blocks/meters)
+    const float PARALLEL_REFERENCE_DIST = 20.0;  // Distance where rays are 50% parallel
+    float parallelFactor = orbDistance / (orbDistance + PARALLEL_REFERENCE_DIST);
+    
+    // 2D direction toward orb (works for ALL angles including behind camera)
+    // This is the screen-space projection of the orb direction
+    vec2 orbDir2D = vec2(xProj, yProj);
+    float orbDir2DLen = length(orbDir2D);
+    vec2 parallelDir = (orbDir2DLen > 0.001) ? normalize(orbDir2D) : vec2(0.0, 1.0);
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // ANGLE-BASED INTENSITY (for behind-camera fade)
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    // Angle factor: +1 = directly in front, 0 = 90° to side, -1 = directly behind
+    vec3 orbDirWorld = (orbDistance > 0.001) ? normalize(toOrb) : forward;
+    float angleFactor = dot(orbDirWorld, forward);
+    
+    // Global intensity based on angle:
+    // - Front (angleFactor = 1.0): full intensity
+    // - Side (angleFactor = 0.0): reduced but still visible
+    // - Behind (angleFactor = -1.0): minimal/faded
+    float angleIntensity = angleFactor * 0.5 + 0.5;  // Remap -1..1 to 0..1
+    angleIntensity = max(0.1, angleIntensity);        // Minimum 10% when behind
+    angleIntensity = pow(angleIntensity, 0.7);        // Smooth the curve
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // LIGHT UV PROJECTION (with 360° support)
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    vec2 lightUV = vec2(0.5, 0.5);
+    float tanHalfFov = tan(fov * 0.5);
+    
+    if (zDist > 0.001) {
+        // FRONT: Standard perspective projection
         float ndcX = (xProj / zDist) / (tanHalfFov * aspect);
         float ndcY = (yProj / zDist) / tanHalfFov;
-        
-        // NDC to UV
         lightUV = vec2(ndcX * 0.5 + 0.5, ndcY * 0.5 + 0.5);
-        
-        // Visible if within extended screen bounds (allow off-screen margin)
-        lightVisible = (abs(ndcX) < 1.5 && abs(ndcY) < 1.5) ? 1.0 : 0.0;
+    } else {
+        // BEHIND/SIDE: Push light far off-screen in the orb's direction
+        // This makes rays parallel (no on-screen convergence point)
+        // The farther we push it, the more parallel the rays become
+        lightUV = vec2(0.5, 0.5) + parallelDir * 5.0;
     }
     
-    // Early out if light is behind camera or way off-screen
-    if (lightVisible < 0.5) {
-        fragColor = vec4(0.0, 0.0, 0.0, 1.0);
-        return;
-    }
+    // Clamp lightUV to reasonable bounds to avoid numerical issues
+    // Allow significant off-screen margin for proper ray coverage
+    lightUV = clamp(lightUV, vec2(-3.0), vec2(4.0));
     
     // Get god ray config from UBO
     int samples = int(GodRaySamples);
@@ -173,7 +212,7 @@ void main() {
         }
     }
     
-    // Accumulate god rays with full style support
+    // Accumulate god rays with full style support (including 360° parallelism)
     float illumination = accumulateGodRaysStyled(
         texCoord,
         lightUV,
@@ -200,8 +239,14 @@ void main() {
         travelSpeed,
         travelCount,
         travelWidth,
-        time
+        time,
+        // New 360° parallelism parameters
+        parallelFactor,
+        parallelDir
     );
+    
+    // Apply angle-based intensity for 360° coverage fade
+    illumination *= angleIntensity;
     
     // Output monochrome illumination (HDR-safe, may exceed 1.0)
     // Color tinting happens at composite stage
