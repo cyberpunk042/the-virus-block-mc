@@ -117,6 +117,8 @@ void main() {
     // Get travel params from UBO (Slot 57)
     float travelMode = GodRayTravelMode;
     float travelSpeed = GodRayTravelSpeed;
+    float travelCount = GodRayTravelCount;
+    float travelWidth = GodRayTravelWidth;
     
     // Get animated time from FrameDataUBO (accumulated seconds since game start)
     float time = FrameTimeUBO.x * AnimSpeed;
@@ -145,6 +147,8 @@ void main() {
         flickerFrequency,
         travelMode,
         travelSpeed,
+        travelCount,
+        travelWidth,
         time
     );
     

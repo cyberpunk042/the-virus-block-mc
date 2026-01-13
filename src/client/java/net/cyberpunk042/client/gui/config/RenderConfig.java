@@ -74,7 +74,7 @@ public class RenderConfig {
     private int godRaysDistributionMode = 0;
     
     /** Arrangement mode: 0=point, 1=ring, 2=sector */
-    private int godRaysArrangementMode = 0;
+    private int godRaysArrangementMode = 1; // Default: SPHERICAL
     
     /** Secondary color R for gradient mode (0-1 range) */
     private float godRaysColor2R = 1.0f;
@@ -120,6 +120,12 @@ public class RenderConfig {
     
     /** Travel speed */
     private float godRaysTravelSpeed = 1.0f;
+    
+    /** Travel particle count (1-10) */
+    private float godRaysTravelCount = 3.0f;
+    
+    /** Travel particle width (0.05-0.5) */
+    private float godRaysTravelWidth = 0.15f;
     
     // =========================================================================
     // CONSTRUCTOR & SINGLETON
@@ -280,6 +286,12 @@ public class RenderConfig {
     /** Get travel speed */
     public float getGodRaysTravelSpeed() { return godRaysTravelSpeed; }
     
+    /** Get travel particle count */
+    public float getGodRaysTravelCount() { return godRaysTravelCount; }
+    
+    /** Get travel particle width */
+    public float getGodRaysTravelWidth() { return godRaysTravelWidth; }
+    
     // =========================================================================
     // HDR SETTERS
     // =========================================================================
@@ -357,7 +369,7 @@ public class RenderConfig {
      * @param decay 0.94 to 0.99
      */
     public void setGodRaysDecay(float decay) {
-        this.godRaysDecay = Math.max(0.94f, Math.min(0.99f, decay));
+        this.godRaysDecay = Math.max(0.90f, Math.min(0.995f, decay));
     }
     
     /**
@@ -429,9 +441,9 @@ public class RenderConfig {
         this.godRaysGradientPower = Math.max(0.1f, Math.min(5f, power));
     }
     
-    /** Set noise scale */
+    /** Set noise scale (0.5-50) */
     public void setGodRaysNoiseScale(float scale) {
-        this.godRaysNoiseScale = Math.max(1f, Math.min(20f, scale));
+        this.godRaysNoiseScale = Math.max(0.5f, Math.min(50f, scale));
     }
     
     /** Set noise speed */
@@ -482,6 +494,16 @@ public class RenderConfig {
     /** Set travel speed (0-5) */
     public void setGodRaysTravelSpeed(float speed) {
         this.godRaysTravelSpeed = Math.max(0f, Math.min(5f, speed));
+    }
+    
+    /** Set travel particle count (1-10) */
+    public void setGodRaysTravelCount(float count) {
+        this.godRaysTravelCount = Math.max(1f, Math.min(10f, count));
+    }
+    
+    /** Set travel particle width (0.01-0.75) */
+    public void setGodRaysTravelWidth(float width) {
+        this.godRaysTravelWidth = Math.max(0.01f, Math.min(0.75f, width));
     }
     
     // =========================================================================
@@ -581,6 +603,12 @@ public class RenderConfig {
         if (json.has("god_rays_travel_speed")) {
             setGodRaysTravelSpeed(json.get("god_rays_travel_speed").getAsFloat());
         }
+        if (json.has("god_rays_travel_count")) {
+            setGodRaysTravelCount(json.get("god_rays_travel_count").getAsFloat());
+        }
+        if (json.has("god_rays_travel_width")) {
+            setGodRaysTravelWidth(json.get("god_rays_travel_width").getAsFloat());
+        }
         
         Logging.RENDER.topic("render_config")
             .kv("hdr", hdrEnabled)
@@ -634,6 +662,8 @@ public class RenderConfig {
         json.addProperty("god_rays_flicker_frequency", godRaysFlickerFrequency);
         json.addProperty("god_rays_travel_mode", godRaysTravelMode);
         json.addProperty("god_rays_travel_speed", godRaysTravelSpeed);
+        json.addProperty("god_rays_travel_count", godRaysTravelCount);
+        json.addProperty("god_rays_travel_width", godRaysTravelWidth);
     }
     
     /**
@@ -653,7 +683,7 @@ public class RenderConfig {
         godRaysEnergyMode = 0;      // Radiation
         godRaysColorMode = 0;       // Solid
         godRaysDistributionMode = 0; // Uniform
-        godRaysArrangementMode = 0;  // Point
+        godRaysArrangementMode = 1;  // Spherical (default)
         godRaysColor2R = 1.0f;
         godRaysColor2G = 0.9f;
         godRaysColor2B = 0.7f;

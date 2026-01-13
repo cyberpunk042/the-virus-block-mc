@@ -363,7 +363,7 @@ public class FieldVisualSubPanel extends BoundPanel {
                 // Decay slider (controls RANGE)
                 float decay = renderConfig.getGodRaysDecay();
                 widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
-                    "Reach", 0.94f, 0.99f, decay, "%.3f", 
+                    "Reach", 0.90f, 0.995f, decay, "%.3f", 
                     "Higher = longer rays (range control)",
                     v -> renderConfig.setGodRaysDecay(v)));
                 content.advanceBy(22);
@@ -372,7 +372,7 @@ public class FieldVisualSubPanel extends BoundPanel {
                 y = content.getCurrentY();
                 float exposure = renderConfig.getGodRaysExposure();
                 widgets.add(GuiWidgets.slider(x, y, halfW, 
-                    "Strength", 0.005f, 0.1f, exposure, "%.3f", 
+                    "Strength", 0.005f, 0.3f, exposure, "%.3f", 
                     "Higher = brighter rays (strength control)",
                     v -> renderConfig.setGodRaysExposure(v)));
                 
@@ -453,6 +453,70 @@ public class FieldVisualSubPanel extends BoundPanel {
                     }));
                 content.advanceBy(22);
                 
+                // Gradient controls (only when color mode is Gradient) - placed after Color dropdown
+                if (colorMode == 1) {
+                    y = content.getCurrentY();
+                    int fullW = halfW * 2 + GuiConstants.COMPACT_GAP;
+                    int colW = fullW / 4 - 2;
+                    float gradPower = renderConfig.getGodRaysGradientPower();
+                    float c2r = renderConfig.getGodRaysColor2R();
+                    float c2g = renderConfig.getGodRaysColor2G();
+                    float c2b = renderConfig.getGodRaysColor2B();
+                    
+                    // Grad Power + Color2 R/G/B on one row (4 equal columns)
+                    widgets.add(GuiWidgets.slider(x, y, colW, 
+                        "Power", 0.1f, 5f, gradPower, "%.1f", 
+                        "Gradient blend curve",
+                        v -> renderConfig.setGodRaysGradientPower(v)));
+                    widgets.add(GuiWidgets.slider(x + fullW / 4, y, colW, 
+                        "R", 0f, 2f, c2r, "%.1f", 
+                        "Outer color red",
+                        v -> renderConfig.setGodRaysColor2(v, renderConfig.getGodRaysColor2G(), renderConfig.getGodRaysColor2B())));
+                    widgets.add(GuiWidgets.slider(x + 2 * fullW / 4, y, colW, 
+                        "G", 0f, 2f, c2g, "%.1f", 
+                        "Outer color green",
+                        v -> renderConfig.setGodRaysColor2(renderConfig.getGodRaysColor2R(), v, renderConfig.getGodRaysColor2B())));
+                    widgets.add(GuiWidgets.slider(x + 3 * fullW / 4, y, colW, 
+                        "B", 0f, 2f, c2b, "%.1f", 
+                        "Outer color blue",
+                        v -> renderConfig.setGodRaysColor2(renderConfig.getGodRaysColor2R(), renderConfig.getGodRaysColor2G(), v)));
+                    content.advanceBy(22);
+                }
+                
+                // Distribution parameter controls (always visible, meaning varies by mode)
+                {
+                    y = content.getCurrentY();
+                    int fullW = halfW * 2 + GuiConstants.COMPACT_GAP;
+                    int colW = fullW / 3 - 2;
+                    
+                    float noiseScale = renderConfig.getGodRaysNoiseScale();
+                    // Contextual label based on mode
+                    String scaleLabel = switch (distMode) {
+                        case 0 -> "Wave Count";
+                        case 1 -> "Sharpness";
+                        case 2 -> "Noise Scale";
+                        case 3, 4 -> "Ray Count";
+                        default -> "Scale";
+                    };
+                    widgets.add(GuiWidgets.slider(x, y, colW, 
+                        scaleLabel, 0.5f, 50f, noiseScale, "%.1f", 
+                        "Distribution scale parameter",
+                        v -> renderConfig.setGodRaysNoiseScale(v)));
+                    
+                    float noiseSpeed = renderConfig.getGodRaysNoiseSpeed();
+                    widgets.add(GuiWidgets.slider(x + fullW / 3, y, colW, 
+                        "Speed", 0.1f, 5f, noiseSpeed, "%.2f", 
+                        "Animation speed",
+                        v -> renderConfig.setGodRaysNoiseSpeed(v)));
+                    
+                    float noiseIntensity = renderConfig.getGodRaysNoiseIntensity();
+                    widgets.add(GuiWidgets.slider(x + 2 * fullW / 3, y, colW, 
+                        "Intensity", 0f, 1f, noiseIntensity, "%.2f", 
+                        "Effect strength",
+                        v -> renderConfig.setGodRaysNoiseIntensity(v)));
+                    content.advanceBy(22);
+                }
+                
                 // Arrangement mode from RayArrangement enum
                 y = content.getCurrentY();
                 int arrangementMode = renderConfig.getGodRaysArrangementMode();
@@ -480,60 +544,7 @@ public class FieldVisualSubPanel extends BoundPanel {
                     }));
                 content.advanceBy(22);
                 
-                // Noise controls (only when distribution mode is Noise)
-                if (distMode == 2) {
-                    y = content.getCurrentY();
-                    float noiseScale = renderConfig.getGodRaysNoiseScale();
-                    widgets.add(GuiWidgets.slider(x, y, halfW, 
-                        "Noise Scale", 1f, 20f, noiseScale, "%.1f", 
-                        "Angular noise frequency",
-                        v -> renderConfig.setGodRaysNoiseScale(v)));
-                    
-                    float noiseIntensity = renderConfig.getGodRaysNoiseIntensity();
-                    widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
-                        "Intensity", 0f, 1f, noiseIntensity, "%.2f", 
-                        "Noise modulation strength",
-                        v -> renderConfig.setGodRaysNoiseIntensity(v)));
-                    content.advanceBy(22);
-                }
-                
-                // Gradient power (only when color mode is Gradient)
-                if (colorMode == 1) {
-                    y = content.getCurrentY();
-                    float gradPower = renderConfig.getGodRaysGradientPower();
-                    widgets.add(GuiWidgets.slider(x, y, halfW, 
-                        "Grad Power", 0.1f, 5f, gradPower, "%.2f", 
-                        "Gradient blend curve (1=linear)",
-                        v -> renderConfig.setGodRaysGradientPower(v)));
-                    content.advanceBy(22);
-                }
-                
-                // Secondary color (Color2) - only for Gradient mode (not Temperature)
-                if (colorMode == 1) {
-                    y = content.getCurrentY();
-                    float c2r = renderConfig.getGodRaysColor2R();
-                    float c2g = renderConfig.getGodRaysColor2G();
-                    float c2b = renderConfig.getGodRaysColor2B();
-                    
-                    // Color2 R slider
-                    widgets.add(GuiWidgets.slider(x, y, halfW / 3 - 2, 
-                        "R", 0f, 2f, c2r, "%.2f", 
-                        "Secondary color red",
-                        v -> renderConfig.setGodRaysColor2(v, renderConfig.getGodRaysColor2G(), renderConfig.getGodRaysColor2B())));
-                    
-                    // Color2 G slider
-                    widgets.add(GuiWidgets.slider(x + halfW / 3, y, halfW / 3 - 2, 
-                        "G", 0f, 2f, c2g, "%.2f", 
-                        "Secondary color green",
-                        v -> renderConfig.setGodRaysColor2(renderConfig.getGodRaysColor2R(), v, renderConfig.getGodRaysColor2B())));
-                    
-                    // Color2 B slider
-                    widgets.add(GuiWidgets.slider(x + 2 * halfW / 3, y, halfW / 3 - 2, 
-                        "B", 0f, 2f, c2b, "%.2f", 
-                        "Secondary color blue",
-                        v -> renderConfig.setGodRaysColor2(renderConfig.getGodRaysColor2R(), renderConfig.getGodRaysColor2G(), v)));
-                    content.advanceBy(22);
-                }
+
                 
                 // Curvature mode from RayCurvature enum
                 y = content.getCurrentY();
@@ -565,7 +576,7 @@ public class FieldVisualSubPanel extends BoundPanel {
                 // Curvature strength slider
                 float curvStrength = renderConfig.getGodRaysCurvatureStrength();
                 widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y, halfW, 
-                    "Strength", 0f, 2f, curvStrength, "%.2f", 
+                    "Strength", 0f, 5f, curvStrength, "%.2f", 
                     "How much to curve the rays",
                     v -> renderConfig.setGodRaysCurvatureStrength(v)));
                 content.advanceBy(22);
@@ -604,6 +615,17 @@ public class FieldVisualSubPanel extends BoundPanel {
                     "How strong the flicker effect is",
                     v -> renderConfig.setGodRaysFlickerIntensity(v)));
                 content.advanceBy(22);
+                
+                // Flicker frequency slider
+                {
+                    int yFreq = content.getCurrentY();
+                    float flickFreq = renderConfig.getGodRaysFlickerFrequency();
+                    widgets.add(GuiWidgets.slider(x, yFreq, halfW * 2 + GuiConstants.COMPACT_GAP, 
+                        "Flicker Frequency", 0.1f, 10f, flickFreq, "%.1f", 
+                        "How fast the flicker animates",
+                        v -> renderConfig.setGodRaysFlickerFrequency(v)));
+                    content.advanceBy(22);
+                }
                 
                 // Travel mode from EnergyTravel enum (using base modes only)
                 y = content.getCurrentY();
@@ -645,6 +667,23 @@ public class FieldVisualSubPanel extends BoundPanel {
                     "How fast energy travels along rays",
                     v -> renderConfig.setGodRaysTravelSpeed(v)));
                 content.advanceBy(22);
+                
+                // Travel count and width row
+                {
+                    int y2 = content.getCurrentY();
+                    float travCount = renderConfig.getGodRaysTravelCount();
+                    widgets.add(GuiWidgets.slider(x, y2, halfW, 
+                        "Count", 1f, 10f, travCount, "%.0f", 
+                        "Number of particles/waves",
+                        v -> renderConfig.setGodRaysTravelCount(v)));
+                    
+                    float travWidth = renderConfig.getGodRaysTravelWidth();
+                    widgets.add(GuiWidgets.slider(x + halfW + GuiConstants.COMPACT_GAP, y2, halfW, 
+                        "Width", 0.01f, 0.75f, travWidth, "%.2f", 
+                        "Width of each particle",
+                        v -> renderConfig.setGodRaysTravelWidth(v)));
+                    content.advanceBy(22);
+                }
             }
             content.advanceBy(22);
         }

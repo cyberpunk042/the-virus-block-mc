@@ -185,6 +185,8 @@ float accumulateGodRaysStyled(
     float flickerFrequency,
     float travelMode,
     float travelSpeed,
+    float travelCount,
+    float travelWidth,
     float time
 ) {
     // Apply arrangement mode (point source, ring, etc)
@@ -206,15 +208,15 @@ float accumulateGodRaysStyled(
     float marchLength = min(dist, L);
     vec2 step = rayDir * (marchLength / float(N));
     
-    // Apply angular weight for distribution
-    float angularWeight = getAngularWeight(pixelUV, effectiveLightUV, distributionMode, angularBias, time);
+    // Apply angular weight for distribution (all modes use scale/speed/intensity)
+    float angularWeight = getAngularWeight(pixelUV, effectiveLightUV, distributionMode, angularBias, noiseScale, noiseSpeed, noiseIntensity, time);
     
     // Apply arrangement weight (RADIAL restricts to horizontal band)
     float arrangementWeight = getArrangementWeight(pixelUV, effectiveLightUV, arrangementMode);
     
-    // Apply noise modulation if distribution mode is 2 (noise)
+    // Apply noise modulation ONLY for distribution mode 2 (Noise)
     float noiseWeight = 1.0;
-    if (distributionMode > 1.5) {
+    if (distributionMode > 1.5 && distributionMode < 2.5) {
         noiseWeight = getNoiseModulation(pixelUV, effectiveLightUV, time, noiseScale, noiseSpeed, noiseIntensity);
     }
     
@@ -247,10 +249,17 @@ float accumulateGodRaysStyled(
         float energyVis = getEnergyVisibility(t, time, energyMode);
         
         // Apply travel modulation (moving particles along ray)
-        float travelMod = getTravelModulation(t, time, travelMode, travelSpeed, rayRand);
+        float travelMod = getTravelModulation(t, time, travelMode, travelSpeed, travelCount, travelWidth, rayRand);
+        
+        // Per-sample noise grain (only for NOISE distribution mode)
+        float sampleNoise = 1.0;
+        if (distributionMode > 1.5 && distributionMode < 2.5) {
+            float grain = fract(sin(dot(uv * 1000.0, vec2(12.9898, 78.233)) + float(i)) * 43758.5453);
+            sampleNoise = 1.0 - noiseIntensity * 0.5 + grain * noiseIntensity;
+        }
         
         // Combine all per-sample modulations
-        illumination += occlusion * decay * energyVis * travelMod;
+        illumination += occlusion * decay * energyVis * travelMod * sampleNoise;
         
         // Exponential falloff
         decay *= decayFactor;

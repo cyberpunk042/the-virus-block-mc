@@ -31,7 +31,9 @@
  * @return Visibility multiplier (0-1)
  */
 float getEnergyVisibility(float t, float time, float energyMode) {
-    float phase = fract(time * 0.4); // Animation phase
+    // Smooth triangular wave for animation (avoids hard cuts from fract())
+    float rawPhase = time * 0.4;
+    float trianglePhase = abs(fract(rawPhase) * 2.0 - 1.0); // 0→1→0 smoothly
     
     if (energyMode < 0.5) {
         // Mode 0: NONE - uniform visibility, no effect
@@ -40,61 +42,65 @@ float getEnergyVisibility(float t, float time, float energyMode) {
     } else if (energyMode < 1.5) {
         // Mode 1: EMISSION - Light EXPLODES from center
         // Extremely bright at core (t=0), exponential falloff toward edges
-        float baseDensity = exp(-t * 3.0); // Strong exponential: 1.0 at core, ~0.05 at edge
-        // Animated pulses pushing OUTWARD
-        float pulsePos = phase; // 0->1 over time (moving outward)
-        float pulse = exp(-pow((t - pulsePos) * 4.0, 2.0)); // Gaussian pulse
+        float baseDensity = exp(-t * 3.0);
+        // Animated pulses pushing OUTWARD (smooth oscillation)
+        float pulsePos = trianglePhase;
+        float pulse = exp(-pow((t - pulsePos) * 4.0, 2.0));
         return baseDensity * 0.7 + pulse * 0.5;
         
     } else if (energyMode < 2.5) {
         // Mode 2: ABSORPTION - Light SUCKED into void
-        // Dark at center (t=0), bright at edges (t=1), inverse of emission
-        float baseDensity = 1.0 - exp(-t * 3.0); // Inverse exponential
-        // Animated pulses pulling INWARD
-        float pulsePos = 1.0 - phase; // 1->0 over time (moving inward)
+        float baseDensity = 1.0 - exp(-t * 3.0);
+        // Animated pulses pulling INWARD (smooth oscillation)
+        float pulsePos = 1.0 - trianglePhase;
         float pulse = exp(-pow((t - pulsePos) * 4.0, 2.0));
         return baseDensity * 0.7 + pulse * 0.5;
         
     } else if (energyMode < 3.5) {
         // Mode 3: REFLECTION - Light bouncing off invisible sphere
-        // Peak brightness at a surface radius, dark inside and outside
-        float surfaceRadius = 0.4; // Where the "surface" is
+        float surfaceRadius = 0.4;
         float surfaceDist = abs(t - surfaceRadius);
-        float baseDensity = exp(-surfaceDist * 6.0); // Sharp peak at surface
-        // Shimmer/ripple effect
+        float baseDensity = exp(-surfaceDist * 6.0);
         float ripple = sin(t * 20.0 - time * 5.0) * 0.3 + 0.7;
         return baseDensity * ripple;
         
     } else if (energyMode < 4.5) {
         // Mode 4: TRANSMISSION - Clean beam passing straight through
-        // Even density like a laser, minimal variation
-        float cleanBeam = 0.8 + sin(time * 0.5) * 0.1; // Very subtle pulse
+        float cleanBeam = 0.8 + sin(time * 0.5) * 0.1;
         return cleanBeam;
         
     } else if (energyMode < 5.5) {
         // Mode 5: SCATTERING - Chaotic dispersal
-        // Uneven, chaotic density that dances
         float noise1 = fract(sin(t * 50.0 + time * 3.0) * 43758.5453);
         float noise2 = fract(sin(t * 73.0 + time * 2.3) * 12345.6789);
-        float chaos = noise1 * noise2 * 1.5; // Very uneven
+        float chaos = noise1 * noise2 * 1.5;
         return 0.3 + chaos * 0.7;
         
     } else if (energyMode < 6.5) {
-        // Mode 6: OSCILLATION - Breathing in/out
-        // Alternates between emission-like and absorption-like
+        // Mode 6: OSCILLATION - Rays pulse outward/inward
         float breathPhase = sin(time * 1.5) * 0.5 + 0.5; // 0-1 sinusoidal
-        float emissionDensity = exp(-t * 3.0);
-        float absorptionDensity = 1.0 - exp(-t * 3.0);
-        return mix(absorptionDensity, emissionDensity, breathPhase);
+        
+        // Cutoff point oscillates between 0.3 and 1.0
+        float minReach = 0.3;
+        float maxReach = 1.0;
+        float currentReach = minReach + breathPhase * (maxReach - minReach);
+        
+        // Proportional falloff (40% of reach = smooth gradient)
+        float falloffStart = currentReach * 0.4;
+        float visibility = 1.0 - smoothstep(falloffStart, currentReach, t);
+        return visibility * 0.9 + 0.1;
         
     } else {
-        // Mode 7: RESONANCE - Grows then decays asymmetrically
-        // Field grows to maximum then shrinks back
+        // Mode 7: RESONANCE - Grows then decays asymmetrically (smoother)
         float growPhase = fract(time * 0.3);
-        float asymmetric = (growPhase < 0.7) ? growPhase / 0.7 : (1.0 - growPhase) / 0.3;
-        float reach = asymmetric; // 0->1 (slow grow), 1->0 (fast decay)
-        // Everything inside 'reach' is visible, sharp cutoff
-        float visibility = smoothstep(reach + 0.1, reach - 0.1, t);
+        // Use smoothstep for smoother asymmetric curve
+        float asymmetric;
+        if (growPhase < 0.7) {
+            asymmetric = smoothstep(0.0, 0.7, growPhase);
+        } else {
+            asymmetric = 1.0 - smoothstep(0.7, 1.0, growPhase);
+        }
+        float visibility = smoothstep(asymmetric + 0.15, asymmetric - 0.05, t);
         return visibility * 0.9 + 0.1;
     }
 }
@@ -228,41 +234,75 @@ vec2 getGodRayDirection(vec2 pixelUV, vec2 lightUV, float energyMode, float curv
  * @param lightUV Light source UV
  * @param distributionMode 0=uniform, 1=weighted, 2=noise, 3=random, 4=stochastic
  * @param angularBias Bias direction (-1=vertical, 0=none, 1=horizontal)
+ * @param noiseScale For stochastic: number of rays around 360°
+ * @param noiseSpeed For stochastic: animation speed
+ * @param time Animation time
  * @return Weight multiplier [0-1]
  */
-float getAngularWeight(vec2 pixelUV, vec2 lightUV, float distributionMode, float angularBias, float time) {
-    if (distributionMode < 0.5) {
-        // Mode 0: Uniform - subtle breathing animation
-        float breath = sin(time * 1.5) * 0.1 + 1.0;
-        return breath;
-    }
-    
+float getAngularWeight(vec2 pixelUV, vec2 lightUV, float distributionMode, float angularBias, float noiseScale, float noiseSpeed, float noiseIntensity, float time) {
     vec2 dir = normalize(pixelUV - lightUV);
     float angle = atan(dir.y, dir.x);
     
+    // Proper angle normalization for quantization
+    float normalizedAngle = (angle + 3.14159) / 6.28318; // 0 to 1
+    
+    if (distributionMode < 0.5) {
+        // Mode 0: UNIFORM - breathing animation with wave patterns
+        // Scale: how many breathing waves around the circle
+        // Speed: breathing animation speed  
+        // Intensity: breathing amplitude (0=flat, 1=±30%)
+        float waveCount = max(1.0, noiseScale);
+        float breath = sin(time * noiseSpeed + angle * waveCount) * noiseIntensity * 0.3;
+        return 1.0 + breath;
+    }
+    
     if (distributionMode < 1.5) {
-        // Mode 1: Weighted - bias rotates over time for sweeping effect
-        float rotatingBias = angularBias + sin(time * 0.5) * 0.5;
+        // Mode 1: WEIGHTED - directional bias with animation
+        // Scale: weight sharpness (power exponent)
+        // Speed: rotation animation speed
+        // Intensity: contrast (0=flat, 1=high contrast)
+        float rotatingBias = angularBias + sin(time * noiseSpeed) * 0.5;
         float vertWeight = abs(dir.y);
         float horizWeight = abs(dir.x);
         float weight = mix(vertWeight, horizWeight, rotatingBias * 0.5 + 0.5);
-        float pulse = sin(time * 2.0 + angle) * 0.15 + 1.0;
-        return (0.3 + weight * 0.7) * pulse;
+        
+        // Apply sharpness (scale as power exponent, clamped)
+        weight = pow(weight, max(0.5, noiseScale * 0.3));
+        
+        // Apply intensity (contrast control)
+        float minBright = 1.0 - noiseIntensity * 0.7;
+        float pulse = sin(time * noiseSpeed * 2.0 + angle) * 0.1 + 1.0;
+        return (minBright + weight * noiseIntensity * 0.7) * pulse;
     } else if (distributionMode < 2.5) {
         // Mode 2: Noise - handled separately in getNoiseModulation
         return 1.0;
     } else if (distributionMode < 3.5) {
-        // Mode 3: RANDOM - randomized start/length per ray (from RayDistribution)
-        float rayRand = fract(sin(angle * 12.9898) * 43758.5453);
-        float randWeight = rayRand * 0.6 + 0.4; // 0.4 to 1.0
-        return randWeight;
+        // Mode 3: RANDOM - different brightness per ray with subtle shimmer
+        float rayCount = max(4.0, noiseScale * 2.0);
+        float bandIndex = floor(normalizedAngle * rayCount);
+        float rayRand = fract(sin(bandIndex * 78.233 + 12.9898) * 43758.5453);
+        
+        // Subtle shimmer animation (speed controls shimmer rate)
+        float shimmer = sin(time * noiseSpeed + bandIndex * 2.0) * 0.05;
+        
+        // Intensity controls brightness range: low intensity = 0.8-1.0, high = 0.3-1.0
+        float minBright = 1.0 - noiseIntensity * 0.7;
+        return minBright + rayRand * noiseIntensity * 0.7 + shimmer;
     } else {
-        // Mode 4: STOCHASTIC - heavily randomized with variable density
-        float rayRand1 = fract(sin(angle * 12.9898) * 43758.5453);
-        float rayRand2 = fract(sin(angle * 78.233 + time) * 43758.5453);
-        // Some rays may be very dim, some very bright
-        float stochastic = rayRand1 * rayRand2 * 1.5;
-        return clamp(stochastic, 0.1, 1.0);
+        // Mode 4: STOCHASTIC - some rays visible, some hidden (flickering)
+        float rayCount = max(4.0, noiseScale * 2.0);
+        float bandIndex = floor(normalizedAngle * rayCount);
+        float rayRand = fract(sin(bandIndex * 12.9898 + 78.233) * 43758.5453);
+        
+        // Smooth animation instead of chaotic hash
+        float flicker = sin(time * noiseSpeed + bandIndex * 3.7) * 0.5 + 0.5; // 0-1 smooth
+        
+        // Intensity controls on/off threshold: 0.5 = 50/50, 0.2 = 80% on, 0.8 = 20% on
+        float threshold = noiseIntensity;
+        
+        // Binary-ish: some rays on (0.7-1.0), some off (0.1-0.3)
+        float visibility = rayRand > threshold ? 0.7 + flicker * 0.3 : 0.1 + flicker * 0.2;
+        return visibility;
     }
 }
 
@@ -281,25 +321,39 @@ float getIntensityBreathing(float time, float speed, float intensity) {
 }
 
 /**
- * Get noise modulation for organic ray distribution.
+ * Get noise modulation for angular distribution.
  *
  * @param pixelUV Current pixel UV
  * @param lightUV Light source UV
  * @param time Animation time
- * @param scale Noise frequency
- * @param speed Animation speed
+ * @param scale Number of noise bands around the circle (1-50)
+ * @param speed Animation speed (how fast noise shifts)
  * @param intensity Modulation strength 0-1
- * @return Modulation multiplier (1.0 - intensity) to 1.0
+ * @return Modulation multiplier (1-intensity) to 1.0
  */
 float getNoiseModulation(vec2 pixelUV, vec2 lightUV, float time, float scale, float speed, float intensity) {
     vec2 dir = pixelUV - lightUV;
-    float angle = atan(dir.y, dir.x);
+    float angle = atan(dir.y, dir.x); // -PI to PI
     
-    // Simple hash-based noise
-    float n = fract(sin(angle * scale + time * speed) * 43758.5453);
+    // Normalize angle to 0-1 range
+    float normalizedAngle = (angle + 3.14159) / 6.28318; // 0 to 1
+    
+    // Animate the angle for smooth rotation effect
+    float shiftedAngle = normalizedAngle + time * speed * 0.05;
+    
+    // Scale creates discrete bands around the circle
+    // Higher scale = more bands = higher frequency noise
+    float bandedAngle = floor(shiftedAngle * scale) / scale;
+    
+    // Generate noise value for this band
+    float n = fract(sin(bandedAngle * 78.233 + 12.9898) * 43758.5453);
+    
+    // Smooth interpolation within each band for less harsh edges
+    float bandFract = fract(normalizedAngle * scale);
+    float smoothN = n * (1.0 - bandFract * 0.3); // Slight gradient within band
     
     // Map to range: (1-intensity) to 1.0
-    return 1.0 - intensity + n * intensity;
+    return 1.0 - intensity + smoothN * intensity;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -399,15 +453,15 @@ vec2 getArrangedLightUV(vec2 baseLightUV, vec2 pixelUV, float screenRadius, floa
  */
 float getArrangementWeight(vec2 pixelUV, vec2 lightUV, float arrangementMode) {
     if (arrangementMode < 0.5) {
-        // Mode 0: RADIAL - restrict to XZ plane (horizontal band)
-        vec2 dir = pixelUV - lightUV;
-        float len = length(dir);
-        if (len < 0.001) return 1.0;
-        dir /= len;
+        // Mode 0: RADIAL - horizontal disk around light (XZ plane projection)
+        // Weight based on vertical distance from light's horizontal plane
+        float verticalDist = abs(pixelUV.y - lightUV.y);
         
-        // Weight based on how horizontal the ray is (|y| small = horizontal)
-        float horizontalness = 1.0 - abs(dir.y);
-        return horizontalness * horizontalness; // Squared for sharper falloff
+        // Pixels in horizontal band around light get full weight
+        // Falloff for pixels above/below
+        float bandWidth = 0.3; // Half-width of the horizontal band
+        float weight = 1.0 - smoothstep(0.0, bandWidth, verticalDist);
+        return max(0.15, weight); // Minimum 15% visibility outside band
     }
     
     // All other modes: full weight
@@ -489,18 +543,20 @@ float getFlickerModulation(vec2 pixelUV, vec2 lightUV, float time, float flicker
  * @param time Animation time
  * @param travelMode EnergyTravel enum (0-5 for base modes)
  * @param speed Animation speed multiplier
+ * @param particleCount Number of particles/waves (1-10)
+ * @param particleWidth Width of each particle (0.05-0.5)
  * @param rayRand Per-ray random value (0-1)
  * @return Modulation factor (0-1, multiply with sample weight)
  */
-float getTravelModulation(float t, float time, float travelMode, float speed, float rayRand) {
+float getTravelModulation(float t, float time, float travelMode, float speed, float particleCount, float particleWidth, float rayRand) {
     if (travelMode < 0.5) {
         // Mode 0: NONE - no travel animation
         return 1.0;
     }
     
     float phase = fract(time * speed * 0.3);
-    int count = 3;  // Number of particles/waves
-    float width = 0.15;
+    int count = int(clamp(particleCount, 1.0, 10.0));
+    float width = clamp(particleWidth, 0.05, 0.5);
     
     if (travelMode < 1.5) {
         // Mode 1: CHASE - discrete particles traveling
@@ -526,40 +582,60 @@ float getTravelModulation(float t, float time, float travelMode, float speed, fl
         
     } else if (travelMode < 3.5) {
         // Mode 3: COMET - bright head with fading tail
-        // Matches Java FlowTravelStage.COMET
+        // Head travels continuously in one direction (0→1, wraps)
         float headPos = phase;
-        float tailLength = max(0.1, width * 2.0);
+        float tailLength = width * 3.0; // Tail length based on width param
         
-        // Distance behind head (wrapping)
-        float distBehind;
-        if (t > headPos) {
-            distBehind = (1.0 - t) + headPos; // Wrapped
-        } else {
-            distBehind = headPos - t;
+        // Calculate distance from head, with wrap-around
+        float distFromHead = t - headPos;
+        
+        // Handle wrap-around: if head is near 0, tail wraps from 1.0
+        // Check both direct distance and wrapped distance
+        float wrappedDist = distFromHead;
+        if (distFromHead > 0.5) wrappedDist = distFromHead - 1.0;  // t ahead, wrap back
+        if (distFromHead < -0.5) wrappedDist = distFromHead + 1.0; // t behind, wrap forward
+        
+        // Head region (bright) - use wrapped distance
+        if (abs(wrappedDist) < 0.05) {
+            return 1.0;
         }
         
-        if (distBehind >= 0.0 && distBehind <= tailLength) {
-            float tailAlpha = 1.0 - (distBehind / tailLength);
-            return tailAlpha * tailAlpha; // Quadratic falloff
+        // Tail region (behind head, fading) - use wrapped distance
+        if (wrappedDist < 0.0 && wrappedDist > -tailLength) {
+            float tailDist = -wrappedDist;
+            float tailAlpha = 1.0 - (tailDist / tailLength);
+            return tailAlpha * tailAlpha * 0.8 + 0.1;
         }
-        return 0.0;
+        
+        // Ahead of head or far behind - dim
+        return 0.1;
         
     } else if (travelMode < 4.5) {
-        // Mode 4: SPARK - random sparks
-        // Matches Java FlowTravelStage.SPARK logic
-        float maxAlpha = 0.0;
+        // Mode 4: SPARK - random sparks along ray
+        // Use count parameter for number of sparks
+        float maxAlpha = 0.15; // Base visibility
+        
         for (int i = 0; i < count; i++) {
-            // Hash for deterministic randomness (matching Java hash function)
-            float h1 = float(i) * 374761.393 + floor(phase * 10.0) * 668265.263;
-            float h2 = float(i + 1000) * 374761.393 + floor(phase * 3.0) * 668265.263;
-            float sparkPhase = fract(sin(h1) * 0.5 + 0.5);
-            float sparkPos = fract(sin(h2) * 0.5 + 0.5);
+            // Each spark has a position based on index
+            float sparkBasePos = float(i) / float(count);
             
-            if (sparkPhase > 0.5) {
+            // Spark flickers on/off over time
+            float flickerSeed = sparkBasePos * 12.9898 + phase * 5.0;
+            float flicker = fract(sin(flickerSeed) * 43758.5453);
+            
+            // Only show spark when flicker is high
+            if (flicker > 0.4) {
+                // Spark position oscillates slightly
+                float sparkPos = sparkBasePos + sin(phase * 6.28 + sparkBasePos * 10.0) * 0.1;
+                sparkPos = fract(sparkPos);
+                
                 float dist = abs(t - sparkPos);
+                if (dist > 0.5) dist = 1.0 - dist;
+                
                 if (dist < width) {
-                    float spark = 1.0 - (dist / width);
-                    maxAlpha = max(maxAlpha, spark * spark);
+                    float brightness = 1.0 - (dist / width);
+                    brightness = brightness * brightness * flicker;
+                    maxAlpha = max(maxAlpha, brightness);
                 }
             }
         }

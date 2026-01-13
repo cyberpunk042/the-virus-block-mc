@@ -1376,8 +1376,8 @@ public final class FieldVisualTypes {
             return new GodRayTravelParams(
                 config.getGodRaysTravelMode(),
                 config.getGodRaysTravelSpeed(),
-                3f,  // count not yet in RenderConfig
-                0.2f // width not yet in RenderConfig
+                config.getGodRaysTravelCount(),
+                config.getGodRaysTravelWidth()
             );
         }
     }
