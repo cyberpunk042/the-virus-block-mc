@@ -77,16 +77,21 @@ float getEnergyVisibility(float t, float time, float energyMode) {
         return 0.3 + chaos * 0.7;
         
     } else if (energyMode < 6.5) {
-        // Mode 6: OSCILLATION - Rays breathe in intensity, no moving edge
-        float breathPhase = sin(time * 1.5) * 0.5 + 0.5; // 0-1
+        // Mode 6: OSCILLATION - Standing wave pattern (like vibrating string)
+        float phase = time * 1.5;
         
-        // Fixed smooth falloff from center to edge
-        float baseFalloff = 1.0 - smoothstep(0.0, 1.0, t);
+        // Standing wave = spatial pattern × oscillating amplitude
+        // Creates nodes that stay fixed while amplitude pulses
+        float spatialPattern = sin(t * 6.28 * 2.0);  // ~2 wavelengths along ray
+        float temporalOscillation = sin(phase);       // Amplitude oscillates
+        float standingWave = spatialPattern * temporalOscillation;
         
-        // Intensity oscillates
-        float intensity = 0.4 + breathPhase * 0.6; // 0.4 to 1.0
+        // Convert to visibility (ensure always positive, with base level)
+        float visibility = abs(standingWave) * 0.6 + 0.3;
         
-        return baseFalloff * intensity * 0.9 + 0.1;
+        // Add slight falloff toward edge for natural look
+        float edgeFade = 1.0 - smoothstep(0.7, 1.0, t);
+        return visibility * edgeFade * 0.9 + 0.1;
         
     } else {
         // Mode 7: RESONANCE - Grows then decays asymmetrically (smoother)
@@ -208,9 +213,8 @@ vec2 getGodRayDirection(vec2 pixelUV, vec2 lightUV, float energyMode, float curv
         float dancingAngle = (randBase - 0.5) * 0.35 + sin(time * 1.8 + randBase * 10.0) * 0.08;
         baseDir = normalize(rotateVec2(outward, dancingAngle));
     } else if (energyMode < 6.5) {
-        // Mode 6: OSCILLATION - smooth blend between in and out (NO HARD CUT)
-        float blend = sin(time * 1.5) * 0.5 + 0.5; // 0 to 1 smoothly
-        baseDir = normalize(mix(inward, outward, blend));
+        // Mode 6: OSCILLATION - always outward, standing wave handles the visual
+        baseDir = outward;
     } else {
         // Mode 7: RESONANCE - direction stays outward, intensity in visibility
         float pulse = sin(time * 0.8) * 0.05;

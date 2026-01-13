@@ -142,9 +142,10 @@ void main() {
     // Get animated time from FrameDataUBO (accumulated seconds since game start)
     float time = FrameTimeUBO.x * AnimSpeed;
     
-    // For inward-marching modes (ABSORPTION=2, OSCILLATION=6), check if pixel is inside orb
+    // For inward-marching modes (ABSORPTION=2), check if pixel is inside orb
     // using proper ray-sphere intersection (same math as field_visual)
-    bool isInwardMode = (energyMode > 1.5 && energyMode < 2.5) || (energyMode > 5.5 && energyMode < 6.5);
+    // Note: OSCILLATION (6) now uses outward direction, so not included here
+    bool isInwardMode = (energyMode > 1.5 && energyMode < 2.5);
     if (isInwardMode) {
         // Build camera data for ray generation (use same method as field_visual)
         vec3 camPos = CameraPositionUBO.xyz;
