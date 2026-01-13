@@ -148,8 +148,17 @@ void main() {
     // Smooth blend based on parallelFactor (0 = front, 1 = back)
     vec2 lightUV = mix(frontLightUV, backLightUV, parallelFactor);
     
-    // Clamp lightUV to reasonable bounds to avoid numerical issues
-    lightUV = clamp(lightUV, vec2(-3.0), vec2(4.0));
+    // MAGNITUDE CLAMP - preserves direction!
+    // Old clamp(x,y) independently forces 45° direction when both max out
+    // This clamps only the distance from center, keeping direction consistent
+    vec2 center = vec2(0.5, 0.5);
+    vec2 offset = lightUV - center;
+    float mag = length(offset);
+    float maxMag = 5.0;
+    if (mag > maxMag) {
+        offset = normalize(offset) * maxMag;
+        lightUV = center + offset;
+    }
     
     // Get god ray config from UBO
     int samples = int(GodRaySamples);
@@ -270,8 +279,19 @@ void main() {
         parallelDir
     );
     
-    // Apply angle-based intensity for 360° coverage fade
-    illumination *= angleIntensity;
+    // ═══════════════════════════════════════════════════════════════════════════
+    // DISTANCE-BASED INTENSITY FADE
+    // ═══════════════════════════════════════════════════════════════════════════
+    // God rays fade smoothly as the orb gets farther from the player.
+    // Uses DistortionRadius as the fade control (higher = visible from farther)
+    // ═══════════════════════════════════════════════════════════════════════════
+    
+    float fadeStartDist = DistortionRadius * 1.0;   // Full intensity within this range
+    float fadeEndDist = DistortionRadius * 3.0;    // Zero intensity beyond this
+    float distanceIntensity = 1.0 - smoothstep(fadeStartDist, fadeEndDist, orbDistance);
+    
+    // Apply both angle-based and distance-based fades
+    illumination *= angleIntensity * distanceIntensity;
     
     // Output monochrome illumination (HDR-safe, may exceed 1.0)
     // Color tinting happens at composite stage

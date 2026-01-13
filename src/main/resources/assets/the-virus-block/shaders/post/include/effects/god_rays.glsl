@@ -201,23 +201,12 @@ float accumulateGodRaysStyled(
     vec2 effectiveLightUV = getArrangedLightUV(lightUV, pixelUV, 0.0, arrangementMode);
     
     // ═══════════════════════════════════════════════════════════════════════════
-    // DISTANCE-BASED RAY DIRECTION BLENDING
-    // ═══════════════════════════════════════════════════════════════════════════
-    // 
-    // Blend between:
-    //   - Radial rays (converging toward lightUV) - close sources
-    //   - Parallel rays (all pointing in parallelDir) - far sources
-    //
-    // This is physically accurate: distant light sources produce parallel rays
+    // RAY DIRECTION CALCULATION
     // ═══════════════════════════════════════════════════════════════════════════
     
-    // Radial direction: toward the projected light position (current behavior)
+    // Calculate distance to light for orb masking
     vec2 toLight = effectiveLightUV - pixelUV;
     float dist = length(toLight);
-    vec2 radialDir = (dist > 0.001) ? normalize(toLight) : parallelDir;
-    
-    // Blend radial and parallel based on distance factor
-    vec2 blendedDir = normalize(mix(radialDir, parallelDir, parallelFactor));
     
     // Get ray direction based on energy mode + curvature
     vec2 rayDir = getGodRayDirection(pixelUV, effectiveLightUV, energyMode, curvatureMode, curvatureStrength, time);
