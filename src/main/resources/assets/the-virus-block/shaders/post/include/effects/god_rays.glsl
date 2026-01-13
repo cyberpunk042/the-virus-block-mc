@@ -219,13 +219,8 @@ float accumulateGodRaysStyled(
     // Blend radial and parallel based on distance factor
     vec2 blendedDir = normalize(mix(radialDir, parallelDir, parallelFactor));
     
-    // Get ray direction based on energy mode + curvature (uses blended direction)
-    // Note: For extreme parallelFactor, the energy mode direction modifiers become
-    // less important since rays are all pointing the same way anyway
+    // Get ray direction based on energy mode + curvature
     vec2 rayDir = getGodRayDirection(pixelUV, effectiveLightUV, energyMode, curvatureMode, curvatureStrength, time);
-    
-    // Blend the styled ray direction with pure parallel direction
-    rayDir = normalize(mix(rayDir, blendedDir, parallelFactor * 0.5));
     
     // At light center: check if inside orb first
     if (dist < 0.001) {
