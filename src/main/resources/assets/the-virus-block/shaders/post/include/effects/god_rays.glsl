@@ -239,12 +239,15 @@ float accumulateGodRaysStyled(
     // Apply flicker modulation (affects whole ray)
     float flickerMod = getFlickerModulation(pixelUV, effectiveLightUV, time, flickerMode, flickerIntensity, flickerFrequency);
     
-    // Per-ray random for travel variation
+    // Per-ray random for travel variation and jittering
     float rayRand = fract(sin(dot(pixelUV, vec2(12.9898, 78.233))) * 43758.5453);
     
     float illumination = 0.0;
     float decay = 1.0;
-    vec2 uv = pixelUV;
+    
+    // Jitter starting position by fractional step to break up ray march banding
+    // This smooths out visible aliasing from discrete sample positions
+    vec2 uv = pixelUV + step * rayRand;
     
     for (int i = 0; i < N; i++) {
         uv += step;
