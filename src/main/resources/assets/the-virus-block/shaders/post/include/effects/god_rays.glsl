@@ -170,7 +170,8 @@ float accumulateGodRaysStyled(
     float L,
     float decayFactor,
     float exposure,
-    float screenRadius,
+    float orbRadiusX,      // Orb radius in UV space (X direction, aspect-corrected)
+    float orbRadiusY,      // Orb radius in UV space (Y direction)
     float energyMode,
     float distributionMode,
     float arrangementMode,
@@ -190,7 +191,7 @@ float accumulateGodRaysStyled(
     float time
 ) {
     // Apply arrangement mode (point source, ring, etc)
-    vec2 effectiveLightUV = getArrangedLightUV(lightUV, pixelUV, screenRadius, arrangementMode);
+    vec2 effectiveLightUV = getArrangedLightUV(lightUV, pixelUV, 0.0, arrangementMode);
     
     // Get ray direction based on energy mode + curvature
     vec2 rayDir = getGodRayDirection(pixelUV, effectiveLightUV, energyMode, curvatureMode, curvatureStrength, time);
@@ -236,6 +237,16 @@ float accumulateGodRaysStyled(
         // Exit if stepped outside viewport
         if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
             break;
+        }
+        
+        // Skip samples inside the orb (ellipse check for aspect ratio)
+        if (orbRadiusX > 0.0 && orbRadiusY > 0.0) {
+            vec2 delta = uv - effectiveLightUV;
+            float ellipseCheck = (delta.x * delta.x) / (orbRadiusX * orbRadiusX)
+                               + (delta.y * delta.y) / (orbRadiusY * orbRadiusY);
+            if (ellipseCheck < 1.0) {
+                continue;  // Inside orb, skip this sample
+            }
         }
         
         // Normalized position along ray (0=at light, 1=at pixel)

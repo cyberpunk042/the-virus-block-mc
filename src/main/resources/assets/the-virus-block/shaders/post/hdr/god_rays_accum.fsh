@@ -98,13 +98,29 @@ void main() {
     float noiseIntensity = GodRayNoiseIntensity;
     float angularBias = GodRayAngularBias;
     
-    // Calculate screen radius for ring arrangement mode
-    // Project orb radius to screen space (approximate)
-    float screenRadius = 0.0;
-    if (arrangementMode > 0.5 && zDist > 0.0) {
+    // Calculate orb radius in UV space (ellipse due to aspect ratio)
+    // Must account for effect type scaling and CoreSize
+    float orbRadiusX = 0.0;
+    float orbRadiusY = 0.0;
+    if (zDist > 0.0) {
+        // Get visual radius: base Radius * effect scaling * CoreSize
+        float visualRadius = Radius;
+        
+        // V6 uses 10x scale (Version = 6.0), V7 uses 1x (Version = 7.0)
+        if (Version > 5.5 && Version < 6.5) {
+            visualRadius *= 10.0;
+        }
+        
+        // Apply CoreSize multiplier
+        visualRadius *= CoreSize;
+        
         float tanHalfFov = tan(fov * 0.5);
-        screenRadius = (Radius / zDist) / (tanHalfFov * 2.0);
+        // Y radius: project to NDC then to UV (0-1 range)
+        orbRadiusY = (visualRadius / zDist) / tanHalfFov * 0.5;
+        // X radius: same but divide by aspect ratio
+        orbRadiusX = orbRadiusY / aspect;
     }
+    
     // Get curvature params from UBO (Slot 55)
     float curvatureMode = GodRayCurvatureMode;
     float curvatureStrength = GodRayCurvatureStrength;
@@ -132,7 +148,8 @@ void main() {
         GOD_RAYS_DEFAULT_MAX_LENGTH,
         decay,
         exposure,
-        screenRadius,
+        orbRadiusX,
+        orbRadiusY,
         energyMode,
         distributionMode,
         arrangementMode,
