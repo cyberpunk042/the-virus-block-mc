@@ -28,6 +28,9 @@ uniform sampler2D OcclusionSampler;
 // Also provides: texCoord, fragColor, samplers
 #include "../include/core/field_visual_base.glsl"
 
+// Ray-sphere intersection for inward mode masking
+#include "../include/sdf/ray_sphere.glsl"
+
 // God rays accumulator
 #include "../include/effects/god_rays.glsl"
 
@@ -138,6 +141,36 @@ void main() {
     
     // Get animated time from FrameDataUBO (accumulated seconds since game start)
     float time = FrameTimeUBO.x * AnimSpeed;
+    
+    // For inward-marching modes (ABSORPTION=2, OSCILLATION=6), check if pixel is inside orb
+    // using proper ray-sphere intersection (same math as field_visual)
+    bool isInwardMode = (energyMode > 1.5 && energyMode < 2.5) || (energyMode > 5.5 && energyMode < 6.5);
+    if (isInwardMode) {
+        // Build camera data for ray generation (use same method as field_visual)
+        vec3 camPos = CameraPositionUBO.xyz;
+        float near = CameraClipUBO.x;
+        float far = CameraClipUBO.y;
+        CameraData cam = buildCameraData(camPos, forward, fov, aspect, near, far);
+        
+        // Generate ray for this pixel
+        Ray pixelRay = getRayFromBasis(texCoord, cam);
+        
+        // Calculate world-space sphere center and radius
+        vec3 sphereCenter = camPos + toOrb;
+        float visualRadius = Radius;
+        if (Version > 5.5 && Version < 6.5) {
+            visualRadius *= 10.0;  // V6 uses 10x scale
+        }
+        visualRadius *= CoreSize;
+        
+        // Check if ray hits sphere
+        float hitDist = raySphereIntersectSimple(pixelRay.origin, pixelRay.direction, sphereCenter, visualRadius);
+        if (hitDist >= 0.0) {
+            // Pixel's ray hits the sphere - no god rays for inward modes
+            fragColor = vec4(0.0, 0.0, 0.0, 1.0);
+            return;
+        }
+    }
     
     // Accumulate god rays with full style support
     float illumination = accumulateGodRaysStyled(
