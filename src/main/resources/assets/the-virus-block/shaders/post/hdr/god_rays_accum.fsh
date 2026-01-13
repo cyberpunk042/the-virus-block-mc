@@ -69,31 +69,51 @@ void main() {
     float yProj = dot(toOrb, up);
     
     // ═══════════════════════════════════════════════════════════════════════════
-    // PARALLELISM CALCULATION
+    // HEMISPHERE-BASED 360° MODEL
+    // ═══════════════════════════════════════════════════════════════════════════
+    //
+    // FRONT HEMISPHERE (0° - 90°): Pure radial rays, NO parallelism
+    //   - Rays converge toward the light's screen position
+    //   - This is the original god ray behavior, preserved exactly
+    //
+    // BACK HEMISPHERE (90° - 180°): Parallel rays from edge
+    //   - When light is behind camera, rays can't converge to a visible point
+    //   - Instead, rays come from the screen edge in the light's direction
+    //
+    // TRANSITION: Smooth crossfade at the 90° boundary
     // ═══════════════════════════════════════════════════════════════════════════
     
     // World-space distance to orb (always positive)
     float orbDistance = length(toOrb);
     
-    // Parallelism factor: 0 = full convergence (close), 1 = parallel rays (far)
-    // Uses inverse-distance falloff: at PARALLEL_REFERENCE_DIST, factor = 0.5
-    // Tune this value based on your world scale (in blocks/meters)
-    const float PARALLEL_REFERENCE_DIST = 20.0;  // Distance where rays are 50% parallel
-    float parallelFactor = orbDistance / (orbDistance + PARALLEL_REFERENCE_DIST);
+    // Angle factor: +1 = directly in front, 0 = 90° to side, -1 = directly behind
+    vec3 orbDirWorld = (orbDistance > 0.001) ? normalize(toOrb) : forward;
+    float angleFactor = dot(orbDirWorld, forward);
     
-    // 2D direction toward orb (works for ALL angles including behind camera)
-    // This is the screen-space projection of the orb direction
+    // 2D direction toward orb (for back hemisphere parallel rays)
     vec2 orbDir2D = vec2(xProj, yProj);
     float orbDir2DLen = length(orbDir2D);
     vec2 parallelDir = (orbDir2DLen > 0.001) ? normalize(orbDir2D) : vec2(0.0, 1.0);
     
     // ═══════════════════════════════════════════════════════════════════════════
-    // ANGLE-BASED INTENSITY (for behind-camera fade)
+    // PARALLELISM FACTOR: Based purely on hemisphere, NOT distance
+    // ═══════════════════════════════════════════════════════════════════════════
+    //
+    // angleFactor > 0 (front hemisphere):  parallelFactor = 0 (pure radial)
+    // angleFactor < 0 (back hemisphere):   parallelFactor = 1 (parallel)
+    // Smooth transition around 90° (angleFactor near 0)
+    //
+    // smoothstep creates the "curved" transition you asked for
     // ═══════════════════════════════════════════════════════════════════════════
     
-    // Angle factor: +1 = directly in front, 0 = 90° to side, -1 = directly behind
-    vec3 orbDirWorld = (orbDistance > 0.001) ? normalize(toOrb) : forward;
-    float angleFactor = dot(orbDirWorld, forward);
+    float parallelFactor = smoothstep(0.2, -0.2, angleFactor);
+    // At angleFactor = 0.2 (~78°): parallelFactor = 0 (still radial)
+    // At angleFactor = 0.0 (90°):  parallelFactor = 0.5 (halfway)
+    // At angleFactor = -0.2 (~101°): parallelFactor = 1.0 (full parallel)
+    
+    // ═══════════════════════════════════════════════════════════════════════════
+    // ANGLE-BASED INTENSITY (for behind-camera fade)
+    // ═══════════════════════════════════════════════════════════════════════════
     
     // Global intensity based on angle:
     // - Front (angleFactor = 1.0): full intensity
@@ -104,26 +124,26 @@ void main() {
     angleIntensity = pow(angleIntensity, 0.7);        // Smooth the curve
     
     // ═══════════════════════════════════════════════════════════════════════════
-    // LIGHT UV PROJECTION (with 360° support)
+    // LIGHT UV PROJECTION
     // ═══════════════════════════════════════════════════════════════════════════
     
     vec2 lightUV = vec2(0.5, 0.5);
     float tanHalfFov = tan(fov * 0.5);
     
     if (zDist > 0.001) {
-        // FRONT: Standard perspective projection
+        // FRONT HEMISPHERE: Standard perspective projection
+        // Light has a valid screen position, rays converge toward it
         float ndcX = (xProj / zDist) / (tanHalfFov * aspect);
         float ndcY = (yProj / zDist) / tanHalfFov;
         lightUV = vec2(ndcX * 0.5 + 0.5, ndcY * 0.5 + 0.5);
     } else {
-        // BEHIND/SIDE: Push light far off-screen in the orb's direction
-        // This makes rays parallel (no on-screen convergence point)
-        // The farther we push it, the more parallel the rays become
+        // BACK HEMISPHERE: Push light far off-screen
+        // This creates parallel rays from the edge in the light's direction
+        // The 5.0 multiplier ensures rays are nearly parallel (convergence point is far away)
         lightUV = vec2(0.5, 0.5) + parallelDir * 5.0;
     }
     
     // Clamp lightUV to reasonable bounds to avoid numerical issues
-    // Allow significant off-screen margin for proper ray coverage
     lightUV = clamp(lightUV, vec2(-3.0), vec2(4.0));
     
     // Get god ray config from UBO
