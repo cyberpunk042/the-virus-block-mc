@@ -54,11 +54,16 @@ void main() {
     // Dark geometry (occluders) will be black
     float brightMask = buildBrightnessMask(sceneColor, threshold, softness);
     
-    // Sky contribution (optional)
-    float skyMask = buildOcclusionMask(rawDepth);
+    // TERRAIN OCCLUSION: Solid geometry blocks rays
+    // Sky (depth ~1.0) = transparent to rays
+    // Geometry (depth < 1.0) = blocks rays UNLESS it's the bright orb itself
+    float isSky = step(0.9999, rawDepth);  // 1.0 if sky, 0.0 if solid
     
-    // Combine based on sky toggle
-    float mask = skyEnabled ? max(brightMask, skyMask) : brightMask;
+    // Mask logic:
+    // - If bright (orb core): always visible (1.0) - regardless of depth
+    // - If sky: visible (1.0) - rays can pass through 
+    // - If solid geometry (not bright): blocked (0.0) - terrain blocks rays
+    float mask = max(brightMask, isSky);
     
     // Output mask in all channels
     fragColor = vec4(mask, mask, mask, 1.0);
