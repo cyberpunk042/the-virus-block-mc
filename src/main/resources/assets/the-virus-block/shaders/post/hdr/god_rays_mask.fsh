@@ -61,9 +61,10 @@ void main() {
     
     // Mask logic:
     // - If bright (orb core): always visible (1.0) - regardless of depth
-    // - If sky: visible (1.0) - rays can pass through 
+    // - If sky AND skyEnabled: visible (1.0) - rays can pass through 
     // - If solid geometry (not bright): blocked (0.0) - terrain blocks rays
-    float mask = max(brightMask, isSky);
+    float skyContrib = skyEnabled ? isSky : 0.0;
+    float mask = max(brightMask, skyContrib);
     
     // Output mask in all channels
     fragColor = vec4(mask, mask, mask, 1.0);
