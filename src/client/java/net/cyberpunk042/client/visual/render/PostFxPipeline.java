@@ -347,12 +347,18 @@ public class PostFxPipeline {
         blurPingTarget = HdrTargetFactory.create("hdr_blur_ping", blurWidth, blurHeight, false, format);
         blurPongTarget = HdrTargetFactory.create("hdr_blur_pong", blurWidth, blurHeight, false, format);
         
+        // IMPORTANT: Prepare (clear) all targets immediately after creation
+        // This prevents garbage data from being read on first use
+        if (glowExtractTarget != null) glowExtractTarget.prepare();
+        if (blurPingTarget != null) blurPingTarget.prepare();
+        if (blurPongTarget != null) blurPongTarget.prepare();
+        
         Logging.RENDER.topic("hdr_pipeline")
             .kv("format", format.jsonName())
             .kv("fullSize", width + "x" + height)
             .kv("blurSize", blurWidth + "x" + blurHeight)
             .kv("quality", String.format("%.2f", quality))
-            .info("Recreated HDR targets");
+            .info("Recreated and cleared HDR targets");
     }
     
     private void closeTarget(@Nullable HdrTarget target) {
