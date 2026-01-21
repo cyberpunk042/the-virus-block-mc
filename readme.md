@@ -445,7 +445,8 @@ Use `/virusblock singularity broadcast mode <immediate|delayed|summary>` and `/v
 Drop this `.mcfunction` into a datapack and run `/function configs:virus_contained` to apply it instantly on a server.
 
  ----------------------------------------------------------------------------------------
- Thanks to shadertoy for offering such a resources and thanks to "DigvijaysinhG, flight404, foxes, tdhooper, Ark, and nimitz" for having shared their beautiful equations with the world. (And thanks to those who inspired them)
+ Thanks to shadertoy for offering such resources and thanks to "DigvijaysinhG, flight404, foxes, tdhooper, Ark, thallippoli, and nimitz" for having shared their beautiful equations with the world. (And thanks to those who inspired them)
+ Thanks to shaderfrog for offering such resources too. Particularly the Electro Orb Design.
 
 Thank you for all the Open Source Community for your support and for making this mod possible.
 Ortibal Railgun pushed me to try and integrate visual effects into this world and it pushed me.
