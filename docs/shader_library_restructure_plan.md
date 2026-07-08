@@ -234,14 +234,14 @@ Camera basis vector computation.
 void computeCameraBasis(vec3 forward, vec3 worldUp, out vec3 right, out vec3 up) {
     right = cross(forward, worldUp);
     float rightLen = length(right);
-    
+
     // Handle gimbal lock (looking straight up/down)
     if (rightLen < NEAR_ZERO) {
         right = vec3(1.0, 0.0, 0.0);
     } else {
         right = right / rightLen;
     }
-    
+
     up = normalize(cross(right, forward));
 }
 
@@ -252,7 +252,7 @@ void computeCameraBasisDefault(vec3 forward, out vec3 right, out vec3 up) {
 
 // Build CameraData from common uniforms
 CameraData buildCameraData(
-    vec3 position, vec3 forward, 
+    vec3 position, vec3 forward,
     float fov, float aspect, float near, float far
 ) {
     CameraData cam;
@@ -291,7 +291,7 @@ Ray generation for raymarching.
 // ═══════════════════════════════════════════════════════════════════════════
 // RAY GENERATION - Two methods for different situations
 // ═══════════════════════════════════════════════════════════════════════════
-// 
+//
 // METHOD 1: YAW/PITCH BASED (getRayFromBasis)
 //   - Uses pre-computed forward/right/up vectors
 //   - Stable when walking (no camera bob in yaw/pitch)
@@ -309,13 +309,13 @@ Ray getRayFromBasis(vec2 texCoord, CameraData cam) {
     float tanHalfFov = tan(cam.fov * 0.5);
     float halfWidth = tanHalfFov * cam.aspect;
     float halfHeight = tanHalfFov;
-    
+
     vec3 direction = normalize(
-        cam.forward + 
-        cam.right * (ndc.x * halfWidth) + 
+        cam.forward +
+        cam.right * (ndc.x * halfWidth) +
         cam.up * (ndc.y * halfHeight)
     );
-    
+
     Ray ray;
     ray.origin = cam.position;
     ray.direction = direction;
@@ -325,17 +325,17 @@ Ray getRayFromBasis(vec2 texCoord, CameraData cam) {
 // Method 2: Generate ray from inverse view-projection matrix
 Ray getRayFromMatrix(vec2 texCoord, mat4 invViewProj, vec3 camPos) {
     vec2 ndc = texCoord * 2.0 - 1.0;
-    
+
     // Transform points on near and far plane
     vec4 clipNear = vec4(ndc, -1.0, 1.0);
     vec4 clipFar = vec4(ndc, 1.0, 1.0);
-    
+
     vec4 worldNear = invViewProj * clipNear;
     vec4 worldFar = invViewProj * clipFar;
-    
+
     worldNear /= worldNear.w;
     worldFar /= worldFar.w;
-    
+
     Ray ray;
     ray.origin = camPos;
     ray.direction = normalize(worldFar.xyz - worldNear.xyz);
@@ -377,22 +377,22 @@ World to screen projection.
 // Project world point to NDC (-1 to 1)
 vec3 worldToNDC(vec3 worldPos, CameraData cam) {
     vec3 toPoint = worldPos - cam.position;
-    
+
     // Transform to view space
     float viewX = dot(toPoint, cam.right);
     float viewY = dot(toPoint, cam.up);
     float viewZ = dot(toPoint, cam.forward);
-    
+
     // Behind camera check
     if (viewZ < cam.near) {
         return vec3(0.0, 0.0, -1.0); // Invalid
     }
-    
+
     // Perspective projection
     float tanHalfFov = tan(cam.fov * 0.5);
     float ndcX = (viewX / viewZ) / (tanHalfFov * cam.aspect);
     float ndcY = (viewY / viewZ) / tanHalfFov;
-    
+
     return vec3(ndcX, ndcY, viewZ);
 }
 
@@ -410,20 +410,20 @@ float getApparentRadius(float worldRadius, float viewDepth, float fov) {
 // Project sphere to screen space
 SphereProjection projectSphere(vec3 sphereCenter, float sphereRadius, CameraData cam) {
     SphereProjection result;
-    
+
     vec3 ndc = worldToNDC(sphereCenter, cam);
-    
+
     // Behind camera
     if (ndc.z < cam.near) {
         result.isVisible = false;
         return result;
     }
-    
+
     result.viewDepth = ndc.z;
     result.screenCenter = ndcToScreen(ndc.xy);
     result.apparentRadius = getApparentRadius(sphereRadius, result.viewDepth, cam.fov);
     result.isVisible = true;
-    
+
     return result;
 }
 
@@ -459,10 +459,10 @@ float linearizeDepth(float rawDepth, float near, float far) {
 // Reconstruct world position from depth buffer
 vec3 reconstructWorldPos(vec2 texCoord, float linearDepth, CameraData cam) {
     Ray ray = getRayFromBasis(texCoord, cam);
-    
+
     // Convert Z-depth to ray distance
     float rayDistance = linearDepth / dot(ray.direction, cam.forward);
-    
+
     return ray.origin + ray.direction * rayDistance;
 }
 
@@ -625,7 +625,7 @@ vec3 getOrbitalPosition(vec3 center, int index, int count, float distance, float
 }
 
 // SDF for orbital spheres only
-float sdfOrbitalSpheres(vec3 p, vec3 center, float orbitalRadius, 
+float sdfOrbitalSpheres(vec3 p, vec3 center, float orbitalRadius,
                         float orbitDistance, int count, float phase) {
     float d = 1e10;
     for (int i = 0; i < count && i < 32; i++) {
@@ -640,10 +640,10 @@ float sdfOrbitalBeams(vec3 p, vec3 center, float orbitalRadius,
                       float orbitDistance, int count, float phase,
                       float beamHeight, float beamRadius, float taper) {
     if (beamHeight < 0.1) return 1e10;
-    
+
     float d = 1e10;
     float topRadius = beamRadius * taper;
-    
+
     for (int i = 0; i < count && i < 32; i++) {
         vec3 orbPos = getOrbitalPosition(center, i, count, orbitDistance, phase);
         vec3 beamEnd = orbPos + vec3(0.0, beamHeight, 0.0);
@@ -657,10 +657,10 @@ float sdfOrbitalSystem(vec3 p, vec3 center, float mainRadius, float orbitalRadiu
                        float orbitDistance, int count, float phase) {
     // Main central sphere (if radius > 0)
     float d = (mainRadius > 0.1) ? sdfSphere(p, center, mainRadius) : 1e10;
-    
+
     // Orbital spheres
     d = min(d, sdfOrbitalSpheres(p, center, orbitalRadius, orbitDistance, count, phase));
-    
+
     return d;
 }
 
@@ -822,7 +822,7 @@ float softOcclusion(float effectDepth, float sceneDepth, float fadeDistance) {
 float depthMaskForProjection(float projectedViewDepth, float linearSceneDepth, float fadeWidth) {
     if (projectedViewDepth > linearSceneDepth + fadeWidth) return 0.0;  // Fully occluded
     if (projectedViewDepth < linearSceneDepth - fadeWidth) return 1.0;  // Fully visible
-    
+
     // Partial fade
     float t = (linearSceneDepth - projectedViewDepth + fadeWidth) / (2.0 * fadeWidth);
     return smoothstep(0.0, 1.0, t);
@@ -897,43 +897,43 @@ struct OrbitalV2Config {
 };
 
 // Render all orbitals using screen projection
-vec4 renderOrbitalsV2(vec2 texCoord, OrbitalV2Config config, 
+vec4 renderOrbitalsV2(vec2 texCoord, OrbitalV2Config config,
                       CameraData cam, float linearDepth) {
     vec4 result = vec4(0.0);
-    
+
     for (int i = 0; i < config.count && i < 32; i++) {
         vec3 orbPos = getOrbitalPosition(
-            config.center, i, config.count, 
+            config.center, i, config.count,
             config.orbitDistance, config.phase
         );
-        
+
         // Project to screen
         SphereProjection proj = projectSphere(orbPos, config.orbitalRadius, cam);
-        
+
         if (!proj.isVisible) continue;
-        
+
         // Depth occlusion
         float depthMask = depthMaskForProjection(proj.viewDepth, linearDepth, 1.0);
         if (depthMask < 0.01) continue;
-        
+
         // Calculate glow
         float dist = normalizedDistToProjected(texCoord, proj, cam.aspect);
-        
+
         if (dist < 2.0) {  // Only process nearby pixels
             // Core (solid color)
             float coreMask = smoothstep(1.0, 0.8, dist);
             vec3 coreColor = config.bodyColor * coreMask;
-            
+
             // Glow (falls off outside)
             float glowMask = circularGlow(dist, 2.0) * config.glowIntensity;
             vec3 glowColor = config.glowColor * glowMask;
-            
+
             // Combine
             result.rgb += (coreColor + glowColor) * depthMask;
             result.a = max(result.a, max(coreMask, glowMask) * depthMask);
         }
     }
-    
+
     return result;
 }
 

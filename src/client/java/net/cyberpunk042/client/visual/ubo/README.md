@@ -87,7 +87,7 @@ public record MyEffectConfigUBO(
     // Clean vec4 records - no boilerplate needed!
     public record ColorVec4(float r, float g, float b, float a) {}
     public record ShapeVec4(float size, float sharpness, float power, float reserved) {}
-    
+
     // Factory method
     public static MyEffectConfigUBO from(Color c, float size, float sharpness) {
         return new MyEffectConfigUBO(

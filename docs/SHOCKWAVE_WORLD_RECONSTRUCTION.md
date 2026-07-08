@@ -97,7 +97,7 @@ Minecraft's vanilla post-effect system loads uniform values once from JSON and d
 
 **Injection Point**: `render()` method, right before `FrameGraphBuilder.run()` is called
 
-**Purpose**: 
+**Purpose**:
 - Capture camera state at the exact moment of rendering (ensures consistency with depth buffer)
 - Add the shockwave post-effect pass to the frame graph
 
@@ -188,21 +188,21 @@ In TARGET mode, we need to determine "which pixels are X blocks away from the ta
 vec3 reconstructWorldPos(vec2 uv, float linearDepth) {
     vec3 camPos = vec3(CameraX, CameraY, CameraZ);
     vec3 forward = normalize(vec3(ForwardX, ForwardY, ForwardZ));
-    
+
     // Compute camera-local right and up vectors
     vec3 worldUp = vec3(0.0, 1.0, 0.0);
     vec3 right = normalize(cross(forward, worldUp));
     vec3 up = normalize(cross(right, forward));  // LOCAL up, tilts with pitch
-    
+
     // Convert UV to NDC (-1 to 1)
     vec2 ndc = uv * 2.0 - 1.0;
-    
+
     // Build ray direction using perspective FOV
     float halfFovTan = tan(Fov * 0.5);
-    vec3 rayDir = forward + right * (ndc.x * halfFovTan * AspectRatio) 
+    vec3 rayDir = forward + right * (ndc.x * halfFovTan * AspectRatio)
                           + up * (ndc.y * halfFovTan);
     rayDir = normalize(rayDir);
-    
+
     // World position = camera + ray * distance
     return camPos + rayDir * linearDepth;
 }

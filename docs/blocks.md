@@ -137,9 +137,9 @@ classDiagram
         +getOutlineShape(...) VoxelShape
     }
     class GrowthRegistryDefaults {
-        +MAGMA_ANIMATION: 
-        +LAVA_STILL_ANIMATION: 
-        +LAVA_FLOW_ANIMATION: 
+        +MAGMA_ANIMATION:
+        +LAVA_STILL_ANIMATION:
+        +LAVA_FLOW_ANIMATION:
         +ensureDefaults(...) void
         +withGlow(...) GrowthBlockDefinition
         +withProfiles(...) GrowthBlockDefinition

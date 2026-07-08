@@ -7,7 +7,7 @@
 ```mermaid
 graph TB
     subgraph TheVirusBlock["🦠 The Virus Block Mod"]
-        
+
         subgraph Common["📦 Common (Server + Client)"]
             subgraph FieldSystem["Field System"]
                 field[field<br/>FieldDefinition, FieldLayer, FieldType]
@@ -16,7 +16,7 @@ graph TB
                 field_influence[field.influence<br/>InfluenceHandler]
                 field_instance[field.instance<br/>FieldInstance, FieldManager]
             end
-            
+
             subgraph VisualSystem["Visual System"]
                 visual[visual<br/>Primitive, Animation]
                 visual_shape[visual.shape<br/>Shape, SphereShape, etc.]
@@ -24,22 +24,22 @@ graph TB
                 visual_fill[visual.fill<br/>FillConfig, FillMode]
                 visual_color[visual.color<br/>ColorTheme, GradientConfig]
             end
-            
+
             subgraph InfectionSystem["Infection System"]
                 infection[infection<br/>InfectedBlockData]
                 scenario[scenario<br/>Scenario, ScenarioManager]
             end
-            
+
             subgraph BlockSystem["Block System"]
                 blocks[block<br/>ModBlocks, VirusBlock]
                 block_entity[block.entity<br/>VirusBlockEntity]
             end
-            
+
             subgraph Util["Utilities"]
                 util[util<br/>JsonSerializer, JsonParseUtils]
             end
         end
-        
+
         subgraph ClientOnly["🖥️ Client Only"]
             subgraph GUISystem["GUI System"]
                 gui_screen[gui.screen<br/>FieldCustomizerScreen]
@@ -48,46 +48,46 @@ graph TB
                 gui_widget[gui.widget<br/>LabeledSlider, Dropdown]
                 gui_layout[gui.layout<br/>LayoutManager, Bounds]
             end
-            
+
             subgraph RenderSystem["Rendering System"]
                 render[render<br/>FieldRenderer]
                 mesh[mesh<br/>MeshBuilder, DynamicMesh]
                 tessellator[visual.tessellator<br/>SphereTessellator, etc.]
             end
-            
+
             subgraph PreviewSystem["Preview System"]
                 preview[gui.preview<br/>PreviewRenderer, Rasterizer]
             end
         end
-        
+
         subgraph NetworkLayer["🌐 Network"]
             network[network<br/>PacketHandler]
             packet[network.packet<br/>FieldSpawnPacket, etc.]
             command[command<br/>FieldCommand]
         end
     end
-    
+
     %% Cross-system dependencies
     gui_state --> field
     gui_state --> visual
     gui_panel --> gui_state
     gui_screen --> gui_panel
-    
+
     field_loader --> field
     field_instance --> field
     field_effect --> field_instance
-    
+
     render --> visual
     render --> field_instance
     tessellator --> visual_shape
     mesh --> tessellator
-    
+
     preview --> visual
     preview --> mesh
-    
+
     network --> field
     packet --> field_instance
-    
+
     infection --> blocks
     scenario --> infection
 ```

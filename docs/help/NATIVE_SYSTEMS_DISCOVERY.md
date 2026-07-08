@@ -165,7 +165,7 @@ SoundEvent customSound = SoundEvent.createVariableRangeEvent(
 
 // Fixed range (audible within N blocks)
 SoundEvent localSound = SoundEvent.createFixedRangeEvent(
-    Identifier.of("the-virus-block", "field_pulse"), 
+    Identifier.of("the-virus-block", "field_pulse"),
     8.0f  // 8 block range
 );
 
@@ -223,14 +223,14 @@ RenderLayer polygonOffset = textLayerSet.polygonOffset();
 ### 1. FieldMath.java (wrap MathHelper)
 ```java
 public final class FieldMath {
-    public static float lerp(float t, float a, float b) { 
-        return MathHelper.lerp(t, a, b); 
+    public static float lerp(float t, float a, float b) {
+        return MathHelper.lerp(t, a, b);
     }
-    public static float smoothStep(float t) { 
-        return t * t * (3 - 2 * t); 
+    public static float smoothStep(float t) {
+        return t * t * (3 - 2 * t);
     }
-    public static float easeOut(float t) { 
-        return 1 - (1-t) * (1-t); 
+    public static float easeOut(float t) {
+        return 1 - (1-t) * (1-t);
     }
     public static float pulse(float time, float speed) {
         return (MathHelper.sin(time * speed * MathHelper.TAU) + 1) * 0.5f;

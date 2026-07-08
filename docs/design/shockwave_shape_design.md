@@ -257,7 +257,7 @@ uniform vec3 EdgeColor;             // Outer ring color
 - Inject after main scene renders but before post-processing
 - Access depth via `MinecraftClient.getInstance().getFramebuffer()`
 
-**Recommended Approach:** 
+**Recommended Approach:**
 Approach 1 (Post-Processing) seems most aligned with Minecraft's architecture.
 The shockwave would be rendered as a post-effect that samples both color and depth.
 

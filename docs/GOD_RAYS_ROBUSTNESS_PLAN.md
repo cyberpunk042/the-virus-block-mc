@@ -25,7 +25,7 @@
 
 ### H1: Floating Point Precision Loss
 **Evidence**: Rectangular banding pattern, consistent with quantization
-**Mechanism**: 
+**Mechanism**:
 - `lightUV` pushed 5 units off-screen
 - `toLight` vectors become very large
 - Small differences between samples lose precision

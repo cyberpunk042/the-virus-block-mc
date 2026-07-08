@@ -2,7 +2,7 @@
 
 > **Purpose:** Single source of truth for all UBO bindings, sizes, and ownership.
 > **Rule:** All binding calls MUST route through this registry. No magic numbers.
-> 
+>
 > **Implementation:** See `UBORegistry.java`
 
 ---

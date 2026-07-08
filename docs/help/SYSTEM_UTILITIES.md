@@ -461,21 +461,21 @@ private int showStatus(ServerCommandSource source) {
         CommandFeedback.error(source, "No active field");
         return 0;
     }
-    
+
     // Header
     source.sendFeedback(() -> CommandFeedback.header("Field Status"), false);
-    
+
     // Basic info
     source.sendFeedback(() -> CommandFeedback.keyValue("Definition", field.id(), Formatting.AQUA), false);
     source.sendFeedback(() -> CommandFeedback.keyValue("Radius", field.radius(), Formatting.WHITE), false);
     source.sendFeedback(() -> CommandFeedback.keyValue("Layers", field.layers().size(), Formatting.WHITE), false);
-    
+
     // Layers
     source.sendFeedback(() -> CommandFeedback.subheader("Layers"), false);
     for (var layer : field.layers()) {
         source.sendFeedback(() -> CommandFeedback.bullet(layer.id()), false);
     }
-    
+
     return 1;
 }
 ```
@@ -488,11 +488,11 @@ private int showStatus(ServerCommandSource source) {
 
 ```java
 public class FieldTestCommands {
-    
+
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         var root = CommandManager.literal("fieldtest")
             .requires(s -> s.hasPermissionLevel(2));
-        
+
         // Toggle: spin enable/disable
         CommandKnob.toggle("fieldtest.spin", "Field spin")
             .defaultValue(true)
@@ -504,7 +504,7 @@ public class FieldTestCommands {
                 return RenderOverrides.setSpin(enabled);
             })
             .attach(root);
-        
+
         // Float: radius
         CommandKnob.floatValue("fieldtest.radius", "Field radius")
             .range(0.1f, 100f)
@@ -519,7 +519,7 @@ public class FieldTestCommands {
                 return RenderOverrides.setRadius(radius);
             })
             .attach(root);
-        
+
         // Enum: fill mode
         CommandKnob.enumValue("fieldtest.fill", "Fill mode", FillMode.class)
             .defaultValue(FillMode.SOLID)
@@ -530,16 +530,16 @@ public class FieldTestCommands {
                 return RenderOverrides.setFillMode(mode);
             })
             .attach(root);
-        
+
         // Action: spawn
         root.then(CommandManager.literal("spawn")
             .then(CommandManager.argument("profile", StringArgumentType.word())
                 .suggests(FieldRegistry::suggest)
                 .executes(ctx -> spawn(ctx.getSource(), StringArgumentType.getString(ctx, "profile")))));
-        
+
         dispatcher.register(root);
     }
-    
+
     private static boolean requireField(ServerCommandSource source) {
         if (FieldTestManager.getCurrentField() == null) {
             CommandFeedback.error(source, "No field active. Use /fieldtest spawn first.");
@@ -547,16 +547,16 @@ public class FieldTestCommands {
         }
         return true;
     }
-    
+
     private static int spawn(ServerCommandSource source, String profile) {
         Identifier id = Identifier.of(TheVirusBlock.MOD_ID, profile);
-        
+
         // Log the attempt
         Logging.FIELD.topic("spawn")
             .player(source.getPlayer())
             .id(id)
             .info("Spawning field");
-        
+
         var definition = FieldRegistry.get(id);
         if (definition == null) {
             // Log error + notify player
@@ -566,9 +566,9 @@ public class FieldTestCommands {
                 .error("Field definition not found");
             return 0;
         }
-        
+
         FieldTestManager.spawn(source.getPlayer(), definition);
-        
+
         // Success feedback
         CommandFeedback.successBroadcast(source, "Field spawned: " + profile);
         return 1;
@@ -593,35 +593,35 @@ public class FieldTestCommands {
 public class Context implements ContextBuilder<Context> {
     // ... existing fields ...
     private boolean forceChat = false;  // NEW
-    
+
     public Context alwaysChat() {  // NEW
         this.forceChat = true;
         return this;
     }
-    
+
     void log(LogLevel level, String message, Object... args) {
         if (!effectiveLevel.includes(level)) return;
         String fullMessage = buildMessage(message, args);
         LogOutput.emit(channel, topicName, level, fullMessage, exception, forceChat);  // MODIFIED
     }
-    
+
     // Accessor for FormattedContext
     boolean forceChat() { return forceChat; }  // NEW
 }
 
 // LogOutput.java
-public static void emit(Channel channel, String topic, LogLevel level, 
+public static void emit(Channel channel, String topic, LogLevel level,
                        String message, Throwable exception) {
     emit(channel, topic, level, message, exception, false);  // Default
 }
 
-public static void emit(Channel channel, String topic, LogLevel level, 
+public static void emit(Channel channel, String topic, LogLevel level,
                        String message, Throwable exception, boolean forceChat) {  // NEW
     // ... watchdog check ...
-    
+
     // Log to console
     doLog(level, message, exception);
-    
+
     // Forward to chat if enabled OR forced
     if ((channel.chatForward() || forceChat) && LogConfig.chatEnabled()) {  // MODIFIED
         LogChatBridge.forward(channel, topic, level, message);
@@ -699,7 +699,7 @@ Set<String> allPaths = CommandKnobDefaults.paths();             // All registere
 .suggests(EnumSuggester.of(FillMode.class, mode -> mode.getDisplayName()))
 
 // Filtered
-.suggests(EnumSuggester.ofFiltered(FillMode.class, 
+.suggests(EnumSuggester.ofFiltered(FillMode.class,
     mode -> mode.name().toLowerCase(),
     mode -> mode.isAvailable()))
 
@@ -718,7 +718,7 @@ RegistrySuggester<FieldRegistry> suggester = new RegistrySuggester<>(FieldRegist
 .suggests((ctx, builder) -> suggester.suggest(ctx, builder, r -> r.getIds()))
 
 // Filtered suggestions
-.suggests((ctx, builder) -> suggester.suggestFiltered(ctx, builder, 
+.suggests((ctx, builder) -> suggester.suggestFiltered(ctx, builder,
     r -> r.getIds(),
     id -> id.startsWith("the-virus-block:")))
 
@@ -808,7 +808,7 @@ CommandFormatters.formatAny(value);  // Auto-detects type
 For building commands from field enums:
 
 ```java
-FieldCommandBuilder<FieldParam, FieldRegistry> builder = 
+FieldCommandBuilder<FieldParam, FieldRegistry> builder =
     new FieldCommandBuilder<>(new RegistrySuggester<>(FieldRegistry::get));
 
 // Profile selection commands

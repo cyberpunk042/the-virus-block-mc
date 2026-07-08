@@ -25,20 +25,20 @@ import java.util.function.Supplier;
 
 /**
  * Bidirectional binding wrapper for widgets.
- * 
+ *
  * <p>Handles the critical state↔widget synchronization problem:</p>
  * <ul>
  *   <li><b>Widget → State</b>: User changes widget, value transforms and updates state</li>
  *   <li><b>State → Widget</b>: External change (profile load, primitive switch), widget refreshes</li>
  * </ul>
- * 
+ *
  * <h3>Type Parameters</h3>
  * <ul>
  *   <li><b>W</b>: Widget type (e.g., LabeledSlider, CyclingButtonWidget)</li>
  *   <li><b>S</b>: State value type (what's stored, e.g., Float for normalized 0-1)</li>
  *   <li><b>D</b>: Display value type (what widget shows, e.g., Float for degrees 0-360)</li>
  * </ul>
- * 
+ *
  * <h3>Example - Phase Degrees</h3>
  * <pre>
  * // State stores 0.0-1.0, widget shows 0-360°
@@ -53,16 +53,16 @@ import java.util.function.Supplier;
  * </pre>
  */
 public final class Bound<W extends ClickableWidget, S, D> {
-    
+
     private final W widget;
     private final Supplier<S> stateGetter;
     private final Consumer<S> stateSetter;
     private final Function<S, D> stateToDisplay;
     private final Function<D, S> displayToState;
     private final Consumer<D> widgetUpdater;  // How to push value into widget
-    
+
     private boolean syncing = false;  // Prevent feedback loops
-    
+
     private Bound(Builder<W, S, D> builder) {
         this.widget = builder.widget;
         this.stateGetter = builder.stateGetter;
@@ -71,11 +71,11 @@ public final class Bound<W extends ClickableWidget, S, D> {
         this.displayToState = builder.displayToState;
         this.widgetUpdater = builder.widgetUpdater;
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════════════
     // SYNC OPERATIONS
     // ═══════════════════════════════════════════════════════════════════════════
-    
+
     /**
      * Called when USER changes the widget.
      * Transforms display value → state value, updates state.
@@ -90,7 +90,7 @@ public final class Bound<W extends ClickableWidget, S, D> {
             syncing = false;
         }
     }
-    
+
     /**
      * Called when STATE changes externally (profile load, primitive switch).
      * Reads state value, transforms to display value, updates widget.
@@ -106,22 +106,22 @@ public final class Bound<W extends ClickableWidget, S, D> {
             syncing = false;
         }
     }
-    
+
     /**
      * @return The wrapped widget for adding to panel.
      */
     public W widget() {
         return widget;
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════════════
     // BUILDER
     // ═══════════════════════════════════════════════════════════════════════════
-    
+
     public static <W extends ClickableWidget> Builder<W, Object, Object> of(W widget) {
         return new Builder<>(widget);
     }
-    
+
     public static class Builder<W extends ClickableWidget, S, D> {
         private final W widget;
         private Supplier<S> stateGetter;
@@ -129,11 +129,11 @@ public final class Bound<W extends ClickableWidget, S, D> {
         private Function<S, D> stateToDisplay = s -> (D) s;  // Identity by default
         private Function<D, S> displayToState = d -> (S) d;  // Identity by default
         private Consumer<D> widgetUpdater;
-        
+
         private Builder(W widget) {
             this.widget = widget;
         }
-        
+
         /**
          * Sets the state getter for reading current value.
          */
@@ -143,7 +143,7 @@ public final class Bound<W extends ClickableWidget, S, D> {
             cast.stateGetter = getter;
             return cast;
         }
-        
+
         /**
          * Sets the state setter for writing new values.
          */
@@ -151,26 +151,26 @@ public final class Bound<W extends ClickableWidget, S, D> {
             this.stateSetter = setter;
             return this;
         }
-        
+
         /**
          * Sets bidirectional transforms between state and display values.
-         * 
+         *
          * @param toDisplay Converts state value to display value (e.g., 0.5 → 180°)
          * @param toState Converts display value to state value (e.g., 180° → 0.5)
          */
         @SuppressWarnings("unchecked")
         public <NewD> Builder<W, S, NewD> transform(
-                Function<S, NewD> toDisplay, 
+                Function<S, NewD> toDisplay,
                 Function<NewD, S> toState) {
             Builder<W, S, NewD> cast = (Builder<W, S, NewD>) this;
             cast.stateToDisplay = toDisplay;
             cast.displayToState = toState;
             return cast;
         }
-        
+
         /**
          * Sets how to update the widget with a new display value.
-         * 
+         *
          * <p>For LabeledSlider: {@code slider::setValue}
          * <p>For CyclingButtonWidget: {@code btn::setValue}
          */
@@ -178,7 +178,7 @@ public final class Bound<W extends ClickableWidget, S, D> {
             this.widgetUpdater = updater;
             return this;
         }
-        
+
         public Bound<W, S, D> build() {
             if (stateGetter == null) throw new IllegalStateException("readFrom() required");
             if (stateSetter == null) throw new IllegalStateException("writeTo() required");
@@ -197,13 +197,13 @@ For common patterns, add static factories:
 
 ```java
 public final class Bound<W, S, D> {
-    
+
     // ... existing code ...
-    
+
     // ═══════════════════════════════════════════════════════════════════════════
     // CONVENIENCE FACTORIES
     // ═══════════════════════════════════════════════════════════════════════════
-    
+
     /**
      * Creates a direct binding (no transform) for a float slider.
      */
@@ -217,7 +217,7 @@ public final class Bound<W, S, D> {
             .applyWith(slider::setValue)
             .build();
     }
-    
+
     /**
      * Creates a degree↔normalized binding for a float slider.
      * State stores 0.0-1.0, widget shows 0-360°.
@@ -236,7 +236,7 @@ public final class Bound<W, S, D> {
             .applyWith(slider::setValue)
             .build();
     }
-    
+
     /**
      * Creates a direct binding for a boolean toggle.
      */
@@ -250,7 +250,7 @@ public final class Bound<W, S, D> {
             .applyWith(toggle::setValue)
             .build();
     }
-    
+
     /**
      * Creates a direct binding for an enum dropdown.
      */
@@ -283,9 +283,9 @@ import java.util.function.Supplier;
 
 /**
  * Three-slider binding for Vector3f state values.
- * 
+ *
  * <p>Each slider modifies one component while preserving others.</p>
- * 
+ *
  * <h3>Example - Transform Offset</h3>
  * <pre>
  * Vec3Binding.of(sliderX, sliderY, sliderZ)
@@ -295,13 +295,13 @@ import java.util.function.Supplier;
  * </pre>
  */
 public final class Vec3Binding {
-    
+
     private final LabeledSlider sliderX, sliderY, sliderZ;
     private final Supplier<Vector3f> getter;
     private final Consumer<Vector3f> setter;
-    
+
     private boolean syncing = false;
-    
+
     private Vec3Binding(LabeledSlider x, LabeledSlider y, LabeledSlider z,
             Supplier<Vector3f> getter, Consumer<Vector3f> setter) {
         this.sliderX = x;
@@ -310,7 +310,7 @@ public final class Vec3Binding {
         this.getter = getter;
         this.setter = setter;
     }
-    
+
     /**
      * Called when X slider changes.
      */
@@ -320,7 +320,7 @@ public final class Vec3Binding {
         current.x = value;
         setter.accept(current);
     }
-    
+
     /**
      * Called when Y slider changes.
      */
@@ -330,7 +330,7 @@ public final class Vec3Binding {
         current.y = value;
         setter.accept(current);
     }
-    
+
     /**
      * Called when Z slider changes.
      */
@@ -340,7 +340,7 @@ public final class Vec3Binding {
         current.z = value;
         setter.accept(current);
     }
-    
+
     /**
      * Syncs all three sliders from state.
      */
@@ -357,36 +357,36 @@ public final class Vec3Binding {
             syncing = false;
         }
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════════════
     // BUILDER
     // ═══════════════════════════════════════════════════════════════════════════
-    
+
     public static Builder of(LabeledSlider x, LabeledSlider y, LabeledSlider z) {
         return new Builder(x, y, z);
     }
-    
+
     public static class Builder {
         private final LabeledSlider x, y, z;
         private Supplier<Vector3f> getter;
         private Consumer<Vector3f> setter;
-        
+
         private Builder(LabeledSlider x, LabeledSlider y, LabeledSlider z) {
             this.x = x;
             this.y = y;
             this.z = z;
         }
-        
+
         public Builder readFrom(Supplier<Vector3f> getter) {
             this.getter = getter;
             return this;
         }
-        
+
         public Builder writeTo(Consumer<Vector3f> setter) {
             this.setter = setter;
             return this;
         }
-        
+
         public Vec3Binding build() {
             return new Vec3Binding(x, y, z, getter, setter);
         }
@@ -551,7 +551,7 @@ Currently, each panel has its own `syncFromState()` but it's called inconsistent
 public interface StateChangeListener {
     /**
      * Called when state changes externally (profile load, primitive switch, command).
-     * 
+     *
      * @param changeType Type of change (helps panels decide if they care)
      */
     void onStateChanged(ChangeType changeType);
@@ -595,20 +595,20 @@ public void notifyStateChanged(ChangeType type) {
 
 ```java
 public abstract class BoundPanel extends AbstractPanel implements StateChangeListener {
-    
+
     protected final List<Bound<?, ?, ?>> bindings = new ArrayList<>();
     protected final List<Vec3Binding> vec3Bindings = new ArrayList<>();
-    
+
     @Override
     protected void onAttached() {
         state.addStateListener(this);
     }
-    
+
     @Override
     protected void onDetached() {
         state.removeStateListener(this);
     }
-    
+
     @Override
     public void onStateChanged(ChangeType type) {
         switch (type) {
@@ -627,7 +627,7 @@ public abstract class BoundPanel extends AbstractPanel implements StateChangeLis
                 syncAllFromState();
         }
     }
-    
+
     protected void syncAllFromState() {
         for (Bound<?, ?, ?> binding : bindings) {
             binding.syncFromState();
@@ -636,7 +636,7 @@ public abstract class BoundPanel extends AbstractPanel implements StateChangeLis
             v3.syncFromState();
         }
     }
-    
+
     /**
      * Override in panels that need rebuild on fragment apply (e.g., FillSubPanel).
      */

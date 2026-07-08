@@ -12,7 +12,7 @@ Read the documentation in order of depth:
 <mission>
 [The current mission is to analyse why ProfilesPanel is that massive, looking for OOP principle opportunities and patterns for [abstract] classes or design pattern application, like a good engineer. I aim for 400 lines max, and I want a plan to reach it. Let me know if you have questions or if you need help.]
 This mod creates customizable **force fields** in Minecraft with advanced visual effects.
-The core concept is a **FieldDefinition** that describes layers of geometric primitives 
+The core concept is a **FieldDefinition** that describes layers of geometric primitives
 with animations, colors, and triggers - all editable through a sophisticated GUI.
 </mission>
 

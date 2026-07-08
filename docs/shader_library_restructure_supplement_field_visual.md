@@ -80,7 +80,7 @@ vec2 twirlUV(vec2 uv, vec2 center, float strength) {
 float voronoi2D(vec2 uv, float scale) {
     vec2 grid = floor(uv * scale);
     float minDist = 1e10;
-    
+
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
             vec2 cell = grid + vec2(float(i), float(j));
@@ -167,49 +167,49 @@ vec4 energyOrbEdge(EnergyOrbV1Config cfg, float distToCenter, float rim) {
 // Animated spiral patterns
 vec4 energyOrbSpirals(EnergyOrbV1Config cfg, vec3 localPos, float distToCenter) {
     if (distToCenter > cfg.radius) return vec4(0.0);
-    
+
     // Calculate spherical coordinates
     float theta = atan(localPos.z, localPos.x);
     float phi = asin(clamp(localPos.y / max(0.001, distToCenter), -1.0, 1.0));
-    
+
     // Spiral pattern with twist
     float spiralAngle = theta * cfg.spiralDensity + phi * cfg.spiralTwist;
     float spiral1 = sin(spiralAngle + cfg.time * 2.0) * 0.5 + 0.5;
     float spiral2 = sin(spiralAngle * 2.0 - cfg.time * 3.0) * 0.5 + 0.5;
     float spiral = spiral1 + spiral2 * 0.5;
-    
+
     // Fade near center and edge
     float innerFade = smoothstep(0.0, 0.15 * cfg.radius, distToCenter);
     float outerFade = smoothstep(cfg.radius, cfg.radius * 0.7, distToCenter);
     spiral *= innerFade * outerFade;
-    
+
     vec3 spiralColor = mix(cfg.secondaryColor.rgb, cfg.tertiaryColor.rgb, spiral);
     float spiralAlpha = spiral * cfg.intensity * 0.6;
-    
+
     return vec4(spiralColor, spiralAlpha);
 }
 
 // Radial glow lines  
 vec4 energyOrbGlowLines(EnergyOrbV1Config cfg, vec3 localPos, float distToCenter) {
     if (distToCenter > cfg.radius * 1.5) return vec4(0.0);
-    
+
     float theta = atan(localPos.z, localPos.x);
     int count = int(cfg.glowLineCount);
     vec3 totalGlow = vec3(0.0);
-    
+
     for (int i = 0; i < count && i < 24; i++) {
         float lineAngle = (float(i) / float(count)) * TAU;
         float angleDiff = abs(mod(theta - lineAngle + PI, TAU) - PI);
         float lineGlow = exp(-angleDiff * 8.0);
-        
+
         // Animate intensity
         float pulse = sin(cfg.time * 3.0 + float(i) * 0.5) * 0.5 + 0.5;
         totalGlow += lineGlow * pulse * cfg.glowLineIntensity;
     }
-    
+
     vec3 lineColor = mix(cfg.secondaryColor.rgb, cfg.primaryColor.rgb, 0.3);
     totalGlow *= lineColor;
-    
+
     float glowAlpha = min(1.0, (totalGlow.r + totalGlow.g + totalGlow.b) / 3.0);
     return vec4(totalGlow, glowAlpha);
 }
@@ -231,38 +231,38 @@ EnergyOrbHit raymarchEnergyOrb(Ray ray, EnergyOrbV1Config cfg, float maxDist) {
     EnergyOrbHit result;
     result.hit = false;
     result.glow = 0.0;
-    
+
     float t = 0.0;
-    
+
     for (int i = 0; i < MAX_RAYMARCH_STEPS; i++) {
         vec3 p = ray.origin + ray.direction * t;
         float d = sdfSphere(p, cfg.center, cfg.radius);
-        
+
         if (d < RAYMARCH_EPSILON) {
             result.hit = true;
             result.distance = t;
             result.position = p;
-            
+
             // Calculate rim/fresnel
             vec3 normal = normalize(p - cfg.center);
             result.rim = 1.0 - abs(dot(normal, -ray.direction));
-            
+
             return result;
         }
-        
+
         if (t > maxDist) break;
         t += d * 0.8;
     }
-    
+
     // Check for corona glow (near miss)
     vec3 nearPoint = ray.origin + ray.direction * min(t, maxDist * 0.5);
     float nearDist = sdfSphere(nearPoint, cfg.center, cfg.radius);
     float glowWidth = cfg.coronaWidth * cfg.radius;
-    
+
     if (nearDist < glowWidth && nearDist > 0.0) {
         result.glow = 1.0 - (nearDist / glowWidth);
     }
-    
+
     return result;
 }
 
@@ -278,47 +278,47 @@ vec4 renderEnergyOrbV1(
 ) {
     float distToTarget = length(cfg.center - ray.origin);
     float maxDist = distToTarget + cfg.radius * 3.0;
-    
+
     EnergyOrbHit hit = raymarchEnergyOrb(ray, cfg, maxDist);
-    
+
     if (hit.hit) {
         // Depth occlusion check
         float hitZDepth = hit.distance * dot(ray.direction, forward);
         if (hitZDepth > sceneDepth) {
             return vec4(0.0);  // Occluded
         }
-        
+
         // Calculate local position for effects
         vec3 localPos = hit.position - cfg.center;
         float distToCenter = length(localPos);
-        
+
         // Combine all effect layers
         vec4 core = energyOrbCore(cfg, distToCenter);
         vec4 edge = energyOrbEdge(cfg, distToCenter, hit.rim);
         vec4 spirals = energyOrbSpirals(cfg, localPos, distToCenter);
         vec4 lines = energyOrbGlowLines(cfg, localPos, distToCenter);
-        
+
         // Composite
         vec3 color = core.rgb;
         float alpha = core.a;
-        
+
         color = mix(color, edge.rgb, edge.a * 0.8);
         alpha = max(alpha, edge.a);
-        
+
         color = mix(color, spirals.rgb, spirals.a * 0.6);
         alpha = max(alpha, spirals.a);
-        
+
         color += lines.rgb * lines.a;
         alpha = max(alpha, lines.a);
-        
+
         return vec4(color, alpha);
-        
+
     } else if (hit.glow > 0.01) {
         // Corona glow for near misses
         vec3 glowColor = cfg.primaryColor.rgb * hit.glow * 0.5;
         return vec4(glowColor, hit.glow * 0.3);
     }
-    
+
     return vec4(0.0);
 }
 
@@ -397,27 +397,27 @@ void main() {
     vec4 sceneColor = texture(InSampler, texCoord);
     float rawDepth = texture(DepthSampler, texCoord).r;
     bool isSky = (rawDepth > 0.9999);
-    
+
     // Build camera data from uniforms
     CameraData cam = buildCameraData(
         vec3(CameraX, CameraY, CameraZ),
         vec3(ForwardX, ForwardY, ForwardZ),
         Fov, AspectRatio, NearPlane, FarPlane
     );
-    
+
     // Get ray direction (adaptive based on flying state)
     Ray ray = getRayAdaptive(texCoord, cam, InvViewProj, IsFlying);
-    
+
     // Linearize depth
     float linearDepth = linearizeDepth(rawDepth, cam.near, cam.far);
     float sceneDepth = isSky ? 10000.0 : linearDepth;
-    
+
     // Determine effect type and version
     int effectType = int(EffectType);
     float version = Version;
-    
+
     vec4 fieldEffect = vec4(0.0);
-    
+
     if (effectType == EFFECT_ENERGY_ORB) {
         if (version >= 2.0) {
             // V2: Screen-space projection
@@ -434,20 +434,20 @@ void main() {
             cfg.radius = Radius;
             cfg.primaryColor = vec4(PrimaryR, PrimaryG, PrimaryB, PrimaryA);
             // ... populate config from uniforms
-            
+
             fieldEffect = renderEnergyOrbV1(ray, cam.forward, cfg, sceneDepth);
         }
     }
-    
+
     // Final compositing
     if (fieldEffect.a < 0.001) {
         fragColor = sceneColor;
         return;
     }
-    
+
     vec3 finalColor = mix(sceneColor.rgb, fieldEffect.rgb, fieldEffect.a);
     finalColor = 1.0 - exp(-finalColor * 1.5);  // Tone mapping
-    
+
     fragColor = vec4(finalColor, 1.0);
 }
 ```

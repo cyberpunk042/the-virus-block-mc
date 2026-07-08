@@ -27,23 +27,23 @@ current Java values, the shader receives dynamic data every frame!
 ```java
 @Mixin(PostEffectPass.class)
 public class PostEffectPassMixin {
-    
+
     @Shadow @Final private Map<String, GpuBuffer> uniformBuffers;
     @Shadow @Final private String id;
-    
+
     @Inject(method = "render", at = @At("HEAD"))
     private void updateShockwaveUniforms(...) {
         if (!ShockwavePostEffect.isEnabled()) return;
         if (!id.contains("shockwave")) return;
         if (!uniformBuffers.containsKey("ShockwaveConfig")) return;
-        
+
         // Create new buffer with current Java values
         GpuBuffer newBuffer = RenderSystem.getDevice().createBuffer(
             () -> "ShockwaveConfig Dynamic",
             16,
             builder.get()
         );
-        
+
         // Replace in map - THE KEY!
         uniformBuffers.put("ShockwaveConfig", newBuffer);
     }

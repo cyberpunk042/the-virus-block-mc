@@ -16,7 +16,7 @@ Shoot rays from camera through each pixel, march along ray until hitting geometr
 for each pixel:
     rayOrigin = cameraPos
     rayDir = getRayDirection(pixel, camera)
-    
+
     for step in march:
         position = rayOrigin + rayDir * distance
         sdf = signedDistanceFunction(position, geometry)
@@ -60,7 +60,7 @@ Take 3D world positions, project to 2D screen coordinates, draw 2D effects.
 for effect_source in world:
     screenPos = worldToScreen(source.position, camera)
     apparentRadius = calculateApparentRadius(source.radius, distance, fov)
-    
+
 for each pixel:
     relativeUV = pixel - screenPos
     dist = length(relativeUV) / apparentRadius
@@ -100,7 +100,7 @@ Read depth buffer to find world positions of existing geometry, apply effects re
 for each pixel:
     depth = texture(DepthSampler, uv)
     worldPos = reconstructWorldPos(uv, depth, camera)
-    
+
     // Effect relative to surface position (not camera)
     distance = length(worldPos - effectCenter)
     color = calculate effect based on distance
@@ -138,7 +138,7 @@ Rendered with                         Rays generated with
 positionMatrix                        yaw/pitch OR InvViewProj
 (includes camera bob)                 
     ↓                                      ↓
-Depth says "sphere                    Rays say "sphere 
+Depth says "sphere                    Rays say "sphere
 surface is HERE"                      surface is THERE"
          ↓                                 ↓
          ╰────── MISMATCH! ────────────────╯
@@ -254,14 +254,14 @@ class CameraStateDetector {
     private boolean isFlying;
     private boolean hasVelocity;
     private int transitionCooldown;
-    
+
     RenderMode getCurrentMode() {
         // During transition: stay in STABLE mode
         if (transitionCooldown > 0) return YAW_PITCH_STABLE;
-        
+
         // Walking (velocity + ground): STABLE
         if (hasVelocity && !isFlying) return YAW_PITCH_STABLE;
-        
+
         // Flying or standing still: ACCURATE
         return MATRIX_ACCURATE;
     }

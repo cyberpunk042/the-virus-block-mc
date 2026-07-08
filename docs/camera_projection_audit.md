@@ -9,7 +9,7 @@
 
 #### V1: RAYMARCHING ("Bottom-Up")
 - **Direction:** Camera → World (shooting rays outward)
-- **Process:** 
+- **Process:**
   1. For each screen pixel, compute ray direction
   2. March ray through world space
   3. Find intersections with geometry (SDF)

@@ -43,31 +43,31 @@ public record ParameterSpec(
     String tooltip,        // Optional hover text
     Object defaultValue    // Default value for reset
 ) {
-    public enum ControlType { 
-        SLIDER, TOGGLE, COLOR_RGB, COLOR_RGBA, DROPDOWN, BUTTON 
+    public enum ControlType {
+        SLIDER, TOGGLE, COLOR_RGB, COLOR_RGBA, DROPDOWN, BUTTON
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════════
     // BUILDER FACTORIES
     // ═══════════════════════════════════════════════════════════════════════
-    
+
     public static ParameterSpec slider(String path, String label, String group,
                                        float min, float max, float defaultVal) {
         return new ParameterSpec(path, label, ControlType.SLIDER, group,
                                  min, max, "%.2f", null, defaultVal);
     }
-    
+
     public static ParameterSpec slider(String path, String label, String group,
                                        float min, float max, String format, float defaultVal) {
         return new ParameterSpec(path, label, ControlType.SLIDER, group,
                                  min, max, format, null, defaultVal);
     }
-    
+
     public static ParameterSpec toggle(String path, String label, String group, boolean defaultVal) {
         return new ParameterSpec(path, label, ControlType.TOGGLE, group,
                                  0, 1, null, null, defaultVal);
     }
-    
+
     public static ParameterSpec colorRgb(String pathPrefix, String label, String group) {
         // pathPrefix = "fieldVisual.primary" → creates R, G, B controls
         return new ParameterSpec(pathPrefix, label, ControlType.COLOR_RGB, group,
@@ -95,14 +95,14 @@ public record EffectSchema(
     public List<ParameterSpec> getGroup(String groupName) {
         return groups.getOrDefault(groupName, List.of());
     }
-    
+
     /**
      * Returns all group names in order.
      */
     public List<String> getGroupNames() {
         return new ArrayList<>(groups.keySet());
     }
-    
+
     /**
      * Check if a parameter exists in this schema.
      */
@@ -122,39 +122,39 @@ public record EffectSchema(
  * Add new effects here - single source of truth.
  */
 public final class EffectSchemaRegistry {
-    
+
     private static final Map<String, EffectSchema> SCHEMAS = new LinkedHashMap<>();
-    
+
     static {
         registerEnergyOrbV1();
         registerEnergyOrbV2();
         registerVolumetricStar();
         registerGeodesic();
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════════
     // ENERGY ORB V1 - Classic controls
     // ═══════════════════════════════════════════════════════════════════════
-    
+
     private static void registerEnergyOrbV1() {
         var groups = new LinkedHashMap<String, List<ParameterSpec>>();
-        
+
         groups.put("Colors", List.of(
             ParameterSpec.colorRgb("fieldVisual.primary", "Core Color", "Colors"),
             ParameterSpec.colorRgb("fieldVisual.secondary", "Edge Color", "Colors"),
             ParameterSpec.colorRgb("fieldVisual.tertiary", "Outer Color", "Colors")
         ));
-        
+
         groups.put("Animation", List.of(
             ParameterSpec.slider("fieldVisual.intensity", "Brightness", "Animation", 0.1f, 3f, 1.2f),
             ParameterSpec.slider("fieldVisual.animationSpeed", "Speed", "Animation", 0.1f, 10f, 1f)
         ));
-        
+
         groups.put("Shape", List.of(
             ParameterSpec.slider("fieldVisual.coreSize", "Core Size", "Shape", 0.01f, 3f, 0.15f),
             ParameterSpec.slider("fieldVisual.edgeSharpness", "Edge Sharpness", "Shape", 1f, 10f, 4f)
         ));
-        
+
         groups.put("Effects", List.of(
             ParameterSpec.slider("fieldVisual.spiralDensity", "Spiral Density", "Effects", 1f, 32f, 5f),
             ParameterSpec.slider("fieldVisual.spiralTwist", "Spiral Twist", "Effects", 1f, 20f, 5f),
@@ -162,36 +162,36 @@ public final class EffectSchemaRegistry {
             ParameterSpec.slider("fieldVisual.glowLineIntensity", "Line Intensity", "Effects", 0.1f, 5f, 0.8f),
             ParameterSpec.slider("fieldVisual.coronaWidth", "Lens Width", "Effects", 0f, 2f, 0.5f)
         ));
-        
+
         register(new EffectSchema(EffectType.ENERGY_ORB, 1, "Energy Orb (Classic)", groups));
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════════
     // ENERGY ORB V2 - Enhanced with external effects
     // ═══════════════════════════════════════════════════════════════════════
-    
+
     private static void registerEnergyOrbV2() {
         var groups = new LinkedHashMap<String, List<ParameterSpec>>();
-        
+
         // Same Colors as V1
         groups.put("Colors", List.of(
             ParameterSpec.colorRgb("fieldVisual.primary", "Core Color", "Colors"),
             ParameterSpec.colorRgb("fieldVisual.secondary", "Edge Color", "Colors"),
             ParameterSpec.colorRgb("fieldVisual.tertiary", "Glow Tint", "Colors")  // Different label!
         ));
-        
+
         // Same Animation as V1
         groups.put("Animation", List.of(
             ParameterSpec.slider("fieldVisual.intensity", "Intensity", "Animation", 0.1f, 3f, 1.2f),
             ParameterSpec.slider("fieldVisual.animationSpeed", "Speed", "Animation", 0.1f, 10f, 1f)
         ));
-        
+
         // Shape with slightly different labels
         groups.put("Shape", List.of(
             ParameterSpec.slider("fieldVisual.coreSize", "Core Size", "Shape", 0.01f, 3f, 0.15f),
             ParameterSpec.slider("fieldVisual.edgeSharpness", "Edge Falloff", "Shape", 1f, 10f, 4f)
         ));
-        
+
         // Effects with additional params
         groups.put("Effects", List.of(
             ParameterSpec.slider("fieldVisual.spiralDensity", "Pattern Scale", "Effects", 1f, 32f, 5f),
@@ -200,23 +200,23 @@ public final class EffectSchemaRegistry {
             ParameterSpec.slider("fieldVisual.glowLineIntensity", "Noise Intensity", "Effects", 0.1f, 5f, 0.8f),
             ParameterSpec.slider("fieldVisual.coronaWidth", "Lens Width", "Effects", 0f, 2f, 0.5f)
         ));
-        
+
         // V2 Only: External effects section
         groups.put("External Effects", List.of(
             ParameterSpec.toggle("fieldVisual.showExternalRays", "External Rays", "External Effects", true),
             ParameterSpec.toggle("fieldVisual.showCorona", "Corona Glow", "External Effects", true)
         ));
-        
+
         register(new EffectSchema(EffectType.ENERGY_ORB, 2, "Energy Orb (Shadertoy)", groups));
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════════
     // VOLUMETRIC STAR - Full control set
     // ═══════════════════════════════════════════════════════════════════════
-    
+
     private static void registerVolumetricStar() {
         var groups = new LinkedHashMap<String, List<ParameterSpec>>();
-        
+
         // 5 colors for this effect type
         groups.put("Colors", List.of(
             ParameterSpec.colorRgb("fieldVisual.primary", "Body Color", "Colors"),
@@ -225,7 +225,7 @@ public final class EffectSchemaRegistry {
             ParameterSpec.colorRgb("fieldVisual.highlight", "Highlight", "Colors"),
             ParameterSpec.colorRgb("fieldVisual.ray", "Ray Color", "Colors")
         ));
-        
+
         // Multi-speed animation controls
         groups.put("Animation", List.of(
             ParameterSpec.slider("fieldVisual.anim.speedHigh", "Detail Speed", "Animation", 0f, 10f, 2f),
@@ -233,43 +233,43 @@ public final class EffectSchemaRegistry {
             ParameterSpec.slider("fieldVisual.anim.speedRay", "Ray Speed", "Animation", 0f, 10f, 5f),
             ParameterSpec.slider("fieldVisual.anim.speedRing", "Ring Speed", "Animation", 0f, 10f, 2f)
         ));
-        
+
         // Detail controls
         groups.put("Detail", List.of(
             ParameterSpec.slider("fieldVisual.noiseDetail.octaves", "Detail Level", "Detail", 0f, 5f, "%.0f", 3f),
             ParameterSpec.slider("fieldVisual.noiseConfig.seed", "Seed", "Detail", -10f, 10f, "%.0f", 0f)
         ));
-        
+
         // Ray controls
         groups.put("Rays", List.of(
             ParameterSpec.slider("fieldVisual.glowLine.rayPower", "Ray Power", "Rays", 1f, 10f, 2f),
             ParameterSpec.slider("fieldVisual.glowLine.raySharpness", "Ray Sharpness", "Rays", 0.02f, 10f, 1f),
             ParameterSpec.slider("fieldVisual.corona.ringPower", "Ring Power", "Rays", 1f, 10f, 1f)
         ));
-        
+
         // Glow controls
         groups.put("Glow", List.of(
             ParameterSpec.slider("fieldVisual.coreEdge.coreFalloff", "Glow Falloff", "Glow", 1f, 100f, 4f),
             ParameterSpec.slider("fieldVisual.corona.multiplier", "Glow Intensity", "Glow", 10f, 100f, 50f)
         ));
-        
+
         register(new EffectSchema(EffectType.ENERGY_ORB, 3, "Volumetric Star", groups));
         // Note: Using version=3 to distinguish from V1/V2, or add new EffectType
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════════
     // GEODESIC - SDF geometry controls
     // ═══════════════════════════════════════════════════════════════════════
-    
+
     private static void registerGeodesic() {
         var groups = new LinkedHashMap<String, List<ParameterSpec>>();
-        
+
         groups.put("Colors", List.of(
             ParameterSpec.colorRgb("fieldVisual.primary", "Face Color", "Colors"),
             ParameterSpec.colorRgb("fieldVisual.secondary", "Back Color", "Colors"),
             ParameterSpec.colorRgb("fieldVisual.tertiary", "Edge Glow", "Colors")
         ));
-        
+
         // Geometry controls unique to this effect
         groups.put("Geometry", List.of(
             ParameterSpec.slider("fieldVisual.geometry.subdivisions", "Subdivisions", "Geometry", 1f, 8f, "%.0f", 3f),
@@ -278,41 +278,41 @@ public final class EffectSchemaRegistry {
             ParameterSpec.slider("fieldVisual.geometry2.gap", "Tile Gap", "Geometry", 0f, 0.5f, 0.005f),
             ParameterSpec.slider("fieldVisual.geometry2.height", "Tile Height", "Geometry", 0.5f, 5f, 2f)
         ));
-        
+
         // Animation timing
         groups.put("Animation", List.of(
             ParameterSpec.slider("fieldVisual.timing.animFrequency", "Anim Frequency", "Animation", 5f, 50f, 10f),
             ParameterSpec.slider("fieldVisual.timing.sceneDuration", "Cycle Duration", "Animation", 1f, 20f, 6f)
         ));
-        
+
         // Lighting
         groups.put("Lighting", List.of(
             ParameterSpec.slider("fieldVisual.lighting.diffuseStrength", "Diffuse", "Lighting", 0f, 2f, 1.2f),
             ParameterSpec.slider("fieldVisual.lighting.ambientStrength", "Ambient", "Lighting", 0f, 2f, 0.8f),
             ParameterSpec.slider("fieldVisual.lighting.fresnelStrength", "Fresnel", "Lighting", 0f, 1f, 0.2f)
         ));
-        
+
         // Transform
         groups.put("Transform", List.of(
             ParameterSpec.slider("fieldVisual.transform.rotationX", "Rotation X", "Transform", 0f, 6.28f, 0.3f),
             ParameterSpec.slider("fieldVisual.transform.rotationY", "Rotation Y", "Transform", 0f, 6.28f, 0.25f)
         ));
-        
+
         register(new EffectSchema(EffectType.GEODESIC, 1, "Geodesic Sphere", groups));
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════════
     // REGISTRY ACCESS
     // ═══════════════════════════════════════════════════════════════════════
-    
+
     private static void register(EffectSchema schema) {
         SCHEMAS.put(key(schema.effectType(), schema.version()), schema);
     }
-    
+
     private static String key(EffectType type, int version) {
         return type.name() + "_V" + version;
     }
-    
+
     /**
      * Gets the schema for an effect type and version.
      * Falls back to version 1 if specific version not found.
@@ -324,7 +324,7 @@ public final class EffectSchemaRegistry {
         }
         return schema;
     }
-    
+
     /**
      * Gets all registered effect types and versions.
      */
@@ -342,17 +342,17 @@ public final class EffectSchemaRegistry {
  * Automatically creates appropriate widgets based on ParameterSpec.
  */
 public class SchemaContentBuilder {
-    
+
     private final ContentBuilder content;
     private final EffectSchema schema;
     private final int panelWidth;
-    
+
     public SchemaContentBuilder(ContentBuilder content, EffectSchema schema, int panelWidth) {
         this.content = content;
         this.schema = schema;
         this.panelWidth = panelWidth;
     }
-    
+
     /**
      * Builds all controls for the current schema.
      * Creates sections for each group automatically.
@@ -362,23 +362,23 @@ public class SchemaContentBuilder {
             buildGroup(groupName);
         }
     }
-    
+
     /**
      * Builds controls for a specific group.
      */
     public void buildGroup(String groupName) {
         List<ParameterSpec> params = schema.getGroup(groupName);
         if (params.isEmpty()) return;
-        
+
         content.sectionHeader(groupName);
-        
+
         for (ParameterSpec param : params) {
             buildControl(param);
         }
-        
+
         content.gap();
     }
-    
+
     /**
      * Builds a single control from its specification.
      */
@@ -388,17 +388,17 @@ public class SchemaContentBuilder {
                 .range(param.min(), param.max())
                 .format(param.format())
                 .add();
-                
+
             case TOGGLE -> content.toggle(param.label(), param.path());
-            
+
             case COLOR_RGB -> buildColorRgbRow(param);
-            
+
             case DROPDOWN -> {
                 // Would need enum class info - handle separately
             }
         }
     }
-    
+
     /**
      * Builds a row of 3 RGB sliders.
      */
@@ -417,47 +417,47 @@ public class SchemaContentBuilder {
 
 ```java
 public class FieldVisualSubPanel extends BoundPanel {
-    
+
     @Override
     protected void buildContent() {
         syncToEffect();
         ContentBuilder content = content(startY);
-        
+
         // Get current effect type and version from state
         EffectType effectType = (EffectType) state.get("fieldVisual.effectType");
         Integer version = (Integer) state.get("fieldVisual.version");
         if (effectType == null) effectType = EffectType.ENERGY_ORB;
         if (version == null) version = 1;
-        
+
         // Get schema for this effect
         EffectSchema schema = EffectSchemaRegistry.getSchema(effectType, version);
-        
+
         // ═══════════════════════════════════════════════════════════════════════
         // HEADER (always present)
         // ═══════════════════════════════════════════════════════════════════════
         content.sectionHeader(schema.displayName());
         buildConfigControls(content);  // Enable, Source, Version toggle
         content.gap();
-        
+
         // ═══════════════════════════════════════════════════════════════════════
         // SCHEMA-DRIVEN CONTROLS
         // ═══════════════════════════════════════════════════════════════════════
         SchemaContentBuilder schemaBuilder = new SchemaContentBuilder(content, schema, panelWidth);
         schemaBuilder.buildAll();
-        
+
         // ═══════════════════════════════════════════════════════════════════════
         // ACTIONS (always present)
         // ═══════════════════════════════════════════════════════════════════════
         buildActionControls(content);
-        
+
         contentHeight = content.getContentHeight();
     }
-    
+
     private void buildConfigControls(ContentBuilder content) {
         // Enable/Source/Version row - same as before
         // This is effect-independent infrastructure
     }
-    
+
     private void buildActionControls(ContentBuilder content) {
         // Throw, Reset buttons - same as before
     }
@@ -481,7 +481,7 @@ public class FieldVisualSubPanel extends BoundPanel {
 ## Migration Path
 
 1. **Phase 1**: Create `ParameterSpec`, `EffectSchema`, `EffectSchemaRegistry`
-2. **Phase 2**: Create `SchemaContentBuilder` 
+2. **Phase 2**: Create `SchemaContentBuilder`
 3. **Phase 3**: Refactor `FieldVisualSubPanel` to use schema
 4. **Phase 4**: Verify existing V1/V2 behavior preserved
 5. **Phase 5**: Add new effect schemas (Star, Geodesic)

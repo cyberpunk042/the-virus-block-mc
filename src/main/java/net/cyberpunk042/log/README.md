@@ -124,7 +124,7 @@ Logging.COLLISION.debug(() -> "Expensive: " + computeExpensive());
 ```java
 class CorruptionProfiler {
     private static final Topic LOG = Logging.PROFILER.topic("chunk");
-    
+
     void process() {
         LOG.at(pos).count("blocks", n).info("Corrupted");
     }
@@ -150,7 +150,7 @@ Logging.SINGULARITY.topic("report").formatted()
 
 ### 8. Static Formatters
 ```java
-Logging.PROFILER.info("Chunks:\n{}", 
+Logging.PROFILER.info("Chunks:\n{}",
     LogFormat.list(chunks, ChunkPos::toString));
 
 Logging.SINGULARITY.info("Stats:\n{}",
@@ -189,7 +189,7 @@ and emit them as a single structured tree:
 try (LogScope frame = Logging.FIELD.scope("render-frame")) {
     ScopeNode layer = frame.branch("layer:0");
     layer.kv("primitives", 5).kv("visible", true);
-    
+
     for (Primitive p : primitives) {
         layer.branch("prim:" + p.id())
              .kv("vertices", count)
