@@ -1,7 +1,7 @@
 # Unified Reflective UBO System - Complete Plan
 
 > **STATUS: ✓ IMPLEMENTED** (January 4, 2026)
-> 
+>
 > See `REFLECTIVE_UBO_IMPLEMENTATION.md` for the implementation summary.
 > Old manual writers have been deleted. The system is now live.
 
@@ -91,7 +91,7 @@ import java.lang.annotation.*;
 public @interface UBOStruct {
     /** Name of the GLSL uniform block (for validation) */
     String name() default "";
-    
+
     /** Path to GLSL file containing the struct (for validation) */
     String glslPath() default "";
 }
@@ -142,7 +142,7 @@ import java.lang.annotation.*;
 public @interface Floats {
     /** Number of floats to write */
     int count();
-    
+
     /** Whether to add std140 padding after (default true for vec3) */
     boolean pad() default false;
 }
@@ -158,7 +158,7 @@ package net.cyberpunk042.client.visual.ubo;
 
 /**
  * Interface for records that can be serialized as a vec4 (4 floats).
- * 
+ *
  * <p>Implementing this interface allows any record to be written to a UBO
  * when annotated with @Vec4. The slot names are slot0-3 to be generic.</p>
  */
@@ -167,7 +167,7 @@ public interface Vec4Serializable {
     float slot1();
     float slot2();
     float slot3();
-    
+
     /**
      * Default implementation that extracts from record components.
      * Override for custom extraction logic.
@@ -195,14 +195,14 @@ import java.lang.reflect.RecordComponent;
 
 /**
  * Writes any @UBOStruct record to a Std140 buffer using reflection.
- * 
+ *
  * <p>Field order is determined by record component declaration order,
  * which is guaranteed by Java to match source order.</p>
  */
 public final class ReflectiveUBOWriter {
-    
+
     private ReflectiveUBOWriter() {} // Utility class
-    
+
     /**
      * Calculates the buffer size in bytes for a UBO struct.
      */
@@ -221,7 +221,7 @@ public final class ReflectiveUBOWriter {
         }
         return bytes;
     }
-    
+
     /**
      * Writes a UBO struct record to the buffer.
      */
@@ -229,7 +229,7 @@ public final class ReflectiveUBOWriter {
         try {
             for (RecordComponent comp : record.getClass().getRecordComponents()) {
                 Object value = comp.getAccessor().invoke(record);
-                
+
                 if (comp.isAnnotationPresent(Vec4.class)) {
                     writeVec4(builder, value);
                 } else if (comp.isAnnotationPresent(Mat4.class)) {
@@ -242,7 +242,7 @@ public final class ReflectiveUBOWriter {
             throw new RuntimeException("Failed to write UBO: " + record.getClass().getSimpleName(), e);
         }
     }
-    
+
     private static void writeVec4(Std140Builder builder, Object value) {
         if (value instanceof Vec4Serializable v4) {
             builder.putFloat(v4.slot0());
@@ -261,7 +261,7 @@ public final class ReflectiveUBOWriter {
             );
         }
     }
-    
+
     private static void writeMatrix(Std140Builder builder, Matrix4f mat) {
         if (mat == null) {
             // Identity matrix fallback
@@ -273,7 +273,7 @@ public final class ReflectiveUBOWriter {
             }
             return;
         }
-        
+
         Vector4f col = new Vector4f();
         for (int c = 0; c < 4; c++) {
             mat.getColumn(c, col);
@@ -283,7 +283,7 @@ public final class ReflectiveUBOWriter {
             builder.putFloat(col.w);
         }
     }
-    
+
     private static void writeFloats(Std140Builder builder, Object value, Floats annotation) {
         float[] arr;
         if (value instanceof float[] fa) {
@@ -293,11 +293,11 @@ public final class ReflectiveUBOWriter {
         } else {
             throw new IllegalArgumentException("Cannot write as Floats: " + value.getClass());
         }
-        
+
         for (int i = 0; i < annotation.count() && i < arr.length; i++) {
             builder.putFloat(arr[i]);
         }
-        
+
         // Pad to vec4 boundary if requested
         if (annotation.pad()) {
             int padding = 4 - (annotation.count() % 4);
@@ -332,9 +332,9 @@ import java.util.regex.*;
  * Called at startup to catch mismatches early.
  */
 public final class GLSLValidator {
-    
+
     private GLSLValidator() {}
-    
+
     /**
      * Validates a UBO record against its GLSL counterpart.
      * Throws RuntimeException with detailed message on mismatch.
@@ -344,44 +344,44 @@ public final class GLSLValidator {
         if (annotation == null) {
             throw new IllegalArgumentException("Class must have @UBOStruct: " + uboClass.getName());
         }
-        
+
         if (annotation.glslPath().isEmpty()) {
             return; // No validation requested
         }
-        
+
         List<SlotInfo> javaSlots = extractJavaSlots(uboClass);
         List<SlotInfo> glslSlots = parseGLSLStruct(annotation.glslPath(), annotation.name());
-        
+
         // Compare slot counts
         if (javaSlots.size() != glslSlots.size()) {
             throw new UBOMismatchException(
-                "Slot count mismatch: Java has " + javaSlots.size() + 
+                "Slot count mismatch: Java has " + javaSlots.size() +
                 ", GLSL has " + glslSlots.size(),
                 javaSlots, glslSlots
             );
         }
-        
+
         // Compare each slot
         for (int i = 0; i < javaSlots.size(); i++) {
             SlotInfo java = javaSlots.get(i);
             SlotInfo glsl = glslSlots.get(i);
-            
+
             if (java.size != glsl.size) {
                 throw new UBOMismatchException(
-                    "Slot " + i + " size mismatch: Java '" + java.name + "' is " + java.size + 
+                    "Slot " + i + " size mismatch: Java '" + java.name + "' is " + java.size +
                     " bytes, GLSL '" + glsl.name + "' is " + glsl.size + " bytes",
                     javaSlots, glslSlots
                 );
             }
         }
     }
-    
+
     private static List<SlotInfo> extractJavaSlots(Class<?> uboClass) {
         List<SlotInfo> slots = new ArrayList<>();
         for (RecordComponent comp : uboClass.getRecordComponents()) {
             String name = comp.getName();
             int size = 0;
-            
+
             if (comp.isAnnotationPresent(Vec4.class)) {
                 size = 16;
             } else if (comp.isAnnotationPresent(Mat4.class)) {
@@ -391,33 +391,33 @@ public final class GLSLValidator {
                 size = f.count() * 4;
                 if (f.pad()) size += (4 - (f.count() % 4)) * 4;
             }
-            
+
             if (size > 0) {
                 slots.add(new SlotInfo(name, size));
             }
         }
         return slots;
     }
-    
+
     private static List<SlotInfo> parseGLSLStruct(String glslPath, String structName) {
         // TODO: Implement GLSL parsing
         // For now, return empty to skip validation
         return List.of();
     }
-    
+
     public record SlotInfo(String name, int size) {}
-    
+
     public static class UBOMismatchException extends RuntimeException {
         public final List<SlotInfo> javaSlots;
         public final List<SlotInfo> glslSlots;
-        
+
         public UBOMismatchException(String message, List<SlotInfo> java, List<SlotInfo> glsl) {
-            super(message + "\n\nJava slots:\n" + formatSlots(java) + 
+            super(message + "\n\nJava slots:\n" + formatSlots(java) +
                   "\n\nGLSL slots:\n" + formatSlots(glsl));
             this.javaSlots = java;
             this.glslSlots = glsl;
         }
-        
+
         private static String formatSlots(List<SlotInfo> slots) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < slots.size(); i++) {
@@ -447,13 +447,13 @@ import net.cyberpunk042.client.visual.effect.FieldVisualTypes.*;
  * Each record extracts 4 floats from existing data structures.
  */
 public final class FieldVisualVec4Types {
-    
+
     private FieldVisualVec4Types() {}
-    
+
     // ═══════════════════════════════════════════════════════════════════════════
     // COLOR EXTRACTORS (Slots 1-5)
     // ═══════════════════════════════════════════════════════════════════════════
-    
+
     public record PrimaryColorVec4(float r, float g, float b, float a) implements Vec4Serializable {
         public static PrimaryColorVec4 from(ColorParams c) {
             return new PrimaryColorVec4(c.primaryR(), c.primaryG(), c.primaryB(), c.primaryA());
@@ -463,7 +463,7 @@ public final class FieldVisualVec4Types {
         @Override public float slot2() { return b; }
         @Override public float slot3() { return a; }
     }
-    
+
     public record SecondaryColorVec4(float r, float g, float b, float a) implements Vec4Serializable {
         public static SecondaryColorVec4 from(ColorParams c) {
             return new SecondaryColorVec4(c.secondaryR(), c.secondaryG(), c.secondaryB(), c.secondaryA());
@@ -473,14 +473,14 @@ public final class FieldVisualVec4Types {
         @Override public float slot2() { return b; }
         @Override public float slot3() { return a; }
     }
-    
+
     // ... similar for TertiaryColorVec4, HighlightColorVec4, RayColorVec4
-    
+
     // ═══════════════════════════════════════════════════════════════════════════
     // ANIMATION EXTRACTORS (Slots 6-8)
     // ═══════════════════════════════════════════════════════════════════════════
-    
-    public record AnimBaseVec4(float phase, float speed, float intensity, float effectType) 
+
+    public record AnimBaseVec4(float phase, float speed, float intensity, float effectType)
         implements Vec4Serializable {
         public static AnimBaseVec4 from(AnimParams a) {
             return new AnimBaseVec4(a.phase(), a.speed(), a.intensity(), (float) a.effectType().ordinal());
@@ -490,13 +490,13 @@ public final class FieldVisualVec4Types {
         @Override public float slot2() { return intensity; }
         @Override public float slot3() { return effectType; }
     }
-    
+
     // ... similar for AnimMultiSpeedVec4, AnimTimingVec4
-    
+
     // ═══════════════════════════════════════════════════════════════════════════
     // CAMERA EXTRACTORS (Slots 24-26)
     // ═══════════════════════════════════════════════════════════════════════════
-    
+
     public record CameraPosTimeVec4(float x, float y, float z, float time) implements Vec4Serializable {
         public static CameraPosTimeVec4 from(CameraParams c) {
             return new CameraPosTimeVec4(c.camX(), c.camY(), c.camZ(), c.time());
@@ -506,7 +506,7 @@ public final class FieldVisualVec4Types {
         @Override public float slot2() { return z; }
         @Override public float slot3() { return time; }
     }
-    
+
     // ... etc for all 37 slots
 }
 ```
@@ -525,10 +525,10 @@ import org.joml.Matrix4f;
 
 /**
  * Complete UBO structure for Field Visual effect.
- * 
+ *
  * <p>This record IS THE DOCUMENTATION for the UBO layout.
  * Field order here = slot order in GLSL.</p>
- * 
+ *
  * <p>37 vec4 slots = 148 floats = 592 bytes</p>
  */
 @UBOStruct(name = "FieldVisualConfig", glslPath = "the-virus-block:shaders/post/field_visual.fsh")
@@ -560,7 +560,7 @@ public record FieldVisualUBO(
     @Vec4 V2Detail8Vec4 v2Detail8,            // Slot 21
     @Vec4 V2Line1Vec4 v2Line1,                // Slot 22
     @Vec4 ReservedVec4 reserved,              // Slot 23
-    
+
     // ═══════════════════════════════════════════════════════════════════════════
     // CAMERA/RUNTIME (Slots 24-27)
     // ═══════════════════════════════════════════════════════════════════════════
@@ -568,13 +568,13 @@ public record FieldVisualUBO(
     @Vec4 CameraForwardVec4 cameraForward,    // Slot 25
     @Vec4 CameraUpVec4 cameraUp,              // Slot 26
     @Vec4 RenderParamsVec4 renderParams,      // Slot 27
-    
+
     // ═══════════════════════════════════════════════════════════════════════════
     // MATRICES (Slots 28-35)
     // ═══════════════════════════════════════════════════════════════════════════
     @Mat4 Matrix4f invViewProj,               // Slots 28-31
     @Mat4 Matrix4f viewProj,                  // Slots 32-35
-    
+
     // ═══════════════════════════════════════════════════════════════════════════
     // DEBUG (Slot 36)
     // ═══════════════════════════════════════════════════════════════════════════
@@ -632,7 +632,7 @@ ReflectiveUBOWriter.write(builder, ubo);
 
 Similar structure to FieldVisual:
 - `RingParamsVec4` (extracts from RingParams)
-- `ScreenEffectsVec4` 
+- `ScreenEffectsVec4`
 - `ShapeConfigVec4`
 - etc.
 

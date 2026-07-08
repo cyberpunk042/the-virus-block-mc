@@ -58,14 +58,14 @@ public record PositionVec4(float x, float y, float z, float w) implements Vec4Se
 
 ```java
 // Existing record MODIFIED to implement interface
-public record PositionParams(float centerX, float centerY, float centerZ, float radius) 
+public record PositionParams(float centerX, float centerY, float centerZ, float radius)
     implements Vec4Serializable {
-    
+
     @Override public float slot0() { return centerX; }
     @Override public float slot1() { return centerY; }
     @Override public float slot2() { return centerZ; }
     @Override public float slot3() { return radius; }
-    
+
     // Existing methods unchanged
 }
 ```

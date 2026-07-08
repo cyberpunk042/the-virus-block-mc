@@ -39,17 +39,17 @@ Update `CompiledShaderMixin.java`:
 ```java
 try {
     String processed = ShaderPreprocessor.process(source, id);
-    
+
     // CRITICAL: If no changes (or error), DO NOT recurse.
     if (processed == null || processed.equals(source)) {
         return; // Proceed to original method
     }
 
     // ... logging ...
-    
+
     CompiledShader result = CompiledShader.compile(id, type, processed);
     cir.setReturnValue(result);
-    
+
 } catch (Exception e) {
     // ...
 }

@@ -88,7 +88,7 @@ public record ColorParams(
     int tertiaryColor    // ARGB
 ) {
     public static final ColorParams DEFAULT = new ColorParams(0xFFFFFFFF, 0xFF00FFFF, 0xFF1A0528);
-    
+
     // Extractors for UBO writing
     public float primaryR() { return ((primaryColor >> 16) & 0xFF) / 255f; }
     public float primaryG() { return ((primaryColor >> 8) & 0xFF) / 255f; }
@@ -102,7 +102,7 @@ public record ColorParams(
     public float tertiaryG() { ... }
     public float tertiaryB() { ... }
     public float tertiaryA() { ... }
-    
+
     public ColorParams withPrimary(int c) { ... }
     public ColorParams withSecondary(int c) { ... }
     public ColorParams withTertiary(int c) { ... }
@@ -118,7 +118,7 @@ public record AnimParams(
     EffectType effectType
 ) {
     public static final AnimParams DEFAULT = new AnimParams(0f, 1.0f, 1.2f, EffectType.ENERGY_ORB);
-    
+
     public AnimParams withPhase(float v) { ... }
     public AnimParams withSpeed(float v) { ... }
     public AnimParams withIntensity(float v) { ... }
@@ -134,7 +134,7 @@ public record CoreEdgeParams(
     float shapeType       // 0=sphere, 1=torus, 2=cylinder, 3=prism
 ) {
     public static final CoreEdgeParams DEFAULT = new CoreEdgeParams(0.15f, 4.0f, 0f);
-    
+
     public CoreEdgeParams withCoreSize(float v) { ... }
     public CoreEdgeParams withEdgeSharpness(float v) { ... }
     public CoreEdgeParams withShapeType(float v) { ... }
@@ -148,7 +148,7 @@ public record SpiralParams(
     float twist     // 1 - 10
 ) {
     public static final SpiralParams DEFAULT = new SpiralParams(5.0f, 5.0f);
-    
+
     public SpiralParams withDensity(float v) { ... }
     public SpiralParams withTwist(float v) { ... }
 }
@@ -164,12 +164,12 @@ public record GlowLineParams(
     int version            // 1 or 2
 ) {
     public static final GlowLineParams DEFAULT = new GlowLineParams(16.0f, 0.8f, true, true, 1);
-    
+
     // For UBO encoding
     public float rayCoronaFlags() {
         return (showExternalRays ? 1f : 0f) + (showCorona ? 2f : 0f);
     }
-    
+
     public GlowLineParams withCount(float v) { ... }
     public GlowLineParams withIntensity(float v) { ... }
     public GlowLineParams withShowExternalRays(boolean v) { ... }
@@ -184,7 +184,7 @@ public record CoronaParams(
     float width  // 0.2 - 1.5
 ) {
     public static final CoronaParams DEFAULT = new CoronaParams(0.5f);
-    
+
     public CoronaParams withWidth(float v) { ... }
 }
 ```
@@ -299,8 +299,8 @@ public record DebugParams(
 
 ```java
 public final class FieldVisualUBOWriter {
-    
-    public static void write(Std140Builder builder, 
+
+    public static void write(Std140Builder builder,
                              FieldVisualConfig config,
                              PositionParams position,
                              CameraParams camera,
@@ -308,13 +308,13 @@ public final class FieldVisualUBOWriter {
                              Matrix4f invViewProj,
                              Matrix4f viewProj,
                              DebugParams debug) {
-        
+
         // vec4 0: Position
         builder.putFloat(position.centerX());
         builder.putFloat(position.centerY());
         builder.putFloat(position.centerZ());
         builder.putFloat(position.radius());
-        
+
         // vec4 1-3: Colors
         ColorParams c = config.colors();
         builder.putFloat(c.primaryR());
@@ -322,113 +322,113 @@ public final class FieldVisualUBOWriter {
         builder.putFloat(c.primaryB());
         builder.putFloat(c.primaryA());
         // ... secondary, tertiary
-        
+
         // vec4 4: AnimParams
         AnimParams a = config.anim();
         builder.putFloat(a.phase());
         builder.putFloat(a.speed());
         builder.putFloat(a.intensity());
         builder.putFloat(a.effectType().ordinal());
-        
+
         // vec4 5: CoreEdgeParams
         CoreEdgeParams ce = config.coreEdge();
         builder.putFloat(ce.coreSize());
         builder.putFloat(ce.edgeSharpness());
         builder.putFloat(ce.shapeType());
         builder.putFloat(0f);
-        
+
         // vec4 6: SpiralParams
         SpiralParams sp = config.spiral();
         builder.putFloat(sp.density());
         builder.putFloat(sp.twist());
         builder.putFloat(0f);
         builder.putFloat(0f);
-        
+
         // vec4 7: GlowLineParams
         GlowLineParams gl = config.glowLine();
         builder.putFloat(gl.count());
         builder.putFloat(gl.intensity());
         builder.putFloat(gl.rayCoronaFlags());
         builder.putFloat(gl.version());
-        
+
         // vec4 8: CoronaParams
         builder.putFloat(config.corona().width());
         builder.putFloat(0f);
         builder.putFloat(0f);
         builder.putFloat(0f);
-        
+
         // vec4 9: OtherParams (NEW)
         OtherParams op = config.other();
         builder.putFloat(op.pulseFrequency());
         builder.putFloat(op.pulseAmplitude());
         builder.putFloat(op.noiseScale());
         builder.putFloat(op.noiseStrength());
-        
+
         // vec4 10: ScreenEffects (NEW)
         ScreenEffects se = config.screen();
         builder.putFloat(se.blackout());
         builder.putFloat(se.vignetteAmount());
         builder.putFloat(se.vignetteRadius());
         builder.putFloat(se.tintAmount());
-        
+
         // vec4 11: DistortionParams (NEW)
         DistortionParams dp = config.distortion();
         builder.putFloat(dp.strength());
         builder.putFloat(dp.radius());
         builder.putFloat(dp.frequency());
         builder.putFloat(dp.speed());
-        
+
         // vec4 12: BlendParams (NEW)
         BlendParams bp = config.blend();
         builder.putFloat(bp.opacity());
         builder.putFloat(bp.blendMode());
         builder.putFloat(bp.fadeIn());
         builder.putFloat(bp.fadeOut());
-        
+
         // vec4 13: ReservedParams (NEW)
         ReservedParams rp = config.reserved();
         builder.putFloat(rp.slot1());
         builder.putFloat(rp.slot2());
         builder.putFloat(rp.slot3());
         builder.putFloat(rp.slot4());
-        
+
         // vec4 14: Camera position + time
         builder.putFloat(camera.posX());
         builder.putFloat(camera.posY());
         builder.putFloat(camera.posZ());
         builder.putFloat(camera.time());
-        
+
         // vec4 15: Forward + aspect
         builder.putFloat(camera.forwardX());
         builder.putFloat(camera.forwardY());
         builder.putFloat(camera.forwardZ());
         builder.putFloat(camera.aspect());
-        
+
         // vec4 16: Up + fov
         builder.putFloat(camera.upX());
         builder.putFloat(camera.upY());
         builder.putFloat(camera.upZ());
         builder.putFloat(camera.fov());
-        
+
         // vec4 17: Render params
         builder.putFloat(render.nearPlane());
         builder.putFloat(render.farPlane());
         builder.putFloat(0f);
         builder.putFloat(render.isFlying());
-        
+
         // mat4 18-21: InvViewProj
         writeMatrix(builder, invViewProj);
-        
+
         // mat4 22-25: ViewProj
         writeMatrix(builder, viewProj);
-        
+
         // vec4 26: Debug
         builder.putFloat(debug.camMode());
         builder.putFloat(debug.debugMode());
         builder.putFloat(0f);
         builder.putFloat(0f);
     }
-    
+
     private static void writeMatrix(Std140Builder builder, Matrix4f m) {
         for (int c = 0; c < 4; c++) {
             Vector4f col = new Vector4f();
@@ -479,7 +479,7 @@ public record FieldVisualConfig(
             ReservedParams.DEFAULT
         );
     }
-    
+
     // Convenience accessors
     public EffectType effectType() { return anim.effectType(); }
     public float intensity() { return anim.intensity(); }
@@ -497,7 +497,7 @@ public record FieldVisualConfig(
     public int primaryColor() { return colors.primaryColor(); }
     public int secondaryColor() { return colors.secondaryColor(); }
     public int tertiaryColor() { return colors.tertiaryColor(); }
-    
+
     // Color extractors (delegate)
     public float primaryRed() { return colors.primaryR(); }
     public float primaryGreen() { return colors.primaryG(); }

@@ -117,7 +117,7 @@ vec2 parallelDir = normalize(vec2(screenHorizontal.x, orbVerticalWorld));
 ### Fix C: Separate Horizontal and Vertical Components
 **Concept**: The horizontal component (`xProj`) is mostly correct. The vertical component (`yProj`) is contaminated. Handle them separately.
 
-**Theory**: 
+**Theory**:
 - Keep `xProj` for screen X (horizontal offset is reliable)
 - Calculate screen Y from world-space height difference directly
 

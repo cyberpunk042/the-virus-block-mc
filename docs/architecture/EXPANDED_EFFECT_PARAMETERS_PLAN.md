@@ -106,11 +106,11 @@ public record ColorParams(
         0xFFFFFFFF,  // White
         0xFFFF9933   // Gold
     );
-    
+
     // Extractors for each color's R,G,B,A
     public float primaryR() { return ((primaryColor >> 16) & 0xFF) / 255f; }
     // ... all 20 extractors
-    
+
     // Builders
     public ColorParams withPrimary(int c) { ... }
     public ColorParams withSecondary(int c) { ... }
@@ -129,13 +129,13 @@ public record AnimParams(
     float speed,           // Base animation speed (1.0 = normal)
     float intensity,       // Overall brightness (0-2)
     EffectType effectType, // Effect type enum
-    
+
     // Multi-speed channels (from Volumetric Star)
     float speedHigh,       // Fast detail animation - "_SpeedHi" (0-10)
     float speedLow,        // Slow base movement - "_SpeedLow" (0-10)
     float speedRay,        // Ray/corona animation - "_SpeedRay" (0-10)
     float speedRing,       // Ring/rotation speed - "_SpeedRing" (0-10)
-    
+
     // Timing modifiers (from Star Corona)
     float timeScale,       // Global time multiplier (0.1 = slow)
     float radialSpeed1,    // First radial noise speed (0.35)
@@ -218,7 +218,7 @@ public record GlowLineParams(
     public static final GlowLineParams DEFAULT = new GlowLineParams(
         16.0f, 0.8f, 2.0f, 1.0f
     );
-    
+
     // Legacy flags moved to separate accessor
     public float flags(boolean showRays, boolean showCorona, int version) {
         return (showRays ? 1f : 0f) + (showCorona ? 2f : 0f) + version * 4f;
@@ -333,7 +333,7 @@ public record FieldVisualConfig(
     LightingParams lighting,         // 1 vec4 (NEW)
     TimingParams timing,             // 1 vec4 (NEW)
     ReservedParams reserved,         // 1 vec4
-    
+
     // Screen effects (slots 21-23)
     ScreenEffects screen,            // 1 vec4
     DistortionParams distortion,     // 1 vec4

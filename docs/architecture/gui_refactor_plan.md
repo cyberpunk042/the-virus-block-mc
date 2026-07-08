@@ -64,19 +64,19 @@ public class Bound<W extends ClickableWidget> {
     private final W widget;
     private final Supplier<Object> getter;
     private final Consumer<Object> setter;
-    
+
     // Sync widget → state (on user action)
     private void onWidgetChange(Object newValue) {
         setter.accept(newValue);
         state.markDirty();
     }
-    
+
     // Sync state → widget (call when state changes externally)
     public void syncFromState() {
         Object value = getter.get();
         applyToWidget(value);
     }
-    
+
     public W widget() { return widget; }
 }
 ```
@@ -86,21 +86,21 @@ public class Bound<W extends ClickableWidget> {
 ```java
 public abstract class BoundPanel extends AbstractPanel {
     protected final List<Bound<?>> bindings = new ArrayList<>();
-    
+
     // Subclass registers bindings
     protected abstract void buildContent(ContentBuilder b);
-    
+
     @Override
     public void init(int width, int height) {
         bindings.clear();
         widgets.clear();
-        
+
         ContentBuilder b = new ContentBuilder(this, width);
         buildContent(b);
-        
+
         contentHeight = b.getCurrentY();
     }
-    
+
     // Called when state changes externally (profile load, primitive switch)
     public void syncFromState() {
         for (Bound<?> binding : bindings) {
@@ -118,15 +118,15 @@ public class ContentBuilder {
     private final FieldEditState state;
     private final int width;
     private int x, y;
-    
+
     // ═══════════════════════════════════════════════════════════════════
     // SIMPLE WIDGETS (direct path binding)
     // ═══════════════════════════════════════════════════════════════════
-    
+
     public ContentBuilder slider(String label, String path, float min, float max) {
         return slider(label, path, min, max, "%.2f", null);
     }
-    
+
     public ContentBuilder slider(String label, String path, float min, float max,
                                   String format, @Nullable Consumer<Float> extra) {
         var slider = LabeledSlider.builder(label)
@@ -139,40 +139,40 @@ public class ContentBuilder {
                 if (extra != null) extra.accept(v);
             })
             .build();
-        
+
         var bound = Bound.of(slider,
             () -> state.getFloat(path),
             v -> slider.setValue((Float) v));
-        
+
         panel.bindings.add(bound);
         panel.widgets.add(slider);
         y += GuiConstants.COMPACT_HEIGHT + GAP;
         return this;
     }
-    
+
     public ContentBuilder toggle(String label, String path) {
         // Similar pattern...
     }
-    
+
     public <E extends Enum<E>> ContentBuilder dropdown(String label, String path, E[] values) {
         // Similar pattern...
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════
     // COMPOUND WIDGETS (custom getter/setter)
     // ═══════════════════════════════════════════════════════════════════
-    
-    public ContentBuilder slider(String label, 
+
+    public ContentBuilder slider(String label,
                                   Supplier<Float> getter,
                                   Consumer<Float> setter,
                                   float min, float max, String format) {
         // Uses custom get/set instead of path
     }
-    
+
     // ═══════════════════════════════════════════════════════════════════
     // LAYOUT HELPERS
     // ═══════════════════════════════════════════════════════════════════
-    
+
     public ContentBuilder gap(int pixels) { y += pixels; return this; }
     public ContentBuilder label(String text) { /* draw label, advance y */ return this; }
     public RowBuilder row() { return new RowBuilder(this); }
@@ -186,17 +186,17 @@ public class ContentBuilder {
 public class RowBuilder {
     private final ContentBuilder parent;
     private final List<WidgetSpec> specs = new ArrayList<>();
-    
+
     public RowBuilder slider(String label, String path, float min, float max) {
         specs.add(new SliderSpec(label, path, min, max));
         return this;
     }
-    
+
     public RowBuilder toggle(String label, String path) {
         specs.add(new ToggleSpec(label, path));
         return this;
     }
-    
+
     public ContentBuilder endRow() {
         // Calculate widths based on spec count
         int each = (parent.width - (specs.size() - 1) * GAP) / specs.size();
@@ -220,23 +220,23 @@ public class RowBuilder {
 @Override
 public void init(int width, int height) {
     widgets.clear();
-    
+
     int x = GuiConstants.PADDING;
     int y = startY + GAP;
     int w = width - GuiConstants.PADDING * 2;
     int halfW = (w - GAP) / 2;
     int thirdW = (w - GAP * 2) / 3;
-    
+
     buildAvailableTargets();
-    
+
     Primitive currentPrim = state.getSelectedPrimitive();
     PrimitiveLink link = currentPrim != null ? currentPrim.link() : null;
     String currentTarget = link != null ? link.target() : null;
-    
+
     List<String> targetOptions = new ArrayList<>();
     targetOptions.add("(none)");
     targetOptions.addAll(availableTargets);
-    
+
     targetDropdown = CyclingButtonWidget.<String>builder(v -> Text.literal("Target: " + v))
         .values(targetOptions.toArray(new String[0]))
         .initially(currentTarget != null ? currentTarget : "(none)")
@@ -248,7 +248,7 @@ public void init(int width, int height) {
             });
     widgets.add(targetDropdown);
     y += COMPACT_H + GAP;
-    
+
     // ... 200+ more lines of similar boilerplate
 }
 ```
@@ -256,31 +256,31 @@ public void init(int width, int height) {
 ### AFTER (~80 lines):
 ```java
 public class LinkingSubPanel extends BoundPanel {
-    
+
     @Override
     protected void buildContent(ContentBuilder b) {
         b.dropdown("Target", "link.target", getTargetOptions())
          .gap(4)
-         
+
          .label("Position Linking")
          .row()
              .toggle("Follow", "link.follow")
              .toggle("FollowDyn", "link.followDynamic")
              .toggle("RadMatch", "link.radiusMatch")
          .endRow()
-         
+
          .label("Orbit Linking")
          .row()
              .toggle("OrbitSync", "link.orbitSync")
              .toggle("Color", "link.colorMatch")
              .toggle("Alpha", "link.alphaMatch")
          .endRow()
-         
+
          .gap(8)
          .label("Phase Parameters")
          .slider("Phase", "link.phaseOffset", 0f, 1f)
          .slider("OrbPh°", "link.orbitPhaseOffset", 0f, 1f)
-         
+
          .label("Orbit Parameters")
          .slider("OrbRadOff", "link.orbitRadiusOffset", -5f, 5f)
          .slider("SpdMult", "link.orbitSpeedMult", 0.1f, 5f)
@@ -288,7 +288,7 @@ public class LinkingSubPanel extends BoundPanel {
          .slider("PrecOff", "link.orbitPrecessionOffset", -180f, 180f)
          .slider("ShapeRadOff", "link.radiusOffset", -5f, 5f);
     }
-    
+
     private List<String> getTargetOptions() {
         List<String> targets = new ArrayList<>();
         targets.add("(none)");

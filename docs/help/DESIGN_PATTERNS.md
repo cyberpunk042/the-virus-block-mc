@@ -41,19 +41,19 @@ public record FillConfig(
     CageOptions cage
 ) {
     public static Builder builder() { return new Builder(); }
-    
+
     public static class Builder {
         private FillMode mode = FillMode.SOLID;
         private float wireThickness = 1.0f;
         private boolean doubleSided = false;
         private CageOptions cage = null;
-        
+
         public Builder mode(FillMode mode) { this.mode = mode; return this; }
         public Builder wireThickness(float t) { this.wireThickness = t; return this; }
         public Builder doubleSided(boolean d) { this.doubleSided = d; return this; }
         public Builder cage(CageOptions c) { this.cage = c; return this; }
-        public FillConfig build() { 
-            return new FillConfig(mode, wireThickness, doubleSided, cage); 
+        public FillConfig build() {
+            return new FillConfig(mode, wireThickness, doubleSided, cage);
         }
     }
 }
@@ -117,13 +117,13 @@ public enum QuadPattern implements VertexPattern {
         new Corner[]{Corner.TOP_LEFT, Corner.TOP_RIGHT, Corner.BOTTOM_RIGHT},
         new Corner[]{Corner.BOTTOM_LEFT, Corner.TOP_LEFT, Corner.TOP_RIGHT}
     );
-    
+
     @Override
     public int[][] getVertexOrder() {
         // Converts Corner[] to int[][] for rendering
         return cachedVertexOrder;
     }
-    
+
     public enum Corner { TOP_LEFT(0), TOP_RIGHT(1), BOTTOM_LEFT(2), BOTTOM_RIGHT(3); ... }
 }
 ```
@@ -216,7 +216,7 @@ Avoid null checks with Null Object Pattern:
 // ✅ CORRECT: Default/empty implementations
 public record SpinConfig(Axis axis, float speed, boolean oscillate, float range) {
     public static final SpinConfig NONE = new SpinConfig(Axis.Y, 0, false, 360);
-    
+
     public boolean isActive() { return speed != 0; }
 }
 

@@ -717,7 +717,7 @@ Possibly reuse the progressive growth block to make it wobble, shrink, grow, fus
 **How To Achieve:**
 1. **Base mesh:** Your normal tessellated shape (icosahedron, etc.)
 2. **Constellation layer:** Additional render pass drawing lines between non-adjacent vertices
-3. **Pattern generation:** 
+3. **Pattern generation:**
    - Connect every Nth vertex
    - Skip connections to create star patterns
    - Multiple overlay patterns at different rotations
@@ -921,7 +921,7 @@ A Klein Bottle is just a mesh defined by parametric equations. The "4D" aspect i
 for (float u = 0; u < TWO_PI; u += step) {
     for (float v = 0; v < TWO_PI; v += step) {
         float r = 4.0f * (1.0f - cos(u) / 2.0f);
-        
+
         float x, y, z;
         if (u < PI) {
             x = 6 * cos(u) * (1 + sin(u)) + r * cos(u) * cos(v);
@@ -931,7 +931,7 @@ for (float u = 0; u < TWO_PI; u += step) {
             y = 16 * sin(u);
         }
         z = r * sin(v);
-        
+
         vertices.add(new Vec3d(x, y, z));
     }
 }
@@ -1009,7 +1009,7 @@ for (float t = 0; t < length; t += step) {
         t, // Y is the vertical axis
         radius * sin(angle1)
     ));
-    
+
     // Second strand (offset by π)
     float angle2 = angle1 + PI;
     strand2.add(new Vec3d(
@@ -1017,7 +1017,7 @@ for (float t = 0; t < length; t += step) {
         t,
         radius * sin(angle2)
     ));
-    
+
     // Add rung at intervals
     if (t % rungInterval < step) {
         rungs.add(new Pair<>(strand1.getLast(), strand2.getLast()));
@@ -1155,10 +1155,10 @@ color = mix(color1, color2, step(0.5, band)); // Hard edge
 vec2 voronoi(vec3 p, float scale) {
     vec3 sp = p * scale;
     vec3 cell = floor(sp);
-    
+
     float minDist = 1e10;
     vec3 closestPoint;
-    
+
     // Check 3x3x3 neighborhood
     for (int x = -1; x <= 1; x++) {
         for (int y = -1; y <= 1; y++) {
@@ -1174,7 +1174,7 @@ vec2 voronoi(vec3 p, float scale) {
             }
         }
     }
-    
+
     return vec2(minDist, hash13(closestPoint)); // Distance and cell ID
 }
 
@@ -1307,11 +1307,11 @@ public class OrbitConfig {
     public float xAxisSpeed = 0.0f;  // Rotation around X (pitch)
     public float yAxisSpeed = 1.0f;  // Rotation around Y (yaw) - most common
     public float zAxisSpeed = 0.0f;  // Rotation around Z (roll)
-    
+
     public float xAxisRadius = 0.0f; // Orbit radius in X
     public float yAxisRadius = 0.0f; // Orbit radius in Y
     public float zAxisRadius = 1.0f; // Orbit radius in Z
-    
+
     public float phaseOffset = 0.0f; // Starting phase
 }
 
@@ -1321,19 +1321,19 @@ public Vec3d calculateOrbitPosition(float time, Vec3d center, OrbitConfig config
     float angleX = time * config.xAxisSpeed + config.phaseOffset;
     float angleY = time * config.yAxisSpeed + config.phaseOffset;
     float angleZ = time * config.zAxisSpeed + config.phaseOffset;
-    
+
     // Compose rotation matrices
     Matrix3f rotX = new Matrix3f().rotateX(angleX);
     Matrix3f rotY = new Matrix3f().rotateY(angleY);
     Matrix3f rotZ = new Matrix3f().rotateZ(angleZ);
-    
+
     // Combined rotation
     Matrix3f combined = rotZ.mul(rotY).mul(rotX);
-    
+
     // Apply to offset vector
     Vec3d offset = new Vec3d(config.xAxisRadius, config.yAxisRadius, config.zAxisRadius);
     Vec3f rotated = combined.transform(offset.toVector3f());
-    
+
     return center.add(rotated.x, rotated.y, rotated.z);
 }
 ```

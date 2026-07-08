@@ -1,7 +1,7 @@
 # Reflective UBO System - Implementation Plan
 
 > **STATUS: SUPERSEDED** by `UNIFIED_REFLECTIVE_UBO_PLAN.md`
-> 
+>
 > This was the initial FieldVisual-only plan. The unified plan extends this to both effects.
 > See `REFLECTIVE_UBO_IMPLEMENTATION.md` for the final implementation summary.
 
@@ -54,13 +54,13 @@ public interface Vec4Serializable {
 
 ```java
 public class ReflectiveUBOWriter {
-    
+
     public static int getBufferSize(Class<?> uboClass) { ... }
-    
+
     public static void write(Std140Builder builder, Object record) { ... }
-    
+
     private static void writeVec4(Std140Builder builder, Object value) { ... }
-    
+
     private static void writeMatrix(Std140Builder builder, Matrix4f mat) { ... }
 }
 ```
@@ -82,16 +82,16 @@ public class ReflectiveUBOWriter {
 
 ```java
 public class GLSLValidator {
-    
+
     public static void validate(Class<?> uboClass, String glslPath, String structName) {
         List<String> javaSlots = extractJavaSlots(uboClass);
         List<String> glslSlots = parseGLSLStruct(glslPath, structName);
-        
+
         if (!javaSlots.equals(glslSlots)) {
             throw new UBOMismatchException(javaSlots, glslSlots);
         }
     }
-    
+
     private static List<String> parseGLSLStruct(String path, String name) {
         // Read shader file, find "uniform <name> { ... }", extract field names
     }
@@ -146,7 +146,7 @@ public record FieldVisualUBO(
     @Vec4 V2Detail8 v2Detail8,               // Slot 21
     @Vec4 V2Line1 v2Line1,                   // Slot 22
     @Vec4 ReservedParams reserved,           // Slot 23
-    
+
     // ═══════════════════════════════════════════════════════════════
     // CAMERA/RUNTIME (Slots 24-27)
     // ═══════════════════════════════════════════════════════════════
@@ -154,13 +154,13 @@ public record FieldVisualUBO(
     @Vec4 CameraForwardAspect cameraForward, // Slot 25
     @Vec4 CameraUpFov cameraUp,              // Slot 26
     @Vec4 RenderParams render,               // Slot 27
-    
+
     // ═══════════════════════════════════════════════════════════════
     // MATRICES (Slots 28-35)
     // ═══════════════════════════════════════════════════════════════
     @Mat4 Matrix4f invViewProj,              // Slots 28-31
     @Mat4 Matrix4f viewProj,                 // Slots 32-35
-    
+
     // ═══════════════════════════════════════════════════════════════
     // DEBUG (Slot 36)
     // ═══════════════════════════════════════════════════════════════
@@ -194,16 +194,16 @@ Some existing records don't map directly to vec4. Create wrappers:
 
 ```java
 // Extracts primary color from ColorParams as vec4
-public record PrimaryColorVec4(float r, float g, float b, float a) 
+public record PrimaryColorVec4(float r, float g, float b, float a)
     implements Vec4Serializable {
-    
+
     public static PrimaryColorVec4 from(ColorParams colors) {
         return new PrimaryColorVec4(
-            colors.primaryR(), colors.primaryG(), 
+            colors.primaryR(), colors.primaryG(),
             colors.primaryB(), colors.primaryA()
         );
     }
-    
+
     @Override public float slot0() { return r; }
     @Override public float slot1() { return g; }
     @Override public float slot2() { return b; }

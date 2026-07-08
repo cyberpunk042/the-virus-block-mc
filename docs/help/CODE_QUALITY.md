@@ -22,10 +22,10 @@ Every class must have:
 ```java
 /**
  * Renders sphere primitives using the tessellation pipeline.
- * 
- * <p>Supports all FillModes (SOLID, WIREFRAME, CAGE, POINTS) and 
+ *
+ * <p>Supports all FillModes (SOLID, WIREFRAME, CAGE, POINTS) and
  * applies VisibilityMask filtering before emission.</p>
- * 
+ *
  * @see SphereTessellator
  * @see VertexEmitter
  */

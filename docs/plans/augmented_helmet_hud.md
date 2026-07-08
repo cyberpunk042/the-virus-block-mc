@@ -257,7 +257,7 @@ This is the most ambitious feature. We can leverage the existing depth buffer wo
 
 ```
                     Regular game view
-                          
+
     ┌────────────────────────────────────────┐
     │                                        │
     │         █████                          │
@@ -332,10 +332,10 @@ public record HelmetHudPayload(
     int sourceCount,        // Number of threats in range
     boolean hasTarget       // Whether any target exists
 ) implements CustomPayload {
-    
-    public static final Id<HelmetHudPayload> ID = 
+
+    public static final Id<HelmetHudPayload> ID =
         new Id<>(Identifier.of("the-virus-block", "helmet_hud"));
-    
+
     // ... codec, etc
 }
 ```
@@ -427,21 +427,21 @@ Since the helmet HUD is **client-side**, we need a client config system (not ser
 ```java
 public final class HelmetHudConfig {
     private static final HelmetHudConfig INSTANCE = new HelmetHudConfig();
-    
+
     // Visor effects
     private boolean visorEnabled = true;
     private float visorIntensity = 1.0f;  // 0.0 - 1.0
     private boolean scanlinesEnabled = true;
     private float scanlinesOpacity = 0.15f;  // 0.0 - 0.5
     private float vignetteStrength = 0.4f;  // 0.0 - 1.0
-    
+
     // HUD panel
     private boolean hudEnabled = true;
     private float hudScale = 1.0f;  // 0.5 - 2.0
     private float hudOpacity = 0.85f;  // 0.3 - 1.0
-    
+
     public static HelmetHudConfig get() { return INSTANCE; }
-    
+
     // Getters/setters with validation...
 }
 ```

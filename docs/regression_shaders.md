@@ -22,13 +22,13 @@ out vec4 fragColor;
 
 void main() {
     vec3 scene = texture(InSampler, texCoord).rgb;
-    
+
     // Pulsate based on time
     float pulse = sin(FrameTime.x * 2.0) * 0.5 + 0.5;
-    
+
     // Tint scene with time-based color
     vec3 tint = vec3(pulse, 0.3, 1.0 - pulse);
-    
+
     fragColor = vec4(mix(scene, tint, 0.3), 1.0);
 }
 ```
@@ -59,16 +59,16 @@ out vec4 fragColor;
 
 void main() {
     vec3 scene = texture(InSampler, texCoord).rgb;
-    
+
     // Reconstruct ray direction from matrices
     vec2 ndc = texCoord * 2.0 - 1.0;
     vec4 clipPos = vec4(ndc, 1.0, 1.0);
     vec4 worldPos = InvViewProj * clipPos;
     vec3 rayDir = normalize(worldPos.xyz / worldPos.w - CameraPosition.xyz);
-    
+
     // Visualize ray direction as color
     vec3 rayColor = rayDir * 0.5 + 0.5;
-    
+
     fragColor = vec4(mix(scene, rayColor, 0.5), 1.0);
 }
 ```
@@ -98,11 +98,11 @@ out vec4 fragColor;
 
 void main() {
     vec3 scene = texture(InSampler, texCoord).rgb;
-    
+
     // Draw colored bars based on config colors
     float y = texCoord.y;
     vec3 configColor;
-    
+
     if (y < 0.2) {
         configColor = PrimaryColor.rgb;
     } else if (y < 0.4) {
@@ -114,7 +114,7 @@ void main() {
     } else {
         configColor = RayColor.rgb;
     }
-    
+
     // Show bars on left side
     if (texCoord.x < 0.1) {
         fragColor = vec4(configColor, 1.0);
@@ -154,24 +154,24 @@ layout(std140) uniform SamplerInfo { vec2 OutSize; vec2 InSize; };
 void main() {
     vec3 scene = texture(InSampler, texCoord).rgb;
     float time = FrameTime.x;
-    
+
     // Simple sphere glow at CenterAndRadius
     vec3 center = CenterAndRadius.xyz;
     float radius = CenterAndRadius.w;
-    
+
     // Build ray
     vec2 ndc = texCoord * 2.0 - 1.0;
     ndc.x *= CameraForward.w;  // aspect
     vec4 clipPos = vec4(ndc, 1.0, 1.0);
     vec4 worldPos = InvViewProj * clipPos;
     vec3 rayDir = normalize(worldPos.xyz / worldPos.w - CameraPosition.xyz);
-    
+
     // Ray-sphere intersection (simplified)
     vec3 oc = CameraPosition.xyz - center;
     float b = dot(oc, rayDir);
     float c = dot(oc, oc) - radius * radius;
     float disc = b * b - c;
-    
+
     vec3 finalColor = scene;
     if (disc > 0.0) {
         float t = -b - sqrt(disc);
@@ -182,7 +182,7 @@ void main() {
             finalColor = scene + glow * 0.5;
         }
     }
-    
+
     fragColor = vec4(finalColor, 1.0);
 }
 ```
